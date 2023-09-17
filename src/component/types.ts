@@ -1,5 +1,5 @@
-import type { Unzipped } from 'fflate'
-import type { RefObject } from 'react'
+import type { AnimationDirection } from 'lottie-web'
+import type { CSSProperties, RefObject } from 'react'
 import type { DotLottiePlayer } from '.'
 
 export enum PlayerState {
@@ -33,20 +33,61 @@ export enum PlayerEvents {
   Stop = 'stop',
 }
 
-export interface LottieAssets {
-  id?: string;
-  p?: string;
-  e?: number;
-  layers?: [];
+export interface LottieAsset {
+  /** Whether the data is encoded or not */
+  e: 0 | 1
+  /** Name of asset – e.g. image_0 / audio_0 */
+  id: string
+  /** Filename – e.g image_0.png / audio_0.mp3 | DataURL, Base64 encoded */
+  p: string
+  u: string
+}
+
+export interface LottieJSON {
+  assets?: LottieAsset[]
+  ddd: number
+  /** Frames per second, natively */
+  fr: number
+  /** Height of animation in pixels */
+  h: number
+  ip: number
+  layers: unknown[]
+  markers: unknown[]
+  meta: {
+    a: string
+    d: string
+    /** Generator */
+    g: string
+    k: string
+    tc: string
+  }
+  /** Name of animation, from rendering */
+  nm: string
+  /** Total number of frames */
+  op: number
+  /** Version */
+  v: string
+  /** Width of animation in pixels */
+  w: number
+}
+
+export interface Config {
+  id: string
+  url: string
+  autoplay?: Autoplay
+  loop?: Loop
+  direction?: AnimationDirection
+  mode?: PlayMode
+  speed?: number
 }
 
 export interface LottieManifest {
-  animations: [Record<string, unknown>];
-  version?: string;
-}
-
-export interface LottieAnimation extends Unzipped {
-  "manifest.json": Uint8Array;
+  animations: Omit<Config, 'url'>[]
+  author?: string
+  description?: string
+  generator?: string
+  keywords?: string
+  version?: string
 }
 
 export type Autoplay = boolean | '' | 'autoplay' | null
@@ -58,11 +99,14 @@ export type ObjectFit = 'contain' | 'cover' | 'fill' | 'scale-down' | 'none'
 
 export type PreserveAspectRatio = 'xMidYMid meet' | 'xMidYMid slice' | 'xMinYMin slice' | 'none'
 
-interface ReactLottiePlayer extends Partial<DotLottiePlayer> {
+export class CustomError extends Error {
+  status?: number
+}
+
+type JSXLottiePlayer = Omit<DotLottiePlayer, 'style'> & {
   class?: string
   ref?: RefObject<unknown>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  style?: any
+  style?: CSSProperties
 }
 
 declare global {
@@ -75,7 +119,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      'dotlottie-player': ReactLottiePlayer
+      'dotlottie-player': JSXLottiePlayer
     }
   }
 }

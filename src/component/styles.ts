@@ -41,8 +41,37 @@ export default css`
     height: 100%;
     display: flex;
   }
-  .animation.controls {
+
+  [data-controls="true"] .animation {
     height: calc(100% - 35px);
+  }
+
+  .animation-container {
+    position: relative;
+  }
+
+  .popover {
+    position: absolute;
+    right: 5px;
+    bottom: 40px;
+    background-color: var(--lottie-player-toolbar-background-color);
+    border-radius: 5px;
+    padding: 10px 15px;
+    border: solid 2px var(--lottie-player-toolbar-icon-color);
+    animation: fadeIn .2s ease-in-out;
+  }
+  .popover::before {
+    content: "";
+    right: 10px;
+    border: 7px solid transparent;
+    border-top-color: transparent;
+    margin-right: -7px;
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    top: 100%;
+    border-top-color: var(--lottie-player-toolbar-icon-color);
   }
 
   .toolbar {
@@ -54,6 +83,7 @@ export default css`
     height: 35px;
     padding: 5px;
     border-radius: 5px;
+    gap: 5px;
   }
 
   .toolbar.has-error {
@@ -64,20 +94,38 @@ export default css`
   .toolbar button {
     cursor: pointer;
     fill: var(--lottie-player-toolbar-icon-color);
+    color: var(--lottie-player-toolbar-icon-color);
     display: flex;
     background: none;
     border: 0;
     padding: 0;
     outline: 0;
     height: 100%;
+    margin: 0;
+    align-items: center;
+    gap: 5px;
+    opacity: .9;
   }
 
-  .toolbar button.active {
+  .toolbar button:hover {
+    opacity: 1;
+  }
+
+  .toolbar button[data-active="true"] {
+    opacity: 1;
     fill: var(--lottie-player-toolbar-icon-active-color);
+  }
+
+  .toolbar button:disabled {
+    opacity: .5;
   }
 
   .toolbar button:focus {
     outline: 0;
+  }
+
+  .toolbar button svg {
+    pointer-events: none;
   }
 
   .toolbar button svg > * {
@@ -101,7 +149,7 @@ export default css`
 
   .seeker {
     width: 100%;
-    height: 5px;
+    height: 20px;
     border-radius: 3px;
     border: 0;
     cursor: pointer;
@@ -110,6 +158,7 @@ export default css`
     display: var(--lottie-player-seeker-display);
     color: var(--lottie-player-seeker-thumb-color);
     margin: 0;
+    padding: 7.5px 0;
     position: relative;
     z-index: 1;
   }
@@ -121,7 +170,7 @@ export default css`
     border: 0;
     top: 0;
     left: 0;
-    margin: 0;
+    margin: 7.5px 0;
     background-color: var(--lottie-player-seeker-track-color);
     pointer-events: none;
   }
@@ -145,6 +194,11 @@ export default css`
     border: 0;
     background-color: var(--lottie-player-seeker-thumb-color);
     cursor: pointer;
+    transition: transform .2s ease-in-out;
+    transform: scale(0);
+  }
+  .seeker:hover::-webkit-slider-thumb, .seeker:focus::-webkit-slider-thumb {
+    transform: scale(1);
   }
   .seeker::-moz-range-progress {
     background-color: var(--lottie-player-seeker-thumb-color);
@@ -158,6 +212,11 @@ export default css`
     background-color: var(--lottie-player-seeker-thumb-color);
     border: 0;
     cursor: pointer;
+    transition: transform .2s ease-in-out;
+    transform: scale(0);
+  }
+  .seeker:hover::-moz-range-thumb, .seeker:focus::-moz-range-thumb {
+    transform: scale(1);
   }
   .seeker::-ms-track {
     width: 100%;
@@ -182,6 +241,11 @@ export default css`
     border-radius: 50%;
     background: var(--lottie-player-seeker-thumb-color);
     cursor: pointer;
+    transition: transform .2s ease-in-out;
+    transform: scale(0);
+  }
+  .seeker:hover::-ms-thumb, .seeker:focus::-ms-thumb {
+    transform: scale(1);
   }
   .seeker:focus::-ms-fill-lower {
     background: var(--lottie-player-seeker-track-color);
@@ -201,5 +265,15 @@ export default css`
   .error svg {
     width: 100%;
     height: auto;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
 `

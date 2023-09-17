@@ -6,7 +6,7 @@
 	 * Copyright 2019 Google LLC
 	 * SPDX-License-Identifier: BSD-3-Clause
 	 */
-	const t$1=window,e$4=t$1.ShadowRoot&&(void 0===t$1.ShadyCSS||t$1.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s$3=Symbol(),n$5=new WeakMap;let o$4 = class o{constructor(t,e,n){if(this._$cssResult$=!0,n!==s$3)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e;}get styleSheet(){let t=this.o;const s=this.t;if(e$4&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n$5.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n$5.set(s,t));}return t}toString(){return this.cssText}};const r$2=t=>new o$4("string"==typeof t?t:t+"",void 0,s$3),i$5=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o$4(n,t,s$3)},S$1=(s,n)=>{e$4?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t$1.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n);}));},c$1=e$4?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r$2(e)})(t):t;
+	const t$2=window,e$4=t$2.ShadowRoot&&(void 0===t$2.ShadyCSS||t$2.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s$3=Symbol(),n$5=new WeakMap;let o$4 = class o{constructor(t,e,n){if(this._$cssResult$=!0,n!==s$3)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e;}get styleSheet(){let t=this.o;const s=this.t;if(e$4&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n$5.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n$5.set(s,t));}return t}toString(){return this.cssText}};const r$2=t=>new o$4("string"==typeof t?t:t+"",void 0,s$3),i$4=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o$4(n,t,s$3)},S$1=(s,n)=>{e$4?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t$2.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n);}));},c$1=e$4?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r$2(e)})(t):t;
 
 	/**
 	 * @license
@@ -19,7 +19,7 @@
 	 * Copyright 2017 Google LLC
 	 * SPDX-License-Identifier: BSD-3-Clause
 	 */
-	var t;const i$4=window,s$1=i$4.trustedTypes,e$2=s$1?s$1.createPolicy("lit-html",{createHTML:t=>t}):void 0,o$2="$lit$",n$3=`lit$${(Math.random()+"").slice(9)}$`,l$1="?"+n$3,h=`<${l$1}>`,r=document,u=()=>r.createComment(""),d=t=>null===t||"object"!=typeof t&&"function"!=typeof t,c=Array.isArray,v=t=>c(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),a="[ \t\n\f\r]",f=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,_=/-->/g,m=/>/g,p=RegExp(`>|${a}(?:([^\\s"'>=/]+)(${a}*=${a}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),g=/'/g,$=/"/g,y=/^(?:script|style|textarea|title)$/i,w=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x$1=w(1),T=Symbol.for("lit-noChange"),A=Symbol.for("lit-nothing"),E=new WeakMap,C=r.createTreeWalker(r,129,null,!1);function P(t,i){if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==e$2?e$2.createHTML(i):i}const V=(t,i)=>{const s=t.length-1,e=[];let l,r=2===i?"<svg>":"",u=f;for(let i=0;i<s;i++){const s=t[i];let d,c,v=-1,a=0;for(;a<s.length&&(u.lastIndex=a,c=u.exec(s),null!==c);)a=u.lastIndex,u===f?"!--"===c[1]?u=_:void 0!==c[1]?u=m:void 0!==c[2]?(y.test(c[2])&&(l=RegExp("</"+c[2],"g")),u=p):void 0!==c[3]&&(u=p):u===p?">"===c[0]?(u=null!=l?l:f,v=-1):void 0===c[1]?v=-2:(v=u.lastIndex-c[2].length,d=c[1],u=void 0===c[3]?p:'"'===c[3]?$:g):u===$||u===g?u=p:u===_||u===m?u=f:(u=p,l=void 0);const w=u===p&&t[i+1].startsWith("/>")?" ":"";r+=u===f?s+h:v>=0?(e.push(d),s.slice(0,v)+o$2+s.slice(v)+n$3+w):s+n$3+(-2===v?(e.push(void 0),i):w);}return [P(t,r+(t[s]||"<?>")+(2===i?"</svg>":"")),e]};class N{constructor({strings:t,_$litType$:i},e){let h;this.parts=[];let r=0,d=0;const c=t.length-1,v=this.parts,[a,f]=V(t,i);if(this.el=N.createElement(a,e),C.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(h=C.nextNode())&&v.length<c;){if(1===h.nodeType){if(h.hasAttributes()){const t=[];for(const i of h.getAttributeNames())if(i.endsWith(o$2)||i.startsWith(n$3)){const s=f[d++];if(t.push(i),void 0!==s){const t=h.getAttribute(s.toLowerCase()+o$2).split(n$3),i=/([.?@])?(.*)/.exec(s);v.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?H:"?"===i[1]?L:"@"===i[1]?z:k});}else v.push({type:6,index:r});}for(const i of t)h.removeAttribute(i);}if(y.test(h.tagName)){const t=h.textContent.split(n$3),i=t.length-1;if(i>0){h.textContent=s$1?s$1.emptyScript:"";for(let s=0;s<i;s++)h.append(t[s],u()),C.nextNode(),v.push({type:2,index:++r});h.append(t[i],u());}}}else if(8===h.nodeType)if(h.data===l$1)v.push({type:2,index:r});else {let t=-1;for(;-1!==(t=h.data.indexOf(n$3,t+1));)v.push({type:7,index:r}),t+=n$3.length-1;}r++;}}static createElement(t,i){const s=r.createElement("template");return s.innerHTML=t,s}}function S(t,i,s=t,e){var o,n,l,h;if(i===T)return i;let r=void 0!==e?null===(o=s._$Co)||void 0===o?void 0:o[e]:s._$Cl;const u=d(i)?void 0:i._$litDirective$;return (null==r?void 0:r.constructor)!==u&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===u?r=void 0:(r=new u(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Co)&&void 0!==l?l:h._$Co=[])[e]=r:s._$Cl=r),void 0!==r&&(i=S(t,r._$AS(t,i.values),r,e)),i}class M{constructor(t,i){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:r).importNode(s,!0);C.currentNode=o;let n=C.nextNode(),l=0,h=0,u=e[0];for(;void 0!==u;){if(l===u.index){let i;2===u.type?i=new R(n,n.nextSibling,this,t):1===u.type?i=new u.ctor(n,u.name,u.strings,this,t):6===u.type&&(i=new Z(n,this,t)),this._$AV.push(i),u=e[++h];}l!==(null==u?void 0:u.index)&&(n=C.nextNode(),l++);}return C.currentNode=r,o}v(t){let i=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class R{constructor(t,i,s,e){var o;this.type=2,this._$AH=A,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cp=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===(null==t?void 0:t.nodeType)&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=S(this,t,i),d(t)?t===A||null==t||""===t?(this._$AH!==A&&this._$AR(),this._$AH=A):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):v(t)?this.T(t):this._(t);}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t));}_(t){this._$AH!==A&&d(this._$AH)?this._$AA.nextSibling.data=t:this.$(r.createTextNode(t)),this._$AH=t;}g(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=N.createElement(P(e.h,e.h[0]),this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.v(s);else {const t=new M(o,this),i=t.u(this.options);t.v(s),this.$(i),this._$AH=t;}}_$AC(t){let i=E.get(t.strings);return void 0===i&&E.set(t.strings,i=new N(t)),i}T(t){c(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new R(this.k(u()),this.k(u()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$Cp=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class k{constructor(t,i,s,e,o){this.type=1,this._$AH=A,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=A;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=S(this,t,i,0),n=!d(t)||t!==this._$AH&&t!==T,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=S(this,e[s+l],i,l),h===T&&(h=this._$AH[l]),n||(n=!d(h)||h!==this._$AH[l]),h===A?t=A:t!==A&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.j(t);}j(t){t===A?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class H extends k{constructor(){super(...arguments),this.type=3;}j(t){this.element[this.name]=t===A?void 0:t;}}const I=s$1?s$1.emptyScript:"";class L extends k{constructor(){super(...arguments),this.type=4;}j(t){t&&t!==A?this.element.setAttribute(this.name,I):this.element.removeAttribute(this.name);}}class z extends k{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=S(this,t,i,0))&&void 0!==s?s:A)===T)return;const e=this._$AH,o=t===A&&e!==A||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==A&&(e===A||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class Z{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){S(this,t);}}const B=i$4.litHtmlPolyfillSupport;null==B||B(N,R),(null!==(t=i$4.litHtmlVersions)&&void 0!==t?t:i$4.litHtmlVersions=[]).push("2.8.0");const D=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new R(i.insertBefore(u(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l};
+	var t$1;const i$3=window,s$1=i$3.trustedTypes,e$2=s$1?s$1.createPolicy("lit-html",{createHTML:t=>t}):void 0,o$2="$lit$",n$3=`lit$${(Math.random()+"").slice(9)}$`,l$1="?"+n$3,h=`<${l$1}>`,r=document,u=()=>r.createComment(""),d=t=>null===t||"object"!=typeof t&&"function"!=typeof t,c=Array.isArray,v=t=>c(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),a="[ \t\n\f\r]",f=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,_=/-->/g,m=/>/g,p=RegExp(`>|${a}(?:([^\\s"'>=/]+)(${a}*=${a}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),g=/'/g,$=/"/g,y=/^(?:script|style|textarea|title)$/i,w=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x$1=w(1),T=Symbol.for("lit-noChange"),A=Symbol.for("lit-nothing"),E=new WeakMap,C=r.createTreeWalker(r,129,null,!1);function P(t,i){if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==e$2?e$2.createHTML(i):i}const V=(t,i)=>{const s=t.length-1,e=[];let l,r=2===i?"<svg>":"",u=f;for(let i=0;i<s;i++){const s=t[i];let d,c,v=-1,a=0;for(;a<s.length&&(u.lastIndex=a,c=u.exec(s),null!==c);)a=u.lastIndex,u===f?"!--"===c[1]?u=_:void 0!==c[1]?u=m:void 0!==c[2]?(y.test(c[2])&&(l=RegExp("</"+c[2],"g")),u=p):void 0!==c[3]&&(u=p):u===p?">"===c[0]?(u=null!=l?l:f,v=-1):void 0===c[1]?v=-2:(v=u.lastIndex-c[2].length,d=c[1],u=void 0===c[3]?p:'"'===c[3]?$:g):u===$||u===g?u=p:u===_||u===m?u=f:(u=p,l=void 0);const w=u===p&&t[i+1].startsWith("/>")?" ":"";r+=u===f?s+h:v>=0?(e.push(d),s.slice(0,v)+o$2+s.slice(v)+n$3+w):s+n$3+(-2===v?(e.push(void 0),i):w);}return [P(t,r+(t[s]||"<?>")+(2===i?"</svg>":"")),e]};class N{constructor({strings:t,_$litType$:i},e){let h;this.parts=[];let r=0,d=0;const c=t.length-1,v=this.parts,[a,f]=V(t,i);if(this.el=N.createElement(a,e),C.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(h=C.nextNode())&&v.length<c;){if(1===h.nodeType){if(h.hasAttributes()){const t=[];for(const i of h.getAttributeNames())if(i.endsWith(o$2)||i.startsWith(n$3)){const s=f[d++];if(t.push(i),void 0!==s){const t=h.getAttribute(s.toLowerCase()+o$2).split(n$3),i=/([.?@])?(.*)/.exec(s);v.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?H:"?"===i[1]?L:"@"===i[1]?z:k});}else v.push({type:6,index:r});}for(const i of t)h.removeAttribute(i);}if(y.test(h.tagName)){const t=h.textContent.split(n$3),i=t.length-1;if(i>0){h.textContent=s$1?s$1.emptyScript:"";for(let s=0;s<i;s++)h.append(t[s],u()),C.nextNode(),v.push({type:2,index:++r});h.append(t[i],u());}}}else if(8===h.nodeType)if(h.data===l$1)v.push({type:2,index:r});else {let t=-1;for(;-1!==(t=h.data.indexOf(n$3,t+1));)v.push({type:7,index:r}),t+=n$3.length-1;}r++;}}static createElement(t,i){const s=r.createElement("template");return s.innerHTML=t,s}}function S(t,i,s=t,e){var o,n,l,h;if(i===T)return i;let r=void 0!==e?null===(o=s._$Co)||void 0===o?void 0:o[e]:s._$Cl;const u=d(i)?void 0:i._$litDirective$;return (null==r?void 0:r.constructor)!==u&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===u?r=void 0:(r=new u(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Co)&&void 0!==l?l:h._$Co=[])[e]=r:s._$Cl=r),void 0!==r&&(i=S(t,r._$AS(t,i.values),r,e)),i}class M{constructor(t,i){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:r).importNode(s,!0);C.currentNode=o;let n=C.nextNode(),l=0,h=0,u=e[0];for(;void 0!==u;){if(l===u.index){let i;2===u.type?i=new R(n,n.nextSibling,this,t):1===u.type?i=new u.ctor(n,u.name,u.strings,this,t):6===u.type&&(i=new Z(n,this,t)),this._$AV.push(i),u=e[++h];}l!==(null==u?void 0:u.index)&&(n=C.nextNode(),l++);}return C.currentNode=r,o}v(t){let i=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class R{constructor(t,i,s,e){var o;this.type=2,this._$AH=A,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cp=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===(null==t?void 0:t.nodeType)&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=S(this,t,i),d(t)?t===A||null==t||""===t?(this._$AH!==A&&this._$AR(),this._$AH=A):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):v(t)?this.T(t):this._(t);}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t));}_(t){this._$AH!==A&&d(this._$AH)?this._$AA.nextSibling.data=t:this.$(r.createTextNode(t)),this._$AH=t;}g(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=N.createElement(P(e.h,e.h[0]),this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.v(s);else {const t=new M(o,this),i=t.u(this.options);t.v(s),this.$(i),this._$AH=t;}}_$AC(t){let i=E.get(t.strings);return void 0===i&&E.set(t.strings,i=new N(t)),i}T(t){c(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new R(this.k(u()),this.k(u()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$Cp=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class k{constructor(t,i,s,e,o){this.type=1,this._$AH=A,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=A;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=S(this,t,i,0),n=!d(t)||t!==this._$AH&&t!==T,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=S(this,e[s+l],i,l),h===T&&(h=this._$AH[l]),n||(n=!d(h)||h!==this._$AH[l]),h===A?t=A:t!==A&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.j(t);}j(t){t===A?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class H extends k{constructor(){super(...arguments),this.type=3;}j(t){this.element[this.name]=t===A?void 0:t;}}const I=s$1?s$1.emptyScript:"";class L extends k{constructor(){super(...arguments),this.type=4;}j(t){t&&t!==A?this.element.setAttribute(this.name,I):this.element.removeAttribute(this.name);}}class z extends k{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=S(this,t,i,0))&&void 0!==s?s:A)===T)return;const e=this._$AH,o=t===A&&e!==A||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==A&&(e===A||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class Z{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){S(this,t);}}const B=i$3.litHtmlPolyfillSupport;null==B||B(N,R),(null!==(t$1=i$3.litHtmlVersions)&&void 0!==t$1?t$1:i$3.litHtmlVersions=[]).push("2.8.0");const D=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new R(i.insertBefore(u(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l};
 
 	/**
 	 * @license
@@ -39,7 +39,13 @@
 	 * Copyright 2017 Google LLC
 	 * SPDX-License-Identifier: BSD-3-Clause
 	 */
-	const i$3=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,finisher(n){n.createProperty(e.key,i);}}:{kind:"field",key:Symbol(),placement:"own",descriptor:{},originalKey:e.key,initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this));},finisher(n){n.createProperty(e.key,i);}},e=(i,e,n)=>{e.constructor.createProperty(n,i);};function n$1(n){return (t,o)=>void 0!==o?e(n,t,o):i$3(n,t)}
+	const i$2=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,finisher(n){n.createProperty(e.key,i);}}:{kind:"field",key:Symbol(),placement:"own",descriptor:{},originalKey:e.key,initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this));},finisher(n){n.createProperty(e.key,i);}},e=(i,e,n)=>{e.constructor.createProperty(n,i);};function n$1(n){return (t,o)=>void 0!==o?e(n,t,o):i$2(n,t)}
+
+	/**
+	 * @license
+	 * Copyright 2017 Google LLC
+	 * SPDX-License-Identifier: BSD-3-Clause
+	 */function t(t){return n$1({...t,state:!0})}
 
 	/**
 	 * @license
@@ -52,7 +58,7 @@
 	 * @license
 	 * Copyright 2017 Google LLC
 	 * SPDX-License-Identifier: BSD-3-Clause
-	 */function i$2(i,n){return o({descriptor:o=>{const t={get(){var o,n;return null!==(n=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==n?n:null},enumerable:!0,configurable:!0};if(n){const n="symbol"==typeof o?Symbol():"__"+o;t.get=function(){var o,t;return void 0===this[n]&&(this[n]=null!==(t=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==t?t:null),this[n]};}return t}})}
+	 */function i$1(i,n){return o({descriptor:o=>{const t={get(){var o,n;return null!==(n=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==n?n:null},enumerable:!0,configurable:!0};if(n){const n="symbol"==typeof o?Symbol():"__"+o;t.get=function(){var o,t;return void 0===this[n]&&(this[n]=null!==(t=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==t?t:null),this[n]};}return t}})}
 
 	/**
 	 * @license
@@ -12808,12 +12814,12 @@
 	var _b = freb(fdeb, 0), fd = _b[0];
 	// map of value to reverse (assuming 16 bits)
 	var rev = new u16(32768);
-	for (var i$1 = 0; i$1 < 32768; ++i$1) {
+	for (var i = 0; i < 32768; ++i) {
 	    // reverse table algorithm from SO
-	    var x = ((i$1 & 0xAAAA) >>> 1) | ((i$1 & 0x5555) << 1);
+	    var x = ((i & 0xAAAA) >>> 1) | ((i & 0x5555) << 1);
 	    x = ((x & 0xCCCC) >>> 2) | ((x & 0x3333) << 2);
 	    x = ((x & 0xF0F0) >>> 4) | ((x & 0x0F0F) << 4);
-	    rev[i$1] = (((x & 0xFF00) >>> 8) | ((x & 0x00FF) << 8)) >>> 1;
+	    rev[i] = (((x & 0xFF00) >>> 8) | ((x & 0x00FF) << 8)) >>> 1;
 	}
 	// create huffman tree from u8 "map": index -> code length for code index
 	// mb (max bits) must be at most 15
@@ -12869,18 +12875,18 @@
 	});
 	// fixed length tree
 	var flt = new u8(288);
-	for (var i$1 = 0; i$1 < 144; ++i$1)
-	    flt[i$1] = 8;
-	for (var i$1 = 144; i$1 < 256; ++i$1)
-	    flt[i$1] = 9;
-	for (var i$1 = 256; i$1 < 280; ++i$1)
-	    flt[i$1] = 7;
-	for (var i$1 = 280; i$1 < 288; ++i$1)
-	    flt[i$1] = 8;
+	for (var i = 0; i < 144; ++i)
+	    flt[i] = 8;
+	for (var i = 144; i < 256; ++i)
+	    flt[i] = 9;
+	for (var i = 256; i < 280; ++i)
+	    flt[i] = 7;
+	for (var i = 280; i < 288; ++i)
+	    flt[i] = 8;
 	// fixed distance tree
 	var fdt = new u8(32);
-	for (var i$1 = 0; i$1 < 32; ++i$1)
-	    fdt[i$1] = 5;
+	for (var i = 0; i < 32; ++i)
+	    fdt[i] = 5;
 	// fixed length map
 	var flrm = /*#__PURE__*/ hMap(flt, 9, 1);
 	// fixed distance map
@@ -13298,7 +13304,7 @@
 	    return [b8(d, b + 12), b8(d, b + 4), b8(d, b + 20)];
 	};
 	var mt = typeof queueMicrotask == 'function' ? queueMicrotask : typeof setTimeout == 'function' ? setTimeout : function (fn) { fn(); };
-	function unzip(data, opts, cb) {
+	function unzip$1(data, opts, cb) {
 	    if (!cb)
 	        cb = opts, opts = {};
 	    if (typeof cb != 'function')
@@ -13385,2421 +13391,6 @@
 	    return tAll;
 	}
 
-	var buffer = {};
-
-	var base64Js = {};
-
-	base64Js.byteLength = byteLength;
-	base64Js.toByteArray = toByteArray;
-	base64Js.fromByteArray = fromByteArray;
-
-	var lookup = [];
-	var revLookup = [];
-	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
-
-	var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-	for (var i = 0, len = code.length; i < len; ++i) {
-	  lookup[i] = code[i];
-	  revLookup[code.charCodeAt(i)] = i;
-	}
-
-	// Support decoding URL-safe base64 strings, as Node.js does.
-	// See: https://en.wikipedia.org/wiki/Base64#URL_applications
-	revLookup['-'.charCodeAt(0)] = 62;
-	revLookup['_'.charCodeAt(0)] = 63;
-
-	function getLens (b64) {
-	  var len = b64.length;
-
-	  if (len % 4 > 0) {
-	    throw new Error('Invalid string. Length must be a multiple of 4')
-	  }
-
-	  // Trim off extra bytes after placeholder bytes are found
-	  // See: https://github.com/beatgammit/base64-js/issues/42
-	  var validLen = b64.indexOf('=');
-	  if (validLen === -1) validLen = len;
-
-	  var placeHoldersLen = validLen === len
-	    ? 0
-	    : 4 - (validLen % 4);
-
-	  return [validLen, placeHoldersLen]
-	}
-
-	// base64 is 4/3 + up to two characters of the original data
-	function byteLength (b64) {
-	  var lens = getLens(b64);
-	  var validLen = lens[0];
-	  var placeHoldersLen = lens[1];
-	  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
-	}
-
-	function _byteLength (b64, validLen, placeHoldersLen) {
-	  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
-	}
-
-	function toByteArray (b64) {
-	  var tmp;
-	  var lens = getLens(b64);
-	  var validLen = lens[0];
-	  var placeHoldersLen = lens[1];
-
-	  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen));
-
-	  var curByte = 0;
-
-	  // if there are placeholders, only get up to the last complete 4 chars
-	  var len = placeHoldersLen > 0
-	    ? validLen - 4
-	    : validLen;
-
-	  var i;
-	  for (i = 0; i < len; i += 4) {
-	    tmp =
-	      (revLookup[b64.charCodeAt(i)] << 18) |
-	      (revLookup[b64.charCodeAt(i + 1)] << 12) |
-	      (revLookup[b64.charCodeAt(i + 2)] << 6) |
-	      revLookup[b64.charCodeAt(i + 3)];
-	    arr[curByte++] = (tmp >> 16) & 0xFF;
-	    arr[curByte++] = (tmp >> 8) & 0xFF;
-	    arr[curByte++] = tmp & 0xFF;
-	  }
-
-	  if (placeHoldersLen === 2) {
-	    tmp =
-	      (revLookup[b64.charCodeAt(i)] << 2) |
-	      (revLookup[b64.charCodeAt(i + 1)] >> 4);
-	    arr[curByte++] = tmp & 0xFF;
-	  }
-
-	  if (placeHoldersLen === 1) {
-	    tmp =
-	      (revLookup[b64.charCodeAt(i)] << 10) |
-	      (revLookup[b64.charCodeAt(i + 1)] << 4) |
-	      (revLookup[b64.charCodeAt(i + 2)] >> 2);
-	    arr[curByte++] = (tmp >> 8) & 0xFF;
-	    arr[curByte++] = tmp & 0xFF;
-	  }
-
-	  return arr
-	}
-
-	function tripletToBase64 (num) {
-	  return lookup[num >> 18 & 0x3F] +
-	    lookup[num >> 12 & 0x3F] +
-	    lookup[num >> 6 & 0x3F] +
-	    lookup[num & 0x3F]
-	}
-
-	function encodeChunk (uint8, start, end) {
-	  var tmp;
-	  var output = [];
-	  for (var i = start; i < end; i += 3) {
-	    tmp =
-	      ((uint8[i] << 16) & 0xFF0000) +
-	      ((uint8[i + 1] << 8) & 0xFF00) +
-	      (uint8[i + 2] & 0xFF);
-	    output.push(tripletToBase64(tmp));
-	  }
-	  return output.join('')
-	}
-
-	function fromByteArray (uint8) {
-	  var tmp;
-	  var len = uint8.length;
-	  var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
-	  var parts = [];
-	  var maxChunkLength = 16383; // must be multiple of 3
-
-	  // go through the array every three bytes, we'll deal with trailing stuff later
-	  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-	    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
-	  }
-
-	  // pad the end with zeros, but make sure to not forget the extra bytes
-	  if (extraBytes === 1) {
-	    tmp = uint8[len - 1];
-	    parts.push(
-	      lookup[tmp >> 2] +
-	      lookup[(tmp << 4) & 0x3F] +
-	      '=='
-	    );
-	  } else if (extraBytes === 2) {
-	    tmp = (uint8[len - 2] << 8) + uint8[len - 1];
-	    parts.push(
-	      lookup[tmp >> 10] +
-	      lookup[(tmp >> 4) & 0x3F] +
-	      lookup[(tmp << 2) & 0x3F] +
-	      '='
-	    );
-	  }
-
-	  return parts.join('')
-	}
-
-	var ieee754 = {};
-
-	/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
-
-	ieee754.read = function (buffer, offset, isLE, mLen, nBytes) {
-	  var e, m;
-	  var eLen = (nBytes * 8) - mLen - 1;
-	  var eMax = (1 << eLen) - 1;
-	  var eBias = eMax >> 1;
-	  var nBits = -7;
-	  var i = isLE ? (nBytes - 1) : 0;
-	  var d = isLE ? -1 : 1;
-	  var s = buffer[offset + i];
-
-	  i += d;
-
-	  e = s & ((1 << (-nBits)) - 1);
-	  s >>= (-nBits);
-	  nBits += eLen;
-	  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-	  m = e & ((1 << (-nBits)) - 1);
-	  e >>= (-nBits);
-	  nBits += mLen;
-	  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-	  if (e === 0) {
-	    e = 1 - eBias;
-	  } else if (e === eMax) {
-	    return m ? NaN : ((s ? -1 : 1) * Infinity)
-	  } else {
-	    m = m + Math.pow(2, mLen);
-	    e = e - eBias;
-	  }
-	  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
-	};
-
-	ieee754.write = function (buffer, value, offset, isLE, mLen, nBytes) {
-	  var e, m, c;
-	  var eLen = (nBytes * 8) - mLen - 1;
-	  var eMax = (1 << eLen) - 1;
-	  var eBias = eMax >> 1;
-	  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0);
-	  var i = isLE ? 0 : (nBytes - 1);
-	  var d = isLE ? 1 : -1;
-	  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
-
-	  value = Math.abs(value);
-
-	  if (isNaN(value) || value === Infinity) {
-	    m = isNaN(value) ? 1 : 0;
-	    e = eMax;
-	  } else {
-	    e = Math.floor(Math.log(value) / Math.LN2);
-	    if (value * (c = Math.pow(2, -e)) < 1) {
-	      e--;
-	      c *= 2;
-	    }
-	    if (e + eBias >= 1) {
-	      value += rt / c;
-	    } else {
-	      value += rt * Math.pow(2, 1 - eBias);
-	    }
-	    if (value * c >= 2) {
-	      e++;
-	      c /= 2;
-	    }
-
-	    if (e + eBias >= eMax) {
-	      m = 0;
-	      e = eMax;
-	    } else if (e + eBias >= 1) {
-	      m = ((value * c) - 1) * Math.pow(2, mLen);
-	      e = e + eBias;
-	    } else {
-	      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
-	      e = 0;
-	    }
-	  }
-
-	  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
-
-	  e = (e << mLen) | m;
-	  eLen += mLen;
-	  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
-
-	  buffer[offset + i - d] |= s * 128;
-	};
-
-	/*!
-	 * The buffer module from node.js, for the browser.
-	 *
-	 * @author   Feross Aboukhadijeh <https://feross.org>
-	 * @license  MIT
-	 */
-
-	(function (exports) {
-
-		const base64 = base64Js;
-		const ieee754$1 = ieee754;
-		const customInspectSymbol =
-		  (typeof Symbol === 'function' && typeof Symbol['for'] === 'function') // eslint-disable-line dot-notation
-		    ? Symbol['for']('nodejs.util.inspect.custom') // eslint-disable-line dot-notation
-		    : null;
-
-		exports.Buffer = Buffer;
-		exports.SlowBuffer = SlowBuffer;
-		exports.INSPECT_MAX_BYTES = 50;
-
-		const K_MAX_LENGTH = 0x7fffffff;
-		exports.kMaxLength = K_MAX_LENGTH;
-
-		/**
-		 * If `Buffer.TYPED_ARRAY_SUPPORT`:
-		 *   === true    Use Uint8Array implementation (fastest)
-		 *   === false   Print warning and recommend using `buffer` v4.x which has an Object
-		 *               implementation (most compatible, even IE6)
-		 *
-		 * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
-		 * Opera 11.6+, iOS 4.2+.
-		 *
-		 * We report that the browser does not support typed arrays if the are not subclassable
-		 * using __proto__. Firefox 4-29 lacks support for adding new properties to `Uint8Array`
-		 * (See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438). IE 10 lacks support
-		 * for __proto__ and has a buggy typed array implementation.
-		 */
-		Buffer.TYPED_ARRAY_SUPPORT = typedArraySupport();
-
-		if (!Buffer.TYPED_ARRAY_SUPPORT && typeof console !== 'undefined' &&
-		    typeof console.error === 'function') {
-		  console.error(
-		    'This browser lacks typed array (Uint8Array) support which is required by ' +
-		    '`buffer` v5.x. Use `buffer` v4.x if you require old browser support.'
-		  );
-		}
-
-		function typedArraySupport () {
-		  // Can typed array instances can be augmented?
-		  try {
-		    const arr = new Uint8Array(1);
-		    const proto = { foo: function () { return 42 } };
-		    Object.setPrototypeOf(proto, Uint8Array.prototype);
-		    Object.setPrototypeOf(arr, proto);
-		    return arr.foo() === 42
-		  } catch (e) {
-		    return false
-		  }
-		}
-
-		Object.defineProperty(Buffer.prototype, 'parent', {
-		  enumerable: true,
-		  get: function () {
-		    if (!Buffer.isBuffer(this)) return undefined
-		    return this.buffer
-		  }
-		});
-
-		Object.defineProperty(Buffer.prototype, 'offset', {
-		  enumerable: true,
-		  get: function () {
-		    if (!Buffer.isBuffer(this)) return undefined
-		    return this.byteOffset
-		  }
-		});
-
-		function createBuffer (length) {
-		  if (length > K_MAX_LENGTH) {
-		    throw new RangeError('The value "' + length + '" is invalid for option "size"')
-		  }
-		  // Return an augmented `Uint8Array` instance
-		  const buf = new Uint8Array(length);
-		  Object.setPrototypeOf(buf, Buffer.prototype);
-		  return buf
-		}
-
-		/**
-		 * The Buffer constructor returns instances of `Uint8Array` that have their
-		 * prototype changed to `Buffer.prototype`. Furthermore, `Buffer` is a subclass of
-		 * `Uint8Array`, so the returned instances will have all the node `Buffer` methods
-		 * and the `Uint8Array` methods. Square bracket notation works as expected -- it
-		 * returns a single octet.
-		 *
-		 * The `Uint8Array` prototype remains unmodified.
-		 */
-
-		function Buffer (arg, encodingOrOffset, length) {
-		  // Common case.
-		  if (typeof arg === 'number') {
-		    if (typeof encodingOrOffset === 'string') {
-		      throw new TypeError(
-		        'The "string" argument must be of type string. Received type number'
-		      )
-		    }
-		    return allocUnsafe(arg)
-		  }
-		  return from(arg, encodingOrOffset, length)
-		}
-
-		Buffer.poolSize = 8192; // not used by this implementation
-
-		function from (value, encodingOrOffset, length) {
-		  if (typeof value === 'string') {
-		    return fromString(value, encodingOrOffset)
-		  }
-
-		  if (ArrayBuffer.isView(value)) {
-		    return fromArrayView(value)
-		  }
-
-		  if (value == null) {
-		    throw new TypeError(
-		      'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
-		      'or Array-like Object. Received type ' + (typeof value)
-		    )
-		  }
-
-		  if (isInstance(value, ArrayBuffer) ||
-		      (value && isInstance(value.buffer, ArrayBuffer))) {
-		    return fromArrayBuffer(value, encodingOrOffset, length)
-		  }
-
-		  if (typeof SharedArrayBuffer !== 'undefined' &&
-		      (isInstance(value, SharedArrayBuffer) ||
-		      (value && isInstance(value.buffer, SharedArrayBuffer)))) {
-		    return fromArrayBuffer(value, encodingOrOffset, length)
-		  }
-
-		  if (typeof value === 'number') {
-		    throw new TypeError(
-		      'The "value" argument must not be of type number. Received type number'
-		    )
-		  }
-
-		  const valueOf = value.valueOf && value.valueOf();
-		  if (valueOf != null && valueOf !== value) {
-		    return Buffer.from(valueOf, encodingOrOffset, length)
-		  }
-
-		  const b = fromObject(value);
-		  if (b) return b
-
-		  if (typeof Symbol !== 'undefined' && Symbol.toPrimitive != null &&
-		      typeof value[Symbol.toPrimitive] === 'function') {
-		    return Buffer.from(value[Symbol.toPrimitive]('string'), encodingOrOffset, length)
-		  }
-
-		  throw new TypeError(
-		    'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
-		    'or Array-like Object. Received type ' + (typeof value)
-		  )
-		}
-
-		/**
-		 * Functionally equivalent to Buffer(arg, encoding) but throws a TypeError
-		 * if value is a number.
-		 * Buffer.from(str[, encoding])
-		 * Buffer.from(array)
-		 * Buffer.from(buffer)
-		 * Buffer.from(arrayBuffer[, byteOffset[, length]])
-		 **/
-		Buffer.from = function (value, encodingOrOffset, length) {
-		  return from(value, encodingOrOffset, length)
-		};
-
-		// Note: Change prototype *after* Buffer.from is defined to workaround Chrome bug:
-		// https://github.com/feross/buffer/pull/148
-		Object.setPrototypeOf(Buffer.prototype, Uint8Array.prototype);
-		Object.setPrototypeOf(Buffer, Uint8Array);
-
-		function assertSize (size) {
-		  if (typeof size !== 'number') {
-		    throw new TypeError('"size" argument must be of type number')
-		  } else if (size < 0) {
-		    throw new RangeError('The value "' + size + '" is invalid for option "size"')
-		  }
-		}
-
-		function alloc (size, fill, encoding) {
-		  assertSize(size);
-		  if (size <= 0) {
-		    return createBuffer(size)
-		  }
-		  if (fill !== undefined) {
-		    // Only pay attention to encoding if it's a string. This
-		    // prevents accidentally sending in a number that would
-		    // be interpreted as a start offset.
-		    return typeof encoding === 'string'
-		      ? createBuffer(size).fill(fill, encoding)
-		      : createBuffer(size).fill(fill)
-		  }
-		  return createBuffer(size)
-		}
-
-		/**
-		 * Creates a new filled Buffer instance.
-		 * alloc(size[, fill[, encoding]])
-		 **/
-		Buffer.alloc = function (size, fill, encoding) {
-		  return alloc(size, fill, encoding)
-		};
-
-		function allocUnsafe (size) {
-		  assertSize(size);
-		  return createBuffer(size < 0 ? 0 : checked(size) | 0)
-		}
-
-		/**
-		 * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
-		 * */
-		Buffer.allocUnsafe = function (size) {
-		  return allocUnsafe(size)
-		};
-		/**
-		 * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
-		 */
-		Buffer.allocUnsafeSlow = function (size) {
-		  return allocUnsafe(size)
-		};
-
-		function fromString (string, encoding) {
-		  if (typeof encoding !== 'string' || encoding === '') {
-		    encoding = 'utf8';
-		  }
-
-		  if (!Buffer.isEncoding(encoding)) {
-		    throw new TypeError('Unknown encoding: ' + encoding)
-		  }
-
-		  const length = byteLength(string, encoding) | 0;
-		  let buf = createBuffer(length);
-
-		  const actual = buf.write(string, encoding);
-
-		  if (actual !== length) {
-		    // Writing a hex string, for example, that contains invalid characters will
-		    // cause everything after the first invalid character to be ignored. (e.g.
-		    // 'abxxcd' will be treated as 'ab')
-		    buf = buf.slice(0, actual);
-		  }
-
-		  return buf
-		}
-
-		function fromArrayLike (array) {
-		  const length = array.length < 0 ? 0 : checked(array.length) | 0;
-		  const buf = createBuffer(length);
-		  for (let i = 0; i < length; i += 1) {
-		    buf[i] = array[i] & 255;
-		  }
-		  return buf
-		}
-
-		function fromArrayView (arrayView) {
-		  if (isInstance(arrayView, Uint8Array)) {
-		    const copy = new Uint8Array(arrayView);
-		    return fromArrayBuffer(copy.buffer, copy.byteOffset, copy.byteLength)
-		  }
-		  return fromArrayLike(arrayView)
-		}
-
-		function fromArrayBuffer (array, byteOffset, length) {
-		  if (byteOffset < 0 || array.byteLength < byteOffset) {
-		    throw new RangeError('"offset" is outside of buffer bounds')
-		  }
-
-		  if (array.byteLength < byteOffset + (length || 0)) {
-		    throw new RangeError('"length" is outside of buffer bounds')
-		  }
-
-		  let buf;
-		  if (byteOffset === undefined && length === undefined) {
-		    buf = new Uint8Array(array);
-		  } else if (length === undefined) {
-		    buf = new Uint8Array(array, byteOffset);
-		  } else {
-		    buf = new Uint8Array(array, byteOffset, length);
-		  }
-
-		  // Return an augmented `Uint8Array` instance
-		  Object.setPrototypeOf(buf, Buffer.prototype);
-
-		  return buf
-		}
-
-		function fromObject (obj) {
-		  if (Buffer.isBuffer(obj)) {
-		    const len = checked(obj.length) | 0;
-		    const buf = createBuffer(len);
-
-		    if (buf.length === 0) {
-		      return buf
-		    }
-
-		    obj.copy(buf, 0, 0, len);
-		    return buf
-		  }
-
-		  if (obj.length !== undefined) {
-		    if (typeof obj.length !== 'number' || numberIsNaN(obj.length)) {
-		      return createBuffer(0)
-		    }
-		    return fromArrayLike(obj)
-		  }
-
-		  if (obj.type === 'Buffer' && Array.isArray(obj.data)) {
-		    return fromArrayLike(obj.data)
-		  }
-		}
-
-		function checked (length) {
-		  // Note: cannot use `length < K_MAX_LENGTH` here because that fails when
-		  // length is NaN (which is otherwise coerced to zero.)
-		  if (length >= K_MAX_LENGTH) {
-		    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
-		                         'size: 0x' + K_MAX_LENGTH.toString(16) + ' bytes')
-		  }
-		  return length | 0
-		}
-
-		function SlowBuffer (length) {
-		  if (+length != length) { // eslint-disable-line eqeqeq
-		    length = 0;
-		  }
-		  return Buffer.alloc(+length)
-		}
-
-		Buffer.isBuffer = function isBuffer (b) {
-		  return b != null && b._isBuffer === true &&
-		    b !== Buffer.prototype // so Buffer.isBuffer(Buffer.prototype) will be false
-		};
-
-		Buffer.compare = function compare (a, b) {
-		  if (isInstance(a, Uint8Array)) a = Buffer.from(a, a.offset, a.byteLength);
-		  if (isInstance(b, Uint8Array)) b = Buffer.from(b, b.offset, b.byteLength);
-		  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
-		    throw new TypeError(
-		      'The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array'
-		    )
-		  }
-
-		  if (a === b) return 0
-
-		  let x = a.length;
-		  let y = b.length;
-
-		  for (let i = 0, len = Math.min(x, y); i < len; ++i) {
-		    if (a[i] !== b[i]) {
-		      x = a[i];
-		      y = b[i];
-		      break
-		    }
-		  }
-
-		  if (x < y) return -1
-		  if (y < x) return 1
-		  return 0
-		};
-
-		Buffer.isEncoding = function isEncoding (encoding) {
-		  switch (String(encoding).toLowerCase()) {
-		    case 'hex':
-		    case 'utf8':
-		    case 'utf-8':
-		    case 'ascii':
-		    case 'latin1':
-		    case 'binary':
-		    case 'base64':
-		    case 'ucs2':
-		    case 'ucs-2':
-		    case 'utf16le':
-		    case 'utf-16le':
-		      return true
-		    default:
-		      return false
-		  }
-		};
-
-		Buffer.concat = function concat (list, length) {
-		  if (!Array.isArray(list)) {
-		    throw new TypeError('"list" argument must be an Array of Buffers')
-		  }
-
-		  if (list.length === 0) {
-		    return Buffer.alloc(0)
-		  }
-
-		  let i;
-		  if (length === undefined) {
-		    length = 0;
-		    for (i = 0; i < list.length; ++i) {
-		      length += list[i].length;
-		    }
-		  }
-
-		  const buffer = Buffer.allocUnsafe(length);
-		  let pos = 0;
-		  for (i = 0; i < list.length; ++i) {
-		    let buf = list[i];
-		    if (isInstance(buf, Uint8Array)) {
-		      if (pos + buf.length > buffer.length) {
-		        if (!Buffer.isBuffer(buf)) buf = Buffer.from(buf);
-		        buf.copy(buffer, pos);
-		      } else {
-		        Uint8Array.prototype.set.call(
-		          buffer,
-		          buf,
-		          pos
-		        );
-		      }
-		    } else if (!Buffer.isBuffer(buf)) {
-		      throw new TypeError('"list" argument must be an Array of Buffers')
-		    } else {
-		      buf.copy(buffer, pos);
-		    }
-		    pos += buf.length;
-		  }
-		  return buffer
-		};
-
-		function byteLength (string, encoding) {
-		  if (Buffer.isBuffer(string)) {
-		    return string.length
-		  }
-		  if (ArrayBuffer.isView(string) || isInstance(string, ArrayBuffer)) {
-		    return string.byteLength
-		  }
-		  if (typeof string !== 'string') {
-		    throw new TypeError(
-		      'The "string" argument must be one of type string, Buffer, or ArrayBuffer. ' +
-		      'Received type ' + typeof string
-		    )
-		  }
-
-		  const len = string.length;
-		  const mustMatch = (arguments.length > 2 && arguments[2] === true);
-		  if (!mustMatch && len === 0) return 0
-
-		  // Use a for loop to avoid recursion
-		  let loweredCase = false;
-		  for (;;) {
-		    switch (encoding) {
-		      case 'ascii':
-		      case 'latin1':
-		      case 'binary':
-		        return len
-		      case 'utf8':
-		      case 'utf-8':
-		        return utf8ToBytes(string).length
-		      case 'ucs2':
-		      case 'ucs-2':
-		      case 'utf16le':
-		      case 'utf-16le':
-		        return len * 2
-		      case 'hex':
-		        return len >>> 1
-		      case 'base64':
-		        return base64ToBytes(string).length
-		      default:
-		        if (loweredCase) {
-		          return mustMatch ? -1 : utf8ToBytes(string).length // assume utf8
-		        }
-		        encoding = ('' + encoding).toLowerCase();
-		        loweredCase = true;
-		    }
-		  }
-		}
-		Buffer.byteLength = byteLength;
-
-		function slowToString (encoding, start, end) {
-		  let loweredCase = false;
-
-		  // No need to verify that "this.length <= MAX_UINT32" since it's a read-only
-		  // property of a typed array.
-
-		  // This behaves neither like String nor Uint8Array in that we set start/end
-		  // to their upper/lower bounds if the value passed is out of range.
-		  // undefined is handled specially as per ECMA-262 6th Edition,
-		  // Section 13.3.3.7 Runtime Semantics: KeyedBindingInitialization.
-		  if (start === undefined || start < 0) {
-		    start = 0;
-		  }
-		  // Return early if start > this.length. Done here to prevent potential uint32
-		  // coercion fail below.
-		  if (start > this.length) {
-		    return ''
-		  }
-
-		  if (end === undefined || end > this.length) {
-		    end = this.length;
-		  }
-
-		  if (end <= 0) {
-		    return ''
-		  }
-
-		  // Force coercion to uint32. This will also coerce falsey/NaN values to 0.
-		  end >>>= 0;
-		  start >>>= 0;
-
-		  if (end <= start) {
-		    return ''
-		  }
-
-		  if (!encoding) encoding = 'utf8';
-
-		  while (true) {
-		    switch (encoding) {
-		      case 'hex':
-		        return hexSlice(this, start, end)
-
-		      case 'utf8':
-		      case 'utf-8':
-		        return utf8Slice(this, start, end)
-
-		      case 'ascii':
-		        return asciiSlice(this, start, end)
-
-		      case 'latin1':
-		      case 'binary':
-		        return latin1Slice(this, start, end)
-
-		      case 'base64':
-		        return base64Slice(this, start, end)
-
-		      case 'ucs2':
-		      case 'ucs-2':
-		      case 'utf16le':
-		      case 'utf-16le':
-		        return utf16leSlice(this, start, end)
-
-		      default:
-		        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
-		        encoding = (encoding + '').toLowerCase();
-		        loweredCase = true;
-		    }
-		  }
-		}
-
-		// This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
-		// to detect a Buffer instance. It's not possible to use `instanceof Buffer`
-		// reliably in a browserify context because there could be multiple different
-		// copies of the 'buffer' package in use. This method works even for Buffer
-		// instances that were created from another copy of the `buffer` package.
-		// See: https://github.com/feross/buffer/issues/154
-		Buffer.prototype._isBuffer = true;
-
-		function swap (b, n, m) {
-		  const i = b[n];
-		  b[n] = b[m];
-		  b[m] = i;
-		}
-
-		Buffer.prototype.swap16 = function swap16 () {
-		  const len = this.length;
-		  if (len % 2 !== 0) {
-		    throw new RangeError('Buffer size must be a multiple of 16-bits')
-		  }
-		  for (let i = 0; i < len; i += 2) {
-		    swap(this, i, i + 1);
-		  }
-		  return this
-		};
-
-		Buffer.prototype.swap32 = function swap32 () {
-		  const len = this.length;
-		  if (len % 4 !== 0) {
-		    throw new RangeError('Buffer size must be a multiple of 32-bits')
-		  }
-		  for (let i = 0; i < len; i += 4) {
-		    swap(this, i, i + 3);
-		    swap(this, i + 1, i + 2);
-		  }
-		  return this
-		};
-
-		Buffer.prototype.swap64 = function swap64 () {
-		  const len = this.length;
-		  if (len % 8 !== 0) {
-		    throw new RangeError('Buffer size must be a multiple of 64-bits')
-		  }
-		  for (let i = 0; i < len; i += 8) {
-		    swap(this, i, i + 7);
-		    swap(this, i + 1, i + 6);
-		    swap(this, i + 2, i + 5);
-		    swap(this, i + 3, i + 4);
-		  }
-		  return this
-		};
-
-		Buffer.prototype.toString = function toString () {
-		  const length = this.length;
-		  if (length === 0) return ''
-		  if (arguments.length === 0) return utf8Slice(this, 0, length)
-		  return slowToString.apply(this, arguments)
-		};
-
-		Buffer.prototype.toLocaleString = Buffer.prototype.toString;
-
-		Buffer.prototype.equals = function equals (b) {
-		  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
-		  if (this === b) return true
-		  return Buffer.compare(this, b) === 0
-		};
-
-		Buffer.prototype.inspect = function inspect () {
-		  let str = '';
-		  const max = exports.INSPECT_MAX_BYTES;
-		  str = this.toString('hex', 0, max).replace(/(.{2})/g, '$1 ').trim();
-		  if (this.length > max) str += ' ... ';
-		  return '<Buffer ' + str + '>'
-		};
-		if (customInspectSymbol) {
-		  Buffer.prototype[customInspectSymbol] = Buffer.prototype.inspect;
-		}
-
-		Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
-		  if (isInstance(target, Uint8Array)) {
-		    target = Buffer.from(target, target.offset, target.byteLength);
-		  }
-		  if (!Buffer.isBuffer(target)) {
-		    throw new TypeError(
-		      'The "target" argument must be one of type Buffer or Uint8Array. ' +
-		      'Received type ' + (typeof target)
-		    )
-		  }
-
-		  if (start === undefined) {
-		    start = 0;
-		  }
-		  if (end === undefined) {
-		    end = target ? target.length : 0;
-		  }
-		  if (thisStart === undefined) {
-		    thisStart = 0;
-		  }
-		  if (thisEnd === undefined) {
-		    thisEnd = this.length;
-		  }
-
-		  if (start < 0 || end > target.length || thisStart < 0 || thisEnd > this.length) {
-		    throw new RangeError('out of range index')
-		  }
-
-		  if (thisStart >= thisEnd && start >= end) {
-		    return 0
-		  }
-		  if (thisStart >= thisEnd) {
-		    return -1
-		  }
-		  if (start >= end) {
-		    return 1
-		  }
-
-		  start >>>= 0;
-		  end >>>= 0;
-		  thisStart >>>= 0;
-		  thisEnd >>>= 0;
-
-		  if (this === target) return 0
-
-		  let x = thisEnd - thisStart;
-		  let y = end - start;
-		  const len = Math.min(x, y);
-
-		  const thisCopy = this.slice(thisStart, thisEnd);
-		  const targetCopy = target.slice(start, end);
-
-		  for (let i = 0; i < len; ++i) {
-		    if (thisCopy[i] !== targetCopy[i]) {
-		      x = thisCopy[i];
-		      y = targetCopy[i];
-		      break
-		    }
-		  }
-
-		  if (x < y) return -1
-		  if (y < x) return 1
-		  return 0
-		};
-
-		// Finds either the first index of `val` in `buffer` at offset >= `byteOffset`,
-		// OR the last index of `val` in `buffer` at offset <= `byteOffset`.
-		//
-		// Arguments:
-		// - buffer - a Buffer to search
-		// - val - a string, Buffer, or number
-		// - byteOffset - an index into `buffer`; will be clamped to an int32
-		// - encoding - an optional encoding, relevant is val is a string
-		// - dir - true for indexOf, false for lastIndexOf
-		function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
-		  // Empty buffer means no match
-		  if (buffer.length === 0) return -1
-
-		  // Normalize byteOffset
-		  if (typeof byteOffset === 'string') {
-		    encoding = byteOffset;
-		    byteOffset = 0;
-		  } else if (byteOffset > 0x7fffffff) {
-		    byteOffset = 0x7fffffff;
-		  } else if (byteOffset < -0x80000000) {
-		    byteOffset = -0x80000000;
-		  }
-		  byteOffset = +byteOffset; // Coerce to Number.
-		  if (numberIsNaN(byteOffset)) {
-		    // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
-		    byteOffset = dir ? 0 : (buffer.length - 1);
-		  }
-
-		  // Normalize byteOffset: negative offsets start from the end of the buffer
-		  if (byteOffset < 0) byteOffset = buffer.length + byteOffset;
-		  if (byteOffset >= buffer.length) {
-		    if (dir) return -1
-		    else byteOffset = buffer.length - 1;
-		  } else if (byteOffset < 0) {
-		    if (dir) byteOffset = 0;
-		    else return -1
-		  }
-
-		  // Normalize val
-		  if (typeof val === 'string') {
-		    val = Buffer.from(val, encoding);
-		  }
-
-		  // Finally, search either indexOf (if dir is true) or lastIndexOf
-		  if (Buffer.isBuffer(val)) {
-		    // Special case: looking for empty string/buffer always fails
-		    if (val.length === 0) {
-		      return -1
-		    }
-		    return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
-		  } else if (typeof val === 'number') {
-		    val = val & 0xFF; // Search for a byte value [0-255]
-		    if (typeof Uint8Array.prototype.indexOf === 'function') {
-		      if (dir) {
-		        return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
-		      } else {
-		        return Uint8Array.prototype.lastIndexOf.call(buffer, val, byteOffset)
-		      }
-		    }
-		    return arrayIndexOf(buffer, [val], byteOffset, encoding, dir)
-		  }
-
-		  throw new TypeError('val must be string, number or Buffer')
-		}
-
-		function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
-		  let indexSize = 1;
-		  let arrLength = arr.length;
-		  let valLength = val.length;
-
-		  if (encoding !== undefined) {
-		    encoding = String(encoding).toLowerCase();
-		    if (encoding === 'ucs2' || encoding === 'ucs-2' ||
-		        encoding === 'utf16le' || encoding === 'utf-16le') {
-		      if (arr.length < 2 || val.length < 2) {
-		        return -1
-		      }
-		      indexSize = 2;
-		      arrLength /= 2;
-		      valLength /= 2;
-		      byteOffset /= 2;
-		    }
-		  }
-
-		  function read (buf, i) {
-		    if (indexSize === 1) {
-		      return buf[i]
-		    } else {
-		      return buf.readUInt16BE(i * indexSize)
-		    }
-		  }
-
-		  let i;
-		  if (dir) {
-		    let foundIndex = -1;
-		    for (i = byteOffset; i < arrLength; i++) {
-		      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
-		        if (foundIndex === -1) foundIndex = i;
-		        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
-		      } else {
-		        if (foundIndex !== -1) i -= i - foundIndex;
-		        foundIndex = -1;
-		      }
-		    }
-		  } else {
-		    if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength;
-		    for (i = byteOffset; i >= 0; i--) {
-		      let found = true;
-		      for (let j = 0; j < valLength; j++) {
-		        if (read(arr, i + j) !== read(val, j)) {
-		          found = false;
-		          break
-		        }
-		      }
-		      if (found) return i
-		    }
-		  }
-
-		  return -1
-		}
-
-		Buffer.prototype.includes = function includes (val, byteOffset, encoding) {
-		  return this.indexOf(val, byteOffset, encoding) !== -1
-		};
-
-		Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
-		  return bidirectionalIndexOf(this, val, byteOffset, encoding, true)
-		};
-
-		Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) {
-		  return bidirectionalIndexOf(this, val, byteOffset, encoding, false)
-		};
-
-		function hexWrite (buf, string, offset, length) {
-		  offset = Number(offset) || 0;
-		  const remaining = buf.length - offset;
-		  if (!length) {
-		    length = remaining;
-		  } else {
-		    length = Number(length);
-		    if (length > remaining) {
-		      length = remaining;
-		    }
-		  }
-
-		  const strLen = string.length;
-
-		  if (length > strLen / 2) {
-		    length = strLen / 2;
-		  }
-		  let i;
-		  for (i = 0; i < length; ++i) {
-		    const parsed = parseInt(string.substr(i * 2, 2), 16);
-		    if (numberIsNaN(parsed)) return i
-		    buf[offset + i] = parsed;
-		  }
-		  return i
-		}
-
-		function utf8Write (buf, string, offset, length) {
-		  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
-		}
-
-		function asciiWrite (buf, string, offset, length) {
-		  return blitBuffer(asciiToBytes(string), buf, offset, length)
-		}
-
-		function base64Write (buf, string, offset, length) {
-		  return blitBuffer(base64ToBytes(string), buf, offset, length)
-		}
-
-		function ucs2Write (buf, string, offset, length) {
-		  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
-		}
-
-		Buffer.prototype.write = function write (string, offset, length, encoding) {
-		  // Buffer#write(string)
-		  if (offset === undefined) {
-		    encoding = 'utf8';
-		    length = this.length;
-		    offset = 0;
-		  // Buffer#write(string, encoding)
-		  } else if (length === undefined && typeof offset === 'string') {
-		    encoding = offset;
-		    length = this.length;
-		    offset = 0;
-		  // Buffer#write(string, offset[, length][, encoding])
-		  } else if (isFinite(offset)) {
-		    offset = offset >>> 0;
-		    if (isFinite(length)) {
-		      length = length >>> 0;
-		      if (encoding === undefined) encoding = 'utf8';
-		    } else {
-		      encoding = length;
-		      length = undefined;
-		    }
-		  } else {
-		    throw new Error(
-		      'Buffer.write(string, encoding, offset[, length]) is no longer supported'
-		    )
-		  }
-
-		  const remaining = this.length - offset;
-		  if (length === undefined || length > remaining) length = remaining;
-
-		  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
-		    throw new RangeError('Attempt to write outside buffer bounds')
-		  }
-
-		  if (!encoding) encoding = 'utf8';
-
-		  let loweredCase = false;
-		  for (;;) {
-		    switch (encoding) {
-		      case 'hex':
-		        return hexWrite(this, string, offset, length)
-
-		      case 'utf8':
-		      case 'utf-8':
-		        return utf8Write(this, string, offset, length)
-
-		      case 'ascii':
-		      case 'latin1':
-		      case 'binary':
-		        return asciiWrite(this, string, offset, length)
-
-		      case 'base64':
-		        // Warning: maxLength not taken into account in base64Write
-		        return base64Write(this, string, offset, length)
-
-		      case 'ucs2':
-		      case 'ucs-2':
-		      case 'utf16le':
-		      case 'utf-16le':
-		        return ucs2Write(this, string, offset, length)
-
-		      default:
-		        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
-		        encoding = ('' + encoding).toLowerCase();
-		        loweredCase = true;
-		    }
-		  }
-		};
-
-		Buffer.prototype.toJSON = function toJSON () {
-		  return {
-		    type: 'Buffer',
-		    data: Array.prototype.slice.call(this._arr || this, 0)
-		  }
-		};
-
-		function base64Slice (buf, start, end) {
-		  if (start === 0 && end === buf.length) {
-		    return base64.fromByteArray(buf)
-		  } else {
-		    return base64.fromByteArray(buf.slice(start, end))
-		  }
-		}
-
-		function utf8Slice (buf, start, end) {
-		  end = Math.min(buf.length, end);
-		  const res = [];
-
-		  let i = start;
-		  while (i < end) {
-		    const firstByte = buf[i];
-		    let codePoint = null;
-		    let bytesPerSequence = (firstByte > 0xEF)
-		      ? 4
-		      : (firstByte > 0xDF)
-		          ? 3
-		          : (firstByte > 0xBF)
-		              ? 2
-		              : 1;
-
-		    if (i + bytesPerSequence <= end) {
-		      let secondByte, thirdByte, fourthByte, tempCodePoint;
-
-		      switch (bytesPerSequence) {
-		        case 1:
-		          if (firstByte < 0x80) {
-		            codePoint = firstByte;
-		          }
-		          break
-		        case 2:
-		          secondByte = buf[i + 1];
-		          if ((secondByte & 0xC0) === 0x80) {
-		            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F);
-		            if (tempCodePoint > 0x7F) {
-		              codePoint = tempCodePoint;
-		            }
-		          }
-		          break
-		        case 3:
-		          secondByte = buf[i + 1];
-		          thirdByte = buf[i + 2];
-		          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
-		            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F);
-		            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
-		              codePoint = tempCodePoint;
-		            }
-		          }
-		          break
-		        case 4:
-		          secondByte = buf[i + 1];
-		          thirdByte = buf[i + 2];
-		          fourthByte = buf[i + 3];
-		          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
-		            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F);
-		            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
-		              codePoint = tempCodePoint;
-		            }
-		          }
-		      }
-		    }
-
-		    if (codePoint === null) {
-		      // we did not generate a valid codePoint so insert a
-		      // replacement char (U+FFFD) and advance only 1 byte
-		      codePoint = 0xFFFD;
-		      bytesPerSequence = 1;
-		    } else if (codePoint > 0xFFFF) {
-		      // encode to utf16 (surrogate pair dance)
-		      codePoint -= 0x10000;
-		      res.push(codePoint >>> 10 & 0x3FF | 0xD800);
-		      codePoint = 0xDC00 | codePoint & 0x3FF;
-		    }
-
-		    res.push(codePoint);
-		    i += bytesPerSequence;
-		  }
-
-		  return decodeCodePointsArray(res)
-		}
-
-		// Based on http://stackoverflow.com/a/22747272/680742, the browser with
-		// the lowest limit is Chrome, with 0x10000 args.
-		// We go 1 magnitude less, for safety
-		const MAX_ARGUMENTS_LENGTH = 0x1000;
-
-		function decodeCodePointsArray (codePoints) {
-		  const len = codePoints.length;
-		  if (len <= MAX_ARGUMENTS_LENGTH) {
-		    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
-		  }
-
-		  // Decode in chunks to avoid "call stack size exceeded".
-		  let res = '';
-		  let i = 0;
-		  while (i < len) {
-		    res += String.fromCharCode.apply(
-		      String,
-		      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
-		    );
-		  }
-		  return res
-		}
-
-		function asciiSlice (buf, start, end) {
-		  let ret = '';
-		  end = Math.min(buf.length, end);
-
-		  for (let i = start; i < end; ++i) {
-		    ret += String.fromCharCode(buf[i] & 0x7F);
-		  }
-		  return ret
-		}
-
-		function latin1Slice (buf, start, end) {
-		  let ret = '';
-		  end = Math.min(buf.length, end);
-
-		  for (let i = start; i < end; ++i) {
-		    ret += String.fromCharCode(buf[i]);
-		  }
-		  return ret
-		}
-
-		function hexSlice (buf, start, end) {
-		  const len = buf.length;
-
-		  if (!start || start < 0) start = 0;
-		  if (!end || end < 0 || end > len) end = len;
-
-		  let out = '';
-		  for (let i = start; i < end; ++i) {
-		    out += hexSliceLookupTable[buf[i]];
-		  }
-		  return out
-		}
-
-		function utf16leSlice (buf, start, end) {
-		  const bytes = buf.slice(start, end);
-		  let res = '';
-		  // If bytes.length is odd, the last 8 bits must be ignored (same as node.js)
-		  for (let i = 0; i < bytes.length - 1; i += 2) {
-		    res += String.fromCharCode(bytes[i] + (bytes[i + 1] * 256));
-		  }
-		  return res
-		}
-
-		Buffer.prototype.slice = function slice (start, end) {
-		  const len = this.length;
-		  start = ~~start;
-		  end = end === undefined ? len : ~~end;
-
-		  if (start < 0) {
-		    start += len;
-		    if (start < 0) start = 0;
-		  } else if (start > len) {
-		    start = len;
-		  }
-
-		  if (end < 0) {
-		    end += len;
-		    if (end < 0) end = 0;
-		  } else if (end > len) {
-		    end = len;
-		  }
-
-		  if (end < start) end = start;
-
-		  const newBuf = this.subarray(start, end);
-		  // Return an augmented `Uint8Array` instance
-		  Object.setPrototypeOf(newBuf, Buffer.prototype);
-
-		  return newBuf
-		};
-
-		/*
-		 * Need to make sure that buffer isn't trying to write out of bounds.
-		 */
-		function checkOffset (offset, ext, length) {
-		  if ((offset % 1) !== 0 || offset < 0) throw new RangeError('offset is not uint')
-		  if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
-		}
-
-		Buffer.prototype.readUintLE =
-		Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
-		  offset = offset >>> 0;
-		  byteLength = byteLength >>> 0;
-		  if (!noAssert) checkOffset(offset, byteLength, this.length);
-
-		  let val = this[offset];
-		  let mul = 1;
-		  let i = 0;
-		  while (++i < byteLength && (mul *= 0x100)) {
-		    val += this[offset + i] * mul;
-		  }
-
-		  return val
-		};
-
-		Buffer.prototype.readUintBE =
-		Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
-		  offset = offset >>> 0;
-		  byteLength = byteLength >>> 0;
-		  if (!noAssert) {
-		    checkOffset(offset, byteLength, this.length);
-		  }
-
-		  let val = this[offset + --byteLength];
-		  let mul = 1;
-		  while (byteLength > 0 && (mul *= 0x100)) {
-		    val += this[offset + --byteLength] * mul;
-		  }
-
-		  return val
-		};
-
-		Buffer.prototype.readUint8 =
-		Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 1, this.length);
-		  return this[offset]
-		};
-
-		Buffer.prototype.readUint16LE =
-		Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 2, this.length);
-		  return this[offset] | (this[offset + 1] << 8)
-		};
-
-		Buffer.prototype.readUint16BE =
-		Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 2, this.length);
-		  return (this[offset] << 8) | this[offset + 1]
-		};
-
-		Buffer.prototype.readUint32LE =
-		Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 4, this.length);
-
-		  return ((this[offset]) |
-		      (this[offset + 1] << 8) |
-		      (this[offset + 2] << 16)) +
-		      (this[offset + 3] * 0x1000000)
-		};
-
-		Buffer.prototype.readUint32BE =
-		Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 4, this.length);
-
-		  return (this[offset] * 0x1000000) +
-		    ((this[offset + 1] << 16) |
-		    (this[offset + 2] << 8) |
-		    this[offset + 3])
-		};
-
-		Buffer.prototype.readBigUInt64LE = defineBigIntMethod(function readBigUInt64LE (offset) {
-		  offset = offset >>> 0;
-		  validateNumber(offset, 'offset');
-		  const first = this[offset];
-		  const last = this[offset + 7];
-		  if (first === undefined || last === undefined) {
-		    boundsError(offset, this.length - 8);
-		  }
-
-		  const lo = first +
-		    this[++offset] * 2 ** 8 +
-		    this[++offset] * 2 ** 16 +
-		    this[++offset] * 2 ** 24;
-
-		  const hi = this[++offset] +
-		    this[++offset] * 2 ** 8 +
-		    this[++offset] * 2 ** 16 +
-		    last * 2 ** 24;
-
-		  return BigInt(lo) + (BigInt(hi) << BigInt(32))
-		});
-
-		Buffer.prototype.readBigUInt64BE = defineBigIntMethod(function readBigUInt64BE (offset) {
-		  offset = offset >>> 0;
-		  validateNumber(offset, 'offset');
-		  const first = this[offset];
-		  const last = this[offset + 7];
-		  if (first === undefined || last === undefined) {
-		    boundsError(offset, this.length - 8);
-		  }
-
-		  const hi = first * 2 ** 24 +
-		    this[++offset] * 2 ** 16 +
-		    this[++offset] * 2 ** 8 +
-		    this[++offset];
-
-		  const lo = this[++offset] * 2 ** 24 +
-		    this[++offset] * 2 ** 16 +
-		    this[++offset] * 2 ** 8 +
-		    last;
-
-		  return (BigInt(hi) << BigInt(32)) + BigInt(lo)
-		});
-
-		Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
-		  offset = offset >>> 0;
-		  byteLength = byteLength >>> 0;
-		  if (!noAssert) checkOffset(offset, byteLength, this.length);
-
-		  let val = this[offset];
-		  let mul = 1;
-		  let i = 0;
-		  while (++i < byteLength && (mul *= 0x100)) {
-		    val += this[offset + i] * mul;
-		  }
-		  mul *= 0x80;
-
-		  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
-
-		  return val
-		};
-
-		Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
-		  offset = offset >>> 0;
-		  byteLength = byteLength >>> 0;
-		  if (!noAssert) checkOffset(offset, byteLength, this.length);
-
-		  let i = byteLength;
-		  let mul = 1;
-		  let val = this[offset + --i];
-		  while (i > 0 && (mul *= 0x100)) {
-		    val += this[offset + --i] * mul;
-		  }
-		  mul *= 0x80;
-
-		  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
-
-		  return val
-		};
-
-		Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 1, this.length);
-		  if (!(this[offset] & 0x80)) return (this[offset])
-		  return ((0xff - this[offset] + 1) * -1)
-		};
-
-		Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 2, this.length);
-		  const val = this[offset] | (this[offset + 1] << 8);
-		  return (val & 0x8000) ? val | 0xFFFF0000 : val
-		};
-
-		Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 2, this.length);
-		  const val = this[offset + 1] | (this[offset] << 8);
-		  return (val & 0x8000) ? val | 0xFFFF0000 : val
-		};
-
-		Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 4, this.length);
-
-		  return (this[offset]) |
-		    (this[offset + 1] << 8) |
-		    (this[offset + 2] << 16) |
-		    (this[offset + 3] << 24)
-		};
-
-		Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 4, this.length);
-
-		  return (this[offset] << 24) |
-		    (this[offset + 1] << 16) |
-		    (this[offset + 2] << 8) |
-		    (this[offset + 3])
-		};
-
-		Buffer.prototype.readBigInt64LE = defineBigIntMethod(function readBigInt64LE (offset) {
-		  offset = offset >>> 0;
-		  validateNumber(offset, 'offset');
-		  const first = this[offset];
-		  const last = this[offset + 7];
-		  if (first === undefined || last === undefined) {
-		    boundsError(offset, this.length - 8);
-		  }
-
-		  const val = this[offset + 4] +
-		    this[offset + 5] * 2 ** 8 +
-		    this[offset + 6] * 2 ** 16 +
-		    (last << 24); // Overflow
-
-		  return (BigInt(val) << BigInt(32)) +
-		    BigInt(first +
-		    this[++offset] * 2 ** 8 +
-		    this[++offset] * 2 ** 16 +
-		    this[++offset] * 2 ** 24)
-		});
-
-		Buffer.prototype.readBigInt64BE = defineBigIntMethod(function readBigInt64BE (offset) {
-		  offset = offset >>> 0;
-		  validateNumber(offset, 'offset');
-		  const first = this[offset];
-		  const last = this[offset + 7];
-		  if (first === undefined || last === undefined) {
-		    boundsError(offset, this.length - 8);
-		  }
-
-		  const val = (first << 24) + // Overflow
-		    this[++offset] * 2 ** 16 +
-		    this[++offset] * 2 ** 8 +
-		    this[++offset];
-
-		  return (BigInt(val) << BigInt(32)) +
-		    BigInt(this[++offset] * 2 ** 24 +
-		    this[++offset] * 2 ** 16 +
-		    this[++offset] * 2 ** 8 +
-		    last)
-		});
-
-		Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 4, this.length);
-		  return ieee754$1.read(this, offset, true, 23, 4)
-		};
-
-		Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 4, this.length);
-		  return ieee754$1.read(this, offset, false, 23, 4)
-		};
-
-		Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 8, this.length);
-		  return ieee754$1.read(this, offset, true, 52, 8)
-		};
-
-		Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
-		  offset = offset >>> 0;
-		  if (!noAssert) checkOffset(offset, 8, this.length);
-		  return ieee754$1.read(this, offset, false, 52, 8)
-		};
-
-		function checkInt (buf, value, offset, ext, max, min) {
-		  if (!Buffer.isBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
-		  if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
-		  if (offset + ext > buf.length) throw new RangeError('Index out of range')
-		}
-
-		Buffer.prototype.writeUintLE =
-		Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  byteLength = byteLength >>> 0;
-		  if (!noAssert) {
-		    const maxBytes = Math.pow(2, 8 * byteLength) - 1;
-		    checkInt(this, value, offset, byteLength, maxBytes, 0);
-		  }
-
-		  let mul = 1;
-		  let i = 0;
-		  this[offset] = value & 0xFF;
-		  while (++i < byteLength && (mul *= 0x100)) {
-		    this[offset + i] = (value / mul) & 0xFF;
-		  }
-
-		  return offset + byteLength
-		};
-
-		Buffer.prototype.writeUintBE =
-		Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  byteLength = byteLength >>> 0;
-		  if (!noAssert) {
-		    const maxBytes = Math.pow(2, 8 * byteLength) - 1;
-		    checkInt(this, value, offset, byteLength, maxBytes, 0);
-		  }
-
-		  let i = byteLength - 1;
-		  let mul = 1;
-		  this[offset + i] = value & 0xFF;
-		  while (--i >= 0 && (mul *= 0x100)) {
-		    this[offset + i] = (value / mul) & 0xFF;
-		  }
-
-		  return offset + byteLength
-		};
-
-		Buffer.prototype.writeUint8 =
-		Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0);
-		  this[offset] = (value & 0xff);
-		  return offset + 1
-		};
-
-		Buffer.prototype.writeUint16LE =
-		Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
-		  this[offset] = (value & 0xff);
-		  this[offset + 1] = (value >>> 8);
-		  return offset + 2
-		};
-
-		Buffer.prototype.writeUint16BE =
-		Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
-		  this[offset] = (value >>> 8);
-		  this[offset + 1] = (value & 0xff);
-		  return offset + 2
-		};
-
-		Buffer.prototype.writeUint32LE =
-		Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
-		  this[offset + 3] = (value >>> 24);
-		  this[offset + 2] = (value >>> 16);
-		  this[offset + 1] = (value >>> 8);
-		  this[offset] = (value & 0xff);
-		  return offset + 4
-		};
-
-		Buffer.prototype.writeUint32BE =
-		Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
-		  this[offset] = (value >>> 24);
-		  this[offset + 1] = (value >>> 16);
-		  this[offset + 2] = (value >>> 8);
-		  this[offset + 3] = (value & 0xff);
-		  return offset + 4
-		};
-
-		function wrtBigUInt64LE (buf, value, offset, min, max) {
-		  checkIntBI(value, min, max, buf, offset, 7);
-
-		  let lo = Number(value & BigInt(0xffffffff));
-		  buf[offset++] = lo;
-		  lo = lo >> 8;
-		  buf[offset++] = lo;
-		  lo = lo >> 8;
-		  buf[offset++] = lo;
-		  lo = lo >> 8;
-		  buf[offset++] = lo;
-		  let hi = Number(value >> BigInt(32) & BigInt(0xffffffff));
-		  buf[offset++] = hi;
-		  hi = hi >> 8;
-		  buf[offset++] = hi;
-		  hi = hi >> 8;
-		  buf[offset++] = hi;
-		  hi = hi >> 8;
-		  buf[offset++] = hi;
-		  return offset
-		}
-
-		function wrtBigUInt64BE (buf, value, offset, min, max) {
-		  checkIntBI(value, min, max, buf, offset, 7);
-
-		  let lo = Number(value & BigInt(0xffffffff));
-		  buf[offset + 7] = lo;
-		  lo = lo >> 8;
-		  buf[offset + 6] = lo;
-		  lo = lo >> 8;
-		  buf[offset + 5] = lo;
-		  lo = lo >> 8;
-		  buf[offset + 4] = lo;
-		  let hi = Number(value >> BigInt(32) & BigInt(0xffffffff));
-		  buf[offset + 3] = hi;
-		  hi = hi >> 8;
-		  buf[offset + 2] = hi;
-		  hi = hi >> 8;
-		  buf[offset + 1] = hi;
-		  hi = hi >> 8;
-		  buf[offset] = hi;
-		  return offset + 8
-		}
-
-		Buffer.prototype.writeBigUInt64LE = defineBigIntMethod(function writeBigUInt64LE (value, offset = 0) {
-		  return wrtBigUInt64LE(this, value, offset, BigInt(0), BigInt('0xffffffffffffffff'))
-		});
-
-		Buffer.prototype.writeBigUInt64BE = defineBigIntMethod(function writeBigUInt64BE (value, offset = 0) {
-		  return wrtBigUInt64BE(this, value, offset, BigInt(0), BigInt('0xffffffffffffffff'))
-		});
-
-		Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) {
-		    const limit = Math.pow(2, (8 * byteLength) - 1);
-
-		    checkInt(this, value, offset, byteLength, limit - 1, -limit);
-		  }
-
-		  let i = 0;
-		  let mul = 1;
-		  let sub = 0;
-		  this[offset] = value & 0xFF;
-		  while (++i < byteLength && (mul *= 0x100)) {
-		    if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
-		      sub = 1;
-		    }
-		    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
-		  }
-
-		  return offset + byteLength
-		};
-
-		Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) {
-		    const limit = Math.pow(2, (8 * byteLength) - 1);
-
-		    checkInt(this, value, offset, byteLength, limit - 1, -limit);
-		  }
-
-		  let i = byteLength - 1;
-		  let mul = 1;
-		  let sub = 0;
-		  this[offset + i] = value & 0xFF;
-		  while (--i >= 0 && (mul *= 0x100)) {
-		    if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
-		      sub = 1;
-		    }
-		    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
-		  }
-
-		  return offset + byteLength
-		};
-
-		Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80);
-		  if (value < 0) value = 0xff + value + 1;
-		  this[offset] = (value & 0xff);
-		  return offset + 1
-		};
-
-		Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
-		  this[offset] = (value & 0xff);
-		  this[offset + 1] = (value >>> 8);
-		  return offset + 2
-		};
-
-		Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
-		  this[offset] = (value >>> 8);
-		  this[offset + 1] = (value & 0xff);
-		  return offset + 2
-		};
-
-		Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
-		  this[offset] = (value & 0xff);
-		  this[offset + 1] = (value >>> 8);
-		  this[offset + 2] = (value >>> 16);
-		  this[offset + 3] = (value >>> 24);
-		  return offset + 4
-		};
-
-		Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
-		  if (value < 0) value = 0xffffffff + value + 1;
-		  this[offset] = (value >>> 24);
-		  this[offset + 1] = (value >>> 16);
-		  this[offset + 2] = (value >>> 8);
-		  this[offset + 3] = (value & 0xff);
-		  return offset + 4
-		};
-
-		Buffer.prototype.writeBigInt64LE = defineBigIntMethod(function writeBigInt64LE (value, offset = 0) {
-		  return wrtBigUInt64LE(this, value, offset, -BigInt('0x8000000000000000'), BigInt('0x7fffffffffffffff'))
-		});
-
-		Buffer.prototype.writeBigInt64BE = defineBigIntMethod(function writeBigInt64BE (value, offset = 0) {
-		  return wrtBigUInt64BE(this, value, offset, -BigInt('0x8000000000000000'), BigInt('0x7fffffffffffffff'))
-		});
-
-		function checkIEEE754 (buf, value, offset, ext, max, min) {
-		  if (offset + ext > buf.length) throw new RangeError('Index out of range')
-		  if (offset < 0) throw new RangeError('Index out of range')
-		}
-
-		function writeFloat (buf, value, offset, littleEndian, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) {
-		    checkIEEE754(buf, value, offset, 4);
-		  }
-		  ieee754$1.write(buf, value, offset, littleEndian, 23, 4);
-		  return offset + 4
-		}
-
-		Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
-		  return writeFloat(this, value, offset, true, noAssert)
-		};
-
-		Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
-		  return writeFloat(this, value, offset, false, noAssert)
-		};
-
-		function writeDouble (buf, value, offset, littleEndian, noAssert) {
-		  value = +value;
-		  offset = offset >>> 0;
-		  if (!noAssert) {
-		    checkIEEE754(buf, value, offset, 8);
-		  }
-		  ieee754$1.write(buf, value, offset, littleEndian, 52, 8);
-		  return offset + 8
-		}
-
-		Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
-		  return writeDouble(this, value, offset, true, noAssert)
-		};
-
-		Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
-		  return writeDouble(this, value, offset, false, noAssert)
-		};
-
-		// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
-		Buffer.prototype.copy = function copy (target, targetStart, start, end) {
-		  if (!Buffer.isBuffer(target)) throw new TypeError('argument should be a Buffer')
-		  if (!start) start = 0;
-		  if (!end && end !== 0) end = this.length;
-		  if (targetStart >= target.length) targetStart = target.length;
-		  if (!targetStart) targetStart = 0;
-		  if (end > 0 && end < start) end = start;
-
-		  // Copy 0 bytes; we're done
-		  if (end === start) return 0
-		  if (target.length === 0 || this.length === 0) return 0
-
-		  // Fatal error conditions
-		  if (targetStart < 0) {
-		    throw new RangeError('targetStart out of bounds')
-		  }
-		  if (start < 0 || start >= this.length) throw new RangeError('Index out of range')
-		  if (end < 0) throw new RangeError('sourceEnd out of bounds')
-
-		  // Are we oob?
-		  if (end > this.length) end = this.length;
-		  if (target.length - targetStart < end - start) {
-		    end = target.length - targetStart + start;
-		  }
-
-		  const len = end - start;
-
-		  if (this === target && typeof Uint8Array.prototype.copyWithin === 'function') {
-		    // Use built-in when available, missing from IE11
-		    this.copyWithin(targetStart, start, end);
-		  } else {
-		    Uint8Array.prototype.set.call(
-		      target,
-		      this.subarray(start, end),
-		      targetStart
-		    );
-		  }
-
-		  return len
-		};
-
-		// Usage:
-		//    buffer.fill(number[, offset[, end]])
-		//    buffer.fill(buffer[, offset[, end]])
-		//    buffer.fill(string[, offset[, end]][, encoding])
-		Buffer.prototype.fill = function fill (val, start, end, encoding) {
-		  // Handle string cases:
-		  if (typeof val === 'string') {
-		    if (typeof start === 'string') {
-		      encoding = start;
-		      start = 0;
-		      end = this.length;
-		    } else if (typeof end === 'string') {
-		      encoding = end;
-		      end = this.length;
-		    }
-		    if (encoding !== undefined && typeof encoding !== 'string') {
-		      throw new TypeError('encoding must be a string')
-		    }
-		    if (typeof encoding === 'string' && !Buffer.isEncoding(encoding)) {
-		      throw new TypeError('Unknown encoding: ' + encoding)
-		    }
-		    if (val.length === 1) {
-		      const code = val.charCodeAt(0);
-		      if ((encoding === 'utf8' && code < 128) ||
-		          encoding === 'latin1') {
-		        // Fast path: If `val` fits into a single byte, use that numeric value.
-		        val = code;
-		      }
-		    }
-		  } else if (typeof val === 'number') {
-		    val = val & 255;
-		  } else if (typeof val === 'boolean') {
-		    val = Number(val);
-		  }
-
-		  // Invalid ranges are not set to a default, so can range check early.
-		  if (start < 0 || this.length < start || this.length < end) {
-		    throw new RangeError('Out of range index')
-		  }
-
-		  if (end <= start) {
-		    return this
-		  }
-
-		  start = start >>> 0;
-		  end = end === undefined ? this.length : end >>> 0;
-
-		  if (!val) val = 0;
-
-		  let i;
-		  if (typeof val === 'number') {
-		    for (i = start; i < end; ++i) {
-		      this[i] = val;
-		    }
-		  } else {
-		    const bytes = Buffer.isBuffer(val)
-		      ? val
-		      : Buffer.from(val, encoding);
-		    const len = bytes.length;
-		    if (len === 0) {
-		      throw new TypeError('The value "' + val +
-		        '" is invalid for argument "value"')
-		    }
-		    for (i = 0; i < end - start; ++i) {
-		      this[i + start] = bytes[i % len];
-		    }
-		  }
-
-		  return this
-		};
-
-		// CUSTOM ERRORS
-		// =============
-
-		// Simplified versions from Node, changed for Buffer-only usage
-		const errors = {};
-		function E (sym, getMessage, Base) {
-		  errors[sym] = class NodeError extends Base {
-		    constructor () {
-		      super();
-
-		      Object.defineProperty(this, 'message', {
-		        value: getMessage.apply(this, arguments),
-		        writable: true,
-		        configurable: true
-		      });
-
-		      // Add the error code to the name to include it in the stack trace.
-		      this.name = `${this.name} [${sym}]`;
-		      // Access the stack to generate the error message including the error code
-		      // from the name.
-		      this.stack; // eslint-disable-line no-unused-expressions
-		      // Reset the name to the actual name.
-		      delete this.name;
-		    }
-
-		    get code () {
-		      return sym
-		    }
-
-		    set code (value) {
-		      Object.defineProperty(this, 'code', {
-		        configurable: true,
-		        enumerable: true,
-		        value,
-		        writable: true
-		      });
-		    }
-
-		    toString () {
-		      return `${this.name} [${sym}]: ${this.message}`
-		    }
-		  };
-		}
-
-		E('ERR_BUFFER_OUT_OF_BOUNDS',
-		  function (name) {
-		    if (name) {
-		      return `${name} is outside of buffer bounds`
-		    }
-
-		    return 'Attempt to access memory outside buffer bounds'
-		  }, RangeError);
-		E('ERR_INVALID_ARG_TYPE',
-		  function (name, actual) {
-		    return `The "${name}" argument must be of type number. Received type ${typeof actual}`
-		  }, TypeError);
-		E('ERR_OUT_OF_RANGE',
-		  function (str, range, input) {
-		    let msg = `The value of "${str}" is out of range.`;
-		    let received = input;
-		    if (Number.isInteger(input) && Math.abs(input) > 2 ** 32) {
-		      received = addNumericalSeparator(String(input));
-		    } else if (typeof input === 'bigint') {
-		      received = String(input);
-		      if (input > BigInt(2) ** BigInt(32) || input < -(BigInt(2) ** BigInt(32))) {
-		        received = addNumericalSeparator(received);
-		      }
-		      received += 'n';
-		    }
-		    msg += ` It must be ${range}. Received ${received}`;
-		    return msg
-		  }, RangeError);
-
-		function addNumericalSeparator (val) {
-		  let res = '';
-		  let i = val.length;
-		  const start = val[0] === '-' ? 1 : 0;
-		  for (; i >= start + 4; i -= 3) {
-		    res = `_${val.slice(i - 3, i)}${res}`;
-		  }
-		  return `${val.slice(0, i)}${res}`
-		}
-
-		// CHECK FUNCTIONS
-		// ===============
-
-		function checkBounds (buf, offset, byteLength) {
-		  validateNumber(offset, 'offset');
-		  if (buf[offset] === undefined || buf[offset + byteLength] === undefined) {
-		    boundsError(offset, buf.length - (byteLength + 1));
-		  }
-		}
-
-		function checkIntBI (value, min, max, buf, offset, byteLength) {
-		  if (value > max || value < min) {
-		    const n = typeof min === 'bigint' ? 'n' : '';
-		    let range;
-		    if (byteLength > 3) {
-		      if (min === 0 || min === BigInt(0)) {
-		        range = `>= 0${n} and < 2${n} ** ${(byteLength + 1) * 8}${n}`;
-		      } else {
-		        range = `>= -(2${n} ** ${(byteLength + 1) * 8 - 1}${n}) and < 2 ** ` +
-		                `${(byteLength + 1) * 8 - 1}${n}`;
-		      }
-		    } else {
-		      range = `>= ${min}${n} and <= ${max}${n}`;
-		    }
-		    throw new errors.ERR_OUT_OF_RANGE('value', range, value)
-		  }
-		  checkBounds(buf, offset, byteLength);
-		}
-
-		function validateNumber (value, name) {
-		  if (typeof value !== 'number') {
-		    throw new errors.ERR_INVALID_ARG_TYPE(name, 'number', value)
-		  }
-		}
-
-		function boundsError (value, length, type) {
-		  if (Math.floor(value) !== value) {
-		    validateNumber(value, type);
-		    throw new errors.ERR_OUT_OF_RANGE(type || 'offset', 'an integer', value)
-		  }
-
-		  if (length < 0) {
-		    throw new errors.ERR_BUFFER_OUT_OF_BOUNDS()
-		  }
-
-		  throw new errors.ERR_OUT_OF_RANGE(type || 'offset',
-		                                    `>= ${type ? 1 : 0} and <= ${length}`,
-		                                    value)
-		}
-
-		// HELPER FUNCTIONS
-		// ================
-
-		const INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g;
-
-		function base64clean (str) {
-		  // Node takes equal signs as end of the Base64 encoding
-		  str = str.split('=')[0];
-		  // Node strips out invalid characters like \n and \t from the string, base64-js does not
-		  str = str.trim().replace(INVALID_BASE64_RE, '');
-		  // Node converts strings with length < 2 to ''
-		  if (str.length < 2) return ''
-		  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
-		  while (str.length % 4 !== 0) {
-		    str = str + '=';
-		  }
-		  return str
-		}
-
-		function utf8ToBytes (string, units) {
-		  units = units || Infinity;
-		  let codePoint;
-		  const length = string.length;
-		  let leadSurrogate = null;
-		  const bytes = [];
-
-		  for (let i = 0; i < length; ++i) {
-		    codePoint = string.charCodeAt(i);
-
-		    // is surrogate component
-		    if (codePoint > 0xD7FF && codePoint < 0xE000) {
-		      // last char was a lead
-		      if (!leadSurrogate) {
-		        // no lead yet
-		        if (codePoint > 0xDBFF) {
-		          // unexpected trail
-		          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
-		          continue
-		        } else if (i + 1 === length) {
-		          // unpaired lead
-		          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
-		          continue
-		        }
-
-		        // valid lead
-		        leadSurrogate = codePoint;
-
-		        continue
-		      }
-
-		      // 2 leads in a row
-		      if (codePoint < 0xDC00) {
-		        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
-		        leadSurrogate = codePoint;
-		        continue
-		      }
-
-		      // valid surrogate pair
-		      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000;
-		    } else if (leadSurrogate) {
-		      // valid bmp char, but last char was a lead
-		      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
-		    }
-
-		    leadSurrogate = null;
-
-		    // encode utf8
-		    if (codePoint < 0x80) {
-		      if ((units -= 1) < 0) break
-		      bytes.push(codePoint);
-		    } else if (codePoint < 0x800) {
-		      if ((units -= 2) < 0) break
-		      bytes.push(
-		        codePoint >> 0x6 | 0xC0,
-		        codePoint & 0x3F | 0x80
-		      );
-		    } else if (codePoint < 0x10000) {
-		      if ((units -= 3) < 0) break
-		      bytes.push(
-		        codePoint >> 0xC | 0xE0,
-		        codePoint >> 0x6 & 0x3F | 0x80,
-		        codePoint & 0x3F | 0x80
-		      );
-		    } else if (codePoint < 0x110000) {
-		      if ((units -= 4) < 0) break
-		      bytes.push(
-		        codePoint >> 0x12 | 0xF0,
-		        codePoint >> 0xC & 0x3F | 0x80,
-		        codePoint >> 0x6 & 0x3F | 0x80,
-		        codePoint & 0x3F | 0x80
-		      );
-		    } else {
-		      throw new Error('Invalid code point')
-		    }
-		  }
-
-		  return bytes
-		}
-
-		function asciiToBytes (str) {
-		  const byteArray = [];
-		  for (let i = 0; i < str.length; ++i) {
-		    // Node's code seems to be doing this and not & 0x7F..
-		    byteArray.push(str.charCodeAt(i) & 0xFF);
-		  }
-		  return byteArray
-		}
-
-		function utf16leToBytes (str, units) {
-		  let c, hi, lo;
-		  const byteArray = [];
-		  for (let i = 0; i < str.length; ++i) {
-		    if ((units -= 2) < 0) break
-
-		    c = str.charCodeAt(i);
-		    hi = c >> 8;
-		    lo = c % 256;
-		    byteArray.push(lo);
-		    byteArray.push(hi);
-		  }
-
-		  return byteArray
-		}
-
-		function base64ToBytes (str) {
-		  return base64.toByteArray(base64clean(str))
-		}
-
-		function blitBuffer (src, dst, offset, length) {
-		  let i;
-		  for (i = 0; i < length; ++i) {
-		    if ((i + offset >= dst.length) || (i >= src.length)) break
-		    dst[i + offset] = src[i];
-		  }
-		  return i
-		}
-
-		// ArrayBuffer or Uint8Array objects from other contexts (i.e. iframes) do not pass
-		// the `instanceof` check but they should be treated as of that type.
-		// See: https://github.com/feross/buffer/issues/166
-		function isInstance (obj, type) {
-		  return obj instanceof type ||
-		    (obj != null && obj.constructor != null && obj.constructor.name != null &&
-		      obj.constructor.name === type.name)
-		}
-		function numberIsNaN (obj) {
-		  // For IE11 support
-		  return obj !== obj // eslint-disable-line no-self-compare
-		}
-
-		// Create lookup table for `toString('hex')`
-		// See: https://github.com/feross/buffer/issues/219
-		const hexSliceLookupTable = (function () {
-		  const alphabet = '0123456789abcdef';
-		  const table = new Array(256);
-		  for (let i = 0; i < 16; ++i) {
-		    const i16 = i * 16;
-		    for (let j = 0; j < 16; ++j) {
-		      table[i16 + j] = alphabet[i] + alphabet[j];
-		    }
-		  }
-		  return table
-		})();
-
-		// Return not function with Error if BigInt not supported
-		function defineBigIntMethod (fn) {
-		  return typeof BigInt === 'undefined' ? BufferBigIntNotDefined : fn
-		}
-
-		function BufferBigIntNotDefined () {
-		  throw new Error('BigInt not supported')
-		} 
-	} (buffer));
-
-	const aspectRatio = (objectFit)=>{
-	    switch(objectFit){
-	        case 'contain':
-	        case 'scale-down':
-	            return 'xMidYMid meet';
-	        case 'cover':
-	            return 'xMidYMid slice';
-	        case 'fill':
-	            return 'none';
-	        case 'none':
-	            return 'xMinYMin slice';
-	        default:
-	            return 'xMidYMid meet';
-	    }
-	}, fetchPath = async (path)=>{
-	    const ext = path.split('.').pop()?.toLowerCase();
-	    let status = 200;
-	    try {
-	        const result = await fetch(path);
-	        status = result.status;
-	        if (ext === 'json') return await result.json();
-	        const buffer$1 = new Uint8Array(await result.arrayBuffer()), unzipped = await new Promise((resolve, reject)=>{
-	            unzip(buffer$1, (err, file)=>{
-	                if (err) reject(err);
-	                resolve(file);
-	            });
-	        }), manifestFile = strFromU8(unzipped['manifest.json']), manifest = JSON.parse(manifestFile);
-	        if (!('animations' in manifest)) throw new Error('Manifest not found');
-	        if (!manifest.animations.length) throw new Error('No animations listed in manifest');
-	        const { id } = manifest.animations[0], lottieString = strFromU8(unzipped?.[`animations/${id}.json`]), lottieJson = await JSON.parse(lottieString);
-	        if ('assets' in lottieJson) {
-	            Promise.all(lottieJson.assets.map((asset)=>{
-	                const { p } = asset;
-	                if (!p || !unzipped?.[`images/${p}`]) return;
-	                return new Promise((resolveAsset)=>{
-	                    const ext = p.split('.').pop(), assetB64 = buffer.Buffer.from(unzipped?.[`images/${p}`])?.toString('base64');
-	                    switch(ext){
-	                        case 'svg':
-	                        case 'svg+xml':
-	                            asset.p = `data:image/svg+xml;base64,${assetB64}`;
-	                            break;
-	                        case 'png':
-	                        case 'jpg':
-	                        case 'jpeg':
-	                        case 'gif':
-	                        case 'webp':
-	                            asset.p = `data:image/${ext};base64,${assetB64}`;
-	                            break;
-	                        default:
-	                            asset.p = `data:;base64,${assetB64}`;
-	                    }
-	                    asset.e = 1;
-	                    resolveAsset();
-	                });
-	            }));
-	        }
-	        return lottieJson;
-	    } catch (err) {
-	        if (status === 404) {
-	            throw new Error('File not found');
-	        } else {
-	            throw new Error('Unable to load file');
-	        }
-	    }
-	};
-
 	exports.PlayerState = void 0;
 	(function(PlayerState) {
 	    PlayerState["Completed"] = 'completed';
@@ -15831,9 +13422,309 @@
 	    PlayerEvents["Rendered"] = 'rendered';
 	    PlayerEvents["Stop"] = 'stop';
 	})(exports.PlayerEvents || (exports.PlayerEvents = {}));
+	class CustomError extends Error {
+	}
 
-	var styles = i$5`*{box-sizing:border-box}:host{--lottie-player-toolbar-height:35px;--lottie-player-toolbar-background-color:#FFF;--lottie-player-toolbar-icon-color:#000;--lottie-player-toolbar-icon-hover-color:#000;--lottie-player-toolbar-icon-active-color:#4285f4;--lottie-player-seeker-track-color:rgba(0, 0, 0, 0.2);--lottie-player-seeker-thumb-color:#4285f4;--lottie-player-seeker-display:block;display:block;width:100%;height:100%}@media (prefers-color-scheme:dark){:host{--lottie-player-toolbar-background-color:#000;--lottie-player-toolbar-icon-color:#FFF;--lottie-player-toolbar-icon-hover-color:#FFF;--lottie-player-seeker-track-color:rgba(255, 255, 255, 0.6)}}.main{display:flex;flex-direction:column;height:100%;width:100%}.animation{width:100%;height:100%;display:flex}.animation.controls{height:calc(100% - 35px)}.toolbar{display:flex;align-items:center;justify-items:center;background:var(--lottie-player-toolbar-background-color);margin:0;height:35px;padding:5px;border-radius:5px}.toolbar.has-error{pointer-events:none;opacity:.5}.toolbar button{cursor:pointer;fill:var(--lottie-player-toolbar-icon-color);display:flex;background:0 0;border:0;padding:0;outline:0;height:100%}.toolbar button.active{fill:var(--lottie-player-toolbar-icon-active-color)}.toolbar button:focus{outline:0}.toolbar button svg>*{fill:inherit}.toolbar button.disabled svg{display:none}.progress-container{position:relative;width:100%}.seeker,.seeker::-webkit-slider-runnable-track,.seeker::-webkit-slider-thumb,progress{-webkit-appearance:none;appearance:none;outline:0}.seeker{width:100%;height:5px;border-radius:3px;border:0;cursor:pointer;background-color:transparent;display:var(--lottie-player-seeker-display);color:var(--lottie-player-seeker-thumb-color);margin:0;position:relative;z-index:1}progress{position:absolute;width:100%;height:5px;border-radius:3px;border:0;top:0;left:0;margin:0;background-color:var(--lottie-player-seeker-track-color);pointer-events:none}::-moz-progress-bar{background-color:var(--lottie-player-seeker-thumb-color)}::-webkit-progress-inner-element{border-radius:3px;overflow:hidden}::-webkit-slider-runnable-track{background-color:transparent}::-webkit-progress-value{background-color:var(--lottie-player-seeker-thumb-color)}.seeker::-webkit-slider-thumb{height:15px;width:15px;border-radius:50%;border:0;background-color:var(--lottie-player-seeker-thumb-color);cursor:pointer}.seeker::-moz-range-progress{background-color:var(--lottie-player-seeker-thumb-color);height:5px;border-radius:3px}.seeker::-moz-range-thumb{height:15px;width:15px;border-radius:50%;background-color:var(--lottie-player-seeker-thumb-color);border:0;cursor:pointer}.seeker::-ms-track{width:100%;height:5px;cursor:pointer;background:0 0;border-color:transparent;color:transparent}.seeker::-ms-fill-upper{background:var(--lottie-player-seeker-track-color);border-radius:3px}.seeker::-ms-fill-lower{background-color:var(--lottie-player-seeker-thumb-color);border-radius:3px}.seeker::-ms-thumb{border:0;height:15px;width:15px;border-radius:50%;background:var(--lottie-player-seeker-thumb-color);cursor:pointer}.seeker:focus::-ms-fill-lower{background:var(--lottie-player-seeker-track-color)}.seeker:focus::-ms-fill-upper{background:var(--lottie-player-seeker-track-color)}.error{display:flex;margin:auto;justify-content:center;height:100%;align-items:center}.error svg{width:100%;height:auto}`;
+	function asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, key, arg) {
+	    try {
+	        var info = gen[key](arg);
+	        var value = info.value;
+	    } catch (error) {
+	        reject(error);
+	        return;
+	    }
+	    if (info.done) {
+	        resolve(value);
+	    } else {
+	        Promise.resolve(value).then(_next, _throw);
+	    }
+	}
+	function _async_to_generator$1(fn) {
+	    return function() {
+	        var self = this, args = arguments;
+	        return new Promise(function(resolve, reject) {
+	            var gen = fn.apply(self, args);
+	            function _next(value) {
+	                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "next", value);
+	            }
+	            function _throw(err) {
+	                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "throw", err);
+	            }
+	            _next(undefined);
+	        });
+	    };
+	}
+	const aspectRatio = (objectFit)=>{
+	    switch(objectFit){
+	        case 'contain':
+	        case 'scale-down':
+	            return 'xMidYMid meet';
+	        case 'cover':
+	            return 'xMidYMid slice';
+	        case 'fill':
+	            return 'none';
+	        case 'none':
+	            return 'xMinYMin slice';
+	        default:
+	            return 'xMidYMid meet';
+	    }
+	}, download = (data, options)=>{
+	    var _options, _options1;
+	    const blob = new Blob([
+	        data
+	    ], {
+	        type: (_options = options) === null || _options === void 0 ? void 0 : _options.mimeType
+	    }), fileName = ((_options1 = options) === null || _options1 === void 0 ? void 0 : _options1.name) || useId(), dataURL = URL.createObjectURL(blob), link = document.createElement('a');
+	    link.href = dataURL;
+	    link.download = fileName;
+	    link.hidden = true;
+	    document.body.appendChild(link);
+	    link.click();
+	    setTimeout(()=>{
+	        link.remove();
+	        URL.revokeObjectURL(dataURL);
+	    }, 1000);
+	}, handleErrors = (err)=>{
+	    const res = {
+	        message: 'Unknown error',
+	        status: isServer() ? 500 : 400
+	    };
+	    if (err && typeof err === 'object') {
+	        if ('message' in err && typeof err.message === 'string') {
+	            res.message = err.message;
+	        }
+	        if ('status' in err) {
+	            res.status = Number(err.status);
+	        }
+	    }
+	    return res;
+	}, frameOutput = (frame)=>{
+	    return ((frame !== null && frame !== void 0 ? frame : 0) + 1).toString().padStart(3, '0');
+	}, getAnimationData = function() {
+	    var _ref = _async_to_generator$1(function*(input) {
+	        try {
+	            if (!input || typeof input !== 'string' && typeof input !== 'object') {
+	                throw new Error('Broken file or invalid file format');
+	            }
+	            if (typeof input !== 'string') {
+	                const animations = Array.isArray(input) ? input : [
+	                    input
+	                ];
+	                return {
+	                    animations,
+	                    manifest: null
+	                };
+	            }
+	            const result = yield fetch(input);
+	            if (!result.ok) {
+	                const error = new CustomError(result.statusText);
+	                error.status = result.status;
+	                throw error;
+	            }
+	            if (getExt(input) === 'json') {
+	                const lottie = yield result.json();
+	                return {
+	                    animations: [
+	                        lottie
+	                    ],
+	                    manifest: null
+	                };
+	            }
+	            const { data, manifest } = yield getLottieJSON(result);
+	            return {
+	                animations: data,
+	                manifest,
+	                isDotLottie: true
+	            };
+	        } catch (err) {
+	            console.error(`❌ ${handleErrors(err).message}`);
+	            return {
+	                animations: null,
+	                manifest: null
+	            };
+	        }
+	    });
+	    return function getAnimationData(input) {
+	        return _ref.apply(this, arguments);
+	    };
+	}(), getExt = (str)=>{
+	    var _str_split_pop;
+	    var _str_split_pop_toLowerCase;
+	    return (_str_split_pop_toLowerCase = (_str_split_pop = str.split('.').pop()) === null || _str_split_pop === void 0 ? void 0 : _str_split_pop.toLowerCase()) !== null && _str_split_pop_toLowerCase !== void 0 ? _str_split_pop_toLowerCase : '';
+	}, getFilename = (src, keepExt)=>{
+	    const ext = getExt(src);
+	    return `${src.replace(/\.[^.]*$/, '').replace(/\W+/g, '')}${keepExt ? `.${ext}` : ''}`.toLowerCase();
+	}, getLottieJSON = function() {
+	    var _ref = _async_to_generator$1(function*(resp) {
+	        const unzipped = yield unzip(resp), manifest = getManifest(unzipped), data = [];
+	        for (const { id } of manifest.animations){
+	            const str = strFromU8(unzipped[`animations/${id}.json`]), lottie = JSON.parse(str);
+	            yield resolveAssets(unzipped, lottie.assets);
+	            data.push(lottie);
+	        }
+	        return {
+	            data,
+	            manifest
+	        };
+	    });
+	    return function getLottieJSON(resp) {
+	        return _ref.apply(this, arguments);
+	    };
+	}(), getManifest = (unzipped)=>{
+	    const file = strFromU8(unzipped['manifest.json'], false), manifest = JSON.parse(file);
+	    if (!('animations' in manifest)) throw new Error('Manifest not found');
+	    if (!manifest.animations.length) throw new Error('No animations listed in manifest');
+	    return manifest;
+	}, getMimeFromExt = (ext)=>{
+	    switch(ext){
+	        case 'svg':
+	        case 'svg+xml':
+	            return 'image/svg+xml';
+	        case 'jpg':
+	        case 'jpeg':
+	            return 'image/jpeg';
+	        case 'png':
+	        case 'gif':
+	        case 'webp':
+	            return `image/${ext}`;
+	        case 'mp3':
+	        case 'mpeg':
+	        case 'wav':
+	            return `audio/${ext}`;
+	        default:
+	            return '';
+	    }
+	}, isAudio = (asset)=>{
+	    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset;
+	}, isImage = (asset)=>{
+	    return 'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset;
+	}, isServer = ()=>{
+	    return !(typeof window !== 'undefined' && window.document);
+	}, resolveAssets = function() {
+	    var _ref = _async_to_generator$1(function*(unzipped, assets) {
+	        if (!Array.isArray(assets)) return;
+	        const toResolve = [];
+	        for (const asset of assets){
+	            var _unzipped;
+	            if (!isAudio(asset) && !isImage(asset)) continue;
+	            const type = isImage(asset) ? 'images' : 'audio', u8 = (_unzipped = unzipped) === null || _unzipped === void 0 ? void 0 : _unzipped[`${type}/${asset.p}`];
+	            if (!u8) continue;
+	            toResolve.push(new Promise((resolveAsset)=>{
+	                const assetB64 = isServer() ? Buffer.from(u8).toString('base64') : btoa(u8.reduce((dat, byte)=>dat + String.fromCharCode(byte), ''));
+	                asset.p = `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`;
+	                asset.e = 1;
+	                asset.u = '';
+	                resolveAsset();
+	            }));
+	        }
+	        yield Promise.all(toResolve);
+	    });
+	    return function resolveAssets(unzipped, assets) {
+	        return _ref.apply(this, arguments);
+	    };
+	}(), unzip = function() {
+	    var _ref = _async_to_generator$1(function*(resp) {
+	        const buffer = new Uint8Array((yield resp.arrayBuffer())), unzipped = yield new Promise((resolve, reject)=>{
+	            unzip$1(buffer, (err, file)=>{
+	                if (err) reject(err);
+	                resolve(file);
+	            });
+	        });
+	        return unzipped;
+	    });
+	    return function unzip(resp) {
+	        return _ref.apply(this, arguments);
+	    };
+	}(), useId = (prefix)=>{
+	    const s4 = ()=>{
+	        return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	    };
+	    return `${prefix !== null && prefix !== void 0 ? prefix : `:${s4()}`}-${s4()}`;
+	};
 
+	var styles = i$4`*{box-sizing:border-box}:host{--lottie-player-toolbar-height:35px;--lottie-player-toolbar-background-color:#FFF;--lottie-player-toolbar-icon-color:#000;--lottie-player-toolbar-icon-hover-color:#000;--lottie-player-toolbar-icon-active-color:#4285f4;--lottie-player-seeker-track-color:rgba(0, 0, 0, 0.2);--lottie-player-seeker-thumb-color:#4285f4;--lottie-player-seeker-display:block;display:block;width:100%;height:100%}@media (prefers-color-scheme:dark){:host{--lottie-player-toolbar-background-color:#000;--lottie-player-toolbar-icon-color:#FFF;--lottie-player-toolbar-icon-hover-color:#FFF;--lottie-player-seeker-track-color:rgba(255, 255, 255, 0.6)}}.main{display:flex;flex-direction:column;height:100%;width:100%}.animation{width:100%;height:100%;display:flex}[data-controls=true] .animation{height:calc(100% - 35px)}.animation-container{position:relative}.popover{position:absolute;right:5px;bottom:40px;background-color:var(--lottie-player-toolbar-background-color);border-radius:5px;padding:10px 15px;border:solid 2px var(--lottie-player-toolbar-icon-color);animation:fadeIn .2s ease-in-out}.popover::before{content:"";right:10px;border:7px solid transparent;border-top-color:transparent;margin-right:-7px;height:0;width:0;position:absolute;pointer-events:none;top:100%;border-top-color:var(--lottie-player-toolbar-icon-color)}.toolbar{display:flex;align-items:center;justify-items:center;background:var(--lottie-player-toolbar-background-color);margin:0;height:35px;padding:5px;border-radius:5px;gap:5px}.toolbar.has-error{pointer-events:none;opacity:.5}.toolbar button{cursor:pointer;fill:var(--lottie-player-toolbar-icon-color);color:var(--lottie-player-toolbar-icon-color);display:flex;background:0 0;border:0;padding:0;outline:0;height:100%;margin:0;align-items:center;gap:5px;opacity:.9}.toolbar button:hover{opacity:1}.toolbar button[data-active=true]{opacity:1;fill:var(--lottie-player-toolbar-icon-active-color)}.toolbar button:disabled{opacity:.5}.toolbar button:focus{outline:0}.toolbar button svg{pointer-events:none}.toolbar button svg>*{fill:inherit}.toolbar button.disabled svg{display:none}.progress-container{position:relative;width:100%}.seeker,.seeker::-webkit-slider-runnable-track,.seeker::-webkit-slider-thumb,progress{-webkit-appearance:none;appearance:none;outline:0}.seeker{width:100%;height:20px;border-radius:3px;border:0;cursor:pointer;background-color:transparent;display:var(--lottie-player-seeker-display);color:var(--lottie-player-seeker-thumb-color);margin:0;padding:7.5px 0;position:relative;z-index:1}progress{position:absolute;width:100%;height:5px;border-radius:3px;border:0;top:0;left:0;margin:7.5px 0;background-color:var(--lottie-player-seeker-track-color);pointer-events:none}::-moz-progress-bar{background-color:var(--lottie-player-seeker-thumb-color)}::-webkit-progress-inner-element{border-radius:3px;overflow:hidden}::-webkit-slider-runnable-track{background-color:transparent}::-webkit-progress-value{background-color:var(--lottie-player-seeker-thumb-color)}.seeker::-webkit-slider-thumb{height:15px;width:15px;border-radius:50%;border:0;background-color:var(--lottie-player-seeker-thumb-color);cursor:pointer;transition:transform .2s ease-in-out;transform:scale(0)}.seeker:focus::-webkit-slider-thumb,.seeker:hover::-webkit-slider-thumb{transform:scale(1)}.seeker::-moz-range-progress{background-color:var(--lottie-player-seeker-thumb-color);height:5px;border-radius:3px}.seeker::-moz-range-thumb{height:15px;width:15px;border-radius:50%;background-color:var(--lottie-player-seeker-thumb-color);border:0;cursor:pointer;transition:transform .2s ease-in-out;transform:scale(0)}.seeker:focus::-moz-range-thumb,.seeker:hover::-moz-range-thumb{transform:scale(1)}.seeker::-ms-track{width:100%;height:5px;cursor:pointer;background:0 0;border-color:transparent;color:transparent}.seeker::-ms-fill-upper{background:var(--lottie-player-seeker-track-color);border-radius:3px}.seeker::-ms-fill-lower{background-color:var(--lottie-player-seeker-thumb-color);border-radius:3px}.seeker::-ms-thumb{border:0;height:15px;width:15px;border-radius:50%;background:var(--lottie-player-seeker-thumb-color);cursor:pointer;transition:transform .2s ease-in-out;transform:scale(0)}.seeker:focus::-ms-thumb,.seeker:hover::-ms-thumb{transform:scale(1)}.seeker:focus::-ms-fill-lower{background:var(--lottie-player-seeker-track-color)}.seeker:focus::-ms-fill-upper{background:var(--lottie-player-seeker-track-color)}.error{display:flex;margin:auto;justify-content:center;height:100%;align-items:center}.error svg{width:100%;height:auto}@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}`;
+
+	function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+	    try {
+	        var info = gen[key](arg);
+	        var value = info.value;
+	    } catch (error) {
+	        reject(error);
+	        return;
+	    }
+	    if (info.done) {
+	        resolve(value);
+	    } else {
+	        Promise.resolve(value).then(_next, _throw);
+	    }
+	}
+	function _async_to_generator(fn) {
+	    return function() {
+	        var self = this, args = arguments;
+	        return new Promise(function(resolve, reject) {
+	            var gen = fn.apply(self, args);
+	            function _next(value) {
+	                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+	            }
+	            function _throw(err) {
+	                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+	            }
+	            _next(undefined);
+	        });
+	    };
+	}
+	function _define_property(obj, key, value) {
+	    if (key in obj) {
+	        Object.defineProperty(obj, key, {
+	            value: value,
+	            enumerable: true,
+	            configurable: true,
+	            writable: true
+	        });
+	    } else {
+	        obj[key] = value;
+	    }
+	    return obj;
+	}
+	function _object_spread(target) {
+	    for(var i = 1; i < arguments.length; i++){
+	        var source = arguments[i] != null ? arguments[i] : {};
+	        var ownKeys = Object.keys(source);
+	        if (typeof Object.getOwnPropertySymbols === "function") {
+	            ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+	                return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+	            }));
+	        }
+	        ownKeys.forEach(function(key) {
+	            _define_property(target, key, source[key]);
+	        });
+	    }
+	    return target;
+	}
+	function ownKeys(object, enumerableOnly) {
+	    var keys = Object.keys(object);
+	    if (Object.getOwnPropertySymbols) {
+	        var symbols = Object.getOwnPropertySymbols(object);
+	        if (enumerableOnly) {
+	            symbols = symbols.filter(function(sym) {
+	                return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+	            });
+	        }
+	        keys.push.apply(keys, symbols);
+	    }
+	    return keys;
+	}
+	function _object_spread_props(target, source) {
+	    source = source != null ? source : {};
+	    if (Object.getOwnPropertyDescriptors) {
+	        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+	    } else {
+	        ownKeys(Object(source)).forEach(function(key) {
+	            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+	        });
+	    }
+	    return target;
+	}
 	function _ts_decorate(decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof undefined === "function") r = undefined(decorators, target, key, desc);
@@ -15841,16 +13732,17 @@
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	}
 	exports.DotLottiePlayer = class DotLottiePlayer extends s {
-	    async load(src) {
-	        if (!this.shadowRoot) {
-	            return;
-	        }
-	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), options = {
+	    _getOptions() {
+	        var _this_preserveAspectRatio;
+	        const preserveAspectRatio = (_this_preserveAspectRatio = this.preserveAspectRatio) !== null && _this_preserveAspectRatio !== void 0 ? _this_preserveAspectRatio : this.objectfit && aspectRatio(this.objectfit), initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
+	            this.segment[0] - 1,
+	            this.segment[1] - 1
+	        ] : this.segment, options = {
 	            container: this.container,
 	            loop: !!this.loop,
 	            autoplay: !!this.autoplay,
 	            renderer: 'svg',
-	            initialSegment: this.segment,
+	            initialSegment,
 	            rendererSettings: {
 	                imagePreserveAspectRatio: preserveAspectRatio,
 	                hideOnTransparent: true,
@@ -15858,111 +13750,130 @@
 	                progressiveLoad: true
 	            }
 	        };
-	        try {
-	            if (typeof src !== 'string' && typeof src !== 'object') {
-	                throw new Error('Broken file or invalid file format');
+	        return options;
+	    }
+	    load(src) {
+	        var _this = this;
+	        return _async_to_generator(function*() {
+	            if (!_this.shadowRoot) return;
+	            try {
+	                const { animations } = yield getAnimationData(src);
+	                if (!animations || animations.some((animation)=>!_this._isLottie(animation))) {
+	                    throw new Error('Broken or corrupted file');
+	                }
+	                _this._animations = animations;
+	                if (_this._lottieInstance) _this._lottieInstance.destroy();
+	                _this._lottieInstance = Lottie.loadAnimation(_object_spread_props(_object_spread({}, _this._getOptions()), {
+	                    animationData: animations[_this._currentAnimation]
+	                }));
+	            } catch (err) {
+	                _this._errorMessage = handleErrors(err).message;
+	                _this.currentState = exports.PlayerState.Error;
+	                _this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Error));
+	                return;
 	            }
-	            const srcParsed = typeof src === 'string' ? await fetchPath(src) : src;
-	            if (!this.isLottie(srcParsed)) {
-	                throw new Error('Broken or corrupted file');
+	            _this._addEventListeners();
+	            _this.setSpeed(_this.speed);
+	            var _this_direction;
+	            _this.setDirection((_this_direction = _this.direction) !== null && _this_direction !== void 0 ? _this_direction : 1);
+	            _this.setSubframe(!!_this.subframe);
+	            if (_this.autoplay) {
+	                if (_this.direction === -1) _this.seek('99%');
+	                _this.play();
 	            }
-	            if (this._lottie) this._lottie.destroy();
-	            this._lottie = Lottie.loadAnimation({
-	                ...options,
-	                animationData: srcParsed
-	            });
-	        } catch (err) {
-	            console.error(err);
-	            if (err instanceof Error) this._error = err?.message;
-	            this.currentState = exports.PlayerState.Error;
-	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Error));
-	            return;
-	        }
-	        if (this._lottie) {
-	            this._lottie.addEventListener('enterFrame', ()=>{
-	                const { currentFrame, totalFrames } = this._lottie;
-	                this.seeker = Math.floor(currentFrame / totalFrames * 100);
+	        })();
+	    }
+	    _addEventListeners() {
+	        if (!this._lottieInstance) return;
+	        this._lottieInstance.addEventListener('enterFrame', ()=>{
+	            if (this._lottieInstance) {
+	                const { currentFrame, totalFrames } = this._lottieInstance;
+	                this._seeker = Math.floor(currentFrame / totalFrames * 100);
 	                this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Frame, {
 	                    detail: {
 	                        frame: currentFrame,
-	                        seeker: this.seeker
+	                        seeker: this._seeker
 	                    }
 	                }));
-	            });
-	            this._lottie.addEventListener('complete', ()=>{
-	                this.currentState = exports.PlayerState.Completed;
-	                this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Complete));
-	            });
-	            const _loopComplete = ()=>{
-	                const { firstFrame, totalFrames, playDirection } = this._lottie;
-	                if (this.count) {
-	                    this.mode === exports.PlayMode.Bounce ? this._counter += 1 : this._counter += 0.5;
-	                    if (this._counter >= this.count) {
-	                        this.setLooping(false);
-	                        this.currentState = exports.PlayerState.Completed;
-	                        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Complete));
-	                        return;
-	                    }
+	            }
+	        });
+	        this._lottieInstance.addEventListener('complete', ()=>{
+	            this.currentState = exports.PlayerState.Completed;
+	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Complete));
+	        });
+	        const loopComplete = ()=>{
+	            var _this__lottieInstance;
+	            if (!this._lottieInstance) {
+	                return;
+	            }
+	            const { firstFrame, totalFrames, playDirection } = this._lottieInstance;
+	            if (this.count) {
+	                this.mode === exports.PlayMode.Bounce ? this._playerState.count += 1 : this._playerState.count += 0.5;
+	                if (this._playerState.count >= this.count) {
+	                    this.setLooping(false);
+	                    this.currentState = exports.PlayerState.Completed;
+	                    this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Complete));
+	                    return;
 	                }
-	                this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Loop));
-	                if (this.mode === exports.PlayMode.Bounce) {
-	                    this._lottie?.goToAndStop(playDirection === -1 ? firstFrame : totalFrames * .99, true);
-	                    this._lottie?.setDirection(playDirection * -1);
-	                    return setTimeout(()=>{
-	                        this._lottie?.play();
-	                    }, this.intermission);
-	                }
-	                this._lottie?.goToAndStop(playDirection === -1 ? totalFrames * .99 : firstFrame, true);
+	            }
+	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Loop));
+	            if (this.mode === exports.PlayMode.Bounce) {
+	                var _this__lottieInstance1, _this__lottieInstance2;
+	                (_this__lottieInstance1 = this._lottieInstance) === null || _this__lottieInstance1 === void 0 ? void 0 : _this__lottieInstance1.goToAndStop(playDirection === -1 ? firstFrame : totalFrames * .99, true);
+	                (_this__lottieInstance2 = this._lottieInstance) === null || _this__lottieInstance2 === void 0 ? void 0 : _this__lottieInstance2.setDirection(playDirection * -1);
 	                return setTimeout(()=>{
-	                    this._lottie?.play();
+	                    var _this__lottieInstance;
+	                    (_this__lottieInstance = this._lottieInstance) === null || _this__lottieInstance === void 0 ? void 0 : _this__lottieInstance.play();
 	                }, this.intermission);
-	            };
-	            this._lottie.addEventListener('loopComplete', _loopComplete);
-	            this._lottie.addEventListener('DOMLoaded', ()=>{
-	                this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Ready));
-	            });
-	            this._lottie.addEventListener('data_ready', ()=>{
-	                this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Load));
-	            });
-	            this._lottie.addEventListener('data_failed', ()=>{
-	                this.currentState = exports.PlayerState.Error;
-	                this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Error));
-	            });
-	            if (this.container) {
-	                this.container.addEventListener('mouseenter', ()=>{
-	                    if (this.hover && this.currentState !== exports.PlayerState.Playing) {
-	                        this.play();
-	                    }
-	                });
-	                this.container.addEventListener('mouseleave', ()=>{
-	                    if (this.hover && this.currentState === exports.PlayerState.Playing) {
-	                        this.stop();
-	                    }
-	                });
 	            }
-	            this.setSpeed(this.speed);
-	            this.setDirection(this.direction);
-	            this.setSubframe(!!this.subframe);
-	            if (this.autoplay) {
-	                if (this.direction === -1) this.seek('99%');
-	                this.play();
-	            }
+	            (_this__lottieInstance = this._lottieInstance) === null || _this__lottieInstance === void 0 ? void 0 : _this__lottieInstance.goToAndStop(playDirection === -1 ? totalFrames * .99 : firstFrame, true);
+	            return setTimeout(()=>{
+	                var _this__lottieInstance;
+	                (_this__lottieInstance = this._lottieInstance) === null || _this__lottieInstance === void 0 ? void 0 : _this__lottieInstance.play();
+	            }, this.intermission);
+	        };
+	        this._lottieInstance.addEventListener('loopComplete', loopComplete);
+	        this._lottieInstance.addEventListener('DOMLoaded', ()=>{
+	            this._playerState.loaded = true;
+	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Ready));
+	        });
+	        this._lottieInstance.addEventListener('data_ready', ()=>{
+	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Load));
+	        });
+	        this._lottieInstance.addEventListener('data_failed', ()=>{
+	            this.currentState = exports.PlayerState.Error;
+	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Error));
+	        });
+	        if (this.container) {
+	            this.container.addEventListener('mouseenter', ()=>{
+	                if (this.hover && this.currentState !== exports.PlayerState.Playing) {
+	                    this.play();
+	                }
+	            });
+	            this.container.addEventListener('mouseleave', ()=>{
+	                if (this.hover && this.currentState === exports.PlayerState.Playing) {
+	                    this.stop();
+	                }
+	            });
 	        }
 	    }
 	    _onVisibilityChange() {
 	        if (document.hidden && this.currentState === exports.PlayerState.Playing) {
-	            this.freeze();
+	            this._freeze();
 	        } else if (this.currentState === exports.PlayerState.Frozen) {
 	            this.play();
 	        }
 	    }
-	    _handleSeekChange(e) {
-	        e.preventDefault();
-	        if (!e.target || !this._lottie || isNaN(Number(e.target.value))) return;
-	        const frame = Math.floor(Number(e.target.value) / 100 * this._lottie.totalFrames);
-	        this.seek(frame);
+	    _handleSeekChange({ target }) {
+	        if (!(target instanceof HTMLInputElement) || !this._lottieInstance || isNaN(Number(target.value))) return;
+	        this.seek(Math.floor(Number(target.value) / 100 * this._lottieInstance.totalFrames));
+	        setTimeout(()=>{
+	            if (target.parentElement instanceof HTMLFormElement) {
+	                target.parentElement.reset();
+	            }
+	        }, 100);
 	    }
-	    isLottie(json) {
+	    _isLottie(json) {
 	        const mandatory = [
 	            'v',
 	            'ip',
@@ -15975,99 +13886,137 @@
 	        return mandatory.every((field)=>Object.prototype.hasOwnProperty.call(json, field));
 	    }
 	    getLottie() {
-	        return this._lottie;
+	        return this._lottieInstance;
 	    }
 	    play() {
-	        if (!this._lottie) return;
-	        this.currentState = exports.PlayerState.Playing;
-	        this._lottie.play();
+	        if (!this._lottieInstance) return;
+	        if (this.currentState) {
+	            this._playerState.prev = this.currentState;
+	        }
+	        this._lottieInstance.play();
+	        setTimeout(()=>{
+	            this.currentState = exports.PlayerState.Playing;
+	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Play));
 	    }
 	    pause() {
-	        if (!this._lottie) return;
-	        this.currentState = exports.PlayerState.Paused;
-	        this._lottie.pause();
+	        if (!this._lottieInstance) return;
+	        if (this.currentState) {
+	            this._playerState.prev = this.currentState;
+	        }
+	        this._lottieInstance.pause();
+	        setTimeout(()=>{
+	            this.currentState = exports.PlayerState.Paused;
+	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Pause));
 	    }
 	    stop() {
-	        if (!this._lottie) return;
-	        this.currentState = exports.PlayerState.Stopped;
-	        this.seeker = 0;
-	        this._counter = 0;
-	        this._lottie.stop();
+	        if (!this._lottieInstance) return;
+	        if (this.currentState) {
+	            this._playerState.prev = this.currentState;
+	        }
+	        this._playerState.count = 0;
+	        this._lottieInstance.stop();
+	        setTimeout(()=>{
+	            this.currentState = exports.PlayerState.Stopped;
+	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Stop));
 	    }
 	    destroy() {
-	        if (!this._lottie) return;
+	        if (!this._lottieInstance) return;
 	        this.currentState = exports.PlayerState.Destroyed;
-	        this._lottie.destroy();
-	        this._lottie = null;
+	        this._lottieInstance.destroy();
+	        this._lottieInstance = null;
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Destroyed));
 	        this.remove();
 	    }
 	    seek(value) {
-	        if (!this._lottie) return;
+	        if (!this._lottieInstance) return;
 	        const matches = value.toString().match(/^([0-9]+)(%?)$/);
 	        if (!matches) {
 	            return;
 	        }
-	        const frame = matches[2] === '%' ? this._lottie.totalFrames * Number(matches[1]) / 100 : Number(matches[1]);
-	        this.seeker = frame;
-	        if (this.currentState === exports.PlayerState.Playing) {
-	            this._lottie.goToAndPlay(value, true);
+	        const frame = Math.floor(matches[2] === '%' ? this._lottieInstance.totalFrames * Number(matches[1]) / 100 : Number(matches[1]));
+	        this._seeker = frame;
+	        if (this.currentState === exports.PlayerState.Playing || this.currentState === exports.PlayerState.Frozen && this._playerState.prev === exports.PlayerState.Playing) {
+	            this._lottieInstance.goToAndPlay(frame, true);
+	            this.currentState = exports.PlayerState.Playing;
 	        } else {
-	            this._lottie.goToAndStop(value, true);
-	            this._lottie.pause();
+	            this._lottieInstance.goToAndStop(frame, true);
+	            this._lottieInstance.pause();
 	        }
+	    }
+	    snapshot() {
+	        if (!this.shadowRoot) return;
+	        const svgElement = this.shadowRoot.querySelector('.animation svg'), data = svgElement instanceof Node ? new XMLSerializer().serializeToString(svgElement) : null;
+	        if (!data) {
+	            console.error('Could not serialize data');
+	            return;
+	        }
+	        download(data, {
+	            name: `${getFilename(this.src)}-${frameOutput(this._seeker)}.svg`,
+	            mimeType: 'image/svg+xml'
+	        });
+	        return data;
 	    }
 	    setSubframe(value) {
-	        if (!this._lottie) return;
+	        if (!this._lottieInstance) return;
 	        this.subframe = value;
-	        this._lottie.setSubframe(value);
+	        this._lottieInstance.setSubframe(value);
 	    }
-	    freeze() {
-	        if (!this._lottie) return;
-	        this.currentState = exports.PlayerState.Frozen;
-	        this._lottie.pause();
+	    _freeze() {
+	        if (!this._lottieInstance) return;
+	        if (this.currentState) {
+	            this._playerState.prev = this.currentState;
+	        }
+	        this._lottieInstance.pause();
+	        setTimeout(()=>{
+	            this.currentState = exports.PlayerState.Frozen;
+	        }, 0);
 	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Freeze));
 	    }
-	    async reload() {
-	        if (!this._lottie) return;
-	        this._lottie.destroy();
-	        if (this.src) {
-	            await this.load(this.src);
-	        }
+	    reload() {
+	        var _this = this;
+	        return _async_to_generator(function*() {
+	            if (!_this._lottieInstance) return;
+	            _this._lottieInstance.destroy();
+	            if (_this.src) {
+	                yield _this.load(_this.src);
+	            }
+	        })();
 	    }
 	    setSpeed(value = 1) {
-	        if (!this._lottie) return;
+	        if (!this._lottieInstance) return;
 	        this.speed = value;
-	        this._lottie.setSpeed(value);
+	        this._lottieInstance.setSpeed(value);
 	    }
 	    setDirection(value) {
-	        if (!this._lottie) return;
+	        if (!this._lottieInstance) return;
 	        this.direction = value;
-	        this._lottie.setDirection(value);
+	        this._lottieInstance.setDirection(value);
 	    }
 	    setLooping(value) {
-	        if (this._lottie) {
+	        if (this._lottieInstance) {
 	            this.loop = value;
-	            this._lottie.setLoop(value);
+	            this._lottieInstance.setLoop(value);
 	        }
 	    }
 	    togglePlay() {
-	        if (!this._lottie) return;
-	        const { currentFrame, playDirection, totalFrames } = this._lottie;
-	        if (this.currentState === exports.PlayerState.Playing) return this.pause();
+	        if (!this._lottieInstance) return;
+	        const { currentFrame, playDirection, totalFrames } = this._lottieInstance;
+	        if (this.currentState === exports.PlayerState.Playing) {
+	            return this.pause();
+	        }
 	        if (this.currentState === exports.PlayerState.Completed) {
 	            this.currentState = exports.PlayerState.Playing;
 	            if (this.mode === exports.PlayMode.Bounce) {
 	                this.setDirection(playDirection * -1);
-	                return this._lottie.goToAndPlay(currentFrame, true);
+	                return this._lottieInstance.goToAndPlay(currentFrame, true);
 	            }
 	            if (playDirection === -1) {
-	                return this._lottie.goToAndPlay(totalFrames, true);
+	                return this._lottieInstance.goToAndPlay(totalFrames, true);
 	            }
-	            return this._lottie.goToAndPlay(0, true);
+	            return this._lottieInstance.goToAndPlay(0, true);
 	        }
 	        return this.play();
 	    }
@@ -16081,6 +14030,30 @@
 	            this.mode = exports.PlayMode.Normal;
 	        }
 	    }
+	    _toggleSettings(flag) {
+	        if (flag === undefined) {
+	            this._isSettingsOpen = !this._isSettingsOpen;
+	        } else {
+	            this._isSettingsOpen = flag;
+	        }
+	    }
+	    _switchInstance() {
+	        if (this._lottieInstance) this._lottieInstance.destroy();
+	        this._lottieInstance = Lottie.loadAnimation(_object_spread_props(_object_spread({}, this._getOptions()), {
+	            animationData: this._animations[this._currentAnimation]
+	        }));
+	        this._addEventListeners();
+	        this._lottieInstance.goToAndPlay(0, true);
+	        this.currentState = exports.PlayerState.Playing;
+	    }
+	    next() {
+	        this._currentAnimation++;
+	        this._switchInstance();
+	    }
+	    prev() {
+	        this._currentAnimation--;
+	        this._switchInstance();
+	    }
 	    static get styles() {
 	        return styles;
 	    }
@@ -16090,45 +14063,50 @@
 	            document.addEventListener('visibilitychange', this._onVisibilityChange);
 	        }
 	    }
-	    async firstUpdated() {
-	        if ('IntersectionObserver' in window) {
-	            this._io = new IntersectionObserver((entries)=>{
-	                if (entries[0].isIntersecting) {
-	                    if (!document.hidden && this.currentState === exports.PlayerState.Frozen) {
-	                        this.play();
+	    firstUpdated() {
+	        var _this = this;
+	        return _async_to_generator(function*() {
+	            if ('IntersectionObserver' in window) {
+	                _this._intersectionObserver = new IntersectionObserver((entries)=>{
+	                    if (entries[0].isIntersecting) {
+	                        if (!document.hidden && _this.currentState === exports.PlayerState.Frozen) {
+	                            _this.play();
+	                        }
+	                    } else if (_this.currentState === exports.PlayerState.Playing) {
+	                        _this._freeze();
 	                    }
-	                } else if (this.currentState === exports.PlayerState.Playing) {
-	                    this.freeze();
-	                }
-	            });
-	            this._io.observe(this.container);
-	        }
-	        if (this.src) {
-	            await this.load(this.src);
-	        }
-	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Rendered));
+	                });
+	                _this._intersectionObserver.observe(_this.container);
+	            }
+	            if (_this.src) {
+	                yield _this.load(_this.src);
+	            }
+	            _this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Rendered));
+	        })();
 	    }
 	    disconnectedCallback() {
 	        super.disconnectedCallback();
-	        if (this._io) {
-	            this._io.disconnect();
-	            this._io = undefined;
+	        if (this._intersectionObserver) {
+	            this._intersectionObserver.disconnect();
+	            this._intersectionObserver = undefined;
 	        }
-	        if (this._lottie) this._lottie.destroy();
+	        if (this._lottieInstance) this._lottieInstance.destroy();
 	        document.removeEventListener('visibilitychange', this._onVisibilityChange);
 	    }
 	    renderControls() {
+	        var _this__animations, _this__animations1;
 	        const isPlaying = this.currentState === exports.PlayerState.Playing, isPaused = this.currentState === exports.PlayerState.Paused, isStopped = this.currentState === exports.PlayerState.Stopped, isError = this.currentState === exports.PlayerState.Error;
-	        return x$1`<div class="${`lottie-controls toolbar${isError ? ' has-error' : ''}`}" aria-label="Lottie Animation Controls"><button @click="${this.togglePlay}" class="${isPlaying || isPaused ? 'active' : ''}" style="align-items:center" tabindex="0" aria-label="Toggle Play/Pause">${isPlaying ? x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M14.016 5.016H18v13.969h-3.984V5.016zM6 18.984V5.015h3.984v13.969H6z"/></svg>` : x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M8.016 5.016L18.985 12 8.016 18.984V5.015z"/></svg>`}</button> <button @click="${this.stop}" class="${isStopped ? 'active' : ''}" style="align-items:center" tabindex="0" aria-label="Stop"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M6 6h12v12H6V6z"/></svg></button><div class="progress-container"><input class="seeker" type="range" min="0" max="100" step="1" value="${this.seeker}" @change="${this._handleSeekChange}" @mousedown="${()=>{
-            this._prevState = this.currentState;
-            this.freeze();
-        }}" @mouseup="${()=>{
-            this._prevState === exports.PlayerState.Playing && this.play();
-        }}" aria-valuemin="0" aria-valuemax="100" role="slider" aria-valuenow="${this.seeker}" tabindex="0" aria-label="Slider for search"><progress min="0" max="100" step="1" value="${this.seeker}"></progress></div><button @click="${this.toggleLooping}" class="${this.loop ? 'active' : ''}" style="align-items:center" tabindex="0" aria-label="Toggle looping"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031H5.015v-6h12v-3l3.984 3.984-3.984 3.984v-3H6.984z"/></svg></button> <button @click="${this.toggleBoomerang}" class="${this.mode === exports.PlayMode.Bounce ? 'active' : ''}" aria-label="Toggle boomerang" style="align-items:center" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="m11.8 13.2-.3.3c-.5.5-1.1 1.1-1.7 1.5-.5.4-1 .6-1.5.8-.5.2-1.1.3-1.6.3s-1-.1-1.5-.3c-.6-.2-1-.5-1.4-1-.5-.6-.8-1.2-.9-1.9-.2-.9-.1-1.8.3-2.6.3-.7.8-1.2 1.3-1.6.3-.2.6-.4 1-.5.2-.2.5-.2.8-.3.3 0 .7-.1 1 0 .3 0 .6.1.9.2.9.3 1.7.9 2.4 1.5.4.4.8.7 1.1 1.1l.1.1.4-.4c.6-.6 1.2-1.2 1.9-1.6.5-.3 1-.6 1.5-.7.4-.1.7-.2 1-.2h.9c1 .1 1.9.5 2.6 1.4.4.5.7 1.1.8 1.8.2.9.1 1.7-.2 2.5-.4.9-1 1.5-1.8 2-.4.2-.7.4-1.1.4-.4.1-.8.1-1.2.1-.5 0-.9-.1-1.3-.3-.8-.3-1.5-.9-2.1-1.5-.4-.4-.8-.7-1.1-1.1h-.3zm-1.1-1.1c-.1-.1-.1-.1 0 0-.3-.3-.6-.6-.8-.9-.5-.5-1-.9-1.6-1.2-.4-.3-.8-.4-1.3-.4-.4 0-.8 0-1.1.2-.5.2-.9.6-1.1 1-.2.3-.3.7-.3 1.1 0 .3 0 .6.1.9.1.5.4.9.8 1.2.5.4 1.1.5 1.7.5.5 0 1-.2 1.5-.5.6-.4 1.1-.8 1.6-1.3.1-.3.3-.5.5-.6zM13 12c.5.5 1 1 1.5 1.4.5.5 1.1.9 1.9 1 .4.1.8 0 1.2-.1.3-.1.6-.3.9-.5.4-.4.7-.9.8-1.4.1-.5 0-.9-.1-1.4-.3-.8-.8-1.2-1.7-1.4-.4-.1-.8-.1-1.2 0-.5.1-1 .4-1.4.7-.5.4-1 .8-1.4 1.2-.2.2-.4.3-.5.5z"/></svg></button></div>`;
+	        return x$1`<div class="${`lottie-controls toolbar ${isError ? 'has-error' : ''}`}" aria-label="Lottie Animation controls"><button @click="${this.togglePlay}" data-active="${isPlaying || isPaused}" tabindex="0" aria-label="Toggle Play/Pause">${isPlaying ? x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M14.016 5.016H18v13.969h-3.984V5.016zM6 18.984V5.015h3.984v13.969H6z"/></svg>` : x$1`<svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M8.016 5.016L18.985 12 8.016 18.984V5.015z"/></svg>`}</button> <button @click="${this.stop}" data-active="${isStopped}" tabindex="0" aria-label="Stop"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M6 6h12v12H6V6z"/></svg></button> ${((_this__animations = this._animations) === null || _this__animations === void 0 ? void 0 : _this__animations.length) > 1 ? x$1`${this._currentAnimation > 0 ? x$1`<button @click="${this.prev}" tabindex="0" aria-label="Previous animation"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.9 18.2 8.1 12l9.8-6.2v12.4zm-10.3 0H6.1V5.8h1.5v12.4z"/></svg></button>` : A} ${this._currentAnimation + 1 < ((_this__animations1 = this._animations) === null || _this__animations1 === void 0 ? void 0 : _this__animations1.length) ? x$1`<button @click="${this.next}" tabindex="0" aria-label="Next animation"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="m6.1 5.8 9.8 6.2-9.8 6.2V5.8zM16.4 5.8h1.5v12.4h-1.5z"/></svg></button>` : A}` : A}<form class="progress-container"><input class="seeker" type="range" min="0" max="100" step="1" value="${this._seeker}" @change="${this._handleSeekChange}" @mousedown="${this._freeze}" aria-valuemin="0" aria-valuemax="100" role="slider" aria-valuenow="${this._seeker}" tabindex="0" aria-label="Slider for search"><progress min="0" max="100" value="${this._seeker}"></progress></form><button @click="${this.toggleLooping}" data-active="${this.loop}" tabindex="0" aria-label="Toggle looping"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031H5.015v-6h12v-3l3.984 3.984-3.984 3.984v-3H6.984z"/></svg></button> <button @click="${this.toggleBoomerang}" data-active="${this.mode === exports.PlayMode.Bounce}" aria-label="Toggle boomerang" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="m11.8 13.2-.3.3c-.5.5-1.1 1.1-1.7 1.5-.5.4-1 .6-1.5.8-.5.2-1.1.3-1.6.3s-1-.1-1.5-.3c-.6-.2-1-.5-1.4-1-.5-.6-.8-1.2-.9-1.9-.2-.9-.1-1.8.3-2.6.3-.7.8-1.2 1.3-1.6.3-.2.6-.4 1-.5.2-.2.5-.2.8-.3.3 0 .7-.1 1 0 .3 0 .6.1.9.2.9.3 1.7.9 2.4 1.5.4.4.8.7 1.1 1.1l.1.1.4-.4c.6-.6 1.2-1.2 1.9-1.6.5-.3 1-.6 1.5-.7.4-.1.7-.2 1-.2h.9c1 .1 1.9.5 2.6 1.4.4.5.7 1.1.8 1.8.2.9.1 1.7-.2 2.5-.4.9-1 1.5-1.8 2-.4.2-.7.4-1.1.4-.4.1-.8.1-1.2.1-.5 0-.9-.1-1.3-.3-.8-.3-1.5-.9-2.1-1.5-.4-.4-.8-.7-1.1-1.1h-.3zm-1.1-1.1c-.1-.1-.1-.1 0 0-.3-.3-.6-.6-.8-.9-.5-.5-1-.9-1.6-1.2-.4-.3-.8-.4-1.3-.4-.4 0-.8 0-1.1.2-.5.2-.9.6-1.1 1-.2.3-.3.7-.3 1.1 0 .3 0 .6.1.9.1.5.4.9.8 1.2.5.4 1.1.5 1.7.5.5 0 1-.2 1.5-.5.6-.4 1.1-.8 1.6-1.3.1-.3.3-.5.5-.6zM13 12c.5.5 1 1 1.5 1.4.5.5 1.1.9 1.9 1 .4.1.8 0 1.2-.1.3-.1.6-.3.9-.5.4-.4.7-.9.8-1.4.1-.5 0-.9-.1-1.4-.3-.8-.8-1.2-1.7-1.4-.4-.1-.8-.1-1.2 0-.5.1-1 .4-1.4.7-.5.4-1 .8-1.4 1.2-.2.2-.4.3-.5.5z"/></svg></button> <button @click="${({ target })=>{
+            this._toggleSettings();
+            if (target instanceof HTMLElement) {
+                target.focus();
+            }
+        }}" @blur="${()=>setTimeout(()=>this._toggleSettings(false), 200)}" aria-label="Settings" aria-haspopup="true" aria-expanded="${!!this._isSettingsOpen}" aria-controls="${`${this._identifier}-settings`}"><svg width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="5.4" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="18.6" r="2.5"/></svg></button><div id="${`${this._identifier}-settings`}" class="popover" style="display:${this._isSettingsOpen ? 'block' : 'none'}"><button @click="${this.snapshot}" aria-label="Download still image" tabindex="0"><svg width="24" height="24" aria-hidden="true" focusable="false"><path d="M16.8 10.8 12 15.6l-4.8-4.8h3V3.6h3.6v7.2h3zM12 15.6H3v4.8h18v-4.8h-9zm7.8 2.4h-2.4v-1.2h2.4V18z"/></svg> Download still image</button></div></div>`;
 	    }
 	    render() {
-	        const className = this.controls ? 'main controls' : 'main', animationClass = this.controls ? 'animation controls' : 'animation';
-	        return x$1`<div class="${`animation-container ${className}`}" lang="${this.description ? document?.documentElement?.lang : 'en'}" role="img" aria-label="${this.description ?? 'Lottie animation'}"><div class="${animationClass}" style="background:${this.background}">${this.currentState === exports.PlayerState.Error ? x$1`<div class="error"><svg preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1920" height="1080" viewBox="0 0 1920 1080"><path fill="#fff" d="M0 0h1920v1080H0z"/><path fill="#3a6d8b" d="M1190.2 531 1007 212.4c-22-38.2-77.2-38-98.8.5L729.5 531.3c-21.3 37.9 6.1 84.6 49.5 84.6l361.9.3c43.7 0 71.1-47.3 49.3-85.2zM937.3 288.7c.2-7.5 3.3-23.9 23.2-23.9 16.3 0 23 16.1 23 23.5 0 55.3-10.7 197.2-12.2 214.5-.1 1-.9 1.7-1.9 1.7h-18.3c-1 0-1.8-.7-1.9-1.7-1.4-17.5-13.4-162.9-11.9-214.1zm24.2 283.8c-13.1 0-23.7-10.6-23.7-23.7s10.6-23.7 23.7-23.7 23.7 10.6 23.7 23.7-10.6 23.7-23.7 23.7zM722.1 644h112.6v34.4h-70.4V698h58.8v31.7h-58.8v22.6h72.4v36.2H722.1V644zm162 57.1h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6zm78.9 0h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5H963v15.6zm39.5 36.2c0-31.3 22.2-54.8 56.6-54.8 34.4 0 56.2 23.5 56.2 54.8s-21.8 54.6-56.2 54.6c-34.4-.1-56.6-23.3-56.6-54.6zm74 0c0-17.4-6.1-29.1-17.8-29.1-11.7 0-17.4 11.7-17.4 29.1 0 17.4 5.7 29.1 17.4 29.1s17.8-11.8 17.8-29.1zm83.1-36.2h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6z"/><path fill="none" d="M718.9 807.7h645v285.4h-645z"/><text fill="#3a6d8b" style="text-align:center;position:absolute;left:100%;font-size:47px;font-family:system-ui,-apple-system,BlinkMacSystemFont,'.SFNSText-Regular',sans-serif" x="50%" y="848.017" text-anchor="middle">${this._error}</text></svg></div>` : A}</div>${this.controls ? this.renderControls() : A}</div>`;
+	        var _document_documentElement, _document;
+	        var _this_description;
+	        return x$1`<figure class="${`animation-container main`}" data-controls="${this.controls}" lang="${this.description ? (_document = document) === null || _document === void 0 ? void 0 : (_document_documentElement = _document.documentElement) === null || _document_documentElement === void 0 ? void 0 : _document_documentElement.lang : 'en'}" role="img" aria-label="${(_this_description = this.description) !== null && _this_description !== void 0 ? _this_description : 'Lottie animation'}" data-loaded="${this._playerState.loaded}"><div class="animation" style="background:${this.background}">${this.currentState === exports.PlayerState.Error ? x$1`<div class="error"><svg preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1920" height="1080" viewBox="0 0 1920 1080"><path fill="#fff" d="M0 0h1920v1080H0z"/><path fill="#3a6d8b" d="M1190.2 531 1007 212.4c-22-38.2-77.2-38-98.8.5L729.5 531.3c-21.3 37.9 6.1 84.6 49.5 84.6l361.9.3c43.7 0 71.1-47.3 49.3-85.2zM937.3 288.7c.2-7.5 3.3-23.9 23.2-23.9 16.3 0 23 16.1 23 23.5 0 55.3-10.7 197.2-12.2 214.5-.1 1-.9 1.7-1.9 1.7h-18.3c-1 0-1.8-.7-1.9-1.7-1.4-17.5-13.4-162.9-11.9-214.1zm24.2 283.8c-13.1 0-23.7-10.6-23.7-23.7s10.6-23.7 23.7-23.7 23.7 10.6 23.7 23.7-10.6 23.7-23.7 23.7zM722.1 644h112.6v34.4h-70.4V698h58.8v31.7h-58.8v22.6h72.4v36.2H722.1V644zm162 57.1h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6zm78.9 0h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5H963v15.6zm39.5 36.2c0-31.3 22.2-54.8 56.6-54.8 34.4 0 56.2 23.5 56.2 54.8s-21.8 54.6-56.2 54.6c-34.4-.1-56.6-23.3-56.6-54.6zm74 0c0-17.4-6.1-29.1-17.8-29.1-11.7 0-17.4 11.7-17.4 29.1 0 17.4 5.7 29.1 17.4 29.1s17.8-11.8 17.8-29.1zm83.1-36.2h.6c8.3-12.9 18.2-17.8 31.3-17.8 3 0 5.1.4 6.3 1v32.6h-.8c-22.4-3.8-35.6 6.3-35.6 29.5v42.3h-38.2V685.5h36.4v15.6z"/><path fill="none" d="M718.9 807.7h645v285.4h-645z"/><text fill="#3a6d8b" style="text-align:center;position:absolute;left:100%;font-size:47px;font-family:system-ui,-apple-system,BlinkMacSystemFont,'.SFNSText-Regular',sans-serif" x="50%" y="848.017" text-anchor="middle">${this._errorMessage}</text></svg></div>` : A}</div>${this.controls ? this.renderControls() : A}</figure>`;
 	    }
 	    constructor(...args){
 	        super(...args);
@@ -16141,12 +14119,20 @@
 	        this.loop = false;
 	        this.mode = exports.PlayMode.Normal;
 	        this.objectfit = 'contain';
-	        this.seeker = 0;
+	        this.renderer = 'svg';
 	        this.speed = 1;
-	        this.subframe = false;
-	        this._lottie = null;
-	        this._counter = 0;
-	        this._error = 'Something went wrong';
+	        this.subframe = true;
+	        this._isSettingsOpen = false;
+	        this._seeker = 0;
+	        this._currentAnimation = 0;
+	        this._lottieInstance = null;
+	        this._identifier = this.id || useId('dotlottie');
+	        this._errorMessage = 'Something went wrong';
+	        this._playerState = {
+	            prev: exports.PlayerState.Loading,
+	            count: 0,
+	            loaded: false
+	        };
 	    }
 	};
 	_ts_decorate([
@@ -16219,14 +14205,14 @@
 	], exports.DotLottiePlayer.prototype, "preserveAspectRatio", void 0);
 	_ts_decorate([
 	    n$1({
+	        type: String
+	    })
+	], exports.DotLottiePlayer.prototype, "renderer", void 0);
+	_ts_decorate([
+	    n$1({
 	        type: Array
 	    })
 	], exports.DotLottiePlayer.prototype, "segment", void 0);
-	_ts_decorate([
-	    n$1({
-	        type: Number
-	    })
-	], exports.DotLottiePlayer.prototype, "seeker", void 0);
 	_ts_decorate([
 	    n$1({
 	        type: Number
@@ -16243,10 +14229,19 @@
 	    })
 	], exports.DotLottiePlayer.prototype, "subframe", void 0);
 	_ts_decorate([
-	    i$2('.animation')
+	    i$1('.animation')
 	], exports.DotLottiePlayer.prototype, "container", void 0);
+	_ts_decorate([
+	    t()
+	], exports.DotLottiePlayer.prototype, "_isSettingsOpen", void 0);
+	_ts_decorate([
+	    t()
+	], exports.DotLottiePlayer.prototype, "_seeker", void 0);
+	_ts_decorate([
+	    t()
+	], exports.DotLottiePlayer.prototype, "_currentAnimation", void 0);
 	exports.DotLottiePlayer = _ts_decorate([
 	    e$1('dotlottie-player')
 	], exports.DotLottiePlayer);
 
-})(this["@johanaarstein/dotlottie-player-light"] = this["@johanaarstein/dotlottie-player-light"] || {});
+})(this["@aarsteinmedia/dotlottie-player-light"] = this["@aarsteinmedia/dotlottie-player-light"] || {});

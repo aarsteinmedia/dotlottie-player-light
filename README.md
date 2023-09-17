@@ -2,7 +2,7 @@
 
 ![Awesome Vector Animations](/.github/readmeBanner.svg)
 
-This is a light version of of [@johanaarstein/dotlottie-player](https://www.npmjs.com/package/@johanaarstein/dotlottie-player), that only outputs SVG renders – and not Canvas or HTML.
+This is a light version of of [@aarsteinmedia/dotlottie-player](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player), that only outputs SVG renders – and not Canvas or HTML.
 
 The component is built with Lit and compiled with Rust. It's compatible with server side rendering, and like any good web component it's framework agnostic.
 
@@ -13,13 +13,13 @@ The component is built with Lit and compiled with Rust. It's compatible with ser
 - Import from CDN:
 
 ```xml
-<script src="https://unpkg.com/@johanaarstein/dotlottie-player-light@latest/dist/index.js"></script>
+<script src="https://unpkg.com/@aarsteinmedia/dotlottie-player-light@latest/dist/index.js"></script>
 ```
 
 - Import from node_modules directory:
 
 ```xml
-<script src="/node_modules/@johanaarstein/dotlottie-player-light/dist/index.js"></script>
+<script src="/node_modules/@aarsteinmedia/dotlottie-player-light/dist/index.js"></script>
 ```
 
 ### In JavaScript or TypeScript
@@ -27,13 +27,13 @@ The component is built with Lit and compiled with Rust. It's compatible with ser
 1. Install using npm or yarn:
 
 ```shell
-npm install --save @johanaarstein/dotlottie-player-light
+npm install --save @aarsteinmedia/dotlottie-player-light
 ```
 
 2. Import in your app:
 
 ```javascript
-import '@johanaarstein/dotlottie-player-light'
+import '@aarsteinmedia/dotlottie-player-light'
 ```
 
 ## Usage
@@ -64,7 +64,7 @@ lottiePlayer.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 
 ```typescript
 import { Component } from '@angular/core'
-import '@johanaarstein/dotlottie-player-light'
+import '@aarsteinmedia/dotlottie-player-light'
 
 @Component({
   selector: 'app-root',
@@ -83,7 +83,7 @@ export class AppComponent {
 If you've already imported the library in a parent component, you don't need to import it again in children of that component. If you want to assign the element a class note that you need to use the `class` namespace, and not `className`.
 
 ```jsx
-import '@johanaarstein/dotlottie-player-light'
+import '@aarsteinmedia/dotlottie-player-light'
 
 function App() {
   return (
@@ -108,8 +108,8 @@ If you're using TypeScript and want to assign the component a `ref`, you can do 
 
 ```tsx
 import { useRef } from 'react'
-import '@johanaarstein/dotlottie-player-light'
-import type { DotLottiePlayer } from '@johanaarstein/dotlottie-player-light'
+import '@aarsteinmedia/dotlottie-player-light'
+import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player-light'
 
 function App() {
   const animation = useRef<DotLottiePlayer | null>(null)
@@ -170,7 +170,7 @@ export default defineNuxtConfig({
 
 ```typescript
 import { createApp } from 'vue'
-import { DotLottiePlayer } from '@johanaarstein/dotlottie-player-light'
+import { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player-light'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -181,7 +181,7 @@ app.component('DotLottiePlayer', DotLottiePlayer)
 Create a `plugins` folder in your root if it doesn't exist already, add a file named `dotlottie-player-light.js`:
 
 ```javascript
-import { DotLottiePlayer } from '@johanaarstein/dotlottie-player-light'
+import { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player-light'
 
 export default defineNuxtPlugin(({ vueApp }) => {
   vueApp.component('DotLottiePlayer', DotLottiePlayer)
