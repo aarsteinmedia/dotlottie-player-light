@@ -1,10 +1,10 @@
-# Lottie Player Web Component
+# AM LottiePlayer Light
 
 ![Awesome Vector Animations](/.github/readmeBanner.svg)
 
-This is a light version of of [@aarsteinmedia/dotlottie-player](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player), that only outputs SVG renders – and not Canvas or HTML.
+This is a light version of of [@aarsteinmedia/dotlottie-player](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player). If you only need SVG renderer (not HTML or Canvas) and don't need to convert JSON to dotLottie or combine animations on the fly, this one is for you. This version supports dotLottie format as well as JSON, and you can toggle between multiple animations in a single file.
 
-The component is built with Lit and compiled with Rust. It's compatible with server side rendering, and like any good web component it's framework agnostic.
+The component is compatible with server side rendering, and like any good web component it's framework agnostic.
 
 ## Installation
 
