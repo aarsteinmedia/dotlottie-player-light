@@ -12785,11 +12785,10 @@
 	});
 
 	// aliases for shorter compressed code (most minifers don't do this)
-	var u8 = Uint8Array, u16 = Uint16Array, u32 = Uint32Array;
+	var u8 = Uint8Array, u16 = Uint16Array, i32 = Int32Array;
 	// fixed length extra bits
 	var fleb = new u8([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, /* unused */ 0, 0, /* impossible */ 0]);
 	// fixed distance extra bits
-	// see fleb note
 	var fdeb = new u8([0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, /* unused */ 0, 0]);
 	// code length index map
 	var clim = new u8([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15]);
@@ -12800,26 +12799,26 @@
 	        b[i] = start += 1 << eb[i - 1];
 	    }
 	    // numbers here are at max 18 bits
-	    var r = new u32(b[30]);
+	    var r = new i32(b[30]);
 	    for (var i = 1; i < 30; ++i) {
 	        for (var j = b[i]; j < b[i + 1]; ++j) {
 	            r[j] = ((j - b[i]) << 5) | i;
 	        }
 	    }
-	    return [b, r];
+	    return { b: b, r: r };
 	};
-	var _a = freb(fleb, 2), fl = _a[0], revfl = _a[1];
+	var _a = freb(fleb, 2), fl = _a.b, revfl = _a.r;
 	// we can ignore the fact that the other numbers are wrong; they never happen anyway
 	fl[28] = 258, revfl[258] = 28;
-	var _b = freb(fdeb, 0), fd = _b[0];
+	var _b = freb(fdeb, 0), fd = _b.b;
 	// map of value to reverse (assuming 16 bits)
 	var rev = new u16(32768);
 	for (var i = 0; i < 32768; ++i) {
 	    // reverse table algorithm from SO
-	    var x = ((i & 0xAAAA) >>> 1) | ((i & 0x5555) << 1);
-	    x = ((x & 0xCCCC) >>> 2) | ((x & 0x3333) << 2);
-	    x = ((x & 0xF0F0) >>> 4) | ((x & 0x0F0F) << 4);
-	    rev[i] = (((x & 0xFF00) >>> 8) | ((x & 0x00FF) << 8)) >>> 1;
+	    var x = ((i & 0xAAAA) >> 1) | ((i & 0x5555) << 1);
+	    x = ((x & 0xCCCC) >> 2) | ((x & 0x3333) << 2);
+	    x = ((x & 0xF0F0) >> 4) | ((x & 0x0F0F) << 4);
+	    rev[i] = (((x & 0xFF00) >> 8) | ((x & 0x00FF) << 8)) >> 1;
 	}
 	// create huffman tree from u8 "map": index -> code length for code index
 	// mb (max bits) must be at most 15
@@ -12837,7 +12836,7 @@
 	    }
 	    // u16 "map": index -> minimum code for bit length = index
 	    var le = new u16(mb);
-	    for (i = 0; i < mb; ++i) {
+	    for (i = 1; i < mb; ++i) {
 	        le[i] = (le[i - 1] + l[i - 1]) << 1;
 	    }
 	    var co;
@@ -12858,7 +12857,7 @@
 	                // m is end value
 	                for (var m = v | ((1 << r_1) - 1); v <= m; ++v) {
 	                    // every 16 bit value starting with the code yields the same result
-	                    co[rev[v] >>> rvb] = sv;
+	                    co[rev[v] >> rvb] = sv;
 	                }
 	            }
 	        }
@@ -12867,7 +12866,7 @@
 	        co = new u16(s);
 	        for (i = 0; i < s; ++i) {
 	            if (cd[i]) {
-	                co[i] = rev[le[cd[i] - 1]++] >>> (15 - cd[i]);
+	                co[i] = rev[le[cd[i] - 1]++] >> (15 - cd[i]);
 	            }
 	        }
 	    }
@@ -12920,9 +12919,7 @@
 	    if (e == null || e > v.length)
 	        e = v.length;
 	    // can't use .constructor in case user-supplied
-	    var n = new (v.BYTES_PER_ELEMENT == 2 ? u16 : v.BYTES_PER_ELEMENT == 4 ? u32 : u8)(e - s);
-	    n.set(v.subarray(s, e));
-	    return n;
+	    return new u8(v.subarray(s, e));
 	};
 	// error codes
 	var ec = [
@@ -12952,19 +12949,18 @@
 	    return e;
 	};
 	// expands raw DEFLATE data
-	var inflt = function (dat, buf, st) {
-	    // source length
-	    var sl = dat.length;
-	    if (!sl || (st && st.f && !st.l))
+	var inflt = function (dat, st, buf, dict) {
+	    // source length       dict length
+	    var sl = dat.length, dl = dict ? dict.length : 0;
+	    if (!sl || st.f && !st.l)
 	        return buf || new u8(0);
+	    var noBuf = !buf;
 	    // have to estimate size
-	    var noBuf = !buf || st;
+	    var resize = noBuf || st.i != 2;
 	    // no state
-	    var noSt = !st || st.i;
-	    if (!st)
-	        st = {};
+	    var noSt = st.i;
 	    // Assumes roughly 33% compression ratio average
-	    if (!buf)
+	    if (noBuf)
 	        buf = new u8(sl * 3);
 	    // ensure buffer can fit at least l elements
 	    var cbuf = function (l) {
@@ -12997,7 +12993,7 @@
 	                    break;
 	                }
 	                // ensure size
-	                if (noBuf)
+	                if (resize)
 	                    cbuf(bt + l);
 	                // Copy over uncompressed data
 	                buf.set(dat.subarray(s, t), bt);
@@ -13030,7 +13026,7 @@
 	                    // bits read
 	                    pos += r & 15;
 	                    // symbol
-	                    var s = r >>> 4;
+	                    var s = r >> 4;
 	                    // code length to copy
 	                    if (s < 16) {
 	                        ldt[i++] = s;
@@ -13066,14 +13062,14 @@
 	            }
 	        }
 	        // Make sure the buffer can hold this + the largest possible addition
-	        // Maximum chunk size (practically, theoretically infinite) is 2^17;
-	        if (noBuf)
+	        // Maximum chunk size (practically, theoretically infinite) is 2^17
+	        if (resize)
 	            cbuf(bt + 131072);
 	        var lms = (1 << lbt) - 1, dms = (1 << dbt) - 1;
 	        var lpos = pos;
 	        for (;; lpos = pos) {
 	            // bits read, code
-	            var c = lm[bits16(dat, pos) & lms], sym = c >>> 4;
+	            var c = lm[bits16(dat, pos) & lms], sym = c >> 4;
 	            pos += c & 15;
 	            if (pos > tbts) {
 	                if (noSt)
@@ -13098,37 +13094,40 @@
 	                    pos += b;
 	                }
 	                // dist
-	                var d = dm[bits16(dat, pos) & dms], dsym = d >>> 4;
+	                var d = dm[bits16(dat, pos) & dms], dsym = d >> 4;
 	                if (!d)
 	                    err(3);
 	                pos += d & 15;
 	                var dt = fd[dsym];
 	                if (dsym > 3) {
 	                    var b = fdeb[dsym];
-	                    dt += bits16(dat, pos) & ((1 << b) - 1), pos += b;
+	                    dt += bits16(dat, pos) & (1 << b) - 1, pos += b;
 	                }
 	                if (pos > tbts) {
 	                    if (noSt)
 	                        err(0);
 	                    break;
 	                }
-	                if (noBuf)
+	                if (resize)
 	                    cbuf(bt + 131072);
 	                var end = bt + add;
-	                for (; bt < end; bt += 4) {
-	                    buf[bt] = buf[bt - dt];
-	                    buf[bt + 1] = buf[bt + 1 - dt];
-	                    buf[bt + 2] = buf[bt + 2 - dt];
-	                    buf[bt + 3] = buf[bt + 3 - dt];
+	                if (bt < dt) {
+	                    var shift = dl - dt, dend = Math.min(dt, end);
+	                    if (shift + bt < 0)
+	                        err(3);
+	                    for (; bt < dend; ++bt)
+	                        buf[bt] = dict[shift + bt];
 	                }
-	                bt = end;
+	                for (; bt < end; ++bt)
+	                    buf[bt] = buf[bt - dt];
 	            }
 	        }
 	        st.l = lm, st.p = lpos, st.b = bt, st.f = final;
 	        if (lm)
 	            final = 1, st.m = lbt, st.d = dm, st.n = dbt;
 	    } while (!final);
-	    return bt == buf.length ? buf : slc(buf, 0, bt);
+	    // don't reallocate for streams or user buffers
+	    return bt != buf.length && noBuf ? slc(buf, 0, bt) : buf.subarray(0, bt);
 	};
 	// empty
 	var et = /*#__PURE__*/ new u8(0);
@@ -13175,7 +13174,7 @@
 	        else
 	            td[k] = v;
 	    }
-	    return [fnStr, td];
+	    return fnStr;
 	};
 	var ch = [];
 	// clone bufs
@@ -13190,22 +13189,24 @@
 	};
 	// use a worker to execute code
 	var wrkr = function (fns, init, id, cb) {
-	    var _a;
 	    if (!ch[id]) {
 	        var fnStr = '', td_1 = {}, m = fns.length - 1;
 	        for (var i = 0; i < m; ++i)
-	            _a = wcln(fns[i], fnStr, td_1), fnStr = _a[0], td_1 = _a[1];
-	        ch[id] = wcln(fns[m], fnStr, td_1);
+	            fnStr = wcln(fns[i], fnStr, td_1);
+	        ch[id] = { c: wcln(fns[m], fnStr, td_1), e: td_1 };
 	    }
-	    var td = mrg({}, ch[id][1]);
-	    return wk(ch[id][0] + ';onmessage=function(e){for(var k in e.data)self[k]=e.data[k];onmessage=' + init.toString() + '}', id, td, cbfs(td), cb);
+	    var td = mrg({}, ch[id].e);
+	    return wk(ch[id].c + ';onmessage=function(e){for(var k in e.data)self[k]=e.data[k];onmessage=' + init.toString() + '}', id, td, cbfs(td), cb);
 	};
 	// base async inflate fn
-	var bInflt = function () { return [u8, u16, u32, fleb, fdeb, clim, fl, fd, flrm, fdrm, rev, ec, hMap, max, bits, bits16, shft, slc, err, inflt, inflateSync, pbf, gu8]; };
+	var bInflt = function () { return [u8, u16, i32, fleb, fdeb, clim, fl, fd, flrm, fdrm, rev, ec, hMap, max, bits, bits16, shft, slc, err, inflt, inflateSync, pbf, gopt]; };
 	// post buf
 	var pbf = function (msg) { return postMessage(msg, [msg.buffer]); };
-	// get u8
-	var gu8 = function (o) { return o && o.size && new u8(o.size); };
+	// get opts
+	var gopt = function (o) { return o && {
+	    out: o.size && new u8(o.size),
+	    dictionary: o.dictionary
+	}; };
 	// async helper
 	var cbify = function (dat, opts, fns, init, id, cb) {
 	    var w = wrkr(fns, init, id, function (err, dat) {
@@ -13227,16 +13228,16 @@
 	        err(7);
 	    return cbify(data, opts, [
 	        bInflt
-	    ], function (ev) { return pbf(inflateSync(ev.data[0], gu8(ev.data[1]))); }, 1, cb);
+	    ], function (ev) { return pbf(inflateSync(ev.data[0], gopt(ev.data[1]))); }, 1, cb);
 	}
 	/**
 	 * Expands DEFLATE data with no wrapper
 	 * @param data The data to decompress
-	 * @param out Where to write the data. Saves memory if you know the decompressed size and provide an output buffer of that length.
+	 * @param opts The decompression options
 	 * @returns The decompressed version of the data
 	 */
-	function inflateSync(data, out) {
-	    return inflt(data, out);
+	function inflateSync(data, opts) {
+	    return inflt(data, { i: 2 }, opts && opts.out, opts && opts.dictionary);
 	}
 	// text decoder
 	var td = typeof TextDecoder != 'undefined' && /*#__PURE__*/ new TextDecoder();
@@ -13253,7 +13254,7 @@
 	        var c = d[i++];
 	        var eb = (c > 127) + (c > 223) + (c > 239);
 	        if (i + eb > d.length)
-	            return [r, slc(d, i - 1)];
+	            return { s: r, r: slc(d, i - 1) };
 	        if (!eb)
 	            r += String.fromCharCode(c);
 	        else if (eb == 3) {
@@ -13280,13 +13281,14 @@
 	            r += String.fromCharCode.apply(null, dat.subarray(i, i + 16384));
 	        return r;
 	    }
-	    else if (td)
+	    else if (td) {
 	        return td.decode(dat);
+	    }
 	    else {
-	        var _a = dutf8(dat), out = _a[0], ext = _a[1];
-	        if (ext.length)
+	        var _a = dutf8(dat), s = _a.s, r = _a.r;
+	        if (r.length)
 	            err(8);
-	        return out;
+	        return s;
 	    }
 	}
 	// skip local zip header
@@ -13367,7 +13369,7 @@
 	                    var infl = data.subarray(b, b + sc);
 	                    if (sc < 320000) {
 	                        try {
-	                            cbl(null, inflateSync(infl, new u8(su)));
+	                            cbl(null, inflateSync(infl, { out: new u8(su) }));
 	                        }
 	                        catch (e) {
 	                            cbl(e, null);
