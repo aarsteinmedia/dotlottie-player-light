@@ -221,8 +221,8 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   },
 
   hasExt = (path: string) => {
-    const lastDotIndex = path.lastIndexOf('.')
-    return lastDotIndex > 1 && path.length - 1 > lastDotIndex
+    const lastDotIndex = path.split('/').pop()?.lastIndexOf('.')
+    return (lastDotIndex ?? 0) > 1 && path.length - 1 > (lastDotIndex ?? 0)
   },
 
   isAudio = (asset: LottieAsset) => {

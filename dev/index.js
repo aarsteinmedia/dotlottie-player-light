@@ -13610,8 +13610,9 @@
 	            return '';
 	    }
 	}, hasExt = (path)=>{
-	    const lastDotIndex = path.lastIndexOf('.');
-	    return lastDotIndex > 1 && path.length - 1 > lastDotIndex;
+	    var _path_split_pop;
+	    const lastDotIndex = (_path_split_pop = path.split('/').pop()) === null || _path_split_pop === void 0 ? void 0 : _path_split_pop.lastIndexOf('.');
+	    return (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0) > 1 && path.length - 1 > (lastDotIndex !== null && lastDotIndex !== void 0 ? lastDotIndex : 0);
 	}, isAudio = (asset)=>{
 	    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset;
 	}, isImage = (asset)=>{
