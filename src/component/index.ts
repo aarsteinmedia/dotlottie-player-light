@@ -207,7 +207,7 @@ export class DotLottiePlayer extends LitElement {
    * Get options from props
    * @returns { AnimationConfig }
    */
-  private _getOptions() {
+  private _getOptions(): AnimationConfig {
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
 

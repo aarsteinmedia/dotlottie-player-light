@@ -108,12 +108,27 @@ export const aspectRatio = (objectFit: ObjectFit) => {
         throw error
       }
 
-      if (getExt(input) === 'json') {
-        const lottie = await result.json()
-        return {
-          animations: [lottie],
-          manifest: null,
+      /**
+       * Check if file is JSON, first by parsing file name for extension, then – if filename has no extension – by cloning the response and parsing it for content.
+       */
+      const ext = getExt(input)
+      if (ext === 'json' || !ext) {
+        if (ext) {
+          const lottie = await result.json()
+          return {
+            animations: [lottie],
+            manifest: null,
+          }
         }
+        const text = await result.clone().text()
+
+        try {
+          const lottie = JSON.parse(text)
+          return {
+            animations: [lottie],
+            manifest: null,
+          }
+        } catch { /* Empty */ }
       }
 
       const { data, manifest } = await getLottieJSON(result)
@@ -137,8 +152,10 @@ export const aspectRatio = (objectFit: ObjectFit) => {
    * Get extension from filename, URL or path
    * @param { string } str Filename, URL or path
    */
-  getExt = (str: string): string => {
-    return str.split('.').pop()?.toLowerCase() ?? ''
+  getExt = (str: string) => {
+    if (!hasExt(str))
+      return
+    return str.split('.').pop()?.toLowerCase()
   },
 
   /**
@@ -201,6 +218,11 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       default:
         return ''
     }
+  },
+
+  hasExt = (path: string) => {
+    const lastDotIndex = path.lastIndexOf('.')
+    return lastDotIndex > 1 && path.length - 1 > lastDotIndex
   },
 
   isAudio = (asset: LottieAsset) => {
