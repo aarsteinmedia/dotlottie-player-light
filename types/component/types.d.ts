@@ -81,10 +81,11 @@ export type PreserveAspectRatio = 'xMidYMid meet' | 'xMidYMid slice' | 'xMinYMin
 export declare class CustomError extends Error {
     status?: number;
 }
-type JSXLottiePlayer = Omit<DotLottiePlayer, 'style'> & {
+type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
     class?: string;
     ref?: RefObject<unknown>;
     style?: CSSProperties;
+    src: string;
 };
 declare global {
     interface HTMLElementTagNameMap {
