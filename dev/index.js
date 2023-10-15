@@ -14265,6 +14265,9 @@
 	_ts_decorate([
 	    t()
 	], exports.DotLottiePlayer.prototype, "_currentAnimation", void 0);
+	_ts_decorate([
+	    t()
+	], exports.DotLottiePlayer.prototype, "_animations", void 0);
 	exports.DotLottiePlayer = _ts_decorate([
 	    e$1('dotlottie-player')
 	], exports.DotLottiePlayer);

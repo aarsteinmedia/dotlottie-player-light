@@ -146,7 +146,7 @@ export class DotLottiePlayer extends LitElement {
    * Hide advanced controls
    */
   @property({ type: Boolean })
-    simple?: boolean = false
+  simple?: boolean = false
 
   /**
    * Speed
@@ -195,6 +195,7 @@ export class DotLottiePlayer extends LitElement {
   private _identifier = this.id || useId('dotlottie')
   private _errorMessage = 'Something went wrong'
 
+  @state()
   private _animations!: LottieJSON[]
 
   private _playerState = {
@@ -921,12 +922,12 @@ export class DotLottiePlayer extends LitElement {
         </button>
         <button
           @click=${({ target }: Event) => {
-        this._toggleSettings()
-        // Because Safari does not add focus on click, we need to add it manually, so the onblur event will fire
-        if (target instanceof HTMLElement) {
-          target.focus()
-        }
-      }}
+            this._toggleSettings()
+            // Because Safari does not add focus on click, we need to add it manually, so the onblur event will fire
+            if (target instanceof HTMLElement) {
+              target.focus()
+            }
+          }}
           @blur=${() => setTimeout(() => this._toggleSettings(false), 200)}
           aria-label="Settings"
           aria-haspopup="true"
@@ -956,7 +957,7 @@ export class DotLottiePlayer extends LitElement {
             </svg> Download still image
           </button>
         </div>`
-        }
+      }
       </div>
     `
   }
