@@ -13817,8 +13817,12 @@
 	            }
 	        });
 	        this._lottieInstance.addEventListener('complete', ()=>{
+	            var _this__animations, _this__animations1;
 	            this.currentState = exports.PlayerState.Completed;
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Complete));
+	            if (((_this__animations = this._animations) === null || _this__animations === void 0 ? void 0 : _this__animations.length) > 1 && this.autoplay && this._currentAnimation < ((_this__animations1 = this._animations) === null || _this__animations1 === void 0 ? void 0 : _this__animations1.length) - 1) {
+	                this.next();
+	            }
 	        });
 	        const loopComplete = ()=>{
 	            var _this__lottieInstance;
@@ -14062,8 +14066,12 @@
 	            animationData: this._animations[this._currentAnimation]
 	        }));
 	        this._addEventListeners();
-	        this._lottieInstance.goToAndPlay(0, true);
-	        this.currentState = exports.PlayerState.Playing;
+	        if (this.autoplay) {
+	            this._lottieInstance.goToAndPlay(0, true);
+	            this.currentState = exports.PlayerState.Playing;
+	        } else {
+	            this._lottieInstance.goToAndStop(0, true);
+	        }
 	    }
 	    next() {
 	        this._currentAnimation++;
