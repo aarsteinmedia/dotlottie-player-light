@@ -1,5 +1,4 @@
 import { html, LitElement, nothing } from 'lit'
-// import { ifDefined } from 'lit/directives/if-defined.js'
 import {
   customElement,
   property,
@@ -925,7 +924,7 @@ export class DotLottiePlayer extends LitElement {
         html`
         <button
           @click=${this.toggleLooping}
-          data-active=${this.loop === null ? undefined : this.loop}
+          data-active=${this.loop ?? nothing}
           tabindex="0"
           aria-label="Toggle looping"
         >
@@ -987,7 +986,7 @@ export class DotLottiePlayer extends LitElement {
     return html`
       <figure
         class=${'animation-container main'}
-        data-controls=${this.controls === null ? undefined : this.controls}
+        data-controls=${this.controls ?? nothing}
         lang=${this.description ? document?.documentElement?.lang : 'en'}
         role="img"
         aria-label=${this.description ?? 'Lottie animation'}
