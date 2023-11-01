@@ -13,8 +13,9 @@
     "lib": [
       "ES2021",
       "DOM",
+      "DOM.Iterable"
     ],
-    "module": "ES2015",
+    "module": "ESNext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -33,7 +34,7 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "strict": true,
-    "target": "es2021",
+    "target": "ES2021",
     "useDefineForClassFields": false
   },
   "include": [

@@ -3,7 +3,7 @@ import dts from 'rollup-plugin-dts'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import summary from 'rollup-plugin-summary'
-import { swc, minify as swcMinify } from 'rollup-plugin-swc3'
+import { swc, minify } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
 
 import pkg from './package.json' assert { type: 'json' }
@@ -17,30 +17,26 @@ const input = './src/index.ts',
     'lottie-web/build/player/lottie_light.js',
     'fflate'
   ],
-  plugins = (preferBuiltins = false) => ([
-    template(),
-    replace({
-      preventAssignment: false,
-      'Reflect.decorate': 'undefined'
-    }),
-    nodeResolve({
-      extensions,
-      jsnext: true,
-      module: true,
-      preferBuiltins
-    }),
-    commonjs(),
-    swc(),
-  ]),
-  unpkgPlugins = (minify = false) => ([
-    ...plugins(),
-    minify && swcMinify(),
-    minify && summary()
-  ]),
-  modulePlugins = () => ([
-    ...plugins(true),
-    summary(),
-  ])
+  plugins = ( dev = false, preferBuiltins = true ) => {
+    return [
+      template(),
+      replace({
+        preventAssignment: false,
+        'Reflect.decorate': 'undefined'
+      }),
+      nodeResolve({
+        extensions,
+        jsnext: true,
+        module: true,
+        browser: true,
+        preferBuiltins
+      }),
+      commonjs(),
+      swc(),
+      !dev && minify(),
+      !dev && summary(),
+    ]
+  }
 
 export default [
   {
@@ -65,7 +61,7 @@ export default [
       if (warning.code === 'THIS_IS_UNDEFINED') return
       warn(warning)
     },
-    plugins: unpkgPlugins(true),
+    plugins: plugins(false, false),
   },
   {
     input,
@@ -79,7 +75,7 @@ export default [
       if (warning.code === 'THIS_IS_UNDEFINED') return
       warn(warning)
     },
-    plugins: unpkgPlugins(),
+    plugins: plugins(true, false),
   },
   {
     input,
@@ -98,6 +94,6 @@ export default [
       if (warning.code === 'THIS_IS_UNDEFINED') return
       warn(warning)
     },
-    plugins: modulePlugins(),
+    plugins: plugins(),
   }
 ]
