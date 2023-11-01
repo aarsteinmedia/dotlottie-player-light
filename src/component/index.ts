@@ -1,4 +1,5 @@
 import { html, LitElement, nothing } from 'lit'
+import { ifDefined } from 'lit/directives/if-defined.js'
 import {
   customElement,
   property,
@@ -356,7 +357,7 @@ export class DotLottiePlayer extends LitElement {
 
       if (this.mode === PlayMode.Bounce) {
         this._lottieInstance?.goToAndStop(
-          playDirection === -1 ? firstFrame : totalFrames * .99, true
+          playDirection === -1 ? firstFrame : totalFrames * 0.99, true
         )
 
         this._lottieInstance?.setDirection(playDirection * -1 as AnimationDirection)
@@ -367,7 +368,7 @@ export class DotLottiePlayer extends LitElement {
       }
 
       this._lottieInstance?.goToAndStop(
-        playDirection === -1 ? totalFrames * .99 : firstFrame, true
+        playDirection === -1 ? totalFrames * 0.99 : firstFrame, true
       )
 
       return setTimeout(() => {
@@ -713,6 +714,24 @@ export class DotLottiePlayer extends LitElement {
     }
   }
 
+  /**
+   * Handle settings click event
+   */
+  private _handleSettingsClick = ({ target }: Event) => {
+    this._toggleSettings()
+    // Because Safari does not add focus on click, we need to add it manually, so the onblur event will fire
+    if (target instanceof HTMLElement) {
+      target.focus()
+    }
+  }
+
+  /**
+   * Handle blur
+   */
+  private _handleBlur() {
+    setTimeout(() => this._toggleSettings(false), 200)
+  }
+
   private _switchInstance() {
     // Clear previous animation
     if (this._lottieInstance) this._lottieInstance.destroy()
@@ -897,7 +916,6 @@ export class DotLottiePlayer extends LitElement {
             aria-label="Slider for search"
           />
           <progress
-            min="0"
             max="100"
             value=${this._seeker}
           >
@@ -907,7 +925,7 @@ export class DotLottiePlayer extends LitElement {
         html`
         <button
           @click=${this.toggleLooping}
-          data-active=${this.loop}
+          data-active=${ifDefined(this.loop === null ? undefined : this.loop)}
           tabindex="0"
           aria-label="Toggle looping"
         >
@@ -930,14 +948,8 @@ export class DotLottiePlayer extends LitElement {
           </svg>
         </button>
         <button
-          @click=${({ target }: Event) => {
-            this._toggleSettings()
-            // Because Safari does not add focus on click, we need to add it manually, so the onblur event will fire
-            if (target instanceof HTMLElement) {
-              target.focus()
-            }
-          }}
-          @blur=${() => setTimeout(() => this._toggleSettings(false), 200)}
+          @click=${this._handleSettingsClick}
+          @blur=${this._handleBlur}
           aria-label="Settings"
           aria-haspopup="true"
           aria-expanded=${!!this._isSettingsOpen}
@@ -974,8 +986,8 @@ export class DotLottiePlayer extends LitElement {
   protected override render() {
     return html`
       <figure
-        class=${`animation-container main`}
-        data-controls=${this.controls}
+        class=${'animation-container main'}
+        data-controls=${ifDefined(this.controls === null ? undefined : this.controls)}
         lang=${this.description ? document?.documentElement?.lang : 'en'}
         role="img"
         aria-label=${this.description ?? 'Lottie animation'}

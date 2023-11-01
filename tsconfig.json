@@ -11,11 +11,10 @@
     "isolatedModules": true,
     "experimentalDecorators": true,
     "lib": [
+      "ES2021",
       "DOM",
-      "DOM.Iterable",
-      "ESNext",
     ],
-    "module": "ESNext",
+    "module": "ES2015",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -34,7 +33,7 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "strict": true,
-    "target": "es2016",
+    "target": "es2021",
     "useDefineForClassFields": false
   },
   "include": [
