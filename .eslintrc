@@ -18,6 +18,11 @@
     "ecmaVersion": 2021,
     "sourceType": "module"
   },
+  "ignorePatterns": [
+    "./types/**/*",
+    "./dist/**/*",
+    "./dev/**/*"
+  ],
   "rules": {
     "camelcase": "warn",
     "no-console": [

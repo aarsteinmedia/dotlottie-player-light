@@ -916,6 +916,7 @@ export class DotLottiePlayer extends LitElement {
             aria-label="Slider for search"
           />
           <progress
+            min="0"
             max="100"
             value=${this._seeker}
           >

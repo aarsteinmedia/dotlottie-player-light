@@ -11,9 +11,9 @@
     "isolatedModules": true,
     "experimentalDecorators": true,
     "lib": [
-      "ES2021",
       "DOM",
-      "DOM.Iterable"
+      "DOM.Iterable",
+      "ESNext",
     ],
     "module": "ESNext",
     "moduleResolution": "node",
@@ -34,7 +34,7 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "strict": true,
-    "target": "ES2021",
+    "target": "es2016",
     "useDefineForClassFields": false
   },
   "include": [
