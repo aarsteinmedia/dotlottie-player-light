@@ -1,5 +1,5 @@
 import { html, LitElement, nothing } from 'lit'
-import { ifDefined } from 'lit/directives/if-defined.js'
+// import { ifDefined } from 'lit/directives/if-defined.js'
 import {
   customElement,
   property,
@@ -916,7 +916,6 @@ export class DotLottiePlayer extends LitElement {
             aria-label="Slider for search"
           />
           <progress
-            min="0"
             max="100"
             value=${this._seeker}
           >
@@ -926,7 +925,7 @@ export class DotLottiePlayer extends LitElement {
         html`
         <button
           @click=${this.toggleLooping}
-          data-active=${ifDefined(this.loop === null ? undefined : this.loop)}
+          data-active=${this.loop === null ? undefined : this.loop}
           tabindex="0"
           aria-label="Toggle looping"
         >
@@ -988,7 +987,7 @@ export class DotLottiePlayer extends LitElement {
     return html`
       <figure
         class=${'animation-container main'}
-        data-controls=${ifDefined(this.controls === null ? undefined : this.controls)}
+        data-controls=${this.controls === null ? undefined : this.controls}
         lang=${this.description ? document?.documentElement?.lang : 'en'}
         role="img"
         aria-label=${this.description ?? 'Lottie animation'}
