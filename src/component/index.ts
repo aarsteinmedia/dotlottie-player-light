@@ -374,7 +374,7 @@ export class DotLottiePlayer extends LitElement {
         playDirection,
       } = this._lottieInstance,
 
-        isBounce = this.mode === PlayMode.Bounce || this._manifest.animations[this._currentAnimation].mode === PlayMode.Bounce
+        isBounce = this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce
 
       if (this.count) {
 
@@ -721,7 +721,7 @@ export class DotLottiePlayer extends LitElement {
     }
     if (this.currentState === PlayerState.Completed) {
       this.currentState = PlayerState.Playing
-      if (this.mode === PlayMode.Bounce) {
+      if (this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce) {
         this.setDirection(playDirection * -1 as AnimationDirection)
         return this._lottieInstance.goToAndPlay(currentFrame, true)
       }
@@ -744,7 +744,14 @@ export class DotLottiePlayer extends LitElement {
    * Toggle Boomerang
    */
   public toggleBoomerang() {
-    if (this.mode === PlayMode.Normal) {
+    const curr = this.multiAnimationSettings?.[this._currentAnimation]
+    if (curr?.mode !== undefined) {
+      if (curr.mode === PlayMode.Normal) {
+        curr.mode = PlayMode.Bounce
+      } else {
+        curr.mode = PlayMode.Normal
+      }
+    } else if (this.mode === PlayMode.Normal) {
       this.mode = PlayMode.Bounce
     } else {
       this.mode = PlayMode.Normal
@@ -793,7 +800,7 @@ export class DotLottiePlayer extends LitElement {
     // Add event listeners to new Lottie instance
     this._addEventListeners()
 
-    if (this.autoplay) {
+    if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
       this._lottieInstance?.goToAndPlay(0, true)
       this.currentState = PlayerState.Playing
     } else {
@@ -985,7 +992,7 @@ export class DotLottiePlayer extends LitElement {
         </button>
         <button
           @click=${this.toggleBoomerang}
-          data-active=${this.mode === PlayMode.Bounce}
+          data-active=${this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce ?? this.mode === PlayMode.Bounce}
           aria-label="Toggle boomerang"
           tabindex="0"
         >
