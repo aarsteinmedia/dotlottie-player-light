@@ -13426,7 +13426,6 @@
 	})(exports.PlayerEvents || (exports.PlayerEvents = {}));
 	class CustomError extends Error {
 	}
-
 	const aspectRatio = (objectFit)=>{
 	    switch(objectFit){
 	        case 'contain':
@@ -13618,13 +13617,13 @@
 	}
 	class DotLottiePlayer extends s {
 	    _getOptions() {
-	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
+	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation], currentAnimationManifest = this._manifest.animations[this._currentAnimation], loop = currentAnimationSettings?.loop !== undefined ? !!currentAnimationSettings.loop : this.loop !== undefined ? !!this.loop : currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop, autoplay = currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay : this.autoplay !== undefined ? !!this.autoplay : currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay, initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
 	            this.segment[0] - 1,
 	            this.segment[1] - 1
 	        ] : this.segment, options = {
 	            container: this.container,
-	            loop: !!this.loop,
-	            autoplay: !!this.autoplay,
+	            loop,
+	            autoplay,
 	            renderer: 'svg',
 	            initialSegment,
 	            rendererSettings: {
@@ -13639,11 +13638,23 @@
 	    async load(src) {
 	        if (!this.shadowRoot) return;
 	        try {
-	            const { animations } = await getAnimationData(src);
+	            const { animations, manifest } = await getAnimationData(src);
 	            if (!animations || animations.some((animation)=>!this._isLottie(animation))) {
 	                throw new Error('Broken or corrupted file');
 	            }
 	            this._animations = animations;
+	            this._manifest = manifest ?? {
+	                animations: [
+	                    {
+	                        id: useId(),
+	                        autoplay: this.autoplay,
+	                        loop: this.loop,
+	                        direction: this.direction,
+	                        mode: this.mode,
+	                        speed: this.speed
+	                    }
+	                ]
+	            };
 	            if (this._lottieInstance) this._lottieInstance.destroy();
 	            this._lottieInstance = Lottie.loadAnimation({
 	                ...this._getOptions(),
@@ -13656,8 +13667,9 @@
 	            return;
 	        }
 	        this._addEventListeners();
-	        this.setSpeed(this.speed);
-	        this.setDirection(this.direction ?? 1);
+	        const speed = this.multiAnimationSettings?.[this._currentAnimation]?.speed ?? this.speed ?? this._manifest.animations[this._currentAnimation].speed, direction = this.multiAnimationSettings?.[this._currentAnimation]?.direction ?? this.direction ?? this._manifest.animations[this._currentAnimation].direction ?? 1;
+	        this.setSpeed(speed);
+	        this.setDirection(direction);
 	        this.setSubframe(!!this.subframe);
 	        if (this.autoplay) {
 	            if (this.direction === -1) this.seek('99%');
@@ -13878,6 +13890,11 @@
 	            this._lottieInstance.setLoop(value);
 	        }
 	    }
+	    setMultiAnimationSettings(settings) {
+	        if (this._lottieInstance) {
+	            this.multiAnimationSettings = settings;
+	        }
+	    }
 	    togglePlay() {
 	        if (!this._lottieInstance) return;
 	        const { currentFrame, playDirection, totalFrames } = this._lottieInstance;
@@ -14074,6 +14091,11 @@
 	        type: String
 	    })
 	], DotLottiePlayer.prototype, "mode", void 0);
+	_ts_decorate([
+	    n$1({
+	        type: Array
+	    })
+	], DotLottiePlayer.prototype, "multiAnimationSettings", void 0);
 	_ts_decorate([
 	    n$1({
 	        type: String

@@ -1,11 +1,18 @@
-import { html, LitElement, nothing } from 'lit'
+import { html, LitElement, nothing, type CSSResult } from 'lit'
 import {
   customElement,
   property,
   query,
   state
 } from 'lit/decorators.js'
-import Lottie from 'lottie-web/build/player/lottie_light.js'
+import Lottie, {
+  type AnimationConfig,
+  type AnimationDirection,
+  type AnimationEventName,
+  type AnimationItem,
+  type AnimationSegment,
+  type RendererType
+} from 'lottie-web/build/player/lottie_light.js'
 
 import {
   aspectRatio,
@@ -14,28 +21,19 @@ import {
   getAnimationData,
   getFilename,
   handleErrors,
-  useId,
-} from './functions'
-import {
   PlayMode,
   PlayerEvents,
-  PlayerState
-} from './types'
+  PlayerState,
+  useId,
+} from './utils'
 
-import type { CSSResult } from 'lit'
 import type {
-  AnimationConfig,
-  AnimationDirection,
-  AnimationEventName,
-  AnimationItem,
-  AnimationSegment,
-  RendererType
-} from 'lottie-web'
-import type {
+  Animations,
   Autoplay,
   Controls,
   Loop,
   LottieJSON,
+  LottieManifest,
   ObjectFit,
   PreserveAspectRatio,
   Subframe
@@ -119,6 +117,13 @@ export class DotLottiePlayer extends LitElement {
   mode?: PlayMode = PlayMode.Normal
 
   /**
+   * Multi-animation settings
+   * If set, these will override conflicting settings
+   */
+  @property({ type: Array })
+  multiAnimationSettings?: Partial<Animations>
+
+  /**
    * Resizing to container
   */
   @property({ type: String })
@@ -195,6 +200,8 @@ export class DotLottiePlayer extends LitElement {
   private _identifier = this.id || useId('dotlottie')
   private _errorMessage = 'Something went wrong'
 
+  private _manifest!: LottieManifest
+
   @state()
   private _animations!: LottieJSON[]
 
@@ -212,6 +219,20 @@ export class DotLottiePlayer extends LitElement {
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
 
+      currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation],
+      currentAnimationManifest = this._manifest.animations[this._currentAnimation],
+
+      /** Since Lottie Web does not accept string or null we need
+       * to do this little workaround
+       */
+      loop = currentAnimationSettings?.loop !== undefined ? !!currentAnimationSettings.loop :
+        this.loop !== undefined ? !!this.loop :
+          currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop,
+
+      autoplay = currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay :
+        this.autoplay !== undefined ? !!this.autoplay :
+          currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay,
+
       initialSegment
         = !this.segment ||
           this.segment.some(val => val < 0) ?
@@ -223,8 +244,8 @@ export class DotLottiePlayer extends LitElement {
       options: AnimationConfig<'svg'> =
       {
         container: this.container,
-        loop: !!this.loop,
-        autoplay: !!this.autoplay,
+        loop,
+        autoplay,
         renderer: 'svg',
         initialSegment,
         rendererSettings: {
@@ -250,7 +271,7 @@ export class DotLottiePlayer extends LitElement {
 
     // Load the resource
     try {
-      const { animations } =
+      const { animations, manifest } =
         await getAnimationData(src)
 
       if (!animations || animations.some(animation => !this._isLottie(animation))) {
@@ -258,6 +279,16 @@ export class DotLottiePlayer extends LitElement {
       }
 
       this._animations = animations
+      this._manifest = manifest ?? {
+        animations: [{
+          id: useId(),
+          autoplay: this.autoplay,
+          loop: this.loop,
+          direction: this.direction,
+          mode: this.mode,
+          speed: this.speed
+        }]
+      }
 
       // Clear previous animation, if any
       if (this._lottieInstance) this._lottieInstance.destroy()
@@ -278,9 +309,15 @@ export class DotLottiePlayer extends LitElement {
 
     this._addEventListeners()
 
+    const speed = this.multiAnimationSettings?.[this._currentAnimation]?.speed ??
+      this.speed ?? this._manifest.animations[this._currentAnimation].speed,
+
+      direction = this.multiAnimationSettings?.[this._currentAnimation]?.direction ??
+        this.direction ?? this._manifest.animations[this._currentAnimation].direction ?? 1
+
     // Set initial playback speed and direction
-    this.setSpeed(this.speed)
-    this.setDirection(this.direction ?? 1)
+    this.setSpeed(speed)
+    this.setDirection(direction)
     this.setSubframe(!!this.subframe)
 
     // Start playing if autoplay is enabled
@@ -657,6 +694,16 @@ export class DotLottiePlayer extends LitElement {
     if (this._lottieInstance) {
       this.loop = value
       this._lottieInstance.setLoop(value)
+    }
+  }
+
+  /**
+   * Set Multi-animation settings
+   * @param { Partial<Animations> } settings
+   */
+  public setMultiAnimationSettings(settings: Partial<Animations>) {
+    if (this._lottieInstance) {
+      this.multiAnimationSettings = settings
     }
   }
 

@@ -1,34 +1,7 @@
 import type { AnimationDirection } from 'lottie-web';
 import type { CSSProperties, RefObject } from 'react';
 import type { DotLottiePlayer } from '.';
-export declare enum PlayerState {
-    Completed = "completed",
-    Destroyed = "destroyed",
-    Error = "error",
-    Frozen = "frozen",
-    Loading = "loading",
-    Paused = "paused",
-    Playing = "playing",
-    Stopped = "stopped"
-}
-export declare enum PlayMode {
-    Bounce = "bounce",
-    Normal = "normal"
-}
-export declare enum PlayerEvents {
-    Complete = "complete",
-    Destroyed = "destroyed",
-    Error = "error",
-    Frame = "frame",
-    Freeze = "freeze",
-    Load = "load",
-    Loop = "loop",
-    Pause = "pause",
-    Play = "play",
-    Ready = "ready",
-    Rendered = "rendered",
-    Stop = "stop"
-}
+import type { PlayMode } from './utils';
 export interface LottieAsset {
     e: 0 | 1;
     id: string;
@@ -64,8 +37,9 @@ export interface Config {
     mode?: PlayMode;
     speed?: number;
 }
+export type Animations = Omit<Config, 'url'>[];
 export interface LottieManifest {
-    animations: Omit<Config, 'url'>[];
+    animations: Animations;
     author?: string;
     description?: string;
     generator?: string;
@@ -78,9 +52,6 @@ export type Loop = boolean | '' | 'loop' | null;
 export type Subframe = boolean | '' | null;
 export type ObjectFit = 'contain' | 'cover' | 'fill' | 'scale-down' | 'none';
 export type PreserveAspectRatio = 'xMidYMid meet' | 'xMidYMid slice' | 'xMinYMin slice' | 'none';
-export declare class CustomError extends Error {
-    status?: number;
-}
 type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
     class?: string;
     ref?: RefObject<unknown>;
