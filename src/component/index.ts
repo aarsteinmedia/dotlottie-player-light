@@ -372,11 +372,13 @@ export class DotLottiePlayer extends LitElement {
         firstFrame,
         totalFrames,
         playDirection,
-      } = this._lottieInstance
+      } = this._lottieInstance,
+
+        isBounce = this.mode === PlayMode.Bounce || this._manifest.animations[this._currentAnimation].mode === PlayMode.Bounce
 
       if (this.count) {
 
-        this.mode === PlayMode.Bounce ?
+        isBounce ?
           this._playerState.count += 1 : this._playerState.count += 0.5
 
         if (this._playerState.count >= this.count) {
@@ -391,7 +393,7 @@ export class DotLottiePlayer extends LitElement {
 
       this.dispatchEvent(new CustomEvent(PlayerEvents.Loop))
 
-      if (this.mode === PlayMode.Bounce) {
+      if (isBounce) {
         this._lottieInstance?.goToAndStop(
           playDirection === -1 ? firstFrame : totalFrames * 0.99, true
         )
@@ -792,10 +794,10 @@ export class DotLottiePlayer extends LitElement {
     this._addEventListeners()
 
     if (this.autoplay) {
-      this._lottieInstance.goToAndPlay(0, true)
+      this._lottieInstance?.goToAndPlay(0, true)
       this.currentState = PlayerState.Playing
     } else {
-      this._lottieInstance.goToAndStop(0, true)
+      this._lottieInstance?.goToAndStop(0, true)
     }
   }
 

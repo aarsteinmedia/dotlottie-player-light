@@ -13701,9 +13701,9 @@
 	            if (!this._lottieInstance) {
 	                return;
 	            }
-	            const { firstFrame, totalFrames, playDirection } = this._lottieInstance;
+	            const { firstFrame, totalFrames, playDirection } = this._lottieInstance, isBounce = this.mode === exports.PlayMode.Bounce || this._manifest.animations[this._currentAnimation].mode === exports.PlayMode.Bounce;
 	            if (this.count) {
-	                this.mode === exports.PlayMode.Bounce ? this._playerState.count += 1 : this._playerState.count += 0.5;
+	                isBounce ? this._playerState.count += 1 : this._playerState.count += 0.5;
 	                if (this._playerState.count >= this.count) {
 	                    this.setLooping(false);
 	                    this.currentState = exports.PlayerState.Completed;
@@ -13712,7 +13712,7 @@
 	                }
 	            }
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Loop));
-	            if (this.mode === exports.PlayMode.Bounce) {
+	            if (isBounce) {
 	                this._lottieInstance?.goToAndStop(playDirection === -1 ? firstFrame : totalFrames * 0.99, true);
 	                this._lottieInstance?.setDirection(playDirection * -1);
 	                return setTimeout(()=>{
@@ -13942,10 +13942,10 @@
 	        });
 	        this._addEventListeners();
 	        if (this.autoplay) {
-	            this._lottieInstance.goToAndPlay(0, true);
+	            this._lottieInstance?.goToAndPlay(0, true);
 	            this.currentState = exports.PlayerState.Playing;
 	        } else {
-	            this._lottieInstance.goToAndStop(0, true);
+	            this._lottieInstance?.goToAndStop(0, true);
 	        }
 	    }
 	    next() {
