@@ -13693,7 +13693,7 @@
 	        this._lottieInstance.addEventListener('complete', ()=>{
 	            this.currentState = exports.PlayerState.Completed;
 	            this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Complete));
-	            if (this._animations?.length > 1 && this.autoplay && this._currentAnimation < this._animations?.length - 1) {
+	            if (this._animations?.length > 1 && !!this.multiAnimationSettings?.[this._currentAnimation + 1].autoplay && this._currentAnimation < this._animations?.length - 1) {
 	                this.next();
 	            }
 	        });

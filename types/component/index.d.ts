@@ -1,7 +1,7 @@
 import { LitElement, type CSSResult } from 'lit';
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web/build/player/lottie_light.js';
 import { PlayMode, PlayerState } from './utils';
-import type { Animations, Autoplay, Controls, Loop, LottieJSON, ObjectFit, PreserveAspectRatio, Subframe } from './types';
+import type { AnimationSettings, Autoplay, Controls, Loop, LottieJSON, ObjectFit, PreserveAspectRatio, Subframe } from './types';
 export declare class DotLottiePlayer extends LitElement {
     autoplay?: Autoplay;
     background?: string;
@@ -14,7 +14,7 @@ export declare class DotLottiePlayer extends LitElement {
     intermission?: number | undefined;
     loop?: Loop;
     mode?: PlayMode;
-    multiAnimationSettings?: Partial<Animations>;
+    multiAnimationSettings?: AnimationSettings[];
     objectfit?: ObjectFit;
     preserveAspectRatio?: PreserveAspectRatio;
     renderer?: RendererType;
@@ -53,7 +53,7 @@ export declare class DotLottiePlayer extends LitElement {
     setSpeed(value?: number): void;
     setDirection(value: AnimationDirection): void;
     setLooping(value: boolean): void;
-    setMultiAnimationSettings(settings: Partial<Animations>): void;
+    setMultiAnimationSettings(settings: AnimationSettings[]): void;
     togglePlay(): void;
     toggleLooping(): void;
     toggleBoomerang(): void;
