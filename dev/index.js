@@ -13949,6 +13949,9 @@
 	            ...this._getOptions(),
 	            animationData: this._animations[this._currentAnimation]
 	        });
+	        if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
+	            this._isBounce = this.multiAnimationSettings[this._currentAnimation].mode === exports.PlayMode.Bounce;
+	        }
 	        this._addEventListeners();
 	        if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
 	            this._lottieInstance?.goToAndPlay(0, true);
