@@ -13418,6 +13418,7 @@
 	    PlayerEvents["Freeze"] = "freeze";
 	    PlayerEvents["Load"] = "load";
 	    PlayerEvents["Loop"] = "loop";
+	    PlayerEvents["Next"] = "next";
 	    PlayerEvents["Pause"] = "pause";
 	    PlayerEvents["Play"] = "play";
 	    PlayerEvents["Ready"] = "ready";
@@ -13953,6 +13954,7 @@
 	            this._isBounce = this.multiAnimationSettings[this._currentAnimation].mode === exports.PlayMode.Bounce;
 	        }
 	        this._addEventListeners();
+	        this.dispatchEvent(new CustomEvent(exports.PlayerEvents.Next));
 	        if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
 	            this._lottieInstance?.goToAndPlay(0, true);
 	            this.currentState = exports.PlayerState.Playing;
