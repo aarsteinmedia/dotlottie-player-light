@@ -1,4 +1,9 @@
-import { html, LitElement, nothing, type CSSResult } from 'lit'
+import {
+  html,
+  LitElement,
+  nothing,
+  type CSSResult
+} from 'lit'
 import {
   customElement,
   property,
@@ -204,6 +209,10 @@ export class DotLottiePlayer extends LitElement {
 
   private _manifest!: LottieManifest
 
+  /**
+   * This is set to state, so that next-button will show up
+   * on load, if controls are visible
+   */
   @state()
   private _animations!: LottieJSON[]
 
@@ -215,14 +224,14 @@ export class DotLottiePlayer extends LitElement {
 
   /**
    * Get options from props
-   * @returns { LottieConfig }
+   * @returns { LottieConfig<'svg'> }
    */
-  private _getOptions(): LottieConfig {
+  private _getOptions() {
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
 
       currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation],
-      currentAnimationManifest = this._manifest.animations[this._currentAnimation],
+      currentAnimationManifest = this._manifest.animations?.[this._currentAnimation],
 
       /** Since Lottie Web does not accept string or null we need
        * to do this little workaround
