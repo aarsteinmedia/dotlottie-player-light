@@ -343,6 +343,13 @@ export class DotLottiePlayer extends LitElement {
   }
 
   /**
+   * Get Lottie Manifest
+   */
+  public getManifest() {
+    return this._manifest
+  }
+
+  /**
    * Add event listeners
    */
   private _addEventListeners() {

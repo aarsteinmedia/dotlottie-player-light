@@ -1,7 +1,7 @@
 import { LitElement, type CSSResult } from 'lit';
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web/build/player/lottie_light.js';
 import { PlayMode, PlayerState } from './utils';
-import type { AnimationSettings, Autoplay, Controls, Loop, LottieJSON, ObjectFit, PreserveAspectRatio, Subframe } from './types';
+import type { AnimationSettings, Autoplay, Controls, Loop, LottieJSON, LottieManifest, ObjectFit, PreserveAspectRatio, Subframe } from './types';
 export declare class DotLottiePlayer extends LitElement {
     autoplay?: Autoplay;
     background?: string;
@@ -37,6 +37,7 @@ export declare class DotLottiePlayer extends LitElement {
     private _playerState;
     private _getOptions;
     load(src: string | LottieJSON): Promise<void>;
+    getManifest(): LottieManifest;
     private _addEventListeners;
     private _onVisibilityChange;
     private _handleSeekChange;

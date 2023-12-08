@@ -13619,7 +13619,7 @@
 	}
 	class DotLottiePlayer extends s {
 	    _getOptions() {
-	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation], currentAnimationManifest = this._manifest.animations[this._currentAnimation], loop = currentAnimationSettings?.loop !== undefined ? !!currentAnimationSettings.loop : this.loop !== undefined ? !!this.loop : currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop, autoplay = currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay : this.autoplay !== undefined ? !!this.autoplay : currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay, initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
+	        const preserveAspectRatio = this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)), currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation], currentAnimationManifest = this._manifest.animations?.[this._currentAnimation], loop = currentAnimationSettings?.loop !== undefined ? !!currentAnimationSettings.loop : this.loop !== undefined ? !!this.loop : currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop, autoplay = currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay : this.autoplay !== undefined ? !!this.autoplay : currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay, initialSegment = !this.segment || this.segment.some((val)=>val < 0) ? undefined : this.segment.every((val)=>val > 0) ? [
 	            this.segment[0] - 1,
 	            this.segment[1] - 1
 	        ] : this.segment, options = {
@@ -13678,6 +13678,9 @@
 	            if (this.direction === -1) this.seek('99%');
 	            this.play();
 	        }
+	    }
+	    getManifest() {
+	        return this._manifest;
 	    }
 	    _addEventListeners() {
 	        if (!this._lottieInstance) return;
