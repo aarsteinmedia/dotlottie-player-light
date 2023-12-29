@@ -29,15 +29,13 @@
   },
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "build": "pnpm cleanup && rollup -c",
-    "build:types": "pnpm cleanup:types && tsc",
+    "build": "rimraf ./dist && rollup -c",
+    "build:types": "rimraf ./types && tsc",
     "build:cem": "npx cem analyze --config 'cem.config.mjs'",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
-    "dev": "pnpm cleanup && rollup -c --watch",
-    "lint": "tsc && eslint . --ext .ts,.js",
-    "lint:fix": "eslint . --ext .ts,.js --fix",
-    "cleanup:types": "shx rm -rf types && shx mkdir types",
-    "cleanup": "shx rm -rf dist && shx mkdir dist"
+    "dev": "rollup -c -w --environment NODE_ENV:development",
+    "lint": "tsc && eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "dependencies": {
     "fflate": "^0.8.1",
@@ -56,13 +54,22 @@
     "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",
+    "autoprefixer": "^10.4.16",
+    "esbuild-sass-plugin": "^2.16.1",
     "eslint": "^8.56.0",
     "eslint-plugin-lit": "^1.11.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "rimraf": "^5.0.5",
     "rollup": "^3.29.4",
     "rollup-plugin-dts": "^5.3.1",
     "rollup-plugin-html-literals": "^1.1.8",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-postcss-lit": "^2.1.0",
+    "rollup-plugin-serve": "^1.1.1",
     "rollup-plugin-summary": "^2.0.0",
     "rollup-plugin-swc3": "^0.11.0",
+    "sass": "^1.69.6",
     "shx": "^0.3.4",
     "ts-lit-plugin": "^2.0.1",
     "typescript": "^5.3.3"
@@ -84,10 +91,11 @@
     "player"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "engines": {
-    "node": ">= 7.6.0"
+    "node": ">= 8.17.0"
   },
   "funding": {
     "type": "paypal",
