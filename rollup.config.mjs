@@ -56,7 +56,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   modulePlugins = () => [
     ...plugins(true),
     isProd && summary()
-  ];
+  ]
 
 export default [
   {
@@ -76,8 +76,9 @@ export default [
       name: pkg.name,
     },
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return;
-      warn(warning);
+      if (warning.code === 'THIS_IS_UNDEFINED')
+        return
+      warn(warning)
     },
     plugins: unpkgPlugins(),
   },
@@ -100,9 +101,10 @@ export default [
       },
     ],
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return;
-      warn(warning);
+      if (warning.code === 'THIS_IS_UNDEFINED')
+        return
+      warn(warning)
     },
     plugins: modulePlugins(),
   },
-];
+]

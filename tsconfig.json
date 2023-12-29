@@ -34,7 +34,7 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "strict": true,
-    "target": "es2021",
+    "target": "ES2021",
     "useDefineForClassFields": false
   },
   "include": [
