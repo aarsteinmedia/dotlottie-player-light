@@ -39,6 +39,8 @@ export declare class DotLottiePlayer extends LitElement {
     load(src: string | LottieJSON): Promise<void>;
     getManifest(): LottieManifest;
     private _addEventListeners;
+    private _mouseEnter;
+    private _mouseLeave;
     private _onVisibilityChange;
     private _handleSeekChange;
     private _isLottie;
@@ -66,6 +68,7 @@ export declare class DotLottiePlayer extends LitElement {
     next(): void;
     prev(): void;
     static get styles(): CSSResult;
+    constructor();
     connectedCallback(): void;
     protected firstUpdated(): Promise<void>;
     disconnectedCallback(): void;

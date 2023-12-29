@@ -9,7 +9,7 @@ import postcssLit from 'rollup-plugin-postcss-lit'
 import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import summary from 'rollup-plugin-summary'
-import { swc, minify as swcMinify } from 'rollup-plugin-swc3'
+import { minify, swc } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
 
 import pkg from './package.json' assert { type: 'json' }
@@ -45,7 +45,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   ],
   unpkgPlugins = () => [
     ...plugins(),
-    isProd && swcMinify(),
+    isProd && minify(),
     isProd && summary(),
     !isProd &&
       serve({

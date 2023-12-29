@@ -70,7 +70,6 @@
     "rollup-plugin-summary": "^2.0.0",
     "rollup-plugin-swc3": "^0.11.0",
     "sass": "^1.69.6",
-    "shx": "^0.3.4",
     "ts-lit-plugin": "^2.0.1",
     "typescript": "^5.3.3"
   },
