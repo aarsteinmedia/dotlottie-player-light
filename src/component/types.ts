@@ -3,14 +3,92 @@ import type { CSSProperties, RefObject } from 'react'
 import type { DotLottiePlayer } from '.'
 import type { PlayMode } from './utils'
 
+type BoolInt = 0 | 1
+
+interface Shape {
+  a: ShapeData
+  o: ShapeData
+  p: ShapeData
+  r: ShapeData
+  s: ShapeData
+}
+
+interface ShapeData {
+  /** Whether shape is animated or not */
+  a: 0 | 1
+
+  /** Array of Keyframes */
+  k: number | number[]
+
+  /** Index */
+  ix: number
+}
+
+interface Layer {
+  /** Auto Orient */
+  ao: BoolInt
+
+  /** Blend mode */
+  bm: number
+
+  completed: boolean
+
+  /** Whether the animation has 3D layers" */
+  ddd: BoolInt
+
+  /** "In Point", which frame the animation starts at (usually 0) */
+  ip: number
+
+  /** Layer transform */
+  ks: object
+
+  /** Layer name */
+  nm: string
+
+  /** Total number of frames */
+  op: number
+
+  shapes: Shape[]
+
+  /** Time stretch */
+  sr: number
+
+  /** Start time */
+  st: number
+
+  /** Matte target */
+  td: number
+
+  /** Type */
+  ty: number
+}
+
 export interface LottieAsset {
-  /** Whether the data is encoded or not */
-  e: 0 | 1
-  /** Name of asset – e.g. image_0 / audio_0 */
-  id: string
+  /** Whether the data is embedded/encoded */
+  e?: BoolInt
+
+  layers?: Layer[]
+
+  /** Height of image in pixels */
+  h?: number
+
+  /** id/slug of asset – e.g. image_0 / audio_0 */
+  id?: string
+
+  /** Name of asset – e.g. "Black Mouse Ears" */
+  nm?: string
+
   /** Filename – e.g image_0.png / audio_0.mp3 | DataURL, Base64 encoded */
-  p: string
-  u: string
+  p?: string
+
+  /** Path to asset. Empty string if asset is embedded */
+  u?: string
+
+  /** Extra composition */
+  xt?: number
+
+  /** Width of image in pixels */
+  w?: number
 }
 
 export interface LottieJSON {

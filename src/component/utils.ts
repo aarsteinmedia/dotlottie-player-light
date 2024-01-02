@@ -1,11 +1,9 @@
 import {
   strFromU8,
-  unzip as unzipOrg
+  unzip as unzipOrg,
+  type Unzipped
 } from 'fflate'
 
-import type {
-  Unzipped
-} from 'fflate'
 import type {
   LottieAsset,
   LottieJSON,
@@ -97,30 +95,13 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     }, 1000)
   },
 
-  handleErrors = (err: unknown) => {
-    const res = {
-      message: 'Unknown error',
-      status: isServer() ? 500 : 400
-    }
-    if (err && typeof err === 'object') {
-      if ('message' in err && typeof err.message === 'string') {
-        res.message = err.message
-      }
-      if ('status' in err) {
-        res.status = Number(err.status)
-      }
-    }
-    return res
-  },
-
-  frameOutput = (frame?: number) => {
-    return ((frame ?? 0) + 1).toString().padStart(3, '0')
-  },
+  frameOutput = (frame?: number) =>
+    ((frame ?? 0) + 1).toString().padStart(3, '0'),
 
   getAnimationData = async (input: unknown): Promise<{
     animations: LottieJSON[] | null
     manifest: LottieManifest | null
-    isDotLottie?: boolean
+    isDotLottie: boolean
   }> => {
     try {
       if (!input || (typeof input !== 'string' && typeof input !== 'object')) {
@@ -128,11 +109,11 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       }
 
       if (typeof input !== 'string') {
-        const animations =
-          Array.isArray(input) ? input : [input]
+        const animations = Array.isArray(input) ? input : [input]
         return {
           animations,
           manifest: null,
+          isDotLottie: false
         }
       }
 
@@ -145,7 +126,9 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       }
 
       /**
-       * Check if file is JSON, first by parsing file name for extension, then – if filename has no extension – by cloning the response and parsing it for content.
+       * Check if file is JSON, first by parsing file name for extension,
+       * then – if filename has no extension – by cloning the response
+       * and parsing it for content.
        */
       const ext = getExt(input)
       if (ext === 'json' || !ext) {
@@ -154,17 +137,20 @@ export const aspectRatio = (objectFit: ObjectFit) => {
           return {
             animations: [lottie],
             manifest: null,
+            isDotLottie: false
           }
         }
         const text = await result.clone().text()
-
         try {
           const lottie = JSON.parse(text)
           return {
             animations: [lottie],
             manifest: null,
+            isDotLottie: false
           }
-        } catch { /* Empty */ }
+        } catch (e) {
+          console.warn(e)
+        }
       }
 
       const { data, manifest } = await getLottieJSON(result)
@@ -180,6 +166,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       return {
         animations: null,
         manifest: null,
+        isDotLottie: false
       }
     }
   },
@@ -188,8 +175,8 @@ export const aspectRatio = (objectFit: ObjectFit) => {
    * Get extension from filename, URL or path
    * @param { string } str Filename, URL or path
    */
-  getExt = (str: string) => {
-    if (!hasExt(str))
+  getExt = (str?: string) => {
+    if (!str || !hasExt(str))
       return
     return str.split('.').pop()?.toLowerCase()
   },
@@ -209,13 +196,17 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   getLottieJSON = async (resp: Response) => {
     const unzipped = await unzip(resp),
       manifest = getManifest(unzipped),
-      data = []
+      data = [],
+      toResolve: Promise<void>[] = []
     for (const { id } of manifest.animations) {
       const str = strFromU8(unzipped[`animations/${id}.json`]),
         lottie: LottieJSON = JSON.parse(str)
-      await resolveAssets(unzipped, lottie.assets)
+
+      toResolve.push(resolveAssets(unzipped, lottie.assets))
       data.push(lottie)
     }
+
+    await Promise.all(toResolve)
 
     return {
       data,
@@ -256,22 +247,45 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     }
   },
 
+  handleErrors = (err: unknown) => {
+    const res = {
+      message: 'Unknown error',
+      status: isServer() ? 500 : 400
+    }
+    if (err && typeof err === 'object') {
+      if ('message' in err && typeof err.message === 'string') {
+        res.message = err.message
+      }
+      if ('status' in err) {
+        res.status = Number(err.status)
+      }
+    }
+    return res
+  },
+
   hasExt = (path: string) => {
     const lastDotIndex = path.split('/').pop()?.lastIndexOf('.')
     return (lastDotIndex ?? 0) > 1 && path.length - 1 > (lastDotIndex ?? 0)
   },
 
-  isAudio = (asset: LottieAsset) => {
-    return !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset
+  isAudio = (asset: LottieAsset) =>
+    !('h' in asset) && !('w' in asset) && 'p' in asset && 'e' in asset && 'u' in asset && 'id' in asset,
+
+  isBase64 = (str?: string) => {
+    if (!str)
+      return false
+    const regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+    return regex.test(parseBase64(str))
   },
 
-  isImage = (asset: LottieAsset) => {
-    return 'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset
-  },
+  isImage = (asset: LottieAsset) =>
+    'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
 
-  isServer = () => {
-    return !(typeof window !== 'undefined' && window.document)
-  },
+  isServer = () =>
+    !(typeof window !== 'undefined' && window.document),
+
+  parseBase64 = (str: string) =>
+    str.substring(str.indexOf(',') + 1),
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets))
@@ -293,10 +307,11 @@ export const aspectRatio = (objectFit: ObjectFit) => {
         new Promise<void>(resolveAsset => {
           const assetB64 = isServer() ? Buffer.from(u8).toString('base64') :
             btoa(u8.reduce((dat, byte) => (
-              dat + String.fromCharCode(byte)
+              `${dat}${String.fromCharCode(byte)}`
             ), ''))
 
-          asset.p = `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`
+          asset.p = (asset.p?.startsWith('data:') || isBase64(asset.p)) ? asset.p :
+            `data:${getMimeFromExt(getExt(asset.p))};base64,${assetB64}`
           asset.e = 1
           asset.u = ''
 

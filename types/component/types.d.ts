@@ -2,11 +2,44 @@ import type { AnimationDirection } from 'lottie-web';
 import type { CSSProperties, RefObject } from 'react';
 import type { DotLottiePlayer } from '.';
 import type { PlayMode } from './utils';
+type BoolInt = 0 | 1;
+interface Shape {
+    a: ShapeData;
+    o: ShapeData;
+    p: ShapeData;
+    r: ShapeData;
+    s: ShapeData;
+}
+interface ShapeData {
+    a: 0 | 1;
+    k: number | number[];
+    ix: number;
+}
+interface Layer {
+    ao: BoolInt;
+    bm: number;
+    completed: boolean;
+    ddd: BoolInt;
+    ip: number;
+    ks: object;
+    nm: string;
+    op: number;
+    shapes: Shape[];
+    sr: number;
+    st: number;
+    td: number;
+    ty: number;
+}
 export interface LottieAsset {
-    e: 0 | 1;
-    id: string;
-    p: string;
-    u: string;
+    e?: BoolInt;
+    layers?: Layer[];
+    h?: number;
+    id?: string;
+    nm?: string;
+    p?: string;
+    u?: string;
+    xt?: number;
+    w?: number;
 }
 export interface LottieJSON {
     assets?: LottieAsset[];
