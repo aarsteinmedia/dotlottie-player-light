@@ -56,33 +56,8 @@ const isProd = process.env.NODE_ENV !== 'development',
   modulePlugins = () => [
     ...plugins(true),
     isProd && summary()
-  ]
-
-export default [
-  {
-    input: './types/index.d.ts',
-    output: {
-      file: pkg.types,
-      format: 'esm',
-    },
-    plugins: [dts()],
-  },
-  {
-    input,
-    output: {
-      extend: true,
-      file: pkg.main,
-      format: 'iife',
-      name: pkg.name,
-    },
-    onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED')
-        return
-      warn(warning)
-    },
-    plugins: unpkgPlugins(),
-  },
-  {
+  ],
+  module = {
     input,
     external: [
       'lit',
@@ -107,4 +82,32 @@ export default [
     },
     plugins: modulePlugins(),
   },
-]
+  types = {
+    input: './types/index.d.ts',
+    output: {
+      file: pkg.types,
+      format: 'esm',
+    },
+    plugins: [dts()],
+  },
+  unpkg = {
+    input,
+    output: {
+      extend: true,
+      file: pkg.main,
+      format: 'iife',
+      name: pkg.name,
+    },
+    onwarn(warning, warn) {
+      if (warning.code === 'THIS_IS_UNDEFINED')
+        return
+      warn(warning)
+    },
+    plugins: unpkgPlugins(),
+  }
+
+export default isProd ? [
+  types,
+  unpkg,
+  module,
+] : unpkg
