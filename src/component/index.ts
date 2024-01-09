@@ -101,13 +101,13 @@ export class DotLottiePlayer extends LitElement {
    * Whether to play on mouseover
    */
   @property({ type: Boolean })
-  hover?= false
+  hover? = false
 
   /**
    * Intermission
    */
   @property({ type: Number })
-  intermission?= 0
+  intermission? = 0
 
   /**
    * Whether to loop
@@ -824,13 +824,13 @@ export class DotLottiePlayer extends LitElement {
       }
       return
     }
-    
+
     if (this.mode === PlayMode.Normal) {
       this.mode = PlayMode.Bounce
       this._isBounce = true
       return
     }
-    
+
     this.mode = PlayMode.Normal
     this._isBounce = false
   }
@@ -1194,9 +1194,9 @@ export class DotLottiePlayer extends LitElement {
             </svg>
           </div>
         `
-        
+
         :
-        
+
         nothing
       }
         </div>
