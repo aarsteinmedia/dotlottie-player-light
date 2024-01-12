@@ -26,7 +26,6 @@ import {
   getAnimationData,
   getFilename,
   handleErrors,
-  isInView,
   PlayMode,
   PlayerEvents,
   PlayerState,
@@ -342,7 +341,23 @@ export class DotLottiePlayer extends LitElement {
       if (this.direction === -1)
         this.seek('99%')
 
-      isInView(this) ? this.play() : this._freeze()
+      if ('IntersectionObserver' in window) {
+        this._intersectionObserver  =
+          new IntersectionObserver(entries => {
+            for (const entry of entries) {
+              if (entry.isIntersecting && !document.hidden) {
+                this.play()
+                continue
+              }
+
+              this._freeze()
+            }
+          })
+
+        this._intersectionObserver.observe(this.container)
+        return
+      }
+      this.play()
     }
   }
 
