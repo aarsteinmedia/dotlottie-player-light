@@ -174,7 +174,7 @@ export class DotLottiePlayer extends LitElement {
    * Subframe
    */
   @property({ type: Boolean })
-  subframe?: Subframe = true
+  subframe?: Subframe = false
 
   /**
    * Animaiton Container
@@ -489,6 +489,8 @@ export class DotLottiePlayer extends LitElement {
     }
     const { currentFrame, totalFrames } = this._lottieInstance
     this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+
+    this.currentState = PlayerState.Completed
 
     this.dispatchEvent(
       new CustomEvent(PlayerEvents.Frame, {
@@ -1035,7 +1037,6 @@ export class DotLottiePlayer extends LitElement {
     if (this._lottieInstance)
       this._lottieInstance.destroy()
 
-    this._removeEventListeners()
     // Remove the attached Visibility API's change event listener
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
   }

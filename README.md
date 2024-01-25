@@ -44,6 +44,7 @@ Add the element `dotlottie-player` to your markup and point `src` to a Lottie an
 <dotlottie-player
   autoplay=""
   controls=""
+  subframe=""
   loop=""
   src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
   style="width: 320px; margin: auto;"
@@ -92,6 +93,7 @@ function App() {
       src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
       autoplay=""
       controls=""
+      subframe=""
       loop=""
       style={{
         width: '320px',
@@ -196,6 +198,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
     src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
     autoplay=""
     controls=""
+    subframe=""
     loop=""
     style="width: 320px; margin: auto;"
   />
@@ -218,7 +221,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
 | `segment`             | Play only part of an animation. E. g. from frame 10 to frame 60 would be `[10, 60]`                     | `[number, number]`                       | `undefined`       |
 | `speed`               | Animation speed                                                                                         | `number`                                 | `1`               |
 | `src` _(required)_    | URL to LottieJSON or dotLottie                                                                          | `string`                                 | `undefined`       |
-| `subframe`            | When enabled this can help to reduce flicker on some animations, especially on Safari and iOS devices.  | `boolean`                                | `true`            |
+| `subframe`            | When enabled this can help to reduce flicker on some animations, especially on Safari and iOS devices.  | `boolean`                                | `false`           |
 
 ## Methods
 
@@ -233,6 +236,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
 | `play() => void`                          | Play                                                                                                      |
 | `reload() => void`                        | Reload                                                                                                    |
 | `seek(value: number \| string) => void`   | Go to frame. Can be a number or a percentage string (e. g. 50%).                                          |
+| `setCount(value: number) => void`         | Dynamically set number of loops                                                                           |
 | `setDirection(value: 1 \| -1) => void`    | Set Direction                                                                                             |
 | `setLooping(value: boolean) => void`      | Set Looping                                                                                               |
 | `setSpeed(value?: number) => void`        | Set Speed                                                                                                 |
