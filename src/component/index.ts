@@ -487,6 +487,11 @@ export class DotLottiePlayer extends LitElement {
     if (!this._lottieInstance) {
       return
     }
+
+    if (this._animations.length > 1 && this.multiAnimationSettings?.[this._currentAnimation + 1]?.autoplay) {
+      return this.next()
+    }
+
     const { currentFrame, totalFrames } = this._lottieInstance
     this._seeker = Math.floor((currentFrame / totalFrames) * 100)
 
