@@ -59,6 +59,20 @@ const lottiePlayer = document.querySelector('dotlottie-player')
 lottiePlayer.load('https://storage.googleapis.com/aarsteinmedia/am.lottie')
 ```
 
+### Control playback of multiple animations in a single file
+Use the [full version](https://github.com/aarsteinmedia/dotlottie-player) of this package to combine multiple animations into one file. To control the playback you can either use the `next()` and `prev()` methods, the navigation buttons in the controls or the parameter `multiAnimationSettings` in the markup.
+
+In the example below the first animation will play once, and then the next animation will loop:
+
+```xml
+<dotlottie-player
+  subframe=""
+  src="/path/to/combined-animations.lottie"
+  multiAnimationSettings='[{"autplay": true}, {"autoplay": true, "loop": true}]'
+>
+</dotlottie-player>  
+```
+
 ### Angular
 
 1. Import the component in `app.component.ts`.
@@ -207,21 +221,22 @@ export default defineNuxtPlugin(({ vueApp }) => {
 
 ## Properties
 
-| Property / Attribute  | Description                                                                                             | Type                                     | Default           |
-| --------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----------------- |
-| `autoplay`            | Play animation on load                                                                                  | `boolean`                                | `false`           |
-| `background`          | Background color                                                                                        | `string`                                 | `undefined`       |
-| `controls`            | Show controls                                                                                           | `boolean`                                | `false`           |
-| `count`               | Number of times to loop animation                                                                       | `number`                                 | `undefined`       |
-| `direction`           | Direction of animation                                                                                  | `1` \| `-1`                              | `1`               |
-| `hover`               | Whether to play on mouse hover                                                                          | `boolean`                                | `false`           |
-| `loop`                | Whether to loop animation                                                                               | `boolean`                                | `false`           |
-| `mode`                | Play mode                                                                                               | `normal` \| `bounce`                     | `normal`          |
-| `objectfit`           | Resizing of animation in container                                                                      | `contain` \| `cover` \| `fill` \| `none` | `contain`         |
-| `segment`             | Play only part of an animation. E. g. from frame 10 to frame 60 would be `[10, 60]`                     | `[number, number]`                       | `undefined`       |
-| `speed`               | Animation speed                                                                                         | `number`                                 | `1`               |
-| `src` _(required)_    | URL to LottieJSON or dotLottie                                                                          | `string`                                 | `undefined`       |
-| `subframe`            | When enabled this can help to reduce flicker on some animations, especially on Safari and iOS devices.  | `boolean`                                | `false`           |
+| Property / Attribute      | Description                                                                                                                   | Type                                     | Default           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----------------- |
+| `autoplay`                | Play animation on load                                                                                                        | `boolean`                                | `false`           |
+| `background`              | Background color                                                                                                              | `string`                                 | `undefined`       |
+| `controls`                | Show controls                                                                                                                 | `boolean`                                | `false`           |
+| `count`                   | Number of times to loop animation                                                                                             | `number`                                 | `undefined`       |
+| `direction`               | Direction of animation                                                                                                        | `1` \| `-1`                              | `1`               |
+| `hover`                   | Whether to play on mouse hover                                                                                                | `boolean`                                | `false`           |
+| `loop`                    | Whether to loop animation                                                                                                     | `boolean`                                | `false`           |
+| `mode`                    | Play mode                                                                                                                     | `normal` \| `bounce`                     | `normal`          |
+| `multiAnimationSettings`  | Control playback of multianimation files. Write a valid JSON array (as string) with properties like `autoplay`, `loop`, etc.  | `object[]`                               | `undefined`       |
+| `objectfit`               | Resizing of animation in container                                                                                            | `contain` \| `cover` \| `fill` \| `none` | `contain`         |
+| `segment`                 | Play only part of an animation. E. g. from frame 10 to frame 60 would be `[10, 60]`                                           | `[number, number]`                       | `undefined`       |
+| `speed`                   | Animation speed                                                                                                               | `number`                                 | `1`               |
+| `src` _(required)_        | URL to LottieJSON or dotLottie                                                                                                | `string`                                 | `undefined`       |
+| `subframe`                | When enabled this can help to reduce flicker on some animations, especially on Safari and iOS devices.                        | `boolean`                                | `false`           |
 
 ## Methods
 

@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player-light",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Light Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player-light",
   "exports": {
     ".": {
@@ -17,10 +17,10 @@
   "type": "module",
   "homepage": "https://www.aarstein.media/en/dotlottie-player",
   "repository": {
-    "url": "https://github.com/aarsteinmedia/dotlottie-player.git",
+    "url": "https://github.com/aarsteinmedia/dotlottie-player-light.git",
     "type": "git"
   },
-  "bugs": "https://github.com/aarsteinmedia/dotlottie-player/issues",
+  "bugs": "https://github.com/aarsteinmedia/dotlottie-player-light/issues",
   "author": {
     "name": "Johan Martin Aarstein",
     "email": "johan@aarstein.media",
@@ -46,7 +46,7 @@
     "@types/react": ">= 16.0.0"
   },
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.6.9",
+    "@custom-elements-manifest/analyzer": "^0.9.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
@@ -55,13 +55,13 @@
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "autoprefixer": "^10.4.17",
-    "esbuild-sass-plugin": "^2.16.1",
+    "esbuild-sass-plugin": "^3.0.0",
     "eslint": "^8.56.0",
     "eslint-plugin-lit": "^1.11.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "rimraf": "^5.0.5",
-    "rollup": "^3.29.4",
-    "rollup-plugin-dts": "^5.3.1",
+    "rollup": "^4.9.6",
+    "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-html-literals": "^1.1.8",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",
