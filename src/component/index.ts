@@ -56,6 +56,12 @@ import styles from './styles.scss'
 export class DotLottiePlayer extends LitElement {
 
   /**
+   * Whether to trigger next frame with scroll
+   */
+  @property({ type: Boolean })
+  animateOnScroll?: boolean = false
+
+  /**
    * Autoplay
    */
   @property({ type: Boolean, reflect: true })
@@ -216,10 +222,20 @@ export class DotLottiePlayer extends LitElement {
   @state()
   private _animations!: LottieJSON[]
 
-  private _playerState = {
+  private _playerState: {
+    prev: PlayerState
+    count: number
+    loaded: boolean
+    visible: boolean
+    scrollY: number
+    scrollTimeout: NodeJS.Timeout | null
+  } = {
     prev: PlayerState.Loading,
     count: 0,
     loaded: false,
+    visible: false,
+    scrollY: 0,
+    scrollTimeout: null
   }
 
   /**
@@ -240,9 +256,9 @@ export class DotLottiePlayer extends LitElement {
         this.loop !== undefined ? !!this.loop :
           currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop,
 
-      autoplay = currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay :
+      autoplay = !this.animateOnScroll && (currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay :
         this.autoplay !== undefined ? !!this.autoplay :
-          currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay,
+          currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay),
 
       initialSegment
         = !this.segment ||
@@ -268,6 +284,34 @@ export class DotLottiePlayer extends LitElement {
       }
 
     return options
+  }
+
+  /**
+   * Add IntersectionObserver
+   */
+  private _addIntersectionObserver() {
+    if (this._intersectionObserver || !('IntersectionObserver' in window)) {
+      return
+    }
+
+    this._intersectionObserver =
+      new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting || document.hidden) {
+            if (this.currentState === PlayerState.Playing) {
+              this._freeze()
+            }
+            this._playerState.visible = false
+            continue
+          }
+          if (!this.animateOnScroll && this.currentState === PlayerState.Frozen) {
+            this.play()
+          }
+          this._playerState.visible = true
+        }
+      })
+
+    this._intersectionObserver.observe(this.container)
   }
 
   /**
@@ -297,7 +341,7 @@ export class DotLottiePlayer extends LitElement {
       this._manifest = manifest ?? {
         animations: [{
           id: useId(),
-          autoplay: this.autoplay,
+          autoplay: !this.animateOnScroll && this.autoplay,
           loop: this.loop,
           direction: this.direction,
           mode: this.mode,
@@ -308,6 +352,9 @@ export class DotLottiePlayer extends LitElement {
       // Clear previous animation, if any
       if (this._lottieInstance)
         this._lottieInstance.destroy()
+
+      this.currentState =
+        this.autoplay && !this.animateOnScroll ? PlayerState.Playing : PlayerState.Stopped
 
       // Initialize lottie player and load animation
       this._lottieInstance = Lottie.loadAnimation({
@@ -337,27 +384,17 @@ export class DotLottiePlayer extends LitElement {
     this.setSubframe(!!this.subframe)
 
     // Start playing if autoplay is enabled
-    if (this.autoplay) {
+    if (this.autoplay || this.animateOnScroll) {
       if (this.direction === -1)
         this.seek('99%')
 
-      if ('IntersectionObserver' in window) {
-        this._intersectionObserver  =
-          new IntersectionObserver(entries => {
-            for (const entry of entries) {
-              if (entry.isIntersecting && !document.hidden) {
-                this.play()
-                continue
-              }
-
-              this._freeze()
-            }
-          })
-
-        this._intersectionObserver.observe(this.container)
-        return
+      if (!('IntersectionObserver' in window)) {
+        !this.animateOnScroll && this.play()
+        this._playerState.visible = true
       }
-      this.play()
+
+      this._addIntersectionObserver()
+      return
     }
   }
 
@@ -397,6 +434,13 @@ export class DotLottiePlayer extends LitElement {
       this.container.addEventListener('mouseenter', this._mouseEnter)
       this.container.addEventListener('mouseleave', this._mouseLeave)
     }
+
+    addEventListener('focus', this._handleWindowBlur, { passive: true, capture: true })
+    addEventListener('blur', this._handleWindowBlur, { passive: true, capture: true })
+
+    if (this.animateOnScroll) {
+      addEventListener('scroll', this._handleScroll, { passive: true, capture: true })
+    }
   }
 
   /**
@@ -415,6 +459,10 @@ export class DotLottiePlayer extends LitElement {
 
     this.container.removeEventListener('mouseenter', this._mouseEnter)
     this.container.removeEventListener('mouseleave', this._mouseLeave)
+
+    removeEventListener('focus', this._handleWindowBlur, true)
+    removeEventListener('blur', this._handleWindowBlur, true)
+    removeEventListener('scroll', this._handleScroll, true)
   }
 
   private _loopComplete() {
@@ -453,7 +501,7 @@ export class DotLottiePlayer extends LitElement {
       this._lottieInstance.setDirection(playDirection * -1 as AnimationDirection)
 
       return setTimeout(() => {
-        this._lottieInstance?.play()
+        !this.animateOnScroll && this._lottieInstance?.play()
       }, this.intermission)
     }
 
@@ -462,7 +510,7 @@ export class DotLottiePlayer extends LitElement {
     )
 
     return setTimeout(() => {
-      this._lottieInstance?.play()
+      !this.animateOnScroll && this._lottieInstance?.play()
     }, this.intermission)
   }
 
@@ -521,6 +569,15 @@ export class DotLottiePlayer extends LitElement {
     this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
   }
 
+  private _handleWindowBlur({ type }: FocusEvent) {
+    if (this.currentState === PlayerState.Playing && type === 'blur') {
+      this._freeze()
+    }
+    if (this.currentState === PlayerState.Frozen && type === 'focus') {
+      this.play()
+    }
+  }
+
   /**
    * Handle MouseEnter
    */
@@ -551,6 +608,38 @@ export class DotLottiePlayer extends LitElement {
     if (this.currentState === PlayerState.Frozen) {
       this.play()
     }
+  }
+
+  /**
+   * Handle scroll
+   */
+  private _handleScroll() {
+    if (!this.animateOnScroll || !this._lottieInstance) {
+      return
+    }
+    if (this._playerState.visible) {
+      const adjustedScroll = this._playerState.scrollY > innerHeight ?
+        scrollY - this._playerState.scrollY : scrollY,
+        clampedScroll = Math.min(Math.max(adjustedScroll / 2, 1), this._lottieInstance.totalFrames * 2),
+        roundedScroll =
+          Math.round(clampedScroll / 2)
+
+      // console.log(roundedScroll, this._lottieInstance.totalFrames)
+      requestAnimationFrame(() => {
+        if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
+          this.currentState = PlayerState.Playing
+          this._lottieInstance?.goToAndStop(roundedScroll, true)
+        } else {
+          this.currentState = PlayerState.Paused
+        }
+      })
+    }
+    if (this._playerState.scrollTimeout) {
+      clearTimeout(this._playerState.scrollTimeout)
+    }
+    this._playerState.scrollTimeout = setTimeout(() => {
+      this.currentState = PlayerState.Paused
+    }, 400)
   }
 
   /**
@@ -932,10 +1021,17 @@ export class DotLottiePlayer extends LitElement {
       this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next))
 
       if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
+        if (this.animateOnScroll) {
+          this._lottieInstance?.goToAndStop(0, true)
+          this.currentState = PlayerState.Paused
+          return
+        }
+
         this._lottieInstance?.goToAndPlay(0, true)
         this.currentState = PlayerState.Playing
         return
       }
+
       this._lottieInstance?.goToAndStop(0, true)
       this.currentState = PlayerState.Stopped
     } catch (err) {
@@ -978,7 +1074,9 @@ export class DotLottiePlayer extends LitElement {
     this._dataReady = this._dataReady.bind(this)
     this._DOMLoaded = this._DOMLoaded.bind(this)
     this._enterFrame = this._enterFrame.bind(this)
+    this._handleScroll = this._handleScroll.bind(this)
     this._handleSeekChange = this._handleSeekChange.bind(this)
+    this._handleWindowBlur = this._handleWindowBlur.bind(this)
     this._loopComplete = this._loopComplete.bind(this)
     this._mouseEnter = this._mouseEnter.bind(this)
     this._mouseLeave = this._mouseLeave.bind(this)
@@ -1001,22 +1099,12 @@ export class DotLottiePlayer extends LitElement {
 
   protected override async firstUpdated() {
     // Add intersection observer for detecting component being out-of-view.
-    if ('IntersectionObserver' in window) {
-      this._intersectionObserver =
-        new IntersectionObserver(entries => {
-          for (const entry of entries) {
-            if (entry.isIntersecting && !document.hidden && this.currentState === PlayerState.Frozen) {
-              this.play()
-              continue
-            }
-            
-            if (this.currentState === PlayerState.Playing) {
-              this._freeze()
-            }
-          }
-        })
+    this._addIntersectionObserver()
 
-      this._intersectionObserver?.observe(this.container)
+    // Get vertical position of element
+    if (this.container) {
+      this._playerState.scrollY =
+        Math.round(this.container.getBoundingClientRect().top + document.documentElement.scrollTop)
     }
 
     // Setup lottie player
