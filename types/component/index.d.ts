@@ -1,9 +1,9 @@
 import { LitElement, type CSSResult } from 'lit';
 import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web/build/player/lottie_light.js';
 import { PlayMode, PlayerState } from './utils';
-import type { AnimationSettings, Autoplay, Controls, Loop, LottieJSON, LottieManifest, ObjectFit, PreserveAspectRatio, Subframe } from './types';
+import type { AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieJSON, LottieManifest, ObjectFit, PreserveAspectRatio, Subframe } from './types';
 export declare class DotLottiePlayer extends LitElement {
-    animateOnScroll?: boolean;
+    animateOnScroll?: AnimateOnScroll;
     autoplay?: Autoplay;
     background?: string;
     controls?: Controls;
