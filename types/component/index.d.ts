@@ -52,7 +52,6 @@ export declare class DotLottiePlayer extends LitElement {
     private _mouseEnter;
     private _mouseLeave;
     private _onVisibilityChange;
-    private _handleResize;
     private _handleScroll;
     private _handleSeekChange;
     private _isLottie;
