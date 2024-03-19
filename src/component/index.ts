@@ -436,6 +436,7 @@ export class DotLottiePlayer extends LitElement {
       this.container.addEventListener('mouseleave', this._mouseLeave)
     }
 
+    addEventListener('resize', this._handleResize, { passive: true, capture: true })
     addEventListener('focus', this._handleWindowBlur, { passive: true, capture: true })
     addEventListener('blur', this._handleWindowBlur, { passive: true, capture: true })
 
@@ -464,6 +465,7 @@ export class DotLottiePlayer extends LitElement {
     removeEventListener('focus', this._handleWindowBlur, true)
     removeEventListener('blur', this._handleWindowBlur, true)
     removeEventListener('scroll', this._handleScroll, true)
+    removeEventListener('resize', this._handleResize, true)
   }
 
   private _loopComplete() {
@@ -612,6 +614,19 @@ export class DotLottiePlayer extends LitElement {
   }
 
   /**
+   * Handle resizing of viewport
+   * @returns void
+   */
+
+  private _handleResize() {
+    if (!this.container) {
+      return
+    }
+    this._playerState.scrollY =
+      this.container.getBoundingClientRect().bottom + scrollY // + this.container.getBoundingClientRect().height //- (innerHeight / 2) //this.container.getBoundingClientRect().height
+  }
+
+  /**
    * Handle scroll
    */
   private _handleScroll() {
@@ -619,11 +634,12 @@ export class DotLottiePlayer extends LitElement {
       return
     }
     if (this._playerState.visible) {
-      const adjustedScroll = this._playerState.scrollY > innerHeight ?
-        scrollY - (this._playerState.scrollY - (innerHeight - 80)) : scrollY,
+      const adjustedScroll = scrollY - this._playerState.scrollY,
         clampedScroll = Math.min(Math.max(adjustedScroll / 2, 1), this._lottieInstance.totalFrames * 2),
         roundedScroll =
           Math.round(clampedScroll / 2)
+
+      // console.log(this._playerState.scrollY, innerHeight)
 
       requestAnimationFrame(() => {
         if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
@@ -1074,6 +1090,7 @@ export class DotLottiePlayer extends LitElement {
     this._dataReady = this._dataReady.bind(this)
     this._DOMLoaded = this._DOMLoaded.bind(this)
     this._enterFrame = this._enterFrame.bind(this)
+    this._handleResize = this._handleResize.bind(this)
     this._handleScroll = this._handleScroll.bind(this)
     this._handleSeekChange = this._handleSeekChange.bind(this)
     this._handleWindowBlur = this._handleWindowBlur.bind(this)
@@ -1102,10 +1119,7 @@ export class DotLottiePlayer extends LitElement {
     this._addIntersectionObserver()
 
     // Get vertical position of element
-    if (this.container) {
-      this._playerState.scrollY =
-        Math.round(this.container.getBoundingClientRect().top)
-    }
+    this._handleResize()
 
     // Setup lottie player
     if (this.src) {
