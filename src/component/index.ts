@@ -1210,7 +1210,7 @@ export class DotLottiePlayer extends LitElement {
             min="0"
             max="100"
             step="1"
-            value=${this._seeker}
+            .value=${this._seeker.toString()}
             @change=${this._handleSeekChange}
             @mousedown=${this._freeze}
             aria-valuemin="0"
@@ -1222,7 +1222,7 @@ export class DotLottiePlayer extends LitElement {
           />
           <progress
             max="100"
-            value=${this._seeker}
+            .value=${this._seeker}
           >
           </progress>
         </form>
