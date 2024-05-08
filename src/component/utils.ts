@@ -200,7 +200,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       toResolve: Promise<void>[] = []
     for (const { id } of manifest.animations) {
       const str = strFromU8(unzipped[`animations/${id}.json`]),
-        lottie: LottieJSON = JSON.parse(str)
+        lottie: LottieJSON = JSON.parse(prepareString(str))
 
       toResolve.push(resolveAssets(unzipped, lottie.assets))
       data.push(lottie)
@@ -286,6 +286,13 @@ export const aspectRatio = (objectFit: ObjectFit) => {
 
   parseBase64 = (str: string) =>
     str.substring(str.indexOf(',') + 1),
+
+  prepareString = (str: string) => {
+    return str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
+      const replacedContent = content.replace(/[^\w\s\d.]/g, '')
+      return `${quote}${replacedContent}${quote}`
+    })
+  },
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets))
