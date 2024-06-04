@@ -18,7 +18,6 @@ import Lottie, {
   type AnimationSegment,
   type RendererType
 } from 'lottie-web/build/player/lottie_light.js'
-
 import {
   aspectRatio,
   download,
@@ -32,7 +31,6 @@ import {
   PlayerState,
   useId,
 } from './utils'
-
 import type {
   AnimationSettings,
   AnimateOnScroll,
@@ -45,7 +43,6 @@ import type {
   PreserveAspectRatio,
   Subframe
 } from './types'
-
 import styles from './styles.scss'
 
 /**
@@ -61,128 +58,128 @@ export class DotLottiePlayer extends LitElement {
    * Whether to trigger next frame with scroll
    */
   @property({ type: Boolean })
-  animateOnScroll?: AnimateOnScroll = false
+    animateOnScroll?: AnimateOnScroll = false
 
   /**
    * Autoplay
    */
   @property({ type: Boolean, reflect: true })
-  autoplay?: Autoplay
+    autoplay?: Autoplay
 
   /**
    * Background color
    */
   @property({ type: String })
-  background?: string = 'transparent'
+    background?: string = 'transparent'
 
   /**
    * Display controls
    */
   @property({ type: Boolean, reflect: true })
-  controls?: Controls = false
+    controls?: Controls = false
 
   /**
    * Number of times to loop
    */
   @property({ type: Number })
-  count?: number
+    count?: number
 
   /**
    * Player state
    */
   @property({ type: String })
-  currentState?: PlayerState = PlayerState.Loading
+    currentState?: PlayerState = PlayerState.Loading
 
   /**
    * Description for screen readers
    */
   @property({ type: String })
-  description?: string
+    description?: string
 
   /**
    * Direction of animation
    */
   @property({ type: Number })
-  direction?: AnimationDirection = 1
+    direction?: AnimationDirection = 1
 
   /**
    * Whether to play on mouseover
    */
   @property({ type: Boolean })
-  hover? = false
+    hover? = false
 
   /**
    * Intermission
    */
   @property({ type: Number })
-  intermission? = 0
+    intermission? = 0
 
   /**
    * Whether to loop
    */
   @property({ type: Boolean, reflect: true })
-  loop?: Loop = false
+    loop?: Loop = false
 
   /**
    * Play mode
    */
   @property({ type: String })
-  mode?: PlayMode = PlayMode.Normal
+    mode?: PlayMode = PlayMode.Normal
 
   /**
    * Multi-animation settings
    * If set, these will override conflicting settings
    */
   @property({ type: Array })
-  multiAnimationSettings?: AnimationSettings[]
+    multiAnimationSettings?: AnimationSettings[]
 
   /**
    * Resizing to container
   */
   @property({ type: String })
-  objectfit?: ObjectFit = 'contain'
+    objectfit?: ObjectFit = 'contain'
 
   /**
    * Resizing to container (Deprecated)
   */
   @property({ type: String })
-  preserveAspectRatio?: PreserveAspectRatio
+    preserveAspectRatio?: PreserveAspectRatio
 
   /**
    * Renderer to use (svg, canvas or html)
    */
   @property({ type: String })
-  renderer?: RendererType = 'svg'
+    renderer?: RendererType = 'svg'
 
   /**
    * Segment
    */
   @property({ type: Array })
-  segment?: AnimationSegment
+    segment?: AnimationSegment
 
   /**
    * Hide advanced controls
    */
   @property({ type: Boolean })
-  simple?: boolean = false
+    simple?: boolean = false
 
   /**
    * Speed
    */
   @property({ type: Number })
-  speed?: number = 1
+    speed?: number = 1
 
   /**
    * JSON/dotLottie data or URL
    */
   @property({ type: String })
-  src!: string
+    src!: string
 
   /**
    * Subframe
    */
   @property({ type: Boolean })
-  subframe?: Subframe = false
+    subframe?: Subframe = false
 
   /**
    * Animaiton Container
@@ -232,13 +229,13 @@ export class DotLottiePlayer extends LitElement {
     scrollY: number
     scrollTimeout: NodeJS.Timeout | null
   } = {
-    prev: PlayerState.Loading,
-    count: 0,
-    loaded: false,
-    visible: false,
-    scrollY: 0,
-    scrollTimeout: null
-  }
+      prev: PlayerState.Loading,
+      count: 0,
+      loaded: false,
+      visible: false,
+      scrollY: 0,
+      scrollTimeout: null
+    }
 
   /**
    * Get options from props
@@ -248,29 +245,41 @@ export class DotLottiePlayer extends LitElement {
     const preserveAspectRatio =
       this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
 
-      currentAnimationSettings = this.multiAnimationSettings?.[this._currentAnimation],
-      currentAnimationManifest = this._manifest.animations?.[this._currentAnimation],
+      currentAnimationSettings =
+        this.multiAnimationSettings?.length ? this.multiAnimationSettings?.[this._currentAnimation] : undefined,
+      currentAnimationManifest = this._manifest.animations?.[this._currentAnimation]
 
-      /** Since Lottie Web does not accept string or null we need
-       * to do this little workaround
-       */
-      loop = currentAnimationSettings?.loop !== undefined ? !!currentAnimationSettings.loop :
-        this.loop !== undefined ? !!this.loop :
-          currentAnimationManifest.loop !== undefined && !!currentAnimationManifest.loop,
+    // Loop
+    let loop = !!this.loop
+    if (currentAnimationManifest.loop !== undefined) {
+      loop = !!currentAnimationManifest.loop
+    }
+    if (currentAnimationSettings?.loop !== undefined) {
+      loop = !!currentAnimationSettings.loop
+    }
 
-      autoplay = !this.animateOnScroll && (currentAnimationSettings?.autoplay !== undefined ? !!currentAnimationSettings.autoplay :
-        this.autoplay !== undefined ? !!this.autoplay :
-          currentAnimationManifest.autoplay !== undefined && !!currentAnimationManifest.autoplay),
+    // Autoplay
+    let autoplay = !!this.autoplay
+    if (currentAnimationManifest.autoplay !== undefined) {
+      autoplay = !!currentAnimationManifest.autoplay
+    }
+    if (currentAnimationSettings?.autoplay !== undefined) {
+      autoplay = !!currentAnimationSettings.autoplay
+    }
+    if (this.animateOnScroll) {
+      autoplay = false
+    }
 
-      initialSegment
-        = !this.segment ||
-          this.segment.some(val => val < 0) ?
-          undefined :
-          this.segment.every(val => val > 0) ?
-            ([this.segment[0] - 1, this.segment[1] - 1] as AnimationSegment) :
-            this.segment,
+    // Segment
+    let initialSegment = this.segment
+    if (this.segment?.every(val => val > 0)) {
+      initialSegment = [this.segment[0] - 1, this.segment[1] - 1]
+    }
+    if (this.segment?.some(val => val < 0)) {
+      initialSegment = undefined
+    }
 
-      options: LottieConfig<'svg'> =
+    const options: LottieConfig<'svg'> =
       {
         container: this.container,
         loop,
@@ -327,7 +336,7 @@ export class DotLottiePlayer extends LitElement {
     src: string | LottieJSON,
   ) {
     if (!this.shadowRoot)
-      return
+    {return}
 
     // Load the resource
     try {
@@ -338,9 +347,12 @@ export class DotLottiePlayer extends LitElement {
         throw new Error('Broken or corrupted file')
       }
 
-      this._isBounce = this.multiAnimationSettings?.[this._currentAnimation]?.mode !== undefined ?
-        this.multiAnimationSettings?.[this._currentAnimation]?.mode === PlayMode.Bounce :
-        this.mode === PlayMode.Bounce
+      this._isBounce = this.mode === PlayMode.Bounce
+      if (this.multiAnimationSettings?.length) {
+        if (this.multiAnimationSettings[this._currentAnimation]?.mode) {
+          this._isBounce = this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
+        }
+      }
 
       this._animations = animations
       this._manifest = manifest ?? {
@@ -356,10 +368,15 @@ export class DotLottiePlayer extends LitElement {
 
       // Clear previous animation, if any
       if (this._lottieInstance)
-        this._lottieInstance.destroy()
+      {this._lottieInstance.destroy()}
 
-      this.currentState =
-        (this.autoplay || this.multiAnimationSettings?.[this._currentAnimation].autoplay) && !this.animateOnScroll ? PlayerState.Playing : PlayerState.Stopped
+      this.currentState = PlayerState.Stopped
+      if (!this.animateOnScroll
+        && (this.autoplay
+          || this.multiAnimationSettings?.[this._currentAnimation]?.autoplay
+        )) {
+        this.currentState = PlayerState.Playing
+      }
 
       // Initialize lottie player and load animation
       this._lottieInstance = Lottie.loadAnimation({
@@ -391,15 +408,17 @@ export class DotLottiePlayer extends LitElement {
     // Start playing if autoplay is enabled
     if (this.autoplay || this.animateOnScroll) {
       if (this.direction === -1)
-        this.seek('99%')
+      {this.seek('99%')}
 
       if (!('IntersectionObserver' in window)) {
-        !this.animateOnScroll && this.play()
+        if (!this.animateOnScroll) {
+          this.play()
+        }
         this._playerState.visible = true
       }
 
       this._addIntersectionObserver()
-      return
+
     }
   }
 
@@ -415,7 +434,7 @@ export class DotLottiePlayer extends LitElement {
    */
   private _addEventListeners() {
     if (!this._lottieInstance)
-      return
+    {return}
 
     // Calculate and save the current progress of the animation
     this._lottieInstance.addEventListener<AnimationEventName>('enterFrame', this._enterFrame)
@@ -452,8 +471,9 @@ export class DotLottiePlayer extends LitElement {
    * Remove event listeners
    */
   private _removeEventListeners() {
-    if (!this._lottieInstance || !this.container)
+    if (!this._lottieInstance || !this.container) {
       return
+    }
 
     this._lottieInstance.removeEventListener<AnimationEventName>('enterFrame', this._enterFrame)
     this._lottieInstance.removeEventListener<AnimationEventName>('complete', this._complete)
@@ -477,16 +497,19 @@ export class DotLottiePlayer extends LitElement {
 
     const {
       // firstFrame,
-      totalFrames,
-      playDirection,
-    } = this._lottieInstance,
+        totalFrames,
+        playDirection,
+      } = this._lottieInstance,
       inPoint = this.segment ? this.segment[0] : 0,
       outPoint = this.segment ? this.segment[0] : totalFrames
 
     if (this.count) {
 
-      this._isBounce ?
-        this._playerState.count += 1 : this._playerState.count += 0.5
+      if (this._isBounce) {
+        this._playerState.count += 0.5
+      } else {
+        this._playerState.count += 1
+      }
 
       if (this._playerState.count >= this.count) {
         this.setLooping(false)
@@ -508,7 +531,9 @@ export class DotLottiePlayer extends LitElement {
       this._lottieInstance.setDirection(playDirection * -1 as AnimationDirection)
 
       return setTimeout(() => {
-        !this.animateOnScroll && this._lottieInstance?.play()
+        if (!this.animateOnScroll) {
+          this._lottieInstance?.play()
+        }
       }, this.intermission)
     }
 
@@ -517,7 +542,9 @@ export class DotLottiePlayer extends LitElement {
     )
 
     return setTimeout(() => {
-      !this.animateOnScroll && this._lottieInstance?.play()
+      if (!this.animateOnScroll) {
+        this._lottieInstance?.play()
+      }
     }, this.intermission)
   }
 
@@ -617,7 +644,7 @@ export class DotLottiePlayer extends LitElement {
       this._freeze()
       return
     }
-    
+
     if (this.currentState === PlayerState.Frozen) {
       this.play()
     }
@@ -669,7 +696,7 @@ export class DotLottiePlayer extends LitElement {
       !this._lottieInstance ||
       isNaN(Number(target.value))
     )
-      return
+    {return}
 
     this.seek(
       Math.floor((Number(target.value) / 100) * this._lottieInstance.totalFrames)
@@ -702,7 +729,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public play() {
     if (!this._lottieInstance)
-      return
+    {return}
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
@@ -720,7 +747,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public pause() {
     if (!this._lottieInstance)
-      return
+    {return}
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
@@ -737,7 +764,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public stop() {
     if (!this._lottieInstance)
-      return
+    {return}
     if (this.currentState) {
       this._playerState.prev = this.currentState
     }
@@ -755,7 +782,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public destroy() {
     if (!this._lottieInstance)
-      return
+    {return}
 
     this.currentState = PlayerState.Destroyed
 
@@ -771,7 +798,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public seek(value: number | string) {
     if (!this._lottieInstance)
-      return
+    {return}
 
     // Extract frame number from either number or percentage value
     const matches = value.toString().match(/^([0-9]+)(%?)$/)
@@ -807,7 +834,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public snapshot() {
     if (!this.shadowRoot)
-      return
+    {return}
 
     // Get SVG element and serialize markup
     const svgElement = this.shadowRoot.querySelector('.animation svg'),
@@ -837,7 +864,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public setSubframe(value: boolean) {
     if (!this._lottieInstance)
-      return
+    {return}
     this.subframe = value
     this._lottieInstance.setSubframe(value)
   }
@@ -849,7 +876,7 @@ export class DotLottiePlayer extends LitElement {
    */
   private _freeze() {
     if (!this._lottieInstance)
-      return
+    {return}
 
     if (this.currentState) {
       this._playerState.prev = this.currentState
@@ -867,7 +894,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public async reload() {
     if (!this._lottieInstance)
-      return
+    {return}
 
     this._lottieInstance.destroy()
 
@@ -882,7 +909,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public setSpeed(value = 1) {
     if (!this._lottieInstance)
-      return
+    {return}
     this.speed = value
     this._lottieInstance.setSpeed(value)
   }
@@ -893,7 +920,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public setDirection(value: AnimationDirection) {
     if (!this._lottieInstance)
-      return
+    {return}
     this.direction = value
     this._lottieInstance.setDirection(value)
   }
@@ -926,7 +953,7 @@ export class DotLottiePlayer extends LitElement {
    */
   public togglePlay() {
     if (!this._lottieInstance)
-      return
+    {return}
 
     const { currentFrame, playDirection, totalFrames } = this._lottieInstance
     if (this.currentState === PlayerState.Playing) {
@@ -987,7 +1014,7 @@ export class DotLottiePlayer extends LitElement {
     if (flag === undefined) {
       this._isSettingsOpen = !this._isSettingsOpen
       return
-    } 
+    }
     this._isSettingsOpen = flag
   }
 
@@ -1012,12 +1039,12 @@ export class DotLottiePlayer extends LitElement {
   private _switchInstance(isPrevious = false) {
     // Bail early if there is not animation to play
     if (!this._animations[this._currentAnimation])
-      return
+    {return}
 
     try {
       // Clear previous animation
       if (this._lottieInstance)
-        this._lottieInstance.destroy()
+      {this._lottieInstance.destroy()}
 
       // Re-initialize lottie player
       this._lottieInstance = Lottie.loadAnimation({
@@ -1025,7 +1052,7 @@ export class DotLottiePlayer extends LitElement {
         animationData: this._animations[this._currentAnimation],
       })
 
-      //Check play mode for current animation
+      // Check play mode for current animation
       if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
         this._isBounce =
           this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
@@ -1139,7 +1166,7 @@ export class DotLottiePlayer extends LitElement {
 
     // Destroy the animation instance
     if (this._lottieInstance)
-      this._lottieInstance.destroy()
+    {this._lottieInstance.destroy()}
 
     // Remove the attached Visibility API's change event listener
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
@@ -1163,12 +1190,12 @@ export class DotLottiePlayer extends LitElement {
           aria-label="Toggle Play/Pause"
         >
         ${isPlaying ?
-        html`
+    html`
           <svg width="24" height="24" aria-hidden="true" focusable="false">
             <path d="M14.016 5.016H18v13.969h-3.984V5.016zM6 18.984V5.015h3.984v13.969H6z" />
           </svg>
           ` :
-        html`
+    html`
           <svg width="24" height="24" aria-hidden="true" focusable="false">
             <path d="M8.016 5.016L18.985 12 8.016 18.984V5.015z" />
           </svg>
@@ -1185,9 +1212,9 @@ export class DotLottiePlayer extends LitElement {
           </svg>
         </button>
         ${this._animations?.length > 1 ?
-        html`
+    html`
           ${this._currentAnimation > 0 ?
-            html`
+    html`
             <button
               @click=${this.prev}
               tabindex="0"
@@ -1199,7 +1226,7 @@ export class DotLottiePlayer extends LitElement {
             </button>
           ` : nothing}
           ${(this._currentAnimation + 1) < this._animations?.length ?
-            html`
+    html`
             <button
               @click=${this.next}
               tabindex="0"
@@ -1235,7 +1262,7 @@ export class DotLottiePlayer extends LitElement {
           </progress>
         </form>
         ${this.simple ? nothing :
-        html`
+    html`
         <button
           @click=${this.toggleLooping}
           data-active=${this.loop ?? nothing}
@@ -1291,7 +1318,7 @@ export class DotLottiePlayer extends LitElement {
             </svg> Download still image
           </button>
         </div>`
-      }
+}
       </div>
     `
   }
@@ -1311,7 +1338,7 @@ export class DotLottiePlayer extends LitElement {
           style="background:${this.background}"
         >
           ${this.currentState === PlayerState.Error ?
-        html`
+    html`
           <div class="error">
             <svg
               preserveAspectRatio="xMidYMid slice"
@@ -1335,10 +1362,10 @@ export class DotLottiePlayer extends LitElement {
           </div>
         `
 
-        :
+    :
 
-        nothing
-      }
+    nothing
+}
         </div>
         ${this.controls ? this.renderControls() : nothing}
       </figure>

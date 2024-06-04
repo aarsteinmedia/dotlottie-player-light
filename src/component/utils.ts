@@ -3,7 +3,6 @@ import {
   unzip as unzipOrg,
   type Unzipped
 } from 'fflate'
-
 import type {
   LottieAsset,
   LottieJSON,
@@ -49,20 +48,20 @@ export class CustomError extends Error {
 }
 
 export const aspectRatio = (objectFit: ObjectFit) => {
-  switch (objectFit) {
+    switch (objectFit) {
     case 'contain':
     case 'scale-down':
-      return 'xMidYMid meet';
+      return 'xMidYMid meet'
     case 'cover':
-      return 'xMidYMid slice';
+      return 'xMidYMid slice'
     case 'fill':
-      return 'none';
+      return 'none'
     case 'none':
-      return 'xMinYMin slice';
+      return 'xMinYMin slice'
     default:
-      return 'xMidYMid meet';
-  }
-},
+      return 'xMidYMid meet'
+    }
+  },
 
   /**
    * Download file, either SVG or dotLottie.
@@ -177,7 +176,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
    */
   getExt = (str?: string) => {
     if (!str || !hasExt(str))
-      return
+    {return}
     return str.split('.').pop()?.toLowerCase()
   },
 
@@ -219,31 +218,31 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       manifest: LottieManifest = JSON.parse(file)
 
     if (!('animations' in manifest))
-      throw new Error('Manifest not found')
+    {throw new Error('Manifest not found')}
     if (!manifest.animations.length)
-      throw new Error('No animations listed in manifest')
+    {throw new Error('No animations listed in manifest')}
 
     return manifest
   },
 
   getMimeFromExt = (ext?: string) => {
     switch (ext) {
-      case 'svg':
-      case 'svg+xml':
-        return 'image/svg+xml'
-      case 'jpg':
-      case 'jpeg':
-        return 'image/jpeg'
-      case 'png':
-      case 'gif':
-      case 'webp':
-        return `image/${ext}`
-      case 'mp3':
-      case 'mpeg':
-      case 'wav':
-        return `audio/${ext}`
-      default:
-        return ''
+    case 'svg':
+    case 'svg+xml':
+      return 'image/svg+xml'
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg'
+    case 'png':
+    case 'gif':
+    case 'webp':
+      return `image/${ext}`
+    case 'mp3':
+    case 'mpeg':
+    case 'wav':
+      return `audio/${ext}`
+    default:
+      return ''
     }
   },
 
@@ -273,7 +272,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
 
   isBase64 = (str?: string) => {
     if (!str)
-      return false
+    {return false}
     const regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
     return regex.test(parseBase64(str))
   },
@@ -287,28 +286,26 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   parseBase64 = (str: string) =>
     str.substring(str.indexOf(',') + 1),
 
-  prepareString = (str: string) => {
-    return str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
-      const replacedContent = content.replace(/[^\w\s\d.#]/g, '')
-      return `${quote}${replacedContent}${quote}`
-    })
-  },
+  prepareString = (str: string) => str.replace(new RegExp(/"""/, 'g'), '""').replace(/(["'])(.*?)\1/g, (_match, quote: string, content: string) => {
+    const replacedContent = content.replace(/[^\w\s\d.#]/g, '')
+    return `${quote}${replacedContent}${quote}`
+  }),
 
   resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets))
-      return
+    {return}
 
     const toResolve: Promise<void>[] = []
 
     for (const asset of assets) {
       if (!isAudio(asset) && !isImage(asset))
-        continue
+      {continue}
 
       const type = isImage(asset) ? 'images' : 'audio',
         u8 = unzipped?.[`${type}/${asset.p}`]
 
       if (!u8)
-        continue
+      {continue}
 
       toResolve.push(
         new Promise<void>(resolveAsset => {
@@ -336,8 +333,8 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   ): Promise<Unzipped> => {
     const buffer = new Uint8Array(await resp.arrayBuffer()),
       unzipped = await new Promise<Unzipped>((resolve, reject) => {
-        unzipOrg(buffer, /*{ filter },*/(err, file) => {
-          if (err) reject(err)
+        unzipOrg(buffer, /* { filter }, */(err, file) => {
+          if (err) {reject(err)}
           resolve(file)
         })
       })
@@ -346,8 +343,6 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   },
 
   useId = (prefix?: string) => {
-    const s4 = () => {
-      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    }
+    const s4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
     return (`${prefix ?? `:${s4()}`}-${s4()}`)
   }

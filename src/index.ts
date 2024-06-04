@@ -1,2 +1,2 @@
-export { DotLottiePlayer } from  './component'
+export { DotLottiePlayer } from './component'
 export { PlayMode, PlayerEvents, PlayerState } from './component/utils'
