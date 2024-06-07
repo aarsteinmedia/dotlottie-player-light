@@ -16,7 +16,7 @@
       "ESNext",
     ],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
@@ -39,6 +39,7 @@
   },
   "include": [
     "./src/**/*",
+    // "./**/*.config.ts",
     "./global.d.ts"
   ],
   "exclude": [

@@ -8,10 +8,9 @@ import postcss from 'rollup-plugin-postcss'
 import postcssLit from 'rollup-plugin-postcss-lit'
 import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
-import summary from 'rollup-plugin-summary'
+import * as rollupPluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
-
 import pkg from './package.json' assert { type: 'json' }
 
 const isProd = process.env.NODE_ENV !== 'development',
@@ -36,8 +35,6 @@ const isProd = process.env.NODE_ENV !== 'development',
     }),
     nodeResolve({
       extensions: ['.ts'],
-      jsnext: true,
-      module: true,
       preferBuiltins,
     }),
     commonjs(),
@@ -46,7 +43,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkgPlugins = () => [
     ...plugins(),
     isProd && minify(),
-    isProd && summary(),
+    isProd && rollupPluginSummary.default(),
     !isProd &&
       serve({
         open: true,
@@ -55,7 +52,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   ],
   modulePlugins = () => [
     ...plugins(true),
-    isProd && summary()
+    isProd && rollupPluginSummary.default()
   ],
   module = {
     input,
@@ -75,10 +72,10 @@ const isProd = process.env.NODE_ENV !== 'development',
         format: 'cjs',
       },
     ],
-    onwarn(warning, warn) {
+    onwarn(warning, defaultHandler) {
       if (warning.code === 'THIS_IS_UNDEFINED')
-        return
-      warn(warning)
+      {return}
+      defaultHandler(warning)
     },
     plugins: modulePlugins(),
   },
@@ -98,10 +95,10 @@ const isProd = process.env.NODE_ENV !== 'development',
       format: 'iife',
       name: pkg.name,
     },
-    onwarn(warning, warn) {
+    onwarn(warning, defaultHandler) {
       if (warning.code === 'THIS_IS_UNDEFINED')
-        return
-      warn(warning)
+      {return}
+      defaultHandler(warning)
     },
     plugins: unpkgPlugins(),
   }
