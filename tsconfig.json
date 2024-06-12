@@ -3,8 +3,9 @@
     "swc": true
   },
   "compilerOptions": {
+    "baseUrl": ".",
     "declaration": true,
-    "declarationDir": "./types",
+    "declarationDir": "types",
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -32,18 +33,18 @@
     ],
     "removeComments": true,
     "resolveJsonModule": true,
-    "rootDir": "./src",
+    "rootDir": "src",
     "strict": true,
     "target": "ES2021",
     "useDefineForClassFields": false
   },
   "include": [
-    "./src/**/*",
+    "src/**/*",
     // "./**/*.config.ts",
-    "./global.d.ts"
+    "global.d.ts"
   ],
   "exclude": [
     "node_modules",
-    "./dist",
+    "dist",
   ]
 }
