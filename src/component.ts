@@ -251,10 +251,9 @@ export class DotLottiePlayer extends LitElement {
 
     // Loop
     let loop = !!this.loop
-    // This results in unwanted behavior, and is disabled
-    // if (currentAnimationManifest.loop !== undefined && !this.loop) {
-    //   loop = !!currentAnimationManifest.loop
-    // }
+    if (currentAnimationManifest.loop !== undefined && !this.loop) {
+      loop = !!currentAnimationManifest.loop
+    }
     if (currentAnimationSettings?.loop !== undefined) {
       loop = !!currentAnimationSettings.loop
     }
