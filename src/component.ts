@@ -251,7 +251,7 @@ export class DotLottiePlayer extends LitElement {
 
     // Loop
     let loop = !!this.loop
-    if (currentAnimationManifest.loop !== undefined && !this.loop) {
+    if (currentAnimationManifest.loop !== undefined && this.loop === undefined) {
       loop = !!currentAnimationManifest.loop
     }
     if (currentAnimationSettings?.loop !== undefined) {
@@ -260,7 +260,7 @@ export class DotLottiePlayer extends LitElement {
 
     // Autoplay
     let autoplay = !!this.autoplay
-    if (currentAnimationManifest.autoplay !== undefined && !this.autoplay) {
+    if (currentAnimationManifest.autoplay !== undefined && this.autoplay === undefined) {
       autoplay = !!currentAnimationManifest.autoplay
     }
     if (currentAnimationSettings?.autoplay !== undefined) {
