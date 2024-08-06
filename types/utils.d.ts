@@ -1,5 +1,12 @@
 import { type Unzipped } from 'fflate';
-import type { LottieAsset, LottieJSON, LottieManifest, ObjectFit } from './types';
+import type { LottieAsset, LottieJSON, LottieManifest } from './types';
+export declare enum ObjectFit {
+    Contain = "contain",
+    Cover = "cover",
+    Fill = "fill",
+    ScaleDown = "scale-down",
+    None = "none"
+}
 export declare enum PlayerState {
     Completed = "completed",
     Destroyed = "destroyed",
@@ -30,10 +37,16 @@ export declare enum PlayerEvents {
     Rendered = "rendered",
     Stop = "stop"
 }
+export declare enum PreserveAspectRatio {
+    Contain = "xMidYMid meet",
+    Cover = "xMidYMid slice",
+    None = "xMinYMin slice",
+    Initial = "none"
+}
 export declare class CustomError extends Error {
     status?: number;
 }
-export declare const aspectRatio: (objectFit: ObjectFit) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", download: (data: string | ArrayBuffer, options?: {
+export declare const aspectRatio: (objectFit: string) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", download: (data: string | ArrayBuffer, options?: {
     name: string;
     mimeType: string;
 }) => void, frameOutput: (frame?: number) => string, getAnimationData: (input: unknown) => Promise<{

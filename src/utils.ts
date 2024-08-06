@@ -7,8 +7,15 @@ import type {
   LottieAsset,
   LottieJSON,
   LottieManifest,
-  ObjectFit
 } from './types'
+
+export enum ObjectFit {
+  Contain = 'contain',
+  Cover = 'cover',
+  Fill = 'fill',
+  ScaleDown = 'scale-down',
+  None = 'none'
+}
 
 export enum PlayerState {
   Completed = 'completed',
@@ -43,20 +50,27 @@ export enum PlayerEvents {
   Stop = 'stop',
 }
 
+export enum PreserveAspectRatio {
+  Contain = 'xMidYMid meet',
+  Cover = 'xMidYMid slice',
+  None = 'xMinYMin slice',
+  Initial = 'none'
+}
+
 export class CustomError extends Error {
   status?: number
 }
 
-export const aspectRatio = (objectFit: ObjectFit) => {
+export const aspectRatio = (objectFit: string) => {
     switch (objectFit) {
-    case 'contain':
-    case 'scale-down':
+    case ObjectFit.Contain:
+    case ObjectFit.ScaleDown:
       return 'xMidYMid meet'
-    case 'cover':
+    case ObjectFit.Cover:
       return 'xMidYMid slice'
-    case 'fill':
+    case ObjectFit.Fill:
       return 'none'
-    case 'none':
+    case ObjectFit.None:
       return 'xMinYMin slice'
     default:
       return 'xMidYMid meet'

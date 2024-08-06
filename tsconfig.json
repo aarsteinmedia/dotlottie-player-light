@@ -27,7 +27,6 @@
     "noUnusedParameters": true,
     "plugins": [
       {
-        "name": "ts-lit-plugin",
         "strict": true
       }
     ],
@@ -40,7 +39,6 @@
   },
   "include": [
     "src/**/*",
-    // "./**/*.config.ts",
     "global.d.ts"
   ],
   "exclude": [

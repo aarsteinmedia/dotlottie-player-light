@@ -138,22 +138,6 @@
     -webkit-appearance: none;
     appearance: none;
     outline: none;
-
-    &::-webkit-slider-runnable-track,
-    &::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      outline: none;
-    }
-  }
-
-  progress {
-    -webkit-appearance: none;
-    appearance: none;
-    outline: none;
-  }
-
-  .seeker {
     width: 100%;
     height: 20px;
     border-radius: 3px;
@@ -168,39 +152,14 @@
     padding: 7.5px 0;
     position: relative;
     z-index: 1;
-  }
 
-  progress {
-    position: absolute;
-    width: 100%;
-    height: 5px;
-    border-radius: 3px;
-    border: 0;
-    top: 0;
-    left: 0;
-    margin: 7.5px 0;
-    background-color: var(--lottie-player-seeker-track-color);
-    pointer-events: none;
-  }
+    &::-webkit-slider-runnable-track,
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      outline: none;
+    }
 
-  ::-moz-progress-bar {
-    background-color: var(--lottie-player-seeker-thumb-color);
-  }
-
-  ::-webkit-progress-inner-element {
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  ::-webkit-slider-runnable-track {
-    background-color: transparent;
-  }
-
-  ::-webkit-progress-value {
-    background-color: var(--lottie-player-seeker-thumb-color);
-  }
-
-  .seeker {
     &::-webkit-slider-thumb {
       height: 15px;
       width: 15px;
@@ -285,6 +244,42 @@
     }
   }
 
+  progress {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+
+  progress {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    border: 0;
+    top: 0;
+    left: 0;
+    margin: 7.5px 0;
+    background-color: var(--lottie-player-seeker-track-color);
+    pointer-events: none;
+  }
+
+  ::-moz-progress-bar {
+    background-color: var(--lottie-player-seeker-thumb-color);
+  }
+
+  ::-webkit-progress-inner-element {
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  ::-webkit-slider-runnable-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-progress-value {
+    background-color: var(--lottie-player-seeker-thumb-color);
+  }
+
   .error {
     display: flex;
     margin: auto;
@@ -297,15 +292,15 @@
       height: auto;
     }
   }
+}
 
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
 
-    100% {
-      opacity: 1;
-    }
+  100% {
+    opacity: 1;
   }
 }
 

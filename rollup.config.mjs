@@ -2,11 +2,10 @@ import autoprefixer from 'autoprefixer'
 import commonjs from '@rollup/plugin-commonjs'
 import dts from 'rollup-plugin-dts'
 import flexbugs from 'postcss-flexbugs-fixes'
+import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
-import postcssLit from 'rollup-plugin-postcss-lit'
-import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import * as rollupPluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
@@ -25,13 +24,22 @@ const isProd = process.env.NODE_ENV !== 'development',
         }),
       ],
     }),
-    postcssLit({
-      importPackage: 'lit',
+    template({
+      include: './src/index.ts',
+      options: {
+        shouldMinify(template) {
+          return template.parts.some(
+            (part) =>
+              // Matches Polymer templates that are not tagged
+              part.text.includes('<figure') ||
+              part.text.includes('<div') ||
+              part.text.includes('<svg')
+          )
+        },
+      },
     }),
-    template(),
-    replace({
-      preventAssignment: false,
-      'Reflect.decorate': 'undefined',
+    json({
+      compact: true,
     }),
     nodeResolve({
       extensions: ['.ts'],
@@ -52,33 +60,8 @@ const isProd = process.env.NODE_ENV !== 'development',
   ],
   modulePlugins = () => [
     ...plugins(true),
-    isProd && rollupPluginSummary.default()
+    isProd && rollupPluginSummary.default(),
   ],
-  module = {
-    input,
-    external: [
-      'lit',
-      'lit/decorators.js',
-      'lottie-web/build/player/lottie_light.js',
-      'fflate',
-    ],
-    output: [
-      {
-        file: pkg.module,
-        format: 'esm',
-      },
-      {
-        file: pkg.exports['.'].require,
-        format: 'cjs',
-      },
-    ],
-    onwarn(warning, defaultHandler) {
-      if (warning.code === 'THIS_IS_UNDEFINED')
-      {return}
-      defaultHandler(warning)
-    },
-    plugins: modulePlugins(),
-  },
   types = {
     input: './types/index.d.ts',
     output: {
@@ -91,20 +74,38 @@ const isProd = process.env.NODE_ENV !== 'development',
     input,
     output: {
       extend: true,
-      file: pkg.main,
+      file: pkg.unpkg,
       format: 'iife',
       name: pkg.name,
     },
-    onwarn(warning, defaultHandler) {
-      if (warning.code === 'THIS_IS_UNDEFINED')
-      {return}
-      defaultHandler(warning)
+    onwarn(warning, warn) {
+      if (warning.code === 'THIS_IS_UNDEFINED') {
+        return
+      }
+      warn(warning)
     },
     plugins: unpkgPlugins(),
+  },
+  module = {
+    input,
+    external: ['lottie-web/build/player/lottie_light.js', 'fflate'],
+    output: [
+      {
+        file: pkg.module,
+        format: 'esm',
+      },
+      {
+        file: pkg.exports['.'].require,
+        format: 'cjs',
+      },
+    ],
+    onwarn(warning, warn) {
+      if (warning.code === 'THIS_IS_UNDEFINED') {
+        return
+      }
+      warn(warning)
+    },
+    plugins: modulePlugins(),
   }
 
-export default isProd ? [
-  types,
-  unpkg,
-  module,
-] : unpkg
+export default isProd ? [types, unpkg, module] : unpkg
