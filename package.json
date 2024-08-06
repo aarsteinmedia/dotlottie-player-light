@@ -17,7 +17,7 @@
   "type": "module",
   "homepage": "https://www.aarstein.media/en/dotlottie-player",
   "repository": {
-    "url": "https://github.com/aarsteinmedia/dotlottie-player-light.git",
+    "url": "git+https://github.com/aarsteinmedia/dotlottie-player-light.git",
     "type": "git"
   },
   "bugs": "https://github.com/aarsteinmedia/dotlottie-player-light/issues",
