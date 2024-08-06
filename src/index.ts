@@ -130,6 +130,7 @@ export class DotLottiePlayer extends EnhancedElement {
       'animateOnScroll',
       'autoplay',
       'background',
+      'controls',
       'count',
       'description',
       'direction',
