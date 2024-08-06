@@ -4,7 +4,6 @@ import Lottie, {
   type AnimationEventName,
   type AnimationItem,
   type AnimationSegment,
-  type RendererType
 } from 'lottie-web/build/player/lottie_light.js'
 import EnhancedElement from './observeProperties'
 import {
@@ -30,7 +29,7 @@ import {
   Loop,
   LottieJSON,
   LottieManifest,
-  Subframe
+  Subframe,
 } from './types'
 import styles from './styles.scss'
 
@@ -41,7 +40,6 @@ import styles from './styles.scss'
  * @extends { EnhancedElement }
  */
 export class DotLottiePlayer extends EnhancedElement {
-
   constructor() {
     super()
     this._complete = this._complete.bind(this)
@@ -145,20 +143,13 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    const toggleLoop = this.shadow.querySelector('.toggleLoop'),
-      toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
-
-    if (
-      !(toggleLoop instanceof HTMLButtonElement)
-      || !(toggleBoomerang instanceof HTMLButtonElement)
-    ) {
-      return
-    }
-
     if (name === 'animateOnScroll') {
       if (value === '' || Boolean(value)) {
         this._lottieInstance.autoplay = false
-        addEventListener('scroll', this._handleScroll, { passive: true, capture: true })
+        addEventListener('scroll', this._handleScroll, {
+          passive: true,
+          capture: true,
+        })
         return
       }
       removeEventListener('scroll', this._handleScroll, true)
@@ -197,10 +188,18 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     if (name === 'loop') {
+      const toggleLoop = this.shadow.querySelector('.toggleLoop')
+      if (!(toggleLoop instanceof HTMLButtonElement)) {
+        return
+      }
       toggleLoop.dataset.active = value
     }
 
     if (name === 'mode') {
+      const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
+      if (!(toggleBoomerang instanceof HTMLButtonElement)) {
+        return
+      }
       toggleBoomerang.dataset.active = (value === PlayMode.Bounce).toString()
     }
 
@@ -222,7 +221,7 @@ export class DotLottiePlayer extends EnhancedElement {
       '_isSettingsOpen',
       '_seeker',
       '_currentAnimation',
-      '_animations'
+      '_animations',
     ]
   }
 
@@ -241,19 +240,20 @@ export class DotLottiePlayer extends EnhancedElement {
       popover = this.shadow.querySelector('.popover')
 
     if (
-      !(togglePlay instanceof HTMLButtonElement)
-      || !(stop instanceof HTMLButtonElement)
-      || !(next instanceof HTMLButtonElement)
-      || !(prev instanceof HTMLButtonElement)
-      || !(seeker instanceof HTMLInputElement)
-      || !(progress instanceof HTMLProgressElement)
+      !(togglePlay instanceof HTMLButtonElement) ||
+      !(stop instanceof HTMLButtonElement) ||
+      !(next instanceof HTMLButtonElement) ||
+      !(prev instanceof HTMLButtonElement) ||
+      !(seeker instanceof HTMLInputElement) ||
+      !(progress instanceof HTMLProgressElement)
     ) {
       return
     }
 
     if (name === 'playerState') {
-
-      togglePlay.dataset.active = (value === PlayerState.Playing || value === PlayerState.Paused).toString()
+      togglePlay.dataset.active = (
+        value === PlayerState.Playing || value === PlayerState.Paused
+      ).toString()
       stop.dataset.active = (value === PlayerState.Stopped).toString()
 
       if (value === PlayerState.Playing) {
@@ -271,29 +271,20 @@ export class DotLottiePlayer extends EnhancedElement {
       }
     }
 
-    if (
-      name === '_seeker'
-      && typeof value === 'number'
-    ) {
+    if (name === '_seeker' && typeof value === 'number') {
       seeker.value = value.toString()
       seeker.ariaValueNow = value.toString()
       progress.value = value
     }
 
-    if (
-      name === '_animations'
-      && Array.isArray(value)
-    ) {
-      if ((this._currentAnimation + 1) < value.length) {
+    if (name === '_animations' && Array.isArray(value)) {
+      if (this._currentAnimation + 1 < value.length) {
         next.hidden = false
       }
     }
 
-    if (
-      name === '_currentAnimation'
-      && typeof value === 'number'
-    ) {
-      if ((value + 1) >= this._animations.length) {
+    if (name === '_currentAnimation' && typeof value === 'number') {
+      if (value + 1 >= this._animations.length) {
         next.hidden = true
       } else {
         next.hidden = false
@@ -307,9 +298,9 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     if (
-      name === '_isSettingsOpen'
-      && typeof value === 'boolean'
-      && popover instanceof HTMLDivElement
+      name === '_isSettingsOpen' &&
+      typeof value === 'boolean' &&
+      popover instanceof HTMLDivElement
     ) {
       popover.hidden = !value
     }
@@ -357,7 +348,7 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   /**
-   * Display controls
+   * Show controls
    */
   set controls(value: Controls) {
     this.setAttribute('controls', (!!value).toString())
@@ -443,7 +434,7 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   /**
-   * Whether to loop
+   * Loop animation
    */
   set loop(value: Loop) {
     this.setAttribute('loop', (!!value).toString())
@@ -481,7 +472,9 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   get multiAnimationSettings() {
-    const val = JSON.parse(this.getAttribute('multiAnimationSettings') || 'null')
+    const val = JSON.parse(
+      this.getAttribute('multiAnimationSettings') || 'null'
+    )
     if (Array.isArray(val)) {
       return val
     }
@@ -490,7 +483,7 @@ export class DotLottiePlayer extends EnhancedElement {
 
   /**
    * Resizing to container
-  */
+   */
   set objectfit(value: string) {
     this.setAttribute('objectfit', value)
   }
@@ -505,32 +498,23 @@ export class DotLottiePlayer extends EnhancedElement {
 
   /**
    * Resizing to container (Deprecated)
-  */
+   */
   set preserveAspectRatio(value: PreserveAspectRatio | null) {
-    this.setAttribute('preserveAspectRatio', value || PreserveAspectRatio.Contain)
+    this.setAttribute(
+      'preserveAspectRatio',
+      value || PreserveAspectRatio.Contain
+    )
   }
 
   get preserveAspectRatio() {
     const val = this.getAttribute('preserveAspectRatio')
-    if (val && Object.values(PreserveAspectRatio).includes(val as PreserveAspectRatio)) {
+    if (
+      val &&
+      Object.values(PreserveAspectRatio).includes(val as PreserveAspectRatio)
+    ) {
       return val as PreserveAspectRatio
     }
     return null
-  }
-
-  /**
-   * Renderer to use (svg, canvas or html)
-   */
-  set renderer(value: RendererType) {
-    this.setAttribute('renderer', value)
-  }
-
-  get renderer() {
-    const val = this.getAttribute('renderer')
-    if (val === 'canvas' || val === 'html') {
-      return val
-    }
-    return 'svg'
   }
 
   /**
@@ -658,32 +642,37 @@ export class DotLottiePlayer extends EnhancedElement {
     scrollY: number
     scrollTimeout: NodeJS.Timeout | null
   } = {
-      prev: PlayerState.Loading,
-      count: 0,
-      loaded: false,
-      visible: false,
-      scrollY: 0,
-      scrollTimeout: null
-    }
+    prev: PlayerState.Loading,
+    count: 0,
+    loaded: false,
+    visible: false,
+    scrollY: 0,
+    scrollTimeout: null,
+  }
 
   /**
    * Get options from props
-   * @returns { LottieConfig<'svg'> }
+   * @returns { AnimationConfig<'svg'> }
    */
   private _getOptions() {
     if (!this._container) {
       throw new Error('Container not rendered')
     }
     const preserveAspectRatio =
-      this.preserveAspectRatio ?? (this.objectfit && aspectRatio(this.objectfit)),
-
-      currentAnimationSettings =
-        this.multiAnimationSettings?.length ? this.multiAnimationSettings?.[this._currentAnimation] : undefined,
-      currentAnimationManifest = this._manifest.animations?.[this._currentAnimation]
+        this.preserveAspectRatio ??
+        (this.objectfit && aspectRatio(this.objectfit)),
+      currentAnimationSettings = this.multiAnimationSettings?.length
+        ? this.multiAnimationSettings?.[this._currentAnimation]
+        : undefined,
+      currentAnimationManifest =
+        this._manifest.animations?.[this._currentAnimation]
 
     // Loop
     let loop = !!this.loop
-    if (currentAnimationManifest.loop !== undefined && this.loop === undefined) {
+    if (
+      currentAnimationManifest.loop !== undefined &&
+      this.loop === undefined
+    ) {
       loop = !!currentAnimationManifest.loop
     }
     if (currentAnimationSettings?.loop !== undefined) {
@@ -692,7 +681,10 @@ export class DotLottiePlayer extends EnhancedElement {
 
     // Autoplay
     let autoplay = !!this.autoplay
-    if (currentAnimationManifest.autoplay !== undefined && this.autoplay === undefined) {
+    if (
+      currentAnimationManifest.autoplay !== undefined &&
+      this.autoplay === undefined
+    ) {
       autoplay = !!currentAnimationManifest.autoplay
     }
     if (currentAnimationSettings?.autoplay !== undefined) {
@@ -704,15 +696,14 @@ export class DotLottiePlayer extends EnhancedElement {
 
     // Segment
     let initialSegment = this.segment
-    if (this.segment?.every(val => val > 0)) {
+    if (this.segment?.every((val) => val > 0)) {
       initialSegment = [this.segment[0] - 1, this.segment[1] - 1]
     }
-    if (this.segment?.some(val => val < 0)) {
+    if (this.segment?.some((val) => val < 0)) {
       initialSegment = undefined
     }
 
-    const options: AnimationConfig<'svg'> =
-    {
+    const options: AnimationConfig<'svg'> = {
       container: this._container,
       loop,
       autoplay,
@@ -723,7 +714,7 @@ export class DotLottiePlayer extends EnhancedElement {
         hideOnTransparent: true,
         preserveAspectRatio,
         progressiveLoad: true,
-      }
+      },
     }
 
     return options
@@ -734,32 +725,31 @@ export class DotLottiePlayer extends EnhancedElement {
    */
   private _addIntersectionObserver() {
     if (
-      !this._container
-      || this._intersectionObserver
-      || !('IntersectionObserver' in window)
+      !this._container ||
+      this._intersectionObserver ||
+      !('IntersectionObserver' in window)
     ) {
       return
     }
 
-    this._intersectionObserver =
-      new IntersectionObserver(entries => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting || document.hidden) {
-            if (this.playerState === PlayerState.Playing) {
-              this._freeze()
-            }
-            this._playerState.visible = false
-            continue
+    this._intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting || document.hidden) {
+          if (this.playerState === PlayerState.Playing) {
+            this._freeze()
           }
-          if (!this.animateOnScroll && this.playerState === PlayerState.Frozen) {
-            this.play()
-          }
-          if (!this._playerState.scrollY) {
-            this._playerState.scrollY = scrollY
-          }
-          this._playerState.visible = true
+          this._playerState.visible = false
+          continue
         }
-      })
+        if (!this.animateOnScroll && this.playerState === PlayerState.Frozen) {
+          this.play()
+        }
+        if (!this._playerState.scrollY) {
+          this._playerState.scrollY = scrollY
+        }
+        this._playerState.visible = true
+      }
+    })
 
     this._intersectionObserver.observe(this._container)
   }
@@ -768,46 +758,55 @@ export class DotLottiePlayer extends EnhancedElement {
    * Initialize Lottie Web player
    */
   public async load(src: string | null) {
-    if (!this.shadowRoot) {
+    if (!this.shadowRoot || !src) {
       return
     }
 
     // Load the resource
     try {
-      const { animations, manifest } =
-        await getAnimationData(src)
+      const { animations, manifest } = await getAnimationData(src)
 
-      if (!animations || animations.some(animation => !this._isLottie(animation))) {
+      if (
+        !animations ||
+        animations.some((animation) => !this._isLottie(animation))
+      ) {
         throw new Error('Broken or corrupted file')
       }
 
       this._isBounce = this.mode === PlayMode.Bounce
       if (this.multiAnimationSettings?.length) {
         if (this.multiAnimationSettings[this._currentAnimation]?.mode) {
-          this._isBounce = this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
+          this._isBounce =
+            this.multiAnimationSettings[this._currentAnimation].mode ===
+            PlayMode.Bounce
         }
       }
 
       this._animations = animations
       this._manifest = manifest ?? {
-        animations: [{
-          id: useId(),
-          autoplay: !this.animateOnScroll && this.autoplay,
-          loop: this.loop,
-          direction: this.direction,
-          mode: this.mode,
-          speed: this.speed
-        }]
+        animations: [
+          {
+            id: useId(),
+            autoplay: !this.animateOnScroll && this.autoplay,
+            loop: this.loop,
+            direction: this.direction,
+            mode: this.mode,
+            speed: this.speed,
+          },
+        ],
       }
 
       // Clear previous animation, if any
-      if (this._lottieInstance) { this._lottieInstance.destroy() }
+      if (this._lottieInstance) {
+        this._lottieInstance.destroy()
+      }
 
       this.playerState = PlayerState.Stopped
-      if (!this.animateOnScroll
-        && (this.autoplay
-          || this.multiAnimationSettings?.[this._currentAnimation]?.autoplay
-        )) {
+      if (
+        !this.animateOnScroll &&
+        (this.autoplay ||
+          this.multiAnimationSettings?.[this._currentAnimation]?.autoplay)
+      ) {
         this.playerState = PlayerState.Playing
       }
 
@@ -827,11 +826,15 @@ export class DotLottiePlayer extends EnhancedElement {
 
     this._addEventListeners()
 
-    const speed = this.multiAnimationSettings?.[this._currentAnimation]?.speed ??
-      this.speed ?? this._manifest.animations[this._currentAnimation].speed,
-
-      direction = this.multiAnimationSettings?.[this._currentAnimation]?.direction ??
-        this.direction ?? this._manifest.animations[this._currentAnimation].direction ?? 1
+    const speed =
+        this.multiAnimationSettings?.[this._currentAnimation]?.speed ??
+        this.speed ??
+        this._manifest.animations[this._currentAnimation].speed,
+      direction =
+        this.multiAnimationSettings?.[this._currentAnimation]?.direction ??
+        this.direction ??
+        this._manifest.animations[this._currentAnimation].direction ??
+        1
 
     // Set initial playback speed and direction
     this._lottieInstance.setSpeed(speed)
@@ -840,7 +843,9 @@ export class DotLottiePlayer extends EnhancedElement {
 
     // Start playing if autoplay is enabled
     if (this.autoplay || this.animateOnScroll) {
-      if (this.direction === -1) { this.seek('99%') }
+      if (this.direction === -1) {
+        this.seek('99%')
+      }
 
       if (!('IntersectionObserver' in window)) {
         if (!this.animateOnScroll) {
@@ -850,7 +855,6 @@ export class DotLottiePlayer extends EnhancedElement {
       }
 
       this._addIntersectionObserver()
-
     }
   }
 
@@ -869,13 +873,21 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    this.shadow.querySelector('.togglePlay')?.addEventListener('click', this.togglePlay)
+    this.shadow
+      .querySelector('.togglePlay')
+      ?.addEventListener('click', this.togglePlay)
     this.shadow.querySelector('.stop')?.addEventListener('click', this.stop)
     this.shadow.querySelector('.prev')?.addEventListener('click', this.prev)
     this.shadow.querySelector('.next')?.addEventListener('click', this.next)
-    this.shadow.querySelector('.toggleLoop')?.addEventListener('click', this.toggleLoop)
-    this.shadow.querySelector('.toggleBoomerang')?.addEventListener('click', this.toggleBoomerang)
-    this.shadow.querySelector('.snapshot')?.addEventListener('click', this.snapshot)
+    this.shadow
+      .querySelector('.toggleLoop')
+      ?.addEventListener('click', this.toggleLoop)
+    this.shadow
+      .querySelector('.toggleBoomerang')
+      ?.addEventListener('click', this.toggleBoomerang)
+    this.shadow
+      .querySelector('.snapshot')
+      ?.addEventListener('click', this.snapshot)
 
     const toggleSettings = this.shadow.querySelector('.seeker')
     toggleSettings?.addEventListener('change', this._handleSeekChange)
@@ -886,21 +898,39 @@ export class DotLottiePlayer extends EnhancedElement {
     settings?.addEventListener('blur', this._handleBlur)
 
     // Calculate and save the current progress of the animation
-    this._lottieInstance.addEventListener<AnimationEventName>('enterFrame', this._enterFrame)
+    this._lottieInstance.addEventListener<AnimationEventName>(
+      'enterFrame',
+      this._enterFrame
+    )
 
     // Handle animation play complete
-    this._lottieInstance.addEventListener<AnimationEventName>('complete', this._complete)
+    this._lottieInstance.addEventListener<AnimationEventName>(
+      'complete',
+      this._complete
+    )
 
-    this._lottieInstance.addEventListener<AnimationEventName>('loopComplete', this._loopComplete)
+    this._lottieInstance.addEventListener<AnimationEventName>(
+      'loopComplete',
+      this._loopComplete
+    )
 
     // Handle lottie-web ready event
-    this._lottieInstance.addEventListener<AnimationEventName>('DOMLoaded', this._DOMLoaded)
+    this._lottieInstance.addEventListener<AnimationEventName>(
+      'DOMLoaded',
+      this._DOMLoaded
+    )
 
     // Handle animation data load complete
-    this._lottieInstance.addEventListener<AnimationEventName>('data_ready', this._dataReady)
+    this._lottieInstance.addEventListener<AnimationEventName>(
+      'data_ready',
+      this._dataReady
+    )
 
     // Set error state when animation load fail event triggers
-    this._lottieInstance.addEventListener<AnimationEventName>('data_failed', this._dataFailed)
+    this._lottieInstance.addEventListener<AnimationEventName>(
+      'data_failed',
+      this._dataFailed
+    )
 
     if (this._container && this.hover) {
       // Set handlers to auto play animation on hover if enabled
@@ -908,11 +938,20 @@ export class DotLottiePlayer extends EnhancedElement {
       this._container.addEventListener('mouseleave', this._mouseLeave)
     }
 
-    addEventListener('focus', this._handleWindowBlur, { passive: true, capture: false })
-    addEventListener('blur', this._handleWindowBlur, { passive: true, capture: false })
+    addEventListener('focus', this._handleWindowBlur, {
+      passive: true,
+      capture: false,
+    })
+    addEventListener('blur', this._handleWindowBlur, {
+      passive: true,
+      capture: false,
+    })
 
     if (this.animateOnScroll) {
-      addEventListener('scroll', this._handleScroll, { passive: true, capture: true })
+      addEventListener('scroll', this._handleScroll, {
+        passive: true,
+        capture: true,
+      })
     }
   }
 
@@ -924,13 +963,21 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    this.shadow.querySelector('.togglePlay')?.removeEventListener('click', this.togglePlay)
+    this.shadow
+      .querySelector('.togglePlay')
+      ?.removeEventListener('click', this.togglePlay)
     this.shadow.querySelector('.stop')?.removeEventListener('click', this.stop)
     this.shadow.querySelector('.prev')?.removeEventListener('click', this.prev)
     this.shadow.querySelector('.next')?.removeEventListener('click', this.next)
-    this.shadow.querySelector('.toggleLoop')?.removeEventListener('click', this.toggleLoop)
-    this.shadow.querySelector('.toggleBoomerang')?.removeEventListener('click', this.toggleBoomerang)
-    this.shadow.querySelector('.snapshot')?.removeEventListener('click', this.snapshot)
+    this.shadow
+      .querySelector('.toggleLoop')
+      ?.removeEventListener('click', this.toggleLoop)
+    this.shadow
+      .querySelector('.toggleBoomerang')
+      ?.removeEventListener('click', this.toggleBoomerang)
+    this.shadow
+      .querySelector('.snapshot')
+      ?.removeEventListener('click', this.snapshot)
 
     const seeker = this.shadow.querySelector('.seeker')
     seeker?.removeEventListener('change', this._handleSeekChange)
@@ -940,12 +987,30 @@ export class DotLottiePlayer extends EnhancedElement {
     toggleSettings?.removeEventListener('click', this._handleSettingsClick)
     toggleSettings?.removeEventListener('blur', this._handleBlur)
 
-    this._lottieInstance.removeEventListener<AnimationEventName>('enterFrame', this._enterFrame)
-    this._lottieInstance.removeEventListener<AnimationEventName>('complete', this._complete)
-    this._lottieInstance.removeEventListener<AnimationEventName>('loopComplete', this._loopComplete)
-    this._lottieInstance.removeEventListener<AnimationEventName>('DOMLoaded', this._DOMLoaded)
-    this._lottieInstance.removeEventListener<AnimationEventName>('data_ready', this._dataReady)
-    this._lottieInstance.removeEventListener<AnimationEventName>('data_failed', this._dataFailed)
+    this._lottieInstance.removeEventListener<AnimationEventName>(
+      'enterFrame',
+      this._enterFrame
+    )
+    this._lottieInstance.removeEventListener<AnimationEventName>(
+      'complete',
+      this._complete
+    )
+    this._lottieInstance.removeEventListener<AnimationEventName>(
+      'loopComplete',
+      this._loopComplete
+    )
+    this._lottieInstance.removeEventListener<AnimationEventName>(
+      'DOMLoaded',
+      this._DOMLoaded
+    )
+    this._lottieInstance.removeEventListener<AnimationEventName>(
+      'data_ready',
+      this._dataReady
+    )
+    this._lottieInstance.removeEventListener<AnimationEventName>(
+      'data_failed',
+      this._dataFailed
+    )
 
     this._container.removeEventListener('mouseenter', this._mouseEnter)
     this._container.removeEventListener('mouseleave', this._mouseLeave)
@@ -961,7 +1026,7 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     const {
-      // firstFrame,
+        // firstFrame,
         totalFrames,
         playDirection,
       } = this._lottieInstance,
@@ -969,7 +1034,6 @@ export class DotLottiePlayer extends EnhancedElement {
       outPoint = this.segment ? this.segment[0] : totalFrames
 
     if (this.count) {
-
       if (this._isBounce) {
         this._playerState.count += 0.5
       } else {
@@ -990,10 +1054,13 @@ export class DotLottiePlayer extends EnhancedElement {
 
     if (this._isBounce) {
       this._lottieInstance.goToAndStop(
-        playDirection === -1 ? inPoint : outPoint * 0.99, true
+        playDirection === -1 ? inPoint : outPoint * 0.99,
+        true
       )
 
-      this._lottieInstance.setDirection(playDirection * -1 as AnimationDirection)
+      this._lottieInstance.setDirection(
+        (playDirection * -1) as AnimationDirection
+      )
 
       return setTimeout(() => {
         if (!this.animateOnScroll) {
@@ -1003,7 +1070,8 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     this._lottieInstance.goToAndStop(
-      playDirection === -1 ? outPoint * 0.99 : inPoint, true
+      playDirection === -1 ? outPoint * 0.99 : inPoint,
+      true
     )
 
     return setTimeout(() => {
@@ -1018,7 +1086,7 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
     const { currentFrame, totalFrames } = this._lottieInstance
-    this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+    this._seeker = Math.round((currentFrame / totalFrames) * 100)
 
     this.dispatchEvent(
       new CustomEvent(PlayerEvents.Frame, {
@@ -1026,7 +1094,7 @@ export class DotLottiePlayer extends EnhancedElement {
           frame: currentFrame,
           seeker: this._seeker,
         },
-      }),
+      })
     )
   }
 
@@ -1046,7 +1114,7 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     const { currentFrame, totalFrames } = this._lottieInstance
-    this._seeker = Math.floor((currentFrame / totalFrames) * 100)
+    this._seeker = Math.round((currentFrame / totalFrames) * 100)
 
     this.playerState = PlayerState.Completed
 
@@ -1056,7 +1124,7 @@ export class DotLottiePlayer extends EnhancedElement {
           frame: currentFrame,
           seeker: this._seeker,
         },
-      }),
+      })
     )
   }
 
@@ -1115,7 +1183,6 @@ export class DotLottiePlayer extends EnhancedElement {
     }
   }
 
-
   /**
    * Handle scroll
    */
@@ -1124,15 +1191,20 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
     if (isServer()) {
-      console.warn('DotLottie: Scroll animations might not work properly in a Server Side Rendering context. Try to wrap this in a client component.')
+      console.warn(
+        'DotLottie: Scroll animations might not work properly in a Server Side Rendering context. Try to wrap this in a client component.'
+      )
     }
     if (this._playerState.visible) {
-      // console.log(scrollY, this._playerState.scrollY)
       const adjustedScroll =
-        scrollY > this._playerState.scrollY ? scrollY - this._playerState.scrollY :
-          this._playerState.scrollY - scrollY,
-        clampedScroll = Math.min(Math.max(adjustedScroll / 3, 1), this._lottieInstance.totalFrames * 3),
-        roundedScroll = (clampedScroll / 3)
+          scrollY > this._playerState.scrollY
+            ? scrollY - this._playerState.scrollY
+            : this._playerState.scrollY - scrollY,
+        clampedScroll = Math.min(
+          Math.max(adjustedScroll / 3, 1),
+          this._lottieInstance.totalFrames * 3
+        ),
+        roundedScroll = clampedScroll / 3
 
       requestAnimationFrame(() => {
         if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
@@ -1165,7 +1237,9 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     this.seek(
-      Math.floor((Number(target.value) / 100) * this._lottieInstance.totalFrames)
+      Math.round(
+        (Number(target.value) / 100) * this._lottieInstance.totalFrames
+      )
     )
 
     // setTimeout(() => {
@@ -1176,11 +1250,11 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   private _isLottie(json: LottieJSON) {
-    const mandatory: string[] =
-      ['v', 'ip', 'op', 'layers', 'fr', 'w', 'h']
+    const mandatory: string[] = ['v', 'ip', 'op', 'layers', 'fr', 'w', 'h']
 
     return mandatory.every((field: string) =>
-      Object.prototype.hasOwnProperty.call(json, field))
+      Object.prototype.hasOwnProperty.call(json, field)
+    )
   }
 
   /**
@@ -1193,7 +1267,7 @@ export class DotLottiePlayer extends EnhancedElement {
   /**
    * Play
    */
-  public play() {
+  public async play() {
     if (!this._lottieInstance) {
       return
     }
@@ -1201,12 +1275,12 @@ export class DotLottiePlayer extends EnhancedElement {
       this._playerState.prev = this.playerState
     }
 
-    this._lottieInstance.play()
-    setTimeout(() => {
+    try {
+      this._lottieInstance.play()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Play))
+    } finally {
       this.playerState = PlayerState.Playing
-    }, 0)
-
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Play))
+    }
   }
 
   /**
@@ -1219,12 +1293,13 @@ export class DotLottiePlayer extends EnhancedElement {
     if (this.playerState) {
       this._playerState.prev = this.playerState
     }
-    this._lottieInstance.pause()
-    setTimeout(() => {
-      this.playerState = PlayerState.Paused
-    }, 0)
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Pause))
+    try {
+      this._lottieInstance.pause()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Pause))
+    } finally {
+      this.playerState = PlayerState.Paused
+    }
   }
 
   /**
@@ -1238,12 +1313,13 @@ export class DotLottiePlayer extends EnhancedElement {
       this._playerState.prev = this.playerState
     }
     this._playerState.count = 0
-    this._lottieInstance.stop()
-    setTimeout(() => {
-      this.playerState = PlayerState.Stopped
-    }, 0)
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Stop))
+    try {
+      this._lottieInstance.stop()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Stop))
+    } finally {
+      this.playerState = PlayerState.Stopped
+    }
   }
 
   /**
@@ -1260,6 +1336,8 @@ export class DotLottiePlayer extends EnhancedElement {
     this._lottieInstance = null
     this.dispatchEvent(new CustomEvent(PlayerEvents.Destroyed))
     this.remove()
+
+    document.removeEventListener('visibilitychange', this._onVisibilityChange)
   }
 
   /**
@@ -1278,10 +1356,11 @@ export class DotLottiePlayer extends EnhancedElement {
     }
 
     // Calculate and set the frame number
-    const frame =
-      Math.floor(matches[2] === '%' ?
-        (this._lottieInstance.totalFrames * Number(matches[1])) / 100 :
-        Number(matches[1]))
+    const frame = Math.round(
+      matches[2] === '%'
+        ? (this._lottieInstance.totalFrames * Number(matches[1])) / 100
+        : Number(matches[1])
+    )
 
     // Set seeker to new frame number
     this._seeker = frame
@@ -1311,21 +1390,19 @@ export class DotLottiePlayer extends EnhancedElement {
     // Get SVG element and serialize markup
     const svgElement = this.shadowRoot.querySelector('.animation svg'),
       data =
-        svgElement instanceof Node ?
-          new XMLSerializer().serializeToString(svgElement) : null
+        svgElement instanceof Node
+          ? new XMLSerializer().serializeToString(svgElement)
+          : null
 
     if (!data) {
       console.error('Could not serialize data')
       return
     }
 
-    download(
-      data,
-      {
-        name: `${getFilename(this.src)}-${frameOutput(this._seeker)}.svg`,
-        mimeType: 'image/svg+xml'
-      }
-    )
+    download(data, {
+      name: `${getFilename(this.src)}-${frameOutput(this._seeker)}.svg`,
+      mimeType: 'image/svg+xml',
+    })
 
     return data
   }
@@ -1343,6 +1420,16 @@ export class DotLottiePlayer extends EnhancedElement {
   }
 
   /**
+   * Dynamically set count for loops
+   */
+  public setCount(value: number) {
+    if (!this._lottieInstance) {
+      return
+    }
+    this.count = value
+  }
+
+  /**
    * Freeze animation.
    * This internal state pauses animation and is used to differentiate between
    * user requested pauses and component instigated pauses.
@@ -1355,27 +1442,26 @@ export class DotLottiePlayer extends EnhancedElement {
     if (this.playerState) {
       this._playerState.prev = this.playerState
     }
-    this._lottieInstance.pause()
-    setTimeout(() => {
-      this.playerState = PlayerState.Frozen
-    }, 0)
 
-    this.dispatchEvent(new CustomEvent(PlayerEvents.Freeze))
+    try {
+      this._lottieInstance.pause()
+      this.dispatchEvent(new CustomEvent(PlayerEvents.Freeze))
+    } finally {
+      this.playerState = PlayerState.Frozen
+    }
   }
 
   /**
    * Reload animation
    */
   public async reload() {
-    if (!this._lottieInstance) {
+    if (!this._lottieInstance || !this.src) {
       return
     }
 
     this._lottieInstance.destroy()
 
-    if (this.src) {
-      await this.load(this.src)
-    }
+    await this.load(this.src)
   }
 
   /**
@@ -1442,7 +1528,7 @@ export class DotLottiePlayer extends EnhancedElement {
     }
     this.playerState = PlayerState.Playing
     if (this._isBounce) {
-      this.setDirection(playDirection * -1 as AnimationDirection)
+      this.setDirection((playDirection * -1) as AnimationDirection)
       return this._lottieInstance.goToAndPlay(currentFrame, true)
     }
     if (playDirection === -1) {
@@ -1535,16 +1621,22 @@ export class DotLottiePlayer extends EnhancedElement {
       // Check play mode for current animation
       if (this.multiAnimationSettings?.[this._currentAnimation]?.mode) {
         this._isBounce =
-          this.multiAnimationSettings[this._currentAnimation].mode === PlayMode.Bounce
+          this.multiAnimationSettings[this._currentAnimation].mode ===
+          PlayMode.Bounce
       }
 
       // Remove event listeners to new Lottie instance, and add new
       this._removeEventListeners()
       this._addEventListeners()
 
-      this.dispatchEvent(new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next))
+      this.dispatchEvent(
+        new CustomEvent(isPrevious ? PlayerEvents.Previous : PlayerEvents.Next)
+      )
 
-      if (this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ?? this.autoplay) {
+      if (
+        this.multiAnimationSettings?.[this._currentAnimation]?.autoplay ??
+        this.autoplay
+      ) {
         if (this.animateOnScroll) {
           this._lottieInstance?.goToAndStop(0, true)
           this.playerState = PlayerState.Paused
@@ -1598,7 +1690,8 @@ export class DotLottiePlayer extends EnhancedElement {
       return
     }
 
-    slot.innerHTML = this.controls ? `
+    slot.innerHTML = this.controls
+      ? `
       <div
         class="lottie-controls toolbar ${this.playerState === PlayerState.Error ? 'has-error' : ''}"
         aria-label="Lottie Animation controls"
@@ -1665,8 +1758,10 @@ export class DotLottiePlayer extends EnhancedElement {
           >
           </progress>
         </form>
-        ${this.simple ? '' :
-    `
+        ${
+          this.simple
+            ? ''
+            : `
         <button
           class="toggleLoop"
           data-active="${this.loop}"
@@ -1721,10 +1816,11 @@ export class DotLottiePlayer extends EnhancedElement {
             </svg> Download still image
           </button>
         </div>`
-}
+        }
 
       </div>
-    ` : ''
+    `
+      : ''
   }
 
   protected render() {
@@ -1741,8 +1837,9 @@ export class DotLottiePlayer extends EnhancedElement {
           class="animation"
           style="background:${this.background}"
         >
-          ${this.playerState === PlayerState.Error ?
-    `
+          ${
+            this.playerState === PlayerState.Error
+              ? `
         <div class="error">
           <svg
             preserveAspectRatio="xMidYMid slice"
@@ -1763,7 +1860,9 @@ export class DotLottiePlayer extends EnhancedElement {
               text-anchor="middle"
             >${this._errorMessage}</text>
           </svg>
-        </div>` : ''}
+        </div>`
+              : ''
+          }
       </div>
       <slot name="controls"></slot>
     </figure>
@@ -1773,8 +1872,6 @@ export class DotLottiePlayer extends EnhancedElement {
     this.shadow.appendChild(this.template.content.cloneNode(true))
   }
 }
-
-
 
 export { PlayMode, PlayerEvents, PlayerState } from './utils'
 

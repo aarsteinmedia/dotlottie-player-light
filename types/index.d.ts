@@ -1,4 +1,4 @@
-import { type AnimationDirection, type AnimationItem, type AnimationSegment, type RendererType } from 'lottie-web/build/player/lottie_light.js';
+import { type AnimationDirection, type AnimationItem, type AnimationSegment } from 'lottie-web/build/player/lottie_light.js';
 import EnhancedElement from './observeProperties';
 import { PlayMode, PlayerState, PreserveAspectRatio } from './utils';
 import { AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe } from './types';
@@ -40,8 +40,6 @@ export declare class DotLottiePlayer extends EnhancedElement {
     get objectfit(): string;
     set preserveAspectRatio(value: PreserveAspectRatio | null);
     get preserveAspectRatio(): PreserveAspectRatio | null;
-    set renderer(value: RendererType);
-    get renderer(): RendererType;
     set segment(value: AnimationSegment | undefined);
     get segment(): AnimationSegment | undefined;
     set simple(value: boolean);
@@ -85,20 +83,21 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _handleSeekChange;
     private _isLottie;
     getLottie(): AnimationItem | null;
-    play(): void;
+    play(): Promise<void>;
     pause(): void;
     stop(): void;
     destroy(): void;
     seek(value: number | string): void;
     snapshot(): string | undefined;
     setSubframe(value: boolean): void;
+    setCount(value: number): void;
     private _freeze;
     reload(): Promise<void>;
     setSpeed(value?: number): void;
     setDirection(value: AnimationDirection): void;
     setLoop(value: boolean): void;
     setMultiAnimationSettings(settings: AnimationSettings[]): void;
-    togglePlay(): void;
+    togglePlay(): void | Promise<void>;
     toggleLoop(): void;
     toggleBoomerang(): void;
     private _toggleSettings;

@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player-light",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Light Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player-light",
   "exports": {
     ".": {
@@ -64,10 +64,13 @@
     "autoprefixer": "^10.4.20",
     "esbuild-sass-plugin": "^3.3.1",
     "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.11.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "postcss-flexbugs-fixes": "^5.0.2",
+    "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
     "rollup": "^4.20.0",
     "rollup-plugin-dts": "^6.1.1",
