@@ -35,7 +35,7 @@ import styles from './styles.scss'
 
 /**
  * dotLottie Player Web Component
- * @export
+ * @exports
  * @class DotLottiePlayer
  * @extends { EnhancedElement }
  */
@@ -192,7 +192,7 @@ export class DotLottiePlayer extends EnhancedElement {
       if (toggleLoop instanceof HTMLButtonElement) {
         toggleLoop.dataset.active = value
       }
-      this._lottieInstance.setLoop(value === '' || Boolean(value))
+      this.setLoop(value === '' || Boolean(value))
     }
 
     if (name === 'mode') {
@@ -206,12 +206,12 @@ export class DotLottiePlayer extends EnhancedElement {
     if (name === 'speed') {
       const val = Number(value)
       if (val && !isNaN(val)) {
-        this._lottieInstance.setSpeed(val)
+        this.setSpeed(val)
       }
     }
 
     if (name === 'subframe') {
-      this._lottieInstance.setSubframe(value === '' || Boolean(value))
+      this.setSubframe(value === '' || Boolean(value))
     }
   }
 
@@ -1417,7 +1417,6 @@ export class DotLottiePlayer extends EnhancedElement {
     if (!this._lottieInstance) {
       return
     }
-    this.subframe = value
     this._lottieInstance.setSubframe(value)
   }
 
@@ -1474,7 +1473,6 @@ export class DotLottiePlayer extends EnhancedElement {
     if (!this._lottieInstance) {
       return
     }
-    this.speed = value
     this._lottieInstance.setSpeed(value)
   }
 
@@ -1486,7 +1484,6 @@ export class DotLottiePlayer extends EnhancedElement {
     if (!this._lottieInstance) {
       return
     }
-    this.direction = value
     this._lottieInstance.setDirection(value)
   }
 
@@ -1498,7 +1495,6 @@ export class DotLottiePlayer extends EnhancedElement {
     if (!this._lottieInstance) {
       return
     }
-    this.loop = value
     this._lottieInstance.setLoop(value)
   }
 

@@ -27,13 +27,12 @@ const isProd = process.env.NODE_ENV !== 'development',
     template({
       include: './src/index.ts',
       options: {
-        shouldMinify(template) {
-          return template.parts.some(
-            (part) =>
-              // Matches Polymer templates that are not tagged
-              part.text.includes('<figure') ||
-              part.text.includes('<div') ||
-              part.text.includes('<svg')
+        shouldMinify({ parts }) {
+          return parts.some(
+            ({ text }) =>
+              text.includes('<figure') ||
+              text.includes('<div') ||
+              text.includes('<svg')
           )
         },
       },
