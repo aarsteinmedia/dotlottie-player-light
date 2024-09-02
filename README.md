@@ -125,7 +125,7 @@ If you're using TypeScript and want to assign the component a `ref`, you can do 
 ```tsx
 import { useRef } from 'react'
 import '@aarsteinmedia/dotlottie-player-light'
-import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player-light'
+import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player-light'
 
 function App() {
   const animation = useRef<DotLottiePlayer | null>(null)
@@ -186,7 +186,7 @@ export default defineNuxtConfig({
 
 ```typescript
 import { createApp } from 'vue'
-import { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player-light'
+import DotLottiePlayer from '@aarsteinmedia/dotlottie-player-light'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -197,7 +197,7 @@ app.component('DotLottiePlayer', DotLottiePlayer)
 Create a `plugins` folder in your root if it doesn't exist already, add a file named `dotlottie-player-light.js`:
 
 ```javascript
-import { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player-light'
+import DotLottiePlayer from '@aarsteinmedia/dotlottie-player-light'
 
 export default defineNuxtPlugin(({ vueApp }) => {
   vueApp.component('DotLottiePlayer', DotLottiePlayer)
