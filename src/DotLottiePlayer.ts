@@ -214,14 +214,14 @@ export class DotLottiePlayer extends EnhancedElement {
     }
   }
 
-  static override get observedProperties() {
+  static get observedProperties() {
     return [
       'playerState',
       '_isSettingsOpen',
       '_seeker',
       '_currentAnimation',
       '_animations',
-    ] as unknown as (keyof EnhancedElement)[]
+    ]
   }
 
   // name: string, oldValue: string, newValue: string
