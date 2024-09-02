@@ -237,6 +237,7 @@ export const aspectRatio = (objectFit: string) => {
       case 'png':
       case 'gif':
       case 'webp':
+      case 'avif':
         return `image/${ext}`
       case 'mp3':
       case 'mpeg':

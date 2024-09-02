@@ -72,6 +72,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkg = {
     input,
     output: {
+      exports: 'named',
       extend: true,
       file: pkg.unpkg,
       format: 'iife',
@@ -90,10 +91,12 @@ const isProd = process.env.NODE_ENV !== 'development',
     external: ['lottie-web/build/player/lottie_light.js', 'fflate'],
     output: [
       {
+        exports: 'named',
         file: pkg.module,
         format: 'esm',
       },
       {
+        exports: 'named',
         file: pkg.exports['.'].require,
         format: 'cjs',
       },
