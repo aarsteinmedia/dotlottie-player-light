@@ -1,13 +1,17 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSegment } from 'lottie-web/build/player/lottie_light.js';
+import renderPlayer from 'src/templates/player';
+import renderControls from 'src/templates/controls';
+import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
+import { AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe } from '../types';
 import EnhancedElement from './EnhancedElement';
-import { PlayMode, PlayerState, PreserveAspectRatio } from './utils';
-import { AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe } from './types';
 export declare class DotLottiePlayer extends EnhancedElement {
     constructor();
     connectedCallback(): Promise<void>;
     disconnectedCallback(): void;
     shadow: ShadowRoot;
     template: HTMLTemplateElement;
+    protected _render: typeof renderPlayer;
+    protected _renderControls: typeof renderControls;
     static get observedAttributes(): string[];
     attributeChangedCallback(name: string, _oldValue: unknown, value: string): void;
     static get observedProperties(): string[];
@@ -52,17 +56,24 @@ export declare class DotLottiePlayer extends EnhancedElement {
     get subframe(): Subframe;
     protected _container: Element | null;
     playerState?: PlayerState;
-    private _isSettingsOpen;
-    private _seeker;
+    protected _isSettingsOpen: boolean;
+    protected _seeker: number;
     private _currentAnimation;
     private _animations;
     private _intersectionObserver?;
     private _lottieInstance;
-    private _identifier;
-    private _errorMessage;
+    protected _identifier: string;
+    protected _errorMessage: string;
     private _isBounce;
     private _manifest;
-    private _playerState;
+    protected _playerState: {
+        prev: PlayerState;
+        count: number;
+        loaded: boolean;
+        visible: boolean;
+        scrollY: number;
+        scrollTimeout: NodeJS.Timeout | null;
+    };
     private _getOptions;
     private _addIntersectionObserver;
     load(src: string | null): Promise<void>;
@@ -81,7 +92,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _mouseLeave;
     private _onVisibilityChange;
     private _handleScroll;
-    private _handleSeekChange;
+    protected _handleSeekChange({ target }: Event): void;
     private _isLottie;
     getLottie(): AnimationItem | null;
     play(): Promise<void>;
@@ -92,7 +103,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     snapshot(): string | undefined;
     setSubframe(value: boolean): void;
     setCount(value: number): void;
-    private _freeze;
+    protected _freeze(): void;
     reload(): Promise<void>;
     setSpeed(value?: number): void;
     setDirection(value: AnimationDirection): void;
@@ -102,12 +113,10 @@ export declare class DotLottiePlayer extends EnhancedElement {
     toggleLoop(): void;
     toggleBoomerang(): void;
     private _toggleSettings;
-    private _handleSettingsClick;
-    private _handleBlur;
+    protected _handleSettingsClick: ({ target }: Event) => void;
+    protected _handleBlur(): void;
     private _switchInstance;
     next(): void;
     prev(): void;
     static get styles(): CSSStyleSheet;
-    protected renderControls(): void;
-    protected render(): void;
 }

@@ -1,6 +1,6 @@
 import autoprefixer from 'autoprefixer'
 import commonjs from '@rollup/plugin-commonjs'
-import dts from 'rollup-plugin-dts'
+import { dts } from 'rollup-plugin-dts'
 import flexbugs from 'postcss-flexbugs-fixes'
 import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'

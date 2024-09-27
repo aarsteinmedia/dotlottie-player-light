@@ -1,53 +1,6 @@
 import { strFromU8, unzip as unzipOrg, type Unzipped } from 'fflate'
+import { ObjectFit } from './enums'
 import type { LottieAsset, LottieJSON, LottieManifest } from './types'
-
-export enum ObjectFit {
-  Contain = 'contain',
-  Cover = 'cover',
-  Fill = 'fill',
-  ScaleDown = 'scale-down',
-  None = 'none',
-}
-
-export enum PlayerState {
-  Completed = 'completed',
-  Destroyed = 'destroyed',
-  Error = 'error',
-  Frozen = 'frozen',
-  Loading = 'loading',
-  Paused = 'paused',
-  Playing = 'playing',
-  Stopped = 'stopped',
-}
-
-export enum PlayMode {
-  Bounce = 'bounce',
-  Normal = 'normal',
-}
-
-export enum PlayerEvents {
-  Complete = 'complete',
-  Destroyed = 'destroyed',
-  Error = 'error',
-  Frame = 'frame',
-  Freeze = 'freeze',
-  Load = 'load',
-  Loop = 'loop',
-  Next = 'next',
-  Pause = 'pause',
-  Play = 'play',
-  Previous = 'previous',
-  Ready = 'ready',
-  Rendered = 'rendered',
-  Stop = 'stop',
-}
-
-export enum PreserveAspectRatio {
-  Contain = 'xMidYMid meet',
-  Cover = 'xMidYMid slice',
-  None = 'xMinYMin slice',
-  Initial = 'none',
-}
 
 export class CustomError extends Error {
   status?: number
@@ -115,8 +68,8 @@ export const aspectRatio = (objectFit: string) => {
         const animations = Array.isArray(input) ? input : [input]
         return {
           animations,
-          manifest: null,
           isDotLottie: false,
+          manifest: null,
         }
       }
 
@@ -139,8 +92,8 @@ export const aspectRatio = (objectFit: string) => {
           const lottie = await result.json()
           return {
             animations: [lottie],
-            manifest: null,
             isDotLottie: false,
+            manifest: null,
           }
         }
         const text = await result.clone().text()
@@ -148,8 +101,8 @@ export const aspectRatio = (objectFit: string) => {
           const lottie = JSON.parse(text)
           return {
             animations: [lottie],
-            manifest: null,
             isDotLottie: false,
+            manifest: null,
           }
         } catch (e) {
           console.warn(e)
@@ -160,15 +113,15 @@ export const aspectRatio = (objectFit: string) => {
 
       return {
         animations: data,
-        manifest,
         isDotLottie: true,
+        manifest,
       }
     } catch (err) {
       console.error(`❌ ${handleErrors(err).message}`)
       return {
         animations: null,
-        manifest: null,
         isDotLottie: false,
+        manifest: null,
       }
     }
   },

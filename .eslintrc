@@ -8,7 +8,8 @@
   "plugins": [
     "@typescript-eslint",
     "import",
-    "jsdoc"
+    "jsdoc",
+    "perfectionist"
   ],
   "extends": [
     "eslint:recommended",
@@ -98,10 +99,6 @@
       "error",
       "never"
     ],
-    // "indent": [
-    //   "warn",
-    //   2
-    // ],
     "func-style": [
       "error",
       "declaration",
@@ -155,6 +152,7 @@
       "error",
       "always"
     ],
+    "perfectionist/sort-objects": "warn",
     "prefer-object-spread": "warn",
     "quotes": [
       "error",
@@ -212,6 +210,7 @@
     "import/default": "error",
     "import/namespace": "error",
     "import/export": "error",
+    "import/no-cycle": "error",
     "import/no-named-as-default": "warn",
     "import/no-named-as-default-member": "warn",
     "import/no-duplicates": "warn",
