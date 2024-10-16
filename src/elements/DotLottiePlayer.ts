@@ -4,8 +4,8 @@ import Lottie, {
   type AnimationItem,
   type AnimationSegment,
 } from 'lottie-web/build/player/lottie_light.js'
-import renderPlayer from 'src/templates/player'
-import renderControls from 'src/templates/controls'
+import renderPlayer from '@/templates/player'
+import renderControls from '@/templates/controls'
 import {
   aspectRatio,
   download,
@@ -15,14 +15,14 @@ import {
   handleErrors,
   isServer,
   useId,
-} from '../utils'
+} from '@/utils'
 import {
   ObjectFit,
   PlayMode,
   PlayerEvents,
   PlayerState,
   PreserveAspectRatio,
-} from '../enums'
+} from '@/enums'
 import {
   AnimationSettings,
   AnimateOnScroll,
@@ -32,9 +32,9 @@ import {
   LottieJSON,
   LottieManifest,
   Subframe,
-} from '../types'
-import styles from '../styles.scss'
-import EnhancedElement from './EnhancedElement'
+} from '@/types'
+import styles from '@/styles.scss'
+import EnhancedElement from '@/elements/EnhancedElement'
 
 /**
  * dotLottie Player Web Component

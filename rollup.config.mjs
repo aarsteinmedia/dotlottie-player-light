@@ -10,11 +10,13 @@ import serve from 'rollup-plugin-serve'
 import * as rollupPluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
+import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 import pkg from './package.json' assert { type: 'json' }
 
 const isProd = process.env.NODE_ENV !== 'development',
   input = './src/index.ts',
   plugins = (preferBuiltins = false) => [
+    typescriptPaths(),
     postcss({
       inject: false,
       plugins: [
@@ -71,6 +73,12 @@ const isProd = process.env.NODE_ENV !== 'development',
   },
   unpkg = {
     input,
+    onwarn(warning, warn) {
+      if (warning.code === 'THIS_IS_UNDEFINED') {
+        return
+      }
+      warn(warning)
+    },
     output: {
       exports: 'named',
       extend: true,
@@ -78,17 +86,17 @@ const isProd = process.env.NODE_ENV !== 'development',
       format: 'iife',
       name: pkg.name,
     },
+    plugins: unpkgPlugins(),
+  },
+  module = {
+    external: ['lottie-web/build/player/lottie_light.js', 'fflate'],
+    input,
     onwarn(warning, warn) {
       if (warning.code === 'THIS_IS_UNDEFINED') {
         return
       }
       warn(warning)
     },
-    plugins: unpkgPlugins(),
-  },
-  module = {
-    input,
-    external: ['lottie-web/build/player/lottie_light.js', 'fflate'],
     output: [
       {
         exports: 'named',
@@ -101,12 +109,6 @@ const isProd = process.env.NODE_ENV !== 'development',
         format: 'cjs',
       },
     ],
-    onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') {
-        return
-      }
-      warn(warning)
-    },
     plugins: modulePlugins(),
   }
 

@@ -1,9 +1,9 @@
 import { type AnimationDirection, type AnimationItem, type AnimationSegment } from 'lottie-web/build/player/lottie_light.js';
-import renderPlayer from 'src/templates/player';
-import renderControls from 'src/templates/controls';
+import renderPlayer from '../templates/player';
+import renderControls from '../templates/controls';
 import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
 import { AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe } from '../types';
-import EnhancedElement from './EnhancedElement';
+import EnhancedElement from '../elements/EnhancedElement';
 export declare class DotLottiePlayer extends EnhancedElement {
     constructor();
     connectedCallback(): Promise<void>;
