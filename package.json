@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player-light",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "description": "Light Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player-light",
   "exports": {
     ".": {
@@ -36,8 +36,10 @@
   ],
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "build": "rimraf ./dist && rollup -c",
-    "build:types": "rimraf ./types && tsc && tsc-alias",
+    "prebuild": "rimraf ./dist",
+    "build": "rollup -c",
+    "prebuild:types": "rimraf ./types ",
+    "build:types": "tsc && tsc-alias",
     "build:cem": "npx cem analyze --config 'cem.config.mjs'",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
     "dev": "rollup -c -w --environment NODE_ENV:development",

@@ -1,3 +1,6 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { readFile } from 'fs/promises'
 import autoprefixer from 'autoprefixer'
 import commonjs from '@rollup/plugin-commonjs'
 import { dts } from 'rollup-plugin-dts'
@@ -7,14 +10,22 @@ import livereload from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
-import * as rollupPluginSummary from 'rollup-plugin-summary'
+import * as summary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import template from 'rollup-plugin-html-literals'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
-import pkg from './package.json' assert { type: 'json' }
 
 const isProd = process.env.NODE_ENV !== 'development',
-  input = './src/index.ts',
+  __filename = fileURLToPath(import.meta.url),
+  __dirname = path.dirname(__filename),
+  pkg = JSON.parse(
+    (
+      await readFile(
+        new URL(path.resolve(__dirname, 'package.json'), import.meta.url)
+      )
+    ).toString()
+  ),
+  input = path.resolve(__dirname, 'src', 'index.ts'),
   plugins = (preferBuiltins = false) => [
     typescriptPaths(),
     postcss({
@@ -29,7 +40,10 @@ const isProd = process.env.NODE_ENV !== 'development',
         : [],
     }),
     template({
-      include: './src/index.ts',
+      include: [
+        path.resolve(__dirname, 'src', 'index.ts'),
+        path.resolve(__dirname, 'src', 'templates', '*'),
+      ],
       options: {
         shouldMinify({ parts }) {
           return parts.some(
@@ -54,19 +68,16 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkgPlugins = () => [
     ...plugins(),
     isProd && minify(),
-    isProd && rollupPluginSummary.default(),
+    isProd && summary.default(),
     !isProd &&
       serve({
         open: true,
       }),
     !isProd && livereload(),
   ],
-  modulePlugins = () => [
-    ...plugins(true),
-    isProd && rollupPluginSummary.default(),
-  ],
+  modulePlugins = () => [...plugins(true), summary.default()],
   types = {
-    input: './types/index.d.ts',
+    input: path.resolve(__dirname, 'types', 'index.d.ts'),
     output: {
       file: pkg.types,
       format: 'esm',
@@ -76,7 +87,10 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkg = {
     input,
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') {
+      if (
+        warning.code === 'THIS_IS_UNDEFINED' ||
+        warning.code === 'CIRCULAR_DEPENDENCY'
+      ) {
         return
       }
       warn(warning)
@@ -94,7 +108,10 @@ const isProd = process.env.NODE_ENV !== 'development',
     external: ['lottie-web/build/player/lottie_light.js', 'fflate'],
     input,
     onwarn(warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') {
+      if (
+        warning.code === 'THIS_IS_UNDEFINED' ||
+        warning.code === 'CIRCULAR_DEPENDENCY'
+      ) {
         return
       }
       warn(warning)
@@ -114,4 +131,4 @@ const isProd = process.env.NODE_ENV !== 'development',
     plugins: modulePlugins(),
   }
 
-export default isProd ? [types, unpkg, module] : unpkg
+export default isProd ? [module, types, unpkg] : unpkg
