@@ -17,6 +17,9 @@ const __filename = fileURLToPath(import.meta.url),
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
   }),
+  /**
+   * @type {import('eslint').Linter.Config[]}
+   * */
   eslintConfig = [
     {
       ignores: ['**/node_modules', 'types/**/*', 'dist/**/*', 'dev/**/*'],

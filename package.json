@@ -36,10 +36,11 @@
   ],
   "license": "GPL-2.0-or-later",
   "scripts": {
+    "test": "wtr",
     "prebuild": "rimraf ./dist",
     "build": "rollup -c",
     "prebuild:types": "rimraf ./types ",
-    "build:types": "tsc && tsc-alias",
+    "build:types": "tsc -p ./tsconfig.prod.json && tsc-alias",
     "build:cem": "npx cem analyze --config 'cem.config.mjs'",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
     "dev": "rollup -c -w --environment NODE_ENV:development",
@@ -62,14 +63,20 @@
     "@eslint/compat": "^1.2.1",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.13.0",
+    "@esm-bundle/chai": "4.3.4-fix.0",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-typescript": "^12.1.1",
     "@swc/core": "^1.7.39",
-    "@types/node": "^22.7.8",
+    "@types/mocha": "^10.0.9",
+    "@types/node": "^22.7.9",
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",
+    "@web/dev-server-esbuild": "^1.0.2",
+    "@web/dev-server-rollup": "^0.6.4",
+    "@web/test-runner": "^0.19.0",
+    "@web/test-runner-playwright": "^0.11.0",
     "autoprefixer": "^10.4.20",
     "esbuild": "^0.24.0",
     "esbuild-sass-plugin": "^3.3.1",
@@ -114,9 +121,11 @@
       "last 1 safari version"
     ]
   },
-  "customElements": "dist/custom-elements.json",
+  "customElements": "custom-elements.json",
   "files": [
+    "custom-elements.json",
     "dist",
+    "LICENSE.md",
     "README.md"
   ],
   "keywords": [

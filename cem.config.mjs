@@ -1,4 +1,4 @@
-export default {
+const cemConfig = {
   /** Enable special handling for catalyst */
   catalyst: false,
   /** Include third party custom elements manifests */
@@ -6,7 +6,7 @@ export default {
   /** Run in dev mode, provides extra logging */
   dev: false,
   /** Globs to exclude */
-  exclude: ['dev'],
+  exclude: ['dev', '**/*.test.*'],
   /** Enable special handling for fast */
   fast: false,
   /** Globs to analyze */
@@ -14,7 +14,7 @@ export default {
   /** Enable special handling for litelement */
   litelement: true,
   /** Directory to output CEM to */
-  outdir: 'dist',
+  outdir: '.',
   /** Output CEM path to `package.json`, defaults to true */
   packagejson: true,
   /** Enable special handling for stencil */
@@ -22,3 +22,5 @@ export default {
   /** Run in watch mode, runs on file changes */
   watch: false,
 }
+
+export default cemConfig
