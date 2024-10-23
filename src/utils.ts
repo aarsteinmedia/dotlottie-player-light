@@ -1,6 +1,6 @@
 import { strFromU8, unzip as unzipOrg, type Unzipped } from 'fflate'
-import { ObjectFit } from '@/enums'
 import type { LottieAsset, LottieJSON, LottieManifest } from '@/types'
+import { ObjectFit } from '@/enums'
 
 export class CustomError extends Error {
   status?: number

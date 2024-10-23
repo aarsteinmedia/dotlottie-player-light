@@ -111,6 +111,9 @@ importers:
       npm-package-json-lint-config-default:
         specifier: ^7.0.1
         version: 7.0.1(npm-package-json-lint@8.0.0(typescript@5.6.3))
+      playwright:
+        specifier: ^1.48.1
+        version: 1.48.1
       postcss-flexbugs-fixes:
         specifier: ^5.0.2
         version: 5.0.2(postcss@8.4.47)

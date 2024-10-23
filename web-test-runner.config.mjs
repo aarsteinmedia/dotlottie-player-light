@@ -12,7 +12,12 @@ const testRunnerConfig = {
   browsers: [playwrightLauncher({ product: 'firefox' })],
   files: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
   nodeResolve: true,
-  plugins: [typescriptPaths(), esbuildPlugin({ ts: true })],
+  plugins: [
+    typescriptPaths({
+      preserveExtensions: true,
+    }),
+    esbuildPlugin({ ts: true }),
+  ],
 }
 
 export default testRunnerConfig
