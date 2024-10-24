@@ -1,9 +1,10 @@
-import Lottie, {
-  type AnimationConfig,
-  type AnimationDirection,
-  type AnimationItem,
-  type AnimationSegment,
-} from 'lottie-web/build/player/lottie_light.js'
+import * as Lottie from 'lottie-web/build/player/lottie_light.js'
+import type {
+  AnimationConfig,
+  AnimationDirection,
+  AnimationItem,
+  AnimationSegment,
+} from 'lottie-web'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
 import {
@@ -33,16 +34,17 @@ import {
   LottieManifest,
   Subframe,
 } from '@/types'
-import styles from '@/styles.scss'
 import EnhancedElement from '@/elements/EnhancedElement'
+import styles from '@/styles.scss'
 
 /**
  * dotLottie Player Web Component
  * @exports
  * @class DotLottiePlayer
  * @extends { EnhancedElement }
+ * @description Web Component for playing Lottie animations in your web app.
  */
-export class DotLottiePlayer extends EnhancedElement {
+export default class DotLottiePlayer extends EnhancedElement {
   constructor() {
     super()
     this._complete = this._complete.bind(this)
@@ -818,7 +820,7 @@ export class DotLottiePlayer extends EnhancedElement {
       }
 
       // Initialize lottie player and load animation
-      this._lottieInstance = Lottie.loadAnimation({
+      this._lottieInstance = Lottie.default.loadAnimation({
         ...this._getOptions(),
         animationData: animations[this._currentAnimation],
       })
@@ -1510,7 +1512,7 @@ export class DotLottiePlayer extends EnhancedElement {
       }
 
       // Re-initialize lottie player
-      this._lottieInstance = Lottie.loadAnimation({
+      this._lottieInstance = Lottie.default.loadAnimation({
         ...this._getOptions(),
         animationData: this._animations[this._currentAnimation],
       })

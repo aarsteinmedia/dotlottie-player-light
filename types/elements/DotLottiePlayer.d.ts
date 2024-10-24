@@ -1,10 +1,11 @@
-import { type AnimationDirection, type AnimationItem, type AnimationSegment } from 'lottie-web/build/player/lottie_light.js';
+import * as Lottie from 'lottie-web/build/player/lottie_light.js';
+import type { AnimationDirection, AnimationSegment } from 'lottie-web';
 import renderPlayer from '../templates/player';
 import renderControls from '../templates/controls';
 import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
 import { AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe } from '../types';
 import EnhancedElement from '../elements/EnhancedElement';
-export declare class DotLottiePlayer extends EnhancedElement {
+export default class DotLottiePlayer extends EnhancedElement {
     constructor();
     connectedCallback(): Promise<void>;
     disconnectedCallback(): void;
@@ -94,7 +95,7 @@ export declare class DotLottiePlayer extends EnhancedElement {
     private _handleScroll;
     protected _handleSeekChange({ target }: Event): void;
     private _isLottie;
-    getLottie(): AnimationItem | null;
+    getLottie(): Lottie.AnimationItem | null;
     play(): Promise<void>;
     pause(): void;
     stop(): void;

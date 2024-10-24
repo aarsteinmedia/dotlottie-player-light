@@ -130,7 +130,7 @@ export const aspectRatio = (objectFit: string) => {
    * @param { string } str Filename, URL or path
    */
   getExt = (str?: string) => {
-    if (!str || !hasExt(str)) {
+    if (typeof str !== 'string' || !str || !hasExt(str)) {
       return
     }
     return str.split('.').pop()?.toLowerCase()
