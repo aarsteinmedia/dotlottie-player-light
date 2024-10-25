@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [4.0.0] - 24-10-2014
+
+### Changed
+
+- Refactored type import
+  - BREAKING CHANGE:
+    ```diff
+    - import type { DotLottiePlayer } from '@aarsteinmedia/dotlottie-player'
+    + import type DotLottiePlayer from '@aarsteinmedia/dotlottie-player'
+    ```
+- Rich data moved from attributes to properties
+  - BREAKING CHANGE:
+  ```diff
+  <dotlottie-player
+    id="find-me"
+    - multianimationsettings="[{ autoplay: true, loop: false }]"
+    - segment="[0, 1]"
+  ></dotlottie-player>
+
+  + const player = document.querySelector('#find-me')
+  + player?.setMultianimationsettings([{ autoplay: true, loop: false }])
+  + player?.setSegment([0, 1])
+  ```
+
+- Moved `./dist/custom-elements.json` to `./custom-elements.json`
+
 ## [3.1.5] - 21-10-2014
 
 ### Changed
@@ -49,6 +75,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[4.0.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.0
 [3.1.5]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/3.1.5
 [3.1.4]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/3.1.4
 [3.1.3]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/3.1.3

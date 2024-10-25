@@ -39,14 +39,10 @@ export default class DotLottiePlayer extends EnhancedElement {
     get loop(): Loop;
     set mode(value: PlayMode);
     get mode(): PlayMode;
-    set multiAnimationSettings(value: AnimationSettings[]);
-    get multiAnimationSettings(): AnimationSettings[];
     set objectfit(value: string);
     get objectfit(): string;
     set preserveAspectRatio(value: PreserveAspectRatio | null);
     get preserveAspectRatio(): PreserveAspectRatio | null;
-    set segment(value: AnimationSegment | undefined);
-    get segment(): AnimationSegment | undefined;
     set simple(value: boolean);
     get simple(): boolean;
     set speed(value: number);
@@ -55,6 +51,12 @@ export default class DotLottiePlayer extends EnhancedElement {
     get src(): string | null;
     set subframe(value: Subframe);
     get subframe(): Subframe;
+    private _multiAnimationSettings;
+    getMultiAnimationSettings(): AnimationSettings[];
+    setMultiAnimationSettings(settings: AnimationSettings[]): void;
+    private _segment?;
+    setSegment(segment: AnimationSegment): void;
+    getSegment(): Lottie.AnimationSegment | undefined;
     protected _container: Element | null;
     playerState?: PlayerState;
     protected _isSettingsOpen: boolean;
@@ -109,7 +111,6 @@ export default class DotLottiePlayer extends EnhancedElement {
     setSpeed(value?: number): void;
     setDirection(value: AnimationDirection): void;
     setLoop(value: boolean): void;
-    setMultiAnimationSettings(settings: AnimationSettings[]): void;
     togglePlay(): void | Promise<void>;
     toggleLoop(): void;
     toggleBoomerang(): void;

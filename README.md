@@ -66,11 +66,26 @@ In the example below the first animation will play once, and then the next anima
 
 ```xml
 <dotlottie-player
+  id="find-me"
   subframe=""
   src="/path/to/combined-animations.lottie"
-  multiAnimationSettings='[{"autplay": true}, {"autoplay": true, "loop": true}]'
 >
 </dotlottie-player>  
+```
+
+```javascript
+  const player = document.querySelector('#find-me')
+  player?.setMultiAnimationSettings(
+    [
+      {
+        autplay: true
+      },
+      {
+        autoplay: true,
+        loop: true
+      }
+    ]
+  )
 ```
 
 ### Angular
@@ -231,36 +246,36 @@ export default defineNuxtPlugin(({ vueApp }) => {
 | `hover`                   | Whether to play on mouse hover                                                                                                | `boolean`                                | `false`           |
 | `loop`                    | Whether to loop animation                                                                                                     | `boolean`                                | `false`           |
 | `mode`                    | Play mode                                                                                                                     | `normal` \| `bounce`                     | `normal`          |
-| `multiAnimationSettings`  | Control playback of multianimation files. Write a valid JSON array (as string) with properties like `autoplay`, `loop`, etc.  | `object[]`                               | `undefined`       |
 | `objectfit`               | Resizing of animation in container                                                                                            | `contain` \| `cover` \| `fill` \| `none` | `contain`         |
-| `segment`                 | Play only part of an animation. E. g. from frame 10 to frame 60 would be `[10, 60]`                                           | `[number, number]`                       | `undefined`       |
 | `speed`                   | Animation speed                                                                                                               | `number`                                 | `1`               |
 | `src` _(required)_        | URL to LottieJSON or dotLottie                                                                                                | `string`                                 | `undefined`       |
 | `subframe`                | When enabled this can help to reduce flicker on some animations, especially on Safari and iOS devices.                        | `boolean`                                | `false`           |
 
 ## Methods
 
-| Method                                    | Function
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `destroy() => void`                       | Nullify animation and remove element from the DOM.                                                        |
-| `getLottie() => AnimationItem \| null`    | Returns the lottie-web instance used in the component                                                     |
-| `load(src: string) => void`               | Load animation by URL or JSON object                                                                      |
-| `next() => void`                          | Next animation (if several in file)                                                                       |
-| `pause() => void`                         | Pause                                                                                                     |
-| `prev() => void`                          | Previous animation (if several in file)                                                                   |
-| `play() => void`                          | Play                                                                                                      |
-| `reload() => void`                        | Reload                                                                                                    |
-| `seek(value: number \| string) => void`   | Go to frame. Can be a number or a percentage string (e. g. 50%).                                          |
-| `setCount(value: number) => void`         | Dynamically set number of loops                                                                           |
-| `setDirection(value: 1 \| -1) => void`    | Set Direction                                                                                             |
-| `setLooping(value: boolean) => void`      | Set Looping                                                                                               |
-| `setSpeed(value?: number) => void`        | Set Speed                                                                                                 |
-| `setSubframe(value: boolean) => void`     | Set subframe                                                                                              |
-| `snapshot() => string`                    | Snapshot the current frame as SVG. Triggers a download in the browser.                                    |
-| `stop() => void`                          | Stop                                                                                                      |
-| `toggleBoomerang() => void`               | Toggle between `bounce` and `normal`                                                                      |
-| `toggleLooping() => void`                 | Toggle looping                                                                                            |
-| `togglePlay() => void`                    | Toggle play                                                                                               |
+| Method                                                          | Function
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `destroy() => void`                                             | Nullify animation and remove element from the DOM.                                                        |
+| `getLottie() => AnimationItem \| null`                          | Returns the lottie-web instance used in the component                                                     |
+| `load(src: string) => void`                                     | Load animation by URL or JSON object                                                                      |
+| `next() => void`                                                | Next animation (if several in file)                                                                       |
+| `pause() => void`                                               | Pause                                                                                                     |
+| `prev() => void`                                                | Previous animation (if several in file)                                                                   |
+| `play() => void`                                                | Play                                                                                                      |
+| `reload() => void`                                              | Reload                                                                                                    |
+| `seek(value: number \| string) => void`                         | Go to frame. Can be a number or a percentage string (e. g. 50%).                                          |
+| `setCount(value: number) => void`                               | Dynamically set number of loops                                                                           |
+| `setDirection(value: 1 \| -1) => void`                          | Set Direction                                                                                             |
+| `setLooping(value: boolean) => void`                            | Set Looping                                                                                               |
+| `setMultiAnimationSettings(value: AnimationSettings[]) => void` | Set Multi-animation settings                                                                              |
+| `setSegment(value: AnimationSegment) => void`                   | Play only part of an animation. E. g. from frame 10 to frame 60 would be `[10, 60]`                       |
+| `setSpeed(value?: number) => void`                              | Set Speed                                                                                                 |
+| `setSubframe(value: boolean) => void`                           | Set subframe                                                                                              |
+| `snapshot() => string`                                          | Snapshot the current frame as SVG. Triggers a download in the browser.                                    |
+| `stop() => void`                                                | Stop                                                                                                      |
+| `toggleBoomerang() => void`                                     | Toggle between `bounce` and `normal`                                                                      |
+| `toggleLooping() => void`                                       | Toggle looping                                                                                            |
+| `togglePlay() => void`                                          | Toggle play                                                                                               |
 
 ## Events
 
