@@ -14,7 +14,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     protected _render: typeof renderPlayer;
     protected _renderControls: typeof renderControls;
     static get observedAttributes(): string[];
-    attributeChangedCallback(name: string, _oldValue: unknown, value: string): void;
+    attributeChangedCallback(name: string, _oldValue: unknown, value: string): Promise<void>;
     static get observedProperties(): string[];
     propertyChangedCallback(name: string, _oldValue: unknown, value: unknown): void;
     set animateOnScroll(value: AnimateOnScroll);

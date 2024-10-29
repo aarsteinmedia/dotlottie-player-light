@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
-## [4.0.0] - 24-10-2014
+## [4.0.1] - 29-10-2024
+
+### Changed
+
+- Added attribute listener to `src`
+
+## [4.0.0] - 24-10-2024
 
 ### Changed
 
@@ -33,19 +39,19 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 
 - Moved `./dist/custom-elements.json` to `./custom-elements.json`
 
-## [3.1.5] - 21-10-2014
+## [3.1.5] - 21-10-2024
 
 ### Changed
 
 - Fixed typo, causing some types not to be resolved
 
-## [3.1.4] - 20-10-2014
+## [3.1.4] - 20-10-2024
 
 ### Changed
 
 - Extended browser support
 
-## [3.1.3] - 16-10-2014
+## [3.1.3] - 16-10-2024
 
 ### Added
 
