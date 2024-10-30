@@ -5,11 +5,13 @@ import type DotLottiePlayer from '@/elements/DotLottiePlayer'
  * Render Controls
  */
 export default function renderControls(this: DotLottiePlayer) {
-  if (!this.controls) {
-    return
-  }
   const slot = this.shadow.querySelector('slot[name=controls]')
   if (!slot) {
+    return
+  }
+
+  if (!this.controls) {
+    slot.innerHTML = ''
     return
   }
 
