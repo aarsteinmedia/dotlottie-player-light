@@ -104,8 +104,8 @@ export const aspectRatio = (objectFit: string) => {
             isDotLottie: false,
             manifest: null,
           }
-        } catch (e) {
-          console.warn(e)
+        } catch (_e) {
+          /* empty */
         }
       }
 

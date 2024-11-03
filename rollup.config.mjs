@@ -105,10 +105,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   unpkg = {
     input,
     onwarn(warning, warn) {
-      if (
-        warning.code === 'THIS_IS_UNDEFINED' ||
-        warning.code === 'CIRCULAR_DEPENDENCY'
-      ) {
+      if (warning.code === 'CIRCULAR_DEPENDENCY') {
         return
       }
       warn(warning)
@@ -129,10 +126,7 @@ const isProd = process.env.NODE_ENV !== 'development',
     external: ['lottie-web/build/player/lottie_light.js', 'fflate'],
     input,
     onwarn(warning, warn) {
-      if (
-        warning.code === 'THIS_IS_UNDEFINED' ||
-        warning.code === 'CIRCULAR_DEPENDENCY'
-      ) {
+      if (warning.code === 'CIRCULAR_DEPENDENCY') {
         return
       }
       warn(warning)
