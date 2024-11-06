@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [4.0.7] - 03-11-2024
+
+### Changed
+
+- Made it possible to set certain properties before lottie instance is loaded
+
 ## [4.0.6] - 03-11-2024
 
 ### Changed
@@ -105,6 +111,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[4.0.7]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.7
 [4.0.6]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.6
 [4.0.3]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.3
 [4.0.2]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.2

@@ -591,9 +591,6 @@ export default class DotLottiePlayer extends EnhancedElement {
    * @param { AnimationSettings[] } settings
    */
   public setMultiAnimationSettings(settings: AnimationSettings[]) {
-    if (!this._lottieInstance) {
-      return
-    }
     this._multiAnimationSettings = settings
   }
 
@@ -607,9 +604,6 @@ export default class DotLottiePlayer extends EnhancedElement {
    * @param { AnimationSegment } settings
    */
   public setSegment(segment: AnimationSegment) {
-    if (!this._lottieInstance) {
-      return
-    }
     this._segment = segment
   }
 
@@ -1355,9 +1349,6 @@ export default class DotLottiePlayer extends EnhancedElement {
    * Dynamically set count for loops
    */
   public setCount(value: number) {
-    if (!this._lottieInstance) {
-      return
-    }
     this.count = value
   }
 
