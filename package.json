@@ -105,7 +105,7 @@
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-serve": "^1.1.1",
-    "rollup-plugin-summary": "^2.0.1",
+    "rollup-plugin-summary": "^3.0.0",
     "rollup-plugin-swc3": "^0.12.1",
     "rollup-plugin-typescript-paths": "^1.5.0",
     "sass": "^1.80.6",
