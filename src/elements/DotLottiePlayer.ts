@@ -414,7 +414,7 @@ export default class DotLottiePlayer extends EnhancedElement {
   }
 
   get direction() {
-    const val = Number(this.getAttribute(''))
+    const val = Number(this.getAttribute('direction'))
     if (val === -1) {
       return val
     }
