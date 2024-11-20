@@ -1,6 +1,6 @@
 import { fixture } from '@open-wc/testing'
-import { expect } from '@esm-bundle/chai'
-import DotLottiePlayer from '@/elements/DotLottiePlayer'
+import { assert, expect } from '@esm-bundle/chai'
+import DotLottiePlayer from '@/index'
 
 describe('DotLottiePlayer Component', () => {
   let el: DotLottiePlayer
@@ -8,16 +8,15 @@ describe('DotLottiePlayer Component', () => {
   beforeEach(async () => {
     el = await fixture<DotLottiePlayer>(
       /* HTML */ `<dotlottie-player
-        animateOnScroll
-        autoplay
         controls
-        subframe
         src="./assets/dev.lottie"
       ></dotlottie-player>`
     )
+
+    assert(el instanceof DotLottiePlayer)
   })
 
-  it('passes the a11y audit', async () => {
+  it('Passes the a11y audit', async () => {
     await expect(el).shadowDom.to.be.accessible()
   })
 })
