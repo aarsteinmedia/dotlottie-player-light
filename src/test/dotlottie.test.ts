@@ -16,6 +16,10 @@ describe('DotLottiePlayer Component', () => {
     assert(el instanceof DotLottiePlayer)
   })
 
+  it('Is loaded', () => {
+    assert('load' in el)
+  })
+
   it('Passes the a11y audit', async () => {
     await expect(el).shadowDom.to.be.accessible()
   })
