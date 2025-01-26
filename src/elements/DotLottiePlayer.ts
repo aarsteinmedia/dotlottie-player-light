@@ -35,7 +35,7 @@ import {
   Subframe,
 } from '@/types'
 import EnhancedElement from '@/elements/EnhancedElement'
-import styles from '@/styles.scss'
+import styles from '@/styles.css'
 
 /**
  * dotLottie Player Web Component
