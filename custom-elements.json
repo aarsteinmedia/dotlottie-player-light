@@ -8,12 +8,16 @@
       "declarations": [
         {
           "kind": "variable",
-          "name": "tV"
+          "name": "tz",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"\""
         },
         {
           "kind": "class",
           "description": "",
-          "name": "tV",
+          "name": "tz",
           "members": [
             {
               "kind": "field",
@@ -384,15 +388,12 @@
             {
               "kind": "field",
               "name": "_render",
-              "default": "{}",
-              "type": {
-                "text": "object"
-              }
+              "default": "tT"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "tL"
+              "default": "tF"
             },
             {
               "kind": "field",
@@ -472,7 +473,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:tr.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:ta.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
@@ -619,7 +620,7 @@
             }
           ],
           "superclass": {
-            "name": "tO",
+            "name": "tL",
             "module": "dist/index.js"
           },
           "tagName": "dotlottie-player",
@@ -631,7 +632,7 @@
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
-            "name": "tV",
+            "name": "tz",
             "module": "dist/index.js"
           }
         }
