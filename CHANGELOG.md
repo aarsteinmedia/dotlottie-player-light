@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.0.0] - 25-02-2025
+
+### Changed
+
+- Added TypeScript compatibility with React 19 JSX
+- BREAKING CHANGE:
+  - Dropped support for CommonJS
+  - Set ESM Module as main script, and moved IIFE to unpkg-folder
+
 ## [4.0.12] - 05-02-2025
 
 ### Changed
@@ -143,6 +152,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[5.0.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.0.0
 [4.0.12]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.12
 [4.0.11]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.11
 [4.0.10]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.10

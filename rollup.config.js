@@ -91,6 +91,7 @@ const isProd = process.env.NODE_ENV !== 'development',
    * @type {import('rollup').RollupOptions}
    * */
   types = {
+    external: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     input: path.resolve(__dirname, 'types', 'index.d.ts'),
     output: {
       file: pkg.types,
@@ -102,6 +103,7 @@ const isProd = process.env.NODE_ENV !== 'development',
    * @type {import('rollup').RollupOptions}
    * */
   unpkg = {
+    external: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     input,
     onwarn(warning, warn) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
@@ -122,7 +124,13 @@ const isProd = process.env.NODE_ENV !== 'development',
    * @type {import('rollup').RollupOptions}
    * */
   module = {
-    external: ['lottie-web/build/player/lottie_light.js', 'fflate'],
+    external: [
+      'react',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+      'lottie-web/build/player/lottie_light.js',
+      'fflate',
+    ],
     input,
     onwarn(warning, warn) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
@@ -130,18 +138,12 @@ const isProd = process.env.NODE_ENV !== 'development',
       }
       warn(warning)
     },
-    output: [
-      {
-        exports: 'named',
-        file: pkg.module,
-        format: 'esm',
-      },
-      {
-        exports: 'named',
-        file: pkg.exports['.'].require,
-        format: 'cjs',
-      },
-    ],
+    output: {
+      exports: 'named',
+      file: pkg.main,
+      format: 'esm',
+    },
+
     plugins: modulePlugins(),
   }
 
