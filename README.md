@@ -38,14 +38,14 @@ import '@aarsteinmedia/dotlottie-player-light'
 
 ## Usage
 
-Add the element `dotlottie-player` to your markup and point `src` to a Lottie animation of your choice. If you're working in SSR environments like Next.js or Nuxt.js, it might be a good idea to set reflective booleans (like `autoplay`, `controls` and `loop`) to an empty string instead of `true` – to mimic how modern browsers treats these values in markup, as opposed to how Node.js treats them. This way you avoid hydration errors.
+Add the element `dotlottie-player` to your markup and point `src` to a Lottie animation of your choice.
 
 ```xml
 <dotlottie-player
-  autoplay=""
-  controls=""
-  subframe=""
-  loop=""
+  autoplay
+  controls
+  subframe
+  loop
   src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
   style="width: 320px; margin: auto;"
 >
@@ -67,7 +67,7 @@ In the example below the first animation will play once, and then the next anima
 ```xml
 <dotlottie-player
   id="find-me"
-  subframe=""
+  subframe
   src="/path/to/combined-animations.lottie"
 >
 </dotlottie-player>  
@@ -120,10 +120,10 @@ function App() {
     <dotlottie-player
       class="your-class-name"
       src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
-      autoplay=""
-      controls=""
-      subframe=""
-      loop=""
+      autoplay
+      controls
+      subframe
+      loop
       style={{
         width: '320px',
         margin: 'auto'
@@ -225,10 +225,10 @@ export default defineNuxtPlugin(({ vueApp }) => {
 <template>
   <dotlottie-player
     src="https://storage.googleapis.com/aarsteinmedia/am.lottie"
-    autoplay=""
-    controls=""
-    subframe=""
-    loop=""
+    autoplay
+    controls
+    subframe
+    loop
     style="width: 320px; margin: auto;"
   />
 </template>
