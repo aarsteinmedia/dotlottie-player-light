@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player-light",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Light Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player-light",
   "type": "module",
   "exports": {
@@ -50,8 +50,7 @@
     "lint:pkg:fix": "npmPkgJsonLint . --fix"
   },
   "dependencies": {
-    "fflate": "^0.8.2",
-    "lottie-web": "^5.12.2"
+    "fflate": "^0.8.2"
   },
   "peerDependencies": {
     "@types/react": ">= 16.0.0"
@@ -86,6 +85,7 @@
     "eslint-plugin-perfectionist": "^4.9.0",
     "eslint-plugin-prettier": "^5.2.3",
     "globals": "^16.0.0",
+    "lottie-web": "^5.12.2",
     "mocha": "^11.1.0",
     "npm-package-json-lint": "^8.0.0",
     "npm-package-json-lint-config-default": "^7.0.1",

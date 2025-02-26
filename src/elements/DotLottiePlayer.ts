@@ -1,11 +1,5 @@
 // import Lottie from 'lottie-web/build/player/esm/lottie_light.min.js'
-import type {
-  AnimationConfig,
-  AnimationDirection,
-  AnimationItem,
-  AnimationSegment,
-} from 'lottie-web'
-import Lottie from '@/lottie_light.js'
+import Lottie from '@/lottie.js'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
 import {
@@ -26,6 +20,9 @@ import {
   PreserveAspectRatio,
 } from '@/enums'
 import {
+  AnimationConfiguration,
+  AnimationDirection,
+  AnimationItem,
   AnimationSettings,
   AnimateOnScroll,
   Autoplay,
@@ -34,6 +31,7 @@ import {
   LottieJSON,
   LottieManifest,
   Subframe,
+  Vector2,
 } from '@/types'
 import EnhancedElement from '@/elements/EnhancedElement'
 import styles from '@/styles.css'
@@ -600,13 +598,13 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Segment
    */
-  private _segment?: AnimationSegment
+  private _segment?: Vector2
 
   /**
    * Set playback segment
    * @param { AnimationSegment } settings
    */
-  public setSegment(segment: AnimationSegment) {
+  public setSegment(segment: Vector2) {
     this._segment = segment
   }
 
@@ -733,7 +731,7 @@ export default class DotLottiePlayer extends EnhancedElement {
       initialSegment = undefined
     }
 
-    const options: AnimationConfig<'svg'> = {
+    const options: AnimationConfiguration<'svg'> = {
       autoplay,
       container: this._container,
       initialSegment,

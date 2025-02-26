@@ -41,3 +41,24 @@ export declare enum PreserveAspectRatio {
     None = "xMinYMin slice",
     Initial = "none"
 }
+export declare enum ShapeType {
+    Rectangle = "rc",
+    Ellipse = "el",
+    PolygonStar = "sr",
+    Path = "sh",
+    Fill = "fl",
+    Stroke = "st",
+    GradientFill = "gf",
+    GradientStroke = "gs",
+    NoStyle = "no",
+    Group = "gr",
+    Transform = "tr",
+    RoundedCorners = "rd",
+    PuckerBloat = "pb",
+    Merge = "mm",
+    Twist = "tw",
+    OffsetPath = "op",
+    ZigZag = "zz",
+    Repeater = "rp",
+    Trim = "tm"
+}

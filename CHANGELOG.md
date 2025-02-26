@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.1.0] - 26-02-2025
+
+### Changed
+
+- Dropped lottie-web as dependency in favour of an self-augmented version that will work better with Node SSR
+
 ## [5.0.0] - 25-02-2025
 
 ### Changed
@@ -152,6 +158,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[5.1.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.1.0
 [5.0.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.0.0
 [4.0.12]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.12
 [4.0.11]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/4.0.11

@@ -11,9 +11,6 @@ importers:
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
-      lottie-web:
-        specifier: ^5.12.2
-        version: 5.12.2
     devDependencies:
       '@custom-elements-manifest/analyzer':
         specifier: ^0.10.4
@@ -102,6 +99,9 @@ importers:
       globals:
         specifier: ^16.0.0
         version: 16.0.0
+      lottie-web:
+        specifier: ^5.12.2
+        version: 5.12.2
       mocha:
         specifier: ^11.1.0
         version: 11.1.0

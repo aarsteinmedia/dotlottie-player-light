@@ -1,8 +1,7 @@
-import type { AnimationDirection, AnimationItem, AnimationSegment } from 'lottie-web';
 import renderPlayer from '../templates/player';
 import renderControls from '../templates/controls';
 import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
-import { AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe } from '../types';
+import { AnimationDirection, AnimationItem, AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe, Vector2 } from '../types';
 import EnhancedElement from '../elements/EnhancedElement';
 export default class DotLottiePlayer extends EnhancedElement {
     constructor();
@@ -54,8 +53,8 @@ export default class DotLottiePlayer extends EnhancedElement {
     getMultiAnimationSettings(): AnimationSettings[];
     setMultiAnimationSettings(settings: AnimationSettings[]): void;
     private _segment?;
-    setSegment(segment: AnimationSegment): void;
-    getSegment(): AnimationSegment | undefined;
+    setSegment(segment: Vector2): void;
+    getSegment(): Vector2 | undefined;
     protected _container: Element | null;
     playerState?: PlayerState;
     protected _isSettingsOpen: boolean;

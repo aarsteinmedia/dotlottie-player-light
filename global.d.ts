@@ -8,7 +8,7 @@ declare module 'lottie-web/build/player/esm/lottie_light.min.js' {
   export default Lottie
 }
 
-declare module '@/lottie_light.js' {
+declare module '@/lottie.js' {
   import Lottie from 'lottie-web/build/player/lottie_light'
   export default Lottie
 }

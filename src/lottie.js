@@ -1,3 +1,7 @@
+/**
+ * Augmented version of lottie-web
+ */
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { isServer } from './utils'
 const svgNS = 'http://www.w3.org/2000/svg'
@@ -197,9 +201,9 @@ const createTypedArray = (function () {
 /**
  *
  */
-function createSizedArray(len) {
+function createSizedArray(length) {
   // eslint-disable-next-line prefer-spread
-  return Array.apply(null, { length: len })
+  return Array.apply(null, { length })
 }
 
 let subframeEnabled = true
@@ -314,8 +318,8 @@ function bmRnd(value) {
  */
 function styleDiv(element) {
   element.style.position = 'absolute'
-  element.style.top = 0
-  element.style.left = 0
+  element.style.top = '0'
+  element.style.left = '0'
   element.style.display = 'block'
   element.style.transformOrigin = '0 0'
   element.style.webkitTransformOrigin = '0 0'
@@ -323,7 +327,7 @@ function styleDiv(element) {
   element.style.webkitBackfaceVisibility = 'visible'
   element.style.transformStyle = 'preserve-3d'
   element.style.webkitTransformStyle = 'preserve-3d'
-  element.style.mozTransformStyle = 'preserve-3d'
+  // element.style.mozTransformStyle = 'preserve-3d'
 }
 
 /**
@@ -852,39 +856,38 @@ const dataManager = (function () {
               animationData.chars &&
               !checkVersion(minimumVersion, animationData.v)
             ) {
-              let i
-              const len = animationData.chars.length
-              for (i = 0; i < len; i += 1) {
-                const charData = animationData.chars[i]
-                if (charData.data && charData.data.shapes) {
-                  completeShapes(charData.data.shapes)
-                  charData.data.ip = 0
-                  charData.data.op = 99999
-                  charData.data.st = 0
-                  charData.data.sr = 1
-                  charData.data.ks = {
-                    a: { a: 0, k: [0, 0] },
-                    o: { a: 0, k: 100 },
-                    p: { a: 0, k: [0, 0] },
-                    r: { a: 0, k: 0 },
-                    s: { a: 0, k: [100, 100] },
-                  }
-                  if (!animationData.chars[i].t) {
-                    charData.data.shapes.push({
-                      ty: 'no',
-                    })
-                    charData.data.shapes[0].it.push({
-                      a: { a: 0, k: [0, 0] },
-                      o: { a: 0, k: 100 },
-                      p: { a: 0, k: [0, 0] },
-                      r: { a: 0, k: 0 },
-                      s: { a: 0, k: [100, 100] },
-                      sa: { a: 0, k: 0 },
-                      sk: { a: 0, k: 0 },
-                      ty: 'tr',
-                    })
-                  }
+              for (const char of animationData.chars) {
+                if (!char.data || !char.data.shapes) {
+                  continue
                 }
+                completeShapes(char.data.shapes)
+                char.data.ip = 0
+                char.data.op = 99999
+                char.data.st = 0
+                char.data.sr = 1
+                char.data.ks = {
+                  a: { a: 0, k: [0, 0] },
+                  o: { a: 0, k: 100 },
+                  p: { a: 0, k: [0, 0] },
+                  r: { a: 0, k: 0 },
+                  s: { a: 0, k: [100, 100] },
+                }
+                if (char.t) {
+                  continue
+                }
+                char.data.shapes.push({
+                  ty: 'no',
+                })
+                char.data.shapes[0].it.push({
+                  a: { a: 0, k: [0, 0] },
+                  o: { a: 0, k: 100 },
+                  p: { a: 0, k: [0, 0] },
+                  r: { a: 0, k: 0 },
+                  s: { a: 0, k: [100, 100] },
+                  sa: { a: 0, k: 0 },
+                  sk: { a: 0, k: 0 },
+                  ty: 'tr',
+                })
               }
             }
           }
@@ -922,11 +925,9 @@ const dataManager = (function () {
            *
            */
           function iterateLayers(layers) {
-            let i
-            const len = layers.length
-            for (i = 0; i < len; i += 1) {
-              if (layers[i].ty === 5) {
-                updateTextLayer(layers[i])
+            for (const layer of layers) {
+              if (layer.ty === 5) {
+                updateTextLayer(layer)
               }
             }
           }
@@ -935,11 +936,9 @@ const dataManager = (function () {
             if (checkVersion(minimumVersion, animationData.v)) {
               iterateLayers(animationData.layers)
               if (animationData.assets) {
-                let i
-                const len = animationData.assets.length
-                for (i = 0; i < len; i += 1) {
-                  if (animationData.assets[i].layers) {
-                    iterateLayers(animationData.assets[i].layers)
+                for (const asset of animationData.assets) {
+                  if (asset.layers) {
+                    iterateLayers(asset.layers)
                   }
                 }
               }
@@ -1277,12 +1276,13 @@ const dataManager = (function () {
    *
    */
   function loadAnimation(path, onComplete, onError) {
+    if (isServer()) {
+      return
+    }
     setupWorker()
     const processId = createProcess(onComplete, onError)
     workerInstance.postMessage({
-      fullPath: isServer()
-        ? path
-        : window.location.origin + window.location.pathname,
+      fullPath: window.location.origin + window.location.pathname,
       id: processId,
       path: path,
       type: 'loadAnimation',
@@ -1327,6 +1327,9 @@ const dataManager = (function () {
 
 const ImagePreloader = (function () {
   const proxyImage = (function () {
+    if (isServer()) {
+      return null
+    }
     const canvas = createTag('canvas')
     canvas.width = 1
     canvas.height = 1
@@ -1384,6 +1387,9 @@ const ImagePreloader = (function () {
    *
    */
   function testImageLoaded(img) {
+    if (isServer()) {
+      return
+    }
     let _count = 0
     const intervalId = setInterval(
       function () {
@@ -2781,7 +2787,7 @@ const animationManager = (function () {
       }
       registerAnimation(animElement, animationData)
     }
-    if (standalone && lenAnims === 0) {
+    if (standalone && lenAnims === 0 && !isServer()) {
       if (!renderer) {
         renderer = 'svg'
       }
@@ -7324,7 +7330,7 @@ PolynomialBezier.prototype.boundingBox = function () {
 }
 
 function intersectData(bez, t1, t2) {
-  var box = bez.boundingBox()
+  const box = bez.boundingBox()
   return {
     cx: box.cx,
     cy: box.cy,
@@ -7337,7 +7343,7 @@ function intersectData(bez, t1, t2) {
   }
 }
 function splitData(data) {
-  var split = data.bez.split(0.5)
+  const split = data.bez.split(0.5)
   return [
     intersectData(split[0], data.t1, data.t),
     intersectData(split[1], data.t, data.t2),
@@ -11025,16 +11031,16 @@ SVGShapeElement.prototype.setShapesAsAnimated = function (shapes) {
 
 SVGShapeElement.prototype.createStyleElement = function (data, level) {
   // TODO: prevent drawing of hidden styles
-  var elementData
-  var styleOb = new SVGStyleData(data, level)
+  let elementData
+  const styleOb = new SVGStyleData(data, level)
 
-  var pathElement = styleOb.pElem
+  const pathElement = styleOb.pElem
   if (data.ty === 'st') {
     elementData = new SVGStrokeStyleData(this, data, styleOb)
   } else if (data.ty === 'fl') {
     elementData = new SVGFillStyleData(this, data, styleOb)
   } else if (data.ty === 'gf' || data.ty === 'gs') {
-    var GradientConstructor =
+    const GradientConstructor =
       data.ty === 'gf' ? SVGGradientFillStyleData : SVGGradientStrokeStyleData
     elementData = new GradientConstructor(this, data, styleOb)
     this.globalData.defs.appendChild(elementData.gf)
@@ -11078,7 +11084,7 @@ SVGShapeElement.prototype.createStyleElement = function (data, level) {
 }
 
 SVGShapeElement.prototype.createGroupElement = function (data) {
-  var elementData = new ShapeGroupData()
+  const elementData = new ShapeGroupData()
   if (data.ln) {
     elementData.gr.setAttribute('id', data.ln)
   }
@@ -11092,12 +11098,12 @@ SVGShapeElement.prototype.createGroupElement = function (data) {
 }
 
 SVGShapeElement.prototype.createTransformElement = function (data, container) {
-  var transformProperty = TransformPropertyFactory.getTransformProperty(
+  const transformProperty = TransformPropertyFactory.getTransformProperty(
     this,
     data,
     this
   )
-  var elementData = new SVGTransformData(
+  const elementData = new SVGTransformData(
     transformProperty,
     transformProperty.o,
     container
@@ -11111,7 +11117,7 @@ SVGShapeElement.prototype.createShapeElement = function (
   ownTransformers,
   level
 ) {
-  var ty = 4
+  let ty = 4
   if (data.ty === 'rc') {
     ty = 5
   } else if (data.ty === 'el') {
@@ -11119,8 +11125,8 @@ SVGShapeElement.prototype.createShapeElement = function (
   } else if (data.ty === 'sr') {
     ty = 7
   }
-  var shapeProperty = ShapePropertyFactory.getShapeProp(this, data, ty, this)
-  var elementData = new SVGShapeData(ownTransformers, level, shapeProperty)
+  const shapeProperty = ShapePropertyFactory.getShapeProp(this, data, ty, this)
+  const elementData = new SVGShapeData(ownTransformers, level, shapeProperty)
   this.shapes.push(elementData)
   this.addShapeToModifiers(elementData)
   this.addToAnimatedContents(data, elementData)
@@ -11128,8 +11134,8 @@ SVGShapeElement.prototype.createShapeElement = function (
 }
 
 SVGShapeElement.prototype.addToAnimatedContents = function (data, element) {
-  var i = 0
-  var len = this.animatedContents.length
+  let i = 0
+  const len = this.animatedContents.length
   while (i < len) {
     if (this.animatedContents[i].element === element) {
       return
@@ -11144,21 +11150,16 @@ SVGShapeElement.prototype.addToAnimatedContents = function (data, element) {
 }
 
 SVGShapeElement.prototype.setElementStyles = function (elementData) {
-  var arr = elementData.styles
-  var j
-  var jLen = this.stylesList.length
-  for (j = 0; j < jLen; j += 1) {
-    if (!this.stylesList[j].closed) {
-      arr.push(this.stylesList[j])
+  for (const styleList of this.stylesList) {
+    if (!styleList.closed) {
+      elementData.styles.push(styleList)
     }
   }
 }
 
 SVGShapeElement.prototype.reloadShapes = function () {
   this._isFirstFrame = true
-  var i
-  var len = this.itemsData.length
-  for (i = 0; i < len; i += 1) {
+  for (let i = 0; i < this.itemsData.length; i += 1) {
     this.prevViewData[i] = this.itemsData[i]
   }
   this.searchShapes(
@@ -11171,9 +11172,8 @@ SVGShapeElement.prototype.reloadShapes = function () {
     true
   )
   this.filterUniqueShapes()
-  len = this.dynamicProperties.length
-  for (i = 0; i < len; i += 1) {
-    this.dynamicProperties[i].getValue()
+  for (const dynamicProperty of this.dynamicProperties) {
+    dynamicProperty.getValue()
   }
   this.renderModifiers()
 }
@@ -11187,17 +11187,13 @@ SVGShapeElement.prototype.searchShapes = function (
   transformers,
   render
 ) {
-  var ownTransformers = [].concat(transformers)
-  var i
-  var len = arr.length - 1
-  var j
-  var jLen
-  var ownStyles = []
-  var ownModifiers = []
-  var currentTransform
-  var modifier
-  var processedPos
-  for (i = len; i >= 0; i -= 1) {
+  const ownTransformers = [].concat(transformers)
+  const ownStyles = []
+  const ownModifiers = []
+  let currentTransform
+  let modifier
+  let processedPos
+  for (let i = arr.length - 1; i >= 0; i -= 1) {
     processedPos = this.searchProcessedElement(arr[i])
     if (!processedPos) {
       arr[i]._render = render
@@ -11226,8 +11222,7 @@ SVGShapeElement.prototype.searchShapes = function (
       if (!processedPos) {
         itemsData[i] = this.createGroupElement(arr[i])
       } else {
-        jLen = itemsData[i].it.length
-        for (j = 0; j < jLen; j += 1) {
+        for (let j = 0; j < itemsData[i].it.length; j += 1) {
           itemsData[i].prevViewData[j] = itemsData[i].it[j]
         }
       }
@@ -11294,42 +11289,36 @@ SVGShapeElement.prototype.searchShapes = function (
     }
     this.addProcessedElement(arr[i], i + 1)
   }
-  len = ownStyles.length
-  for (i = 0; i < len; i += 1) {
-    ownStyles[i].closed = true
+  for (const ownStyle of ownStyles) {
+    ownStyle.closed = true
   }
-  len = ownModifiers.length
-  for (i = 0; i < len; i += 1) {
-    ownModifiers[i].closed = true
+  for (const ownModifier of ownModifiers) {
+    ownModifier.closed = true
   }
 }
 
 SVGShapeElement.prototype.renderInnerContent = function () {
   this.renderModifiers()
-  var i
-  var len = this.stylesList.length
-  for (i = 0; i < len; i += 1) {
-    this.stylesList[i].reset()
+  for (const stylesList of this.stylesList) {
+    stylesList.reset()
   }
   this.renderShape()
-  for (i = 0; i < len; i += 1) {
-    if (this.stylesList[i]._mdf || this._isFirstFrame) {
-      if (this.stylesList[i].msElem) {
-        this.stylesList[i].msElem.setAttribute('d', this.stylesList[i].d)
+  for (const stylesList of this.stylesList) {
+    if (stylesList._mdf || this._isFirstFrame) {
+      if (stylesList.msElem) {
+        stylesList.msElem.setAttribute('d', stylesList.d)
         // Adding M0 0 fixes same mask bug on all browsers
-        this.stylesList[i].d = 'M0 0' + this.stylesList[i].d
+        stylesList.d = `M0 0${stylesList.d}`
       }
-      this.stylesList[i].pElem.setAttribute('d', this.stylesList[i].d || 'M0 0')
+      stylesList.pElem.setAttribute('d', stylesList.d || 'M0 0')
     }
   }
 }
 
 SVGShapeElement.prototype.renderShape = function () {
-  var i
-  var len = this.animatedContents.length
-  var animatedContent
-  for (i = 0; i < len; i += 1) {
-    animatedContent = this.animatedContents[i]
+  let animatedContent
+  for (const content of this.animatedContents) {
+    animatedContent = content
     if (
       (this._isFirstFrame || animatedContent.element._isAnimated) &&
       animatedContent.data !== true
@@ -11473,7 +11462,7 @@ function TextProperty(elem, data) {
 TextProperty.prototype.defaultBoxWidth = [0, 0]
 
 TextProperty.prototype.copyData = function (obj, data) {
-  for (var s in data) {
+  for (const s in data) {
     if (Object.prototype.hasOwnProperty.call(data, s)) {
       obj[s] = data[s]
     }
@@ -13832,7 +13821,7 @@ class SVGRenderer {
     this.renderedFrame = -1
     this.svgElement = createNS('svg')
     let ariaLabel = ''
-    if (config && config.title) {
+    if (config?.title) {
       const titleElement = createNS('title')
       const titleId = createElementID()
       titleElement.setAttribute('id', titleId)
@@ -13840,7 +13829,7 @@ class SVGRenderer {
       this.svgElement.appendChild(titleElement)
       ariaLabel += titleId
     }
-    if (config && config.description) {
+    if (config?.description) {
       const descElement = createNS('desc')
       const descId = createElementID()
       descElement.setAttribute('id', descId)
@@ -13857,24 +13846,24 @@ class SVGRenderer {
     this.svgElement.appendChild(maskElement)
     this.layerElement = maskElement
     this.renderConfig = {
-      preserveAspectRatio: (config && config.preserveAspectRatio) || 'xMidYMid meet',
-      imagePreserveAspectRatio: (config && config.imagePreserveAspectRatio) || 'xMidYMid slice',
-      contentVisibility: (config && config.contentVisibility) || 'visible',
-      progressiveLoad: (config && config.progressiveLoad) || false,
-      hideOnTransparent: !(config && config.hideOnTransparent === false),
-      viewBoxOnly: (config && config.viewBoxOnly) || false,
-      viewBoxSize: (config && config.viewBoxSize) || false,
-      className: (config && config.className) || '',
-      id: (config && config.id) || '',
-      focusable: config && config.focusable,
+      preserveAspectRatio: (config?.preserveAspectRatio) || 'xMidYMid meet',
+      imagePreserveAspectRatio: (config?.imagePreserveAspectRatio) || 'xMidYMid slice',
+      contentVisibility: (config?.contentVisibility) || 'visible',
+      progressiveLoad: (config?.progressiveLoad) || false,
+      hideOnTransparent: !(config?.hideOnTransparent === false),
+      viewBoxOnly: (config?.viewBoxOnly) || false,
+      viewBoxSize: (config?.viewBoxSize) || false,
+      className: (config?.className) || '',
+      id: (config?.id) || '',
+      focusable: config?.focusable,
       filterSize: {
-        width: (config && config.filterSize && config.filterSize.width) || '100%',
-        height: (config && config.filterSize && config.filterSize.height) || '100%',
-        x: (config && config.filterSize && config.filterSize.x) || '0%',
-        y: (config && config.filterSize && config.filterSize.y) || '0%',
+        width: (config?.filterSize && config.filterSize.width) || '100%',
+        height: (config?.filterSize && config.filterSize.height) || '100%',
+        x: (config?.filterSize && config.filterSize.x) || '0%',
+        y: (config?.filterSize && config.filterSize.y) || '0%',
       },
-      width: config && config.width,
-      height: config && config.height,
+      width: config?.width,
+      height: config?.height,
       runExpressions: !config || config.runExpressions === undefined || config.runExpressions,
     }
 

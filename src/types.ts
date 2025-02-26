@@ -1,11 +1,190 @@
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
-import type { AnimationDirection } from 'lottie-web'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 import type { PlayMode, ShapeType } from '@/enums'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 
+export type AnimationDirection = 1 | -1
+export type AnimationEventName =
+  | 'drawnFrame'
+  | 'enterFrame'
+  | 'loopComplete'
+  | 'complete'
+  | 'segmentStart'
+  | 'destroy'
+  | 'config_ready'
+  | 'data_ready'
+  | 'DOMLoaded'
+  | 'error'
+  | 'data_failed'
+  | 'loaded_images'
+export type AnimationEventCallback<T = unknown> = (args: T) => void
+
+export interface AnimationEvents {
+  DOMLoaded: undefined
+  complete: BMCompleteEvent
+  config_ready: undefined
+  data_failed: undefined
+  data_ready: undefined
+  destroy: BMDestroyEvent
+  drawnFrame: BMEnterFrameEvent
+  enterFrame: BMEnterFrameEvent
+  error: undefined
+  loaded_images: undefined
+  loopComplete: BMCompleteLoopEvent
+  segmentStart: BMSegmentStartEvent
+}
+
+export interface BMCompleteLoopEvent {
+  currentLoop: number
+  direction: number
+  totalLoops: number
+  type: 'loopComplete'
+}
+
+export interface BMSegmentStartEvent {
+  firstFrame: number
+  totalFrames: number
+  type: 'segmentStart'
+}
+
+export interface BMCompleteEvent {
+  direction: number
+  type: 'complete'
+}
+
+export interface BMDestroyEvent {
+  type: 'destroy'
+}
+
+export interface BMEnterFrameEvent {
+  /** The current time in frames. */
+  currentTime: number
+  direction: number
+  /** The total number of frames. */
+  totalTime: number
+  type: 'enterFrame'
+}
+
+export type AnimationItem = {
+  name: string
+  isLoaded: boolean
+  currentFrame: number
+  currentRawFrame: number
+  firstFrame: number
+  totalFrames: number
+  frameRate: number
+  frameMult: number
+  playSpeed: number
+  playDirection: number
+  playCount: number
+  isPaused: boolean
+  autoplay: boolean
+  loop: boolean | number
+  renderer: RendererType
+  animationID: string
+  assetsPath: string
+  timeCompleted: number
+  segmentPos: number
+  isSubframeEnabled: boolean
+  segments: Vector2 | Vector2[]
+  play(name?: string): void
+  stop(name?: string): void
+  togglePause(name?: string): void
+  destroy(name?: string): void
+  pause(name?: string): void
+  goToAndStop(value: number | string, isFrame?: boolean, name?: string): void
+  goToAndPlay(value: number | string, isFrame?: boolean, name?: string): void
+  includeLayers(data: unknown): void
+  setSegment(init: number, end: number): void
+  resetSegments(forceFlag: boolean): void
+  hide(): void
+  show(): void
+  resize(): void
+  setSpeed(speed: number): void
+  setDirection(direction: AnimationDirection): void
+  setLoop(isLooping: boolean): void
+  playSegments(segments: Vector2 | Vector2[], forceFlag?: boolean): void
+  setSubframe(useSubFrames: boolean): void
+  getDuration(inFrames?: boolean): number
+  triggerEvent<T extends AnimationEventName>(
+    name: T,
+    args: AnimationEvents[T]
+  ): void
+  addEventListener<T extends AnimationEventName>(
+    name: T,
+    callback: AnimationEventCallback<AnimationEvents[T]>
+  ): () => void
+  removeEventListener<T extends AnimationEventName>(
+    name: T,
+    callback?: AnimationEventCallback<AnimationEvents[T]>
+  ): void
+}
+
+export type RendererType = 'svg' | 'canvas' | 'html'
+
+export type BaseRendererConfig = {
+  imagePreserveAspectRatio?: string
+  className?: string
+}
+
+export type FilterSizeConfig = {
+  width: string
+  height: string
+  x: string
+  y: string
+}
+
+export type SVGRendererConfig = BaseRendererConfig & {
+  title?: string
+  description?: string
+  preserveAspectRatio?: string
+  progressiveLoad?: boolean
+  hideOnTransparent?: boolean
+  viewBoxOnly?: boolean
+  viewBoxSize?: string
+  focusable?: boolean
+  filterSize?: FilterSizeConfig
+}
+
+export type CanvasRendererConfig = BaseRendererConfig & {
+  clearCanvas?: boolean
+  context?: CanvasRenderingContext2D
+  progressiveLoad?: boolean
+  preserveAspectRatio?: string
+}
+
+export type HTMLRendererConfig = BaseRendererConfig & {
+  hideOnTransparent?: boolean
+}
+
+export type AnimationConfiguration<T extends RendererType = 'svg'> = {
+  container: Element
+  renderer?: T
+  loop?: boolean | number
+  autoplay?: boolean
+  initialSegment?: Vector2
+  name?: string
+  assetsPath?: string
+  rendererSettings?: {
+    svg: SVGRendererConfig
+    canvas: CanvasRendererConfig
+    html: HTMLRendererConfig
+  }[T]
+  audioFactory?(assetPath: string): {
+    play(): void
+    seek(): void
+    playing(): void
+    rate(): void
+    setVolume(): void
+  }
+}
+
 export type ArrayType = 'float32' | 'int16' | 'int32' | 'uint8' | 'uint8c'
+
+export interface GenericClass {
+  prototype: Record<string, unknown>
+}
 
 type BoolInt = 0 | 1
 
