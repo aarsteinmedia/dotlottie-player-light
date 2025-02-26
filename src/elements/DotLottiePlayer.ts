@@ -1,10 +1,11 @@
-import * as Lottie from 'lottie-web/build/player/lottie_light.js'
+// import Lottie from 'lottie-web/build/player/esm/lottie_light.min.js'
 import type {
   AnimationConfig,
   AnimationDirection,
   AnimationItem,
   AnimationSegment,
 } from 'lottie-web'
+import Lottie from '@/lottie_light.js'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
 import {
@@ -840,10 +841,12 @@ export default class DotLottiePlayer extends EnhancedElement {
       }
 
       // Initialize lottie player and load animation
-      this._lottieInstance = Lottie.default.loadAnimation({
-        ...this._getOptions(),
-        animationData: animations[this._currentAnimation],
-      })
+      if (!isServer()) {
+        this._lottieInstance = Lottie.loadAnimation({
+          ...this._getOptions(),
+          animationData: animations[this._currentAnimation],
+        })
+      }
     } catch (err) {
       this._errorMessage = handleErrors(err).message
 
@@ -866,9 +869,9 @@ export default class DotLottiePlayer extends EnhancedElement {
         1
 
     // Set initial playback speed and direction
-    this._lottieInstance.setSpeed(speed)
-    this._lottieInstance.setDirection(direction)
-    this._lottieInstance.setSubframe(!!this.subframe)
+    this._lottieInstance?.setSpeed(speed)
+    this._lottieInstance?.setDirection(direction)
+    this._lottieInstance?.setSubframe(!!this.subframe)
 
     // Start playing if autoplay is enabled
     if (this.autoplay || this.animateOnScroll) {
@@ -1525,15 +1528,15 @@ export default class DotLottiePlayer extends EnhancedElement {
 
     try {
       // Clear previous animation
-      if (this._lottieInstance) {
-        this._lottieInstance.destroy()
-      }
+      this._lottieInstance?.destroy()
 
       // Re-initialize lottie player
-      this._lottieInstance = Lottie.default.loadAnimation({
-        ...this._getOptions(),
-        animationData: this._animations[this._currentAnimation],
-      })
+      if (!isServer()) {
+        this._lottieInstance = Lottie.loadAnimation({
+          ...this._getOptions(),
+          animationData: this._animations[this._currentAnimation],
+        })
+      }
 
       // Check play mode for current animation
       if (this._multiAnimationSettings?.[this._currentAnimation]?.mode) {

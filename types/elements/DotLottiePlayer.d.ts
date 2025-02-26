@@ -1,5 +1,4 @@
-import * as Lottie from 'lottie-web/build/player/lottie_light.js';
-import type { AnimationDirection, AnimationSegment } from 'lottie-web';
+import type { AnimationDirection, AnimationItem, AnimationSegment } from 'lottie-web';
 import renderPlayer from '../templates/player';
 import renderControls from '../templates/controls';
 import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
@@ -56,7 +55,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     setMultiAnimationSettings(settings: AnimationSettings[]): void;
     private _segment?;
     setSegment(segment: AnimationSegment): void;
-    getSegment(): Lottie.AnimationSegment | undefined;
+    getSegment(): AnimationSegment | undefined;
     protected _container: Element | null;
     playerState?: PlayerState;
     protected _isSettingsOpen: boolean;
@@ -97,7 +96,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     private _handleScroll;
     protected _handleSeekChange({ target }: Event): void;
     private _isLottie;
-    getLottie(): Lottie.AnimationItem | null;
+    getLottie(): AnimationItem | null;
     play(): Promise<void>;
     pause(): void;
     stop(): void;

@@ -707,17 +707,9 @@
       "path": "dist/unpkg/index.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "tz",
-          "type": {
-            "text": "string"
-          },
-          "default": "\"\""
-        },
-        {
           "kind": "class",
           "description": "",
-          "name": "tz",
+          "name": "sM",
           "members": [
             {
               "kind": "field",
@@ -1088,12 +1080,12 @@
             {
               "kind": "field",
               "name": "_render",
-              "default": "tT"
+              "default": "sA"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "tF"
+              "default": "sx"
             },
             {
               "kind": "field",
@@ -1173,7 +1165,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:ta.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:tc.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
@@ -1320,7 +1312,7 @@
             }
           ],
           "superclass": {
-            "name": "tL",
+            "name": "sC",
             "module": "dist/unpkg/index.js"
           },
           "tagName": "dotlottie-player",
@@ -1332,7 +1324,7 @@
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
-            "name": "tz",
+            "name": "sM",
             "module": "dist/unpkg/index.js"
           }
         }

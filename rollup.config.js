@@ -103,7 +103,6 @@ const isProd = process.env.NODE_ENV !== 'development',
    * @type {import('rollup').RollupOptions}
    * */
   unpkg = {
-    external: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     input,
     onwarn(warning, warn) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
@@ -128,7 +127,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       'react',
       'react/jsx-runtime',
       'react/jsx-dev-runtime',
-      'lottie-web/build/player/lottie_light.js',
+      'lottie-web/build/player/esm/lottie_light.min.js',
       'fflate',
     ],
     input,
