@@ -27,6 +27,10 @@ const isProd = process.env.NODE_ENV !== 'development',
       )
     ).toString()
   ),
+  injectVersion = () => ({
+    name: 'inject-version',
+    renderChunk: (code) => code.replace('[[BM_VERSION]]', pkg.version),
+  }),
   input = path.resolve(__dirname, 'src', 'index.ts'),
   /**
    * @type {import('rollup').RollupOptions.InputPluginOption}
@@ -68,14 +72,18 @@ const isProd = process.env.NODE_ENV !== 'development',
       preferBuiltins,
     }),
     commonjs(),
+    injectVersion(),
     swc(),
   ],
   /**
    * @type {import('rollup').RollupOptions.InputPluginOption}
    * */
-  unpkgPlugins = () => [
-    ...plugins(),
-    isProd && minify(),
+  unpkgPlugins = () => [...plugins(), isProd && minify(), isProd && summary()],
+  /**
+   * @type {import('rollup').RollupOptions.InputPluginOption}
+   * */
+  modulePlugins = () => [
+    ...plugins(true),
     isProd && summary(),
     !isProd &&
       serve({
@@ -83,10 +91,6 @@ const isProd = process.env.NODE_ENV !== 'development',
       }),
     !isProd && livereload(),
   ],
-  /**
-   * @type {import('rollup').RollupOptions.InputPluginOption}
-   * */
-  modulePlugins = () => [...plugins(true), summary()],
   /**
    * @type {import('rollup').RollupOptions}
    * */
@@ -146,4 +150,4 @@ const isProd = process.env.NODE_ENV !== 'development',
     plugins: modulePlugins(),
   }
 
-export default isProd ? [module, types, unpkg] : unpkg
+export default isProd ? [module, types, unpkg] : module

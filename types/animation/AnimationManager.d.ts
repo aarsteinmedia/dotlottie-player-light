@@ -1,0 +1,24 @@
+import type { AnimationConfiguration, AnimationData, AnimationDirection } from '@/types';
+import AnimationItem from '@/animation/AnimationItem';
+import { RendererType } from '@/enums';
+declare const animationManager: {
+    destroy: (animation?: string) => void;
+    freeze: () => void;
+    getRegisteredAnimations: () => AnimationItem[];
+    goToAndStop: (value: number, isFrame?: boolean, animation?: string) => void;
+    loadAnimation: (params: AnimationConfiguration) => AnimationItem;
+    mute: (animation?: string) => void;
+    pause: (animation?: string) => void;
+    play: (animation?: string) => void;
+    registerAnimation: (element: HTMLElement | null, animationData?: AnimationData) => AnimationItem | null;
+    resize: () => void;
+    searchAnimations: (animationData?: AnimationData, standalone?: boolean, rendererFromProps?: RendererType) => void;
+    setDirection: (val: AnimationDirection, animation?: string) => void;
+    setSpeed: (val: number, animation?: string) => void;
+    setVolume: (val: number, animation?: string) => void;
+    stop: (animation?: string) => void;
+    togglePause: (animation?: string) => void;
+    unfreeze: () => void;
+    unmute: (animation?: string) => void;
+};
+export default animationManager;

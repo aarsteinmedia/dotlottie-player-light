@@ -10,7 +10,7 @@ import ESLintPluginPrettier from 'eslint-plugin-prettier'
 
 export default TSESlint.config(
   {
-    ignores: ['**/node_modules', 'types/**/*', 'dist/**/*', 'dev/**/*'],
+    ignores: ['**/node_modules', 'types/**/*', 'dist/**/*', 'dev/**/*', '_*'],
   },
   ESLint.configs.recommended,
   ...TSESlint.configs.recommended,
@@ -37,6 +37,7 @@ export default TSESlint.config(
     rules: {
       ...ESLintPluginPrettier.configs?.recommended.rules,
       ...ESLintConfigPrettier.rules,
+      '@typescript-eslint/no-explicit-any': 'warn', // It's explicit, so I meant it
       '@typescript-eslint/no-namespace': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',

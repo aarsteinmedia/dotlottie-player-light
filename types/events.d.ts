@@ -1,0 +1,10 @@
+import { BMEvent } from '@/types';
+export declare function BMEnterFrameEvent(this: BMEvent, type: string, currentTime: number, totalTime: number, frameMultiplier: number): void;
+export declare function BMCompleteEvent(this: BMEvent, type: string, frameMultiplier: number): void;
+export declare function BMCompleteLoopEvent(this: BMEvent, type: string, totalLoops: number, currentLoop: number, frameMultiplier: number): void;
+export declare function BMSegmentStartEvent(this: BMEvent, type: string, firstFrame: number, totalFrames: number): void;
+export declare function BMDestroyEvent(this: BMEvent, type: string, target: BMEvent): void;
+export declare function BMRenderFrameErrorEvent(this: BMEvent, nativeError: unknown, currentTime: number): void;
+export declare function BMConfigErrorEvent(this: BMEvent, nativeError: unknown): void;
+export declare function BMAnimationConfigErrorEvent(this: BMEvent, type: string, nativeError: unknown): void;
+export declare function BaseEvent(): void;

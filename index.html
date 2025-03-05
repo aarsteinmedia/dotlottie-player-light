@@ -25,6 +25,8 @@
       Sit amet venenatis urna cursus eget. Id volutpat lacus laoreet non curabitur. Convallis tellus id interdum velit.
       Consectetur lorem donec massa sapien faucibus. Pharetra sit amet aliquam id diam maecenas ultricies mi. Tincidunt augue
       interdum velit euismod in pellentesque.</p>
+
+      <dotlottie-player autoplay loop src="/assets/blackCat.lottie"></dotlottie-player>
       
       <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque. Libero id faucibus nisl tincidunt eget nullam non
       nisi. Sodales neque sodales ut etiam sit amet nisl. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper
@@ -40,6 +42,8 @@
       justo donec enim. Eget sit amet tellus cras adipiscing. Diam sit amet nisl suscipit adipiscing bibendum est. Ultricies
       tristique nulla aliquet enim tortor. Adipiscing enim eu turpis egestas.</p>
       
+      <dotlottie-player background="#FFF" autoplay loop src="/assets/ux.lottie"></dotlottie-player>
+
       <p>Est sit amet facilisis magna etiam tempor orci. Sed enim ut sem viverra aliquet. Erat velit scelerisque in dictum. Vel
       elit scelerisque mauris pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes. Lobortis scelerisque
       fermentum dui faucibus in ornare quam viverra orci. Pellentesque nec nam aliquam sem. Ultrices mi tempus imperdiet
@@ -132,7 +136,7 @@
       enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra diam sit
       amet nisl suscipit adipiscing bibendum.</p>
 
-      <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player>
+      <!-- <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
 
       <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur vitae.
       Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae. Nulla
@@ -149,7 +153,7 @@
       venenatis. Ante in nibh mauris cursus mattis molestie a. Egestas dui id ornare arcu odio ut sem nulla pharetra.
       Adipiscing elit ut aliquam purus.</p>
 
-      <dotlottie-player autoplay loop subframe src="./assets/blackCat.lottie"></dotlottie-player>
+      <!-- <dotlottie-player autoplay loop subframe src="./assets/blackCat.lottie"></dotlottie-player> -->
 
       <p>Ornare arcu dui vivamus arcu felis. Id ornare arcu odio ut sem nulla pharetra. Vitae proin sagittis nisl rhoncus mattis.
       Pellentesque eu tincidunt tortor aliquam nulla facilisi. Sed enim ut sem viverra aliquet eget sit amet. Blandit turpis
@@ -160,9 +164,17 @@
       enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra diam sit
       amet nisl suscipit adipiscing bibendum.</p>
 
-      <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player>
+      <!-- <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
     </div>
-    <script src="./dist/unpkg/index.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "fflate": "./node_modules/fflate/esm/browser.js",
+                "lottie-web/": "./node_modules/lottie-web/"
+            }
+        }
+    </script>
+    <script type="module" src="./dist/index.js"></script>
     <!-- <script>
       const player = document.querySelector('dotlottie-player')
 

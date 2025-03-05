@@ -1,0 +1,11 @@
+import { ElementInterface, PropertyHandler, Shape, ShapeGroupHandler, ShapeHandler, StyleHandler, StyleObject, Transformer } from '@/types';
+export declare function ShapeGroupData(this: ShapeGroupHandler): void;
+export declare function SVGShapeData(this: ShapeHandler, transformers: ShapeHandler['transformers'], level: number, shape: Shape['ks']): void;
+export declare function SVGTransformData(this: ShapeHandler, mProps: Transformer['mProps'], op: Transformer['op'], container: unknown): void;
+export declare function SVGStyleData(this: StyleHandler, data: Shape, level: number): void;
+export declare function ProcessedElement(this: PropertyHandler, element: ElementInterface, position: number): void;
+export declare function SVGGradientFillStyleData(this: any, elem: any, data: any, styleOb: any): void;
+export declare function SVGGradientStrokeStyleData(this: any, elem: ElementInterface, data: Shape, styleOb: StyleObject): void;
+export declare function SVGStrokeStyleData(this: any, elem: ElementInterface, data: Shape, styleOb: StyleObject): void;
+export declare function SVGFillStyleData(this: any, elem: ElementInterface, data: Shape, styleOb: StyleObject): void;
+export declare function SVGNoStyleData(this: any, elem: ElementInterface, _data: Shape, styleOb: StyleObject): void;

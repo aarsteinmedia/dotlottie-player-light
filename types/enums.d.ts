@@ -60,5 +60,23 @@ export declare enum ShapeType {
     OffsetPath = "op",
     ZigZag = "zz",
     Repeater = "rp",
-    Trim = "tm"
+    Trim = "tm",
+    Unknown = "ms"
 }
+export declare enum RendererType {
+    SVG = "svg",
+    HTML = "html",
+    Canvas = "canvas"
+}
+export declare enum ArrayType {
+    Float32 = "float32",
+    Int16 = "int16",
+    Int32 = "int32",
+    Uint8 = "uint8",
+    Uint8c = "uint8c"
+}
+export declare const lineCapEnum: {
+    [key: number]: string;
+}, lineJoinEnum: {
+    [key: number]: string;
+};

@@ -1,8 +1,9 @@
-import renderPlayer from '../templates/player';
-import renderControls from '../templates/controls';
-import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
-import { AnimationDirection, AnimationItem, AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe, Vector2 } from '../types';
-import EnhancedElement from '../elements/EnhancedElement';
+import renderPlayer from '@/templates/player';
+import renderControls from '@/templates/controls';
+import { PlayMode, PlayerState, PreserveAspectRatio } from '@/enums';
+import type { AnimationDirection, AnimationSettings, AnimateOnScroll, Autoplay, Controls, Loop, LottieManifest, Subframe, Vector2 } from '@/types';
+import EnhancedElement from '@/elements/helpers/EnhancedElement';
+import type AnimationItem from '@/animation/AnimationItem';
 export default class DotLottiePlayer extends EnhancedElement {
     constructor();
     connectedCallback(): Promise<void>;
@@ -55,7 +56,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     private _segment?;
     setSegment(segment: Vector2): void;
     getSegment(): Vector2 | undefined;
-    protected _container: Element | null;
+    protected _container: HTMLElement | null;
     playerState?: PlayerState;
     protected _isSettingsOpen: boolean;
     protected _seeker: number;

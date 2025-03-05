@@ -1,5 +1,4 @@
-// import Lottie from 'lottie-web/build/player/esm/lottie_light.min.js'
-import Lottie from '@/lottie.js'
+import Lottie from '@/Lottie'
 import renderPlayer from '@/templates/player'
 import renderControls from '@/templates/controls'
 import {
@@ -18,23 +17,24 @@ import {
   PlayerEvents,
   PlayerState,
   PreserveAspectRatio,
+  RendererType,
 } from '@/enums'
-import {
+import type {
   AnimationConfiguration,
+  AnimationData,
   AnimationDirection,
-  AnimationItem,
   AnimationSettings,
   AnimateOnScroll,
   Autoplay,
   Controls,
   Loop,
-  LottieJSON,
   LottieManifest,
   Subframe,
   Vector2,
 } from '@/types'
-import EnhancedElement from '@/elements/EnhancedElement'
+import EnhancedElement from '@/elements/helpers/EnhancedElement'
 import styles from '@/styles.css'
+import type AnimationItem from '@/animation/AnimationItem'
 
 /**
  * dotLottie Player Web Component
@@ -619,7 +619,7 @@ export default class DotLottiePlayer extends EnhancedElement {
   /**
    * Animation Container
    */
-  protected _container: Element | null = null
+  protected _container: HTMLElement | null = null
 
   /**
    * @state
@@ -651,7 +651,7 @@ export default class DotLottiePlayer extends EnhancedElement {
    * so that next-button will show up
    * on load, if controls are visible
    */
-  private _animations!: LottieJSON[]
+  private _animations!: AnimationData[]
 
   private _intersectionObserver?: IntersectionObserver
   private _lottieInstance: AnimationItem | null = null
@@ -731,12 +731,12 @@ export default class DotLottiePlayer extends EnhancedElement {
       initialSegment = undefined
     }
 
-    const options: AnimationConfiguration<'svg'> = {
+    const options: AnimationConfiguration<RendererType.SVG> = {
       autoplay,
       container: this._container,
       initialSegment,
       loop,
-      renderer: 'svg',
+      renderer: RendererType.SVG,
       rendererSettings: {
         hideOnTransparent: true,
         imagePreserveAspectRatio: preserveAspectRatio,
@@ -761,8 +761,9 @@ export default class DotLottiePlayer extends EnhancedElement {
     }
 
     this._intersectionObserver = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting || document.hidden) {
+      const { length } = entries
+      for (let i = 0; i < length; i++) {
+        if (!entries[i].isIntersecting || document.hidden) {
           if (this.playerState === PlayerState.Playing) {
             this._freeze()
           }
@@ -1173,7 +1174,7 @@ export default class DotLottiePlayer extends EnhancedElement {
     )
   }
 
-  private _isLottie(json: LottieJSON) {
+  private _isLottie(json: AnimationData) {
     const mandatory: string[] = ['v', 'ip', 'op', 'layers', 'fr', 'w', 'h']
 
     return mandatory.every((field: string) =>

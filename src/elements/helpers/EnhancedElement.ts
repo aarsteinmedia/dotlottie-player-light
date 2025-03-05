@@ -30,21 +30,22 @@ export default class EnhancedElement extends HTMLElement {
       'propertyChangedCallback' in this &&
       typeof this.propertyChangedCallback === 'function'
     ) {
-      for (const propName of observedProperties as (keyof this)[]) {
-        const initialValue = this[propName],
-          CACHED_VALUE = Symbol(propName as string)
+      const { length } = observedProperties
+      for (let i = 0; i < length; i++) {
+        const initialValue = this[observedProperties[i] as keyof this],
+          CACHED_VALUE = Symbol(observedProperties[i] as string)
 
         // @ts-ignore
         this[CACHED_VALUE] = initialValue
 
-        Object.defineProperty(this, propName, {
+        Object.defineProperty(this, observedProperties[i], {
           get() {
             return this[CACHED_VALUE]
           },
           set(value) {
             const oldValue = this[CACHED_VALUE]
             this[CACHED_VALUE] = value
-            this.propertyChangedCallback(propName, oldValue, value)
+            this.propertyChangedCallback(observedProperties[i], oldValue, value)
           },
         })
         if (typeof initialValue !== 'undefined') {
@@ -52,7 +53,9 @@ export default class EnhancedElement extends HTMLElement {
             UPDATE_ON_CONNECTED in this &&
             Array.isArray(this[UPDATE_ON_CONNECTED])
           ) {
-            ;(this[UPDATE_ON_CONNECTED] as (keyof this)[]).push(propName)
+            ;(this[UPDATE_ON_CONNECTED] as (keyof this)[]).push(
+              observedProperties[i]
+            )
           }
         }
       }
@@ -67,7 +70,8 @@ export default class EnhancedElement extends HTMLElement {
     ) {
       arr = this[UPDATE_ON_CONNECTED]
     }
-    for (const propName of arr) {
+    const { length } = arr
+    for (let i = 0; i < length; i++) {
       if (
         !('propertyChangedCallback' in this) ||
         typeof this.propertyChangedCallback !== 'function'
@@ -75,11 +79,11 @@ export default class EnhancedElement extends HTMLElement {
         continue
       }
 
-      if (propName in this) {
+      if (arr[i] in this) {
         this.propertyChangedCallback(
-          propName,
+          arr[i],
           undefined,
-          this[propName as keyof this]
+          this[arr[i] as keyof this]
         )
       }
     }
