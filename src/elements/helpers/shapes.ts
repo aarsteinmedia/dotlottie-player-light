@@ -310,6 +310,12 @@ export function SVGStrokeStyleData(
 extendPrototype([DynamicPropertyContainer], SVGStrokeStyleData)
 
 export class _SVGStrokeStyleData extends DynamicPropertyContainer {
+  c: ItemData
+  d: DashProperty
+  getValue: () => void
+  o: ItemData
+  style: StyleObject
+  w: ItemData
   constructor(elem: ElementInterface, data: Shape, styleObj: StyleObject) {
     super()
     this.initDynamicPropertyContainer(elem)
@@ -321,15 +327,13 @@ export class _SVGStrokeStyleData extends DynamicPropertyContainer {
     this.style = styleObj
     this._isAnimated = !!this._isAnimated
   }
-  getValue: () => void
-  style: StyleObject
-  o: ItemData
-  c: ItemData
-  w: ItemData
-  d: DashProperty
 }
 
 export class SVGFillStyleData extends DynamicPropertyContainer {
+  c: ItemData
+  getValue: () => void
+  o: ItemData
+  style: StyleObject
   constructor(elem: ElementInterface, data: Shape, styleObj: StyleObject) {
     super()
     this.initDynamicPropertyContainer(elem)
@@ -338,19 +342,15 @@ export class SVGFillStyleData extends DynamicPropertyContainer {
     this.c = PropertyFactory.getProp(elem, data.c, 1, 255, this)
     this.style = styleObj
   }
-  getValue: () => void
-  style: StyleObject
-  o: ItemData
-  c: ItemData
 }
 
 export class SVGNoStyleData extends DynamicPropertyContainer {
+  getValue: () => void
+  style: StyleObject
   constructor(elem: ElementInterface, _data: Shape, styleObj: StyleObject) {
     super()
     this.initDynamicPropertyContainer(elem)
     this.getValue = this.iterateDynamicProperties
     this.style = styleObj
   }
-  getValue: () => void
-  style: StyleObject
 }

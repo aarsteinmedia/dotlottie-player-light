@@ -195,6 +195,7 @@ export default TSESlint.config(
       'no-with': 'error',
       'one-var-declaration-per-line': 'error',
       'operator-assignment': ['error', 'always'],
+      'perfectionist/sort-classes': 'warn',
       'perfectionist/sort-imports': 'warn',
       'perfectionist/sort-interfaces': 'warn',
       'perfectionist/sort-objects': 'warn',
