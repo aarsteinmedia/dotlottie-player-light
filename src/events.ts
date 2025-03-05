@@ -1,5 +1,6 @@
+import type AnimationItem from '@/animation/AnimationItem'
+
 import { AnimationEventName, BMEvent } from '@/types'
-import type AnimationItem from './animation/AnimationItem'
 
 /**
  *

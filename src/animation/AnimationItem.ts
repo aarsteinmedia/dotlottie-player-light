@@ -1,27 +1,3 @@
-import { markerParser } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
-import dataManager from '@/dataManager'
-import { RendererType } from '@/enums'
-import {
-  createElementID,
-  getExpressionsPlugin,
-  getRegisteredRenderer,
-  getRenderer,
-  getSubframeEnabled,
-} from '@/utils/getterSetter'
-import ImagePreloader from '@/utils/ImagePreloader'
-import AudioController from '@/utils/audio/AudioController'
-import ProjectInterface from '@/utils/helpers/ProjectInterface'
-import {
-  BaseEvent,
-  BMCompleteEvent,
-  BMCompleteLoopEvent,
-  BMConfigErrorEvent,
-  BMDestroyEvent,
-  BMEnterFrameEvent,
-  BMRenderFrameErrorEvent,
-  BMSegmentStartEvent,
-} from '@/events'
 import type {
   AnimationConfiguration,
   AnimationData,
@@ -33,6 +9,31 @@ import type {
   MarkerData,
   Vector2,
 } from '@/types'
+
+import dataManager from '@/dataManager'
+import { RendererType } from '@/enums'
+import {
+  BaseEvent,
+  BMCompleteEvent,
+  BMCompleteLoopEvent,
+  BMConfigErrorEvent,
+  BMDestroyEvent,
+  BMEnterFrameEvent,
+  BMRenderFrameErrorEvent,
+  BMSegmentStartEvent,
+} from '@/events'
+import { markerParser } from '@/utils'
+import AudioController from '@/utils/audio/AudioController'
+import { extendPrototype } from '@/utils/functionExtensions'
+import {
+  createElementID,
+  getExpressionsPlugin,
+  getRegisteredRenderer,
+  getRenderer,
+  getSubframeEnabled,
+} from '@/utils/getterSetter'
+import ProjectInterface from '@/utils/helpers/ProjectInterface'
+import ImagePreloader from '@/utils/ImagePreloader'
 
 export default class AnimationItem {
   constructor() {

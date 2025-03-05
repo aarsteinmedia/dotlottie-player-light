@@ -1,10 +1,11 @@
 import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
-import PropertyFactory from '@/utils/PropertyFactory'
+
+import ICompElement from '@/elements/CompElement'
+import SVGBaseElement from '@/elements/svg/SVGBaseElement'
+import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
-import SVGRendererBase from '@/renderers/SVGRendererBase'
-import SVGBaseElement from '@/elements/svg/SVGBaseElement'
-import ICompElement from '@/elements/CompElement'
+import PropertyFactory from '@/utils/PropertyFactory'
 /**
  *
  */

@@ -1,4 +1,5 @@
 import type { Vector3 } from '@/types'
+
 import Matrix from '@/utils/Matrix'
 import TransformPropertyFactory from '@/utils/TransformProperty'
 

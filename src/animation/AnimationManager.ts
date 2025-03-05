@@ -3,9 +3,10 @@ import type {
   AnimationData,
   AnimationDirection,
 } from '@/types'
-import { createTag, isServer } from '@/utils'
+
 import AnimationItem from '@/animation/AnimationItem'
 import { RendererType } from '@/enums'
+import { createTag, isServer } from '@/utils'
 
 const animationManager = (() => {
   const registeredAnimations: {

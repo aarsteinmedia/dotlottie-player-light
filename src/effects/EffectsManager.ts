@@ -1,6 +1,5 @@
 import type { Effect } from '@/types'
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import { extendPrototype } from '@/utils/functionExtensions'
+
 import {
   AngleEffect,
   CheckboxEffect,
@@ -11,6 +10,8 @@ import {
   PointEffect,
   SliderEffect,
 } from '@/effects'
+import { extendPrototype } from '@/utils/functionExtensions'
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
 /**
  *

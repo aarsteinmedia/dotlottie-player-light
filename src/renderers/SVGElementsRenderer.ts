@@ -6,6 +6,7 @@ import type {
   ShapeHandler,
   StyleData,
 } from '@/types'
+
 import { ShapeType } from '@/enums'
 import { buildShapeString } from '@/utils'
 import Matrix from '@/utils/Matrix'

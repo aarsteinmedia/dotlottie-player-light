@@ -1,9 +1,10 @@
+import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+
+import RenderableElement from '@/elements/helpers/RenderableElement'
 import {
   createProxyFunction,
   extendPrototype,
 } from '@/utils/functionExtensions'
-import RenderableElement from '@/elements/helpers/RenderableElement'
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
 
 export default function RenderableDOMElement() {}
 

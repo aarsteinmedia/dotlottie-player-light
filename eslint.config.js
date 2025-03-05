@@ -1,12 +1,12 @@
-import TSESlint from 'typescript-eslint'
+import { fixupPluginRules } from '@eslint/compat'
+import ESLint from '@eslint/js'
+import ESLintConfigPrettier from 'eslint-config-prettier'
 import _import from 'eslint-plugin-import'
 import jsdoc from 'eslint-plugin-jsdoc'
 import perfectionist from 'eslint-plugin-perfectionist'
-import { fixupPluginRules } from '@eslint/compat'
-import globals from 'globals'
-import ESLint from '@eslint/js'
-import ESLintConfigPrettier from 'eslint-config-prettier'
 import ESLintPluginPrettier from 'eslint-plugin-prettier'
+import globals from 'globals'
+import TSESlint from 'typescript-eslint'
 
 export default TSESlint.config(
   {
@@ -98,21 +98,21 @@ export default TSESlint.config(
       'import/no-unresolved': 'error',
 
       'import/no-useless-path-segments': 'error',
-      'import/order': [
-        'warn',
-        {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'unknown',
-            'parent',
-            'sibling',
-            'index',
-          ],
-          'newlines-between': 'never',
-        },
-      ],
+      // 'import/order': [
+      //   'warn',
+      //   {
+      //     groups: [
+      //       'builtin',
+      //       'external',
+      //       'internal',
+      //       'unknown',
+      //       'parent',
+      //       'sibling',
+      //       'index',
+      //     ],
+      //     'newlines-between': 'never',
+      //   },
+      // ],
 
       'jsdoc/newline-after-description': 0,
 
@@ -195,6 +195,8 @@ export default TSESlint.config(
       'no-with': 'error',
       'one-var-declaration-per-line': 'error',
       'operator-assignment': ['error', 'always'],
+      'perfectionist/sort-imports': 'warn',
+      'perfectionist/sort-interfaces': 'warn',
       'perfectionist/sort-objects': 'warn',
       'prefer-const': 'error',
 

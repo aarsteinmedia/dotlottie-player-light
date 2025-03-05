@@ -1,4 +1,5 @@
 import type { ElementInterface, ItemData, ShapeData } from '@/types'
+
 import PropertyFactory from '@/utils/PropertyFactory'
 
 /**

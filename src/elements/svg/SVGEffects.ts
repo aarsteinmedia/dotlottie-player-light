@@ -1,9 +1,9 @@
+import { filtersFactory } from '@/utils/filters'
 import {
   createElementID,
   getLocationHref,
   registeredEffects,
 } from '@/utils/getterSetter'
-import { filtersFactory } from '@/utils/filters'
 
 const idPrefix = 'filter_result_'
 
