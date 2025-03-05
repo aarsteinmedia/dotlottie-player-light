@@ -1,4 +1,11 @@
-import type { Shape, ShapeHandler, StyleHandler } from '@/types'
+import type {
+  ItemData,
+  Shape,
+  ShapeData,
+  ShapeDataProperty,
+  ShapeHandler,
+  StyleData,
+} from '@/types'
 import { ShapeType } from '@/enums'
 import { buildShapeString } from '@/utils'
 import Matrix from '@/utils/Matrix'
@@ -38,7 +45,7 @@ const SVGElementsRenderer = (() => {
    *
    */
   function renderContentTransform(
-    _styleData: any,
+    _: any,
     itemData: any,
     isFirstFrame: boolean
   ) {
@@ -62,24 +69,24 @@ const SVGElementsRenderer = (() => {
    *
    */
   function renderPath(
-    _styleData: StyleHandler,
+    styleData: StyleData,
     itemData: ShapeHandler,
     isFirstFrame: boolean
   ) {
-    let j
-    let jLen
+    let j: number
+    let jLen: number
     let pathStringTransformed
     let redraw
     let pathNodes
-    let l
+    let l: number
     const lLen = itemData.styles.length
     const lvl = itemData.lvl
-    let paths
+    let paths: ShapeDataProperty['paths']
     let mat
     let iterations
     let k
     for (l = 0; l < lLen; l += 1) {
-      redraw = itemData.sh._mdf || isFirstFrame
+      redraw = itemData.sh?._mdf || isFirstFrame
       if (itemData.styles[l].lvl < lvl) {
         mat = _matrixHelper.reset()
         iterations = lvl - itemData.styles[l].lvl
@@ -93,7 +100,7 @@ const SVGElementsRenderer = (() => {
           iterations = lvl - itemData.styles[l].lvl
           k = itemData.transformers.length - 1
           while (iterations > 0) {
-            mat.multiply(itemData.transformers[k].mProps.v)
+            mat.multiply(itemData?.transformers[k].mProps.v)
             iterations -= 1
             k -= 1
           }
@@ -105,11 +112,11 @@ const SVGElementsRenderer = (() => {
       jLen = paths._length
       if (redraw) {
         pathStringTransformed = ''
-        for (j = 0; j < jLen; j++) {
+        for (j = 0; j < jLen; j += 1) {
           pathNodes = paths.shapes[j]
           if (pathNodes && pathNodes._length) {
             pathStringTransformed += buildShapeString(
-              pathNodes,
+              pathNodes as unknown as ShapeData,
               pathNodes._length,
               pathNodes.c,
               mat
@@ -128,19 +135,19 @@ const SVGElementsRenderer = (() => {
   /**
    *
    */
-  function renderFill(styleData: any, itemData: any, isFirstFrame: boolean) {
+  function renderFill(_: StyleData, itemData: ItemData, isFirstFrame: boolean) {
     const styleElem = itemData.style
 
     if (itemData.c._mdf || isFirstFrame) {
       styleElem.pElem.setAttribute(
         'fill',
-        `rgb(${Math.floor(itemData.c.v[0])},${Math.floor(
-          itemData.c.v[1]
+        `rgb(${Math.floor(itemData.c.v[0] as number)},${Math.floor(
+          itemData.c.v[1] as number
         )},${itemData.c.v[2]})`
       )
     }
     if (itemData.o._mdf || isFirstFrame) {
-      styleElem.pElem.setAttribute('fill-opacity', itemData.o.v)
+      styleElem.pElem.setAttribute('fill-opacity', itemData.o.v as string)
     }
   }
 
@@ -148,8 +155,8 @@ const SVGElementsRenderer = (() => {
    *
    */
   function renderGradientStroke(
-    styleData: any,
-    itemData: any,
+    styleData: StyleData,
+    itemData: ItemData,
     isFirstFrame: boolean
   ) {
     renderGradient(styleData, itemData, isFirstFrame)
@@ -160,7 +167,7 @@ const SVGElementsRenderer = (() => {
    *
    */
   function renderGradient(
-    styleData: any,
+    styleData: StyleData,
     itemData: any,
     isFirstFrame: boolean
   ) {
@@ -191,12 +198,12 @@ const SVGElementsRenderer = (() => {
       stops = itemData.cst
       const cValues = itemData.g.c
       len = stops.length
-      for (i = 0; i < len; i++) {
+      for (i = 0; i < len; i += 1) {
         stop = stops[i]
-        stop.setAttribute('offset', `${cValues[i * 4]}% `)
+        stop.setAttribute('offset', `${cValues[i * 4]}%`)
         stop.setAttribute(
           'stop-color',
-          `rgb(${cValues[i * 4 + 1]}, ${cValues[i * 4 + 2]}, ${
+          `rgb(${cValues[i * 4 + 1]},${cValues[i * 4 + 2]},${
             cValues[i * 4 + 3]
           })`
         )
@@ -210,10 +217,10 @@ const SVGElementsRenderer = (() => {
         stops = itemData.ost
       }
       len = stops.length
-      for (i = 0; i < len; i++) {
+      for (i = 0; i < len; i += 1) {
         stop = stops[i]
         if (!itemData.g._collapsable) {
-          stop.setAttribute('offset', `${oValues[i * 2]}% `)
+          stop.setAttribute('offset', `${oValues[i * 2]}%`)
         }
         stop.setAttribute('stop-opacity', oValues[i * 2 + 1])
       }
@@ -274,26 +281,26 @@ const SVGElementsRenderer = (() => {
   /**
    *
    */
-  function renderStroke(_: any, itemData: any, isFirstFrame: boolean) {
+  function renderStroke(_: any, itemData: ItemData, isFirstFrame: boolean) {
     const styleElem = itemData.style
     const d = itemData.d
     if (d && (d._mdf || isFirstFrame) && d.dashStr) {
       styleElem.pElem.setAttribute('stroke-dasharray', d.dashStr)
-      styleElem.pElem.setAttribute('stroke-dashoffset', d.dashoffset[0])
+      styleElem.pElem.setAttribute('stroke-dashoffset', `${d.dashoffset[0]}`)
     }
     if (itemData.c && (itemData.c._mdf || isFirstFrame)) {
       styleElem.pElem.setAttribute(
         'stroke',
-        `rgb(${Math.floor(itemData.c.v[0])},${Math.floor(itemData.c.v[1])},${itemData.c.v[2]})`
+        `rgb(${Math.floor(itemData.c.v[0] as number)},${Math.floor(itemData.c.v[1] as number)},${itemData.c.v[2]})`
       )
     }
     if (itemData.o._mdf || isFirstFrame) {
-      styleElem.pElem.setAttribute('stroke-opacity', itemData.o.v)
+      styleElem.pElem.setAttribute('stroke-opacity', itemData.o.v as string)
     }
     if (itemData.w._mdf || isFirstFrame) {
-      styleElem.pElem.setAttribute('stroke-width', itemData.w.v)
+      styleElem.pElem.setAttribute('stroke-width', itemData.w.v as string)
       if (styleElem.msElem) {
-        styleElem.msElem.setAttribute('stroke-width', itemData.w.v)
+        styleElem.msElem.setAttribute('stroke-width', itemData.w.v as string)
       }
     }
   }

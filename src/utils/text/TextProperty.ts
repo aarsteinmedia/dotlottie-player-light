@@ -2,7 +2,7 @@ import type {
   DocumentData,
   ElementInterface,
   Letter,
-  PropertyHandler,
+  ItemData,
   TextData,
 } from '@/types'
 import FontManager, { getFontProperties } from '@/utils/FontManager'
@@ -12,7 +12,7 @@ import { initialDefaultFrame } from '@/utils/getterSetter'
  *
  */
 export default function TextProperty(
-  this: PropertyHandler,
+  this: ItemData,
   elem: ElementInterface,
   data: TextData
 ) {

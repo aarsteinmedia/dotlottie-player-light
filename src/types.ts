@@ -40,7 +40,7 @@ export interface Transformer {
   container: unknown
   mProps: {
     dynamicProperties: unknown[]
-    v?: number
+    v: Matrix
     _mdf?: boolean
   }
   op: {
@@ -95,7 +95,7 @@ export interface ElementInterface {
   tm: number
 }
 
-export interface PropertyHandler {
+export interface ItemData {
   propType: 'multidimensional' | 'uniidimensional'
   effectsSequence: any
   data: any
@@ -132,17 +132,31 @@ export interface PropertyHandler {
   currentData?: Partial<DocumentData>
   defaultBoxWidth?: number
   pos: number
+  style: StyleData
+  dashStr: string
+  dashoffset: Float32Array
+  d: ItemData
+  w: ItemData
+  c: ItemData
+  o: ItemData
+  gf: SVGElement
+  g: any
+  s: any
+  e: any
 }
 
-export interface StyleHandler {
+export interface StyleData {
   data: Shape
   type: ShapeType
+  ty: ShapeType
   d: string
   lvl: number
   _mdf: boolean
   closed: boolean
   pElem: SVGPathElement
-  msElem: unknown
+  msElem: SVGElement
+  hd?: boolean
+  t: number
 }
 
 export interface ShapeHandler {
@@ -152,7 +166,7 @@ export interface ShapeHandler {
   transform: Transformer
   transformers: Transformer[]
   lStr: string
-  sh: Shape['ks']
+  sh: ShapeDataProperty
   lvl: number
   _isAnimated?: boolean
 }
@@ -347,6 +361,24 @@ export interface GradientColor {
   }
 }
 
+export interface ShapeDataProperty {
+  a: 1 | 0
+  k: ShapeData
+  paths: {
+    _length: number
+    _maxLength: number
+    shapes: {
+      c: boolean
+      i: Float32Array
+      o: Float32Array
+      v: Float32Array
+      _length: number
+    }[]
+  }
+  ix?: number
+  _mdf?: boolean
+}
+
 export interface Shape {
   closed?: boolean
   ind?: number
@@ -403,12 +435,7 @@ export interface Shape {
   bm?: number
   /** CSS Class */
   cl?: string
-  ks?: {
-    a: 1 | 0
-    k: ShapeData
-    ix?: number
-    _mdf?: boolean
-  }
+  ks?: ShapeDataProperty
   /** Number of properties */
   np?: number
   tr?: LottieTransform

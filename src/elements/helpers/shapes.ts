@@ -2,11 +2,11 @@ import { lineCapEnum, lineJoinEnum } from '@/enums'
 import {
   ElementInterface,
   GenericAnimatedProperty,
-  PropertyHandler,
+  ItemData,
   Shape,
   ShapeGroupHandler,
   ShapeHandler,
-  StyleHandler,
+  StyleData,
   StyleObject,
   Transformer,
   Vector2,
@@ -88,7 +88,7 @@ export function SVGTransformData(
 /**
  *
  */
-export function SVGStyleData(this: StyleHandler, data: Shape, level: number) {
+export function SVGStyleData(this: StyleData, data: Shape, level: number) {
   this.data = data
   this.type = data.ty
   this.d = ''
@@ -108,7 +108,7 @@ SVGStyleData.prototype.reset = function () {
  *
  */
 export function ProcessedElement(
-  this: PropertyHandler,
+  this: ItemData,
   element: ElementInterface,
   position: number
 ) {

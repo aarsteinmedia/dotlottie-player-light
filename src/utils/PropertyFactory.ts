@@ -3,7 +3,7 @@ import { ArrayType } from '@/enums'
 import { createQuaternion, quaternionToEuler, slerp } from '@/utils'
 import bezFunction from '@/utils/bez'
 import { initialDefaultFrame } from '@/utils/getterSetter'
-import type { GlobalData, PropertyHandler, Vector3 } from '@/types'
+import type { GlobalData, ItemData, Vector3 } from '@/types'
 import { createTypedArray } from '@/utils/helpers/arrays'
 import BezierFactory from '@/utils/BezierFactory'
 
@@ -167,7 +167,7 @@ function KeyframedValueProperty(
  *
  */
 function KeyframedMultidimensionalProperty(
-  this: PropertyHandler,
+  this: ItemData,
   elem: any,
   data: any,
   mult?: number,

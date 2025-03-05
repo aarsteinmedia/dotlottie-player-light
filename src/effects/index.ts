@@ -1,4 +1,4 @@
-import type { ElementInterface, PropertyHandler, ShapeData } from '@/types'
+import type { ElementInterface, ItemData, ShapeData } from '@/types'
 import PropertyFactory from '@/utils/PropertyFactory'
 
 /**
@@ -6,7 +6,7 @@ import PropertyFactory from '@/utils/PropertyFactory'
  */
 export function SliderEffect(
   this: {
-    p: PropertyHandler
+    p: ItemData
   },
   data: ShapeData,
   elem: ElementInterface,
@@ -20,7 +20,7 @@ export function SliderEffect(
  */
 export function AngleEffect(
   this: {
-    p: PropertyHandler
+    p: ItemData
   },
   data: ShapeData,
   elem: ElementInterface,
@@ -33,7 +33,7 @@ export function AngleEffect(
  */
 export function ColorEffect(
   this: {
-    p: PropertyHandler
+    p: ItemData
   },
   data: ShapeData,
   elem: ElementInterface,
@@ -46,7 +46,7 @@ export function ColorEffect(
  */
 export function PointEffect(
   this: {
-    p: PropertyHandler
+    p: ItemData
   },
   data: ShapeData,
   elem: ElementInterface,
@@ -59,7 +59,7 @@ export function PointEffect(
  */
 export function LayerIndexEffect(
   this: {
-    p: PropertyHandler
+    p: ItemData
   },
   data: ShapeData,
   elem: ElementInterface,
@@ -72,7 +72,7 @@ export function LayerIndexEffect(
  */
 export function MaskIndexEffect(
   this: {
-    p: PropertyHandler
+    p: ItemData
   },
   data: ShapeData,
   elem: ElementInterface,
@@ -85,7 +85,7 @@ export function MaskIndexEffect(
  */
 export function CheckboxEffect(
   this: {
-    p: PropertyHandler
+    p: ItemData
   },
   data: ShapeData,
   elem: ElementInterface,
