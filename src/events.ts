@@ -1,6 +1,6 @@
 import type AnimationItem from '@/animation/AnimationItem'
 
-import { AnimationDirection, AnimationEventName, BMEvent } from '@/types'
+import { AnimationDirection, AnimationEventName } from '@/types'
 
 export class BMEnterFrameEvent {
   currentTime: number
@@ -32,11 +32,11 @@ export class BMCompleteEvent {
 export class BMCompleteLoopEvent {
   currentLoop: number
   direction: AnimationDirection
-  totalLoops: number
+  totalLoops: number | boolean
   type: AnimationEventName
   constructor(
     type: AnimationEventName,
-    totalLoops: number,
+    totalLoops: number | boolean,
     currentLoop: number,
     frameMultiplier: number
   ) {
@@ -47,80 +47,82 @@ export class BMCompleteLoopEvent {
   }
 }
 
-/**
- *
- */
-export function BMSegmentStartEvent(
-  this: BMEvent,
-  type: string,
-  firstFrame: number,
+export class BMSegmentStartEvent {
+  firstFrame: number
   totalFrames: number
-) {
-  this.type = type
-  this.firstFrame = firstFrame
-  this.totalFrames = totalFrames
+  type: AnimationEventName
+  constructor(
+    type: AnimationEventName,
+    firstFrame: number,
+    totalFrames: number
+  ) {
+    this.type = type
+    this.firstFrame = firstFrame
+    this.totalFrames = totalFrames
+  }
 }
 
-/**
- *
- */
-export function BMDestroyEvent(this: BMEvent, type: string, target: BMEvent) {
-  this.type = type
-  this.target = target
+export class BMDestroyEvent {
+  target: AnimationItem
+  type: AnimationEventName
+  constructor(type: AnimationEventName, target: AnimationItem) {
+    this.type = type
+    this.target = target
+  }
 }
 
-/**
- *
- */
-export function BMRenderFrameErrorEvent(
-  this: BMEvent,
-  nativeError: unknown,
+export class BMRenderFrameErrorEvent {
   currentTime: number
-) {
-  this.type = 'renderFrameError'
-  this.nativeError = nativeError
-  this.currentTime = currentTime
-}
-
-/**
- *
- */
-export function BMConfigErrorEvent(this: BMEvent, nativeError: unknown) {
-  this.type = 'configError'
-  this.nativeError = nativeError
-}
-
-/**
- *
- */
-export function BMAnimationConfigErrorEvent(
-  this: BMEvent,
-  type: string,
   nativeError: unknown
-) {
-  this.type = type
-  this.nativeError = nativeError
+  type: AnimationEventName
+  constructor(nativeError: unknown, currentTime: number) {
+    this.type = 'renderFrameError'
+    this.nativeError = nativeError
+    this.currentTime = currentTime
+  }
 }
 
-export function BaseEvent() {}
-BaseEvent.prototype = {
-  addEventListener: function (
+export class BMConfigErrorEvent {
+  nativeError: unknown
+  type: AnimationEventName
+  constructor(nativeError: unknown, _: number) {
+    this.type = 'configError'
+    this.nativeError = nativeError
+  }
+}
+
+export class BMAnimationConfigErrorEvent {
+  nativeError: unknown
+  type: AnimationEventName
+  constructor(type: AnimationEventName, nativeError: unknown) {
+    this.type = type
+    this.nativeError = nativeError
+  }
+}
+
+export class BaseEvent {
+  _cbs: Partial<
+    Record<AnimationEventName, ((x?: unknown) => unknown)[] | null>
+  > = {}
+
+  addEventListener(
     eventName: AnimationEventName,
     callback: (x?: unknown) => unknown
-  ) {
+  ): () => void {
     if (!this._cbs[eventName]) {
       this._cbs[eventName] = []
     }
     this._cbs[eventName].push(callback)
 
-    return function (this: AnimationItem) {
+    return () => {
       this.removeEventListener(eventName, callback)
-    }.bind(this)
-  },
-  removeEventListener: function (
-    eventName: string,
-    callback: (x?: unknown) => unknown
-  ) {
+    }
+  }
+
+  removeEventListener(
+    eventName: AnimationEventName,
+    callback?: (x?: unknown) => unknown
+  ): void {
     if (!callback) {
       this._cbs[eventName] = null
       return
@@ -133,22 +135,22 @@ BaseEvent.prototype = {
         if (this._cbs[eventName][i] === callback) {
           this._cbs[eventName].splice(i, 1)
           i--
-          len -= 1
+          len--
         }
         i++
       }
-      if (this._cbs[eventName].length) {
-        return
+      if (this._cbs[eventName].length === 0) {
+        this._cbs[eventName] = null
       }
-      this._cbs[eventName] = null
     }
-  },
-  triggerEvent: function (eventName: string, args: unknown[]) {
+  }
+
+  triggerEvent(eventName: AnimationEventName, args?: unknown): void {
     if (this._cbs[eventName]) {
       const { length } = this._cbs[eventName]
       for (let i = 0; i < length; i++) {
         this._cbs[eventName][i](args)
       }
     }
-  },
+  }
 }

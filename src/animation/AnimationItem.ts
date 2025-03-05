@@ -5,6 +5,7 @@ import type {
   AnimationEventName,
   AssetHandler,
   DocumentData,
+  ElementInterface,
   LottieAsset,
   MarkerData,
   Vector2,
@@ -24,7 +25,6 @@ import {
 } from '@/events'
 import { markerParser } from '@/utils'
 import AudioController from '@/utils/audio/AudioController'
-import { extendPrototype } from '@/utils/functionExtensions'
 import {
   createElementID,
   getExpressionsPlugin,
@@ -35,12 +35,7 @@ import {
 import ProjectInterface from '@/utils/helpers/ProjectInterface'
 import ImagePreloader from '@/utils/ImagePreloader'
 
-export default class AnimationItem {
-  public addEventListener!: (
-    event: AnimationEventName,
-    callback: (e: Event) => void
-  ) => void
-
+export default class AnimationItem extends BaseEvent {
   public animationData: Partial<AnimationData>
   public animationID: string
   public assets: LottieAsset[]
@@ -73,16 +68,12 @@ export default class AnimationItem {
   public playDirection: AnimationDirection
   public playSpeed: number
   public projectInterface: null | ReturnType<typeof ProjectInterface>
-  public removeEventListener!: (
-    event: AnimationEventName,
-    callback: (e: Event) => void
-  ) => void
-  public renderer: any
+
+  public renderer: null | ElementInterface
   public segmentPos: number
   public segments: Vector2[]
   public timeCompleted: number
   public totalFrames: number
-  public triggerEvent!: (event: AnimationEventName, arg?: unknown) => void
   protected animType?: RendererType
   protected autoloadSegments: boolean = false
   protected fileName?: string
@@ -94,11 +85,12 @@ export default class AnimationItem {
   protected onLoopComplete: null | ((arg: unknown) => void) = null
   protected onSegmentStart: null | ((arg: unknown) => void) = null
   protected wrapper: HTMLElement | null = null
-  private _cbs: null | any
+  // private _cbs: null | any
   private _completedLoop: boolean
   private _idle: boolean
   constructor() {
-    this._cbs = []
+    super()
+    this._cbs = {}
     this.name = ''
     this.path = ''
     this.isLoaded = false
@@ -222,7 +214,7 @@ export default class AnimationItem {
   public checkLoaded() {
     if (
       !this.isLoaded &&
-      this.renderer.globalData.fontManager.isLoaded &&
+      this.renderer?.globalData.fontManager?.isLoaded &&
       (this.imagePreloader?.loadedImages() ||
         this.renderer.rendererType !== 'canvas') &&
       this.imagePreloader?.loadedFootages()
@@ -300,7 +292,7 @@ export default class AnimationItem {
     this.renderer.destroy()
     this.imagePreloader?.destroy()
     this.trigger('destroy')
-    this._cbs = null
+    this._cbs = {}
     this.onEnterFrame = null
     this.onLoopComplete = null
     this.onComplete = null
@@ -408,7 +400,7 @@ export default class AnimationItem {
     this.trigger('drawnFrame')
   }
   public hide() {
-    this.renderer.hide()
+    this.renderer?.hide()
   }
   public imagesLoaded() {
     this.trigger('loaded_images')
@@ -436,8 +428,8 @@ export default class AnimationItem {
       }
     }
     if (data.chars || data.fonts) {
-      this.renderer.globalData.fontManager.addChars(data.chars)
-      this.renderer.globalData.fontManager.addFonts(
+      this.renderer?.globalData.fontManager?.addChars(data.chars)
+      this.renderer?.globalData.fontManager?.addFonts(
         data.fonts,
         this.renderer.globalData.defs
       )
@@ -553,7 +545,7 @@ export default class AnimationItem {
       this.imagesLoaded.bind(this)
     )
   }
-  public renderFrame() {
+  public renderFrame(_num?: number) {
     if (this.isLoaded === false || !this.renderer) {
       return
     }
@@ -577,7 +569,7 @@ export default class AnimationItem {
     // Adding this validation for backwards compatibility in case an event object was being passed down
     const _width = typeof width === 'number' ? width : undefined
     const _height = typeof height === 'number' ? height : undefined
-    this.renderer.updateContainerSize(_width, _height)
+    this.renderer?.updateContainerSize(_width, _height)
   }
   public setCurrentRawFrameValue(value: number) {
     this.currentRawFrame = value
@@ -627,7 +619,7 @@ export default class AnimationItem {
     } else if (loop === 'true') {
       params.loop = true
     } else if (loop !== '') {
-      params.loop = !!parseInt(loop, 10)
+      params.loop = parseInt(loop, 10)
     }
     const autoplay =
       wrapperAttributes.getNamedItem('data-anim-autoplay')?.value ??
@@ -678,8 +670,8 @@ export default class AnimationItem {
     }
     const RendererClass = getRenderer(animType)
     this.renderer = new (RendererClass as any)(this, params.rendererSettings)
-    this.imagePreloader?.setCacheType(animType, this.renderer.globalData.defs)
-    this.renderer.setProjectInterface(this.projectInterface)
+    this.imagePreloader?.setCacheType(animType, this.renderer?.globalData.defs)
+    this.renderer?.setProjectInterface(this.projectInterface)
     this.animType = animType
     if (
       params.loop === '' ||
@@ -691,7 +683,7 @@ export default class AnimationItem {
     } else if (params.loop === false) {
       this.loop = false
     } else {
-      this.loop = parseInt(params.loop, 10)
+      this.loop = parseInt(`${params.loop}`, 10)
     }
     this.autoplay = !!('autoplay' in params ? params.autoplay : true)
     this.name = params.name ? params.name : ''
@@ -763,7 +755,7 @@ export default class AnimationItem {
     this.audioController.setVolume(val)
   }
   public show() {
-    this.renderer.show()
+    this.renderer?.show()
   }
   public stop(name?: string) {
     if (name && this.name !== name) {
@@ -790,7 +782,7 @@ export default class AnimationItem {
         case 'enterFrame':
           this.triggerEvent(
             name,
-            new (BMEnterFrameEvent as any)(
+            new BMEnterFrameEvent(
               name,
               this.currentFrame,
               this.totalFrames,
@@ -807,7 +799,7 @@ export default class AnimationItem {
         case 'loopComplete':
           this.triggerEvent(
             name,
-            new (BMCompleteLoopEvent as any)(
+            new BMCompleteLoopEvent(
               name,
               Number(this.loop),
               this.playCount,
@@ -816,23 +808,16 @@ export default class AnimationItem {
           )
           break
         case 'complete':
-          this.triggerEvent(
-            name,
-            new (BMCompleteEvent as any)(name, this.frameMult)
-          )
+          this.triggerEvent(name, new BMCompleteEvent(name, this.frameMult))
           break
         case 'segmentStart':
           this.triggerEvent(
             name,
-            new (BMSegmentStartEvent as any)(
-              name,
-              this.firstFrame,
-              this.totalFrames
-            )
+            new BMSegmentStartEvent(name, this.firstFrame, this.totalFrames)
           )
           break
         case 'destroy':
-          this.triggerEvent(name, new (BMDestroyEvent as any)(name, this))
+          this.triggerEvent(name, new BMDestroyEvent(name, this))
           break
         default:
           this.triggerEvent(name)
@@ -841,7 +826,7 @@ export default class AnimationItem {
     if (name === 'enterFrame' && this.onEnterFrame) {
       this.onEnterFrame.call(
         this,
-        new (BMEnterFrameEvent as any)(
+        new BMEnterFrameEvent(
           name,
           this.currentFrame,
           this.totalFrames,
@@ -852,39 +837,24 @@ export default class AnimationItem {
     if (name === 'loopComplete' && this.onLoopComplete) {
       this.onLoopComplete.call(
         this,
-        new (BMCompleteLoopEvent as any)(
-          name,
-          this.loop,
-          this.playCount,
-          this.frameMult
-        )
+        new BMCompleteLoopEvent(name, this.loop, this.playCount, this.frameMult)
       )
     }
     if (name === 'complete' && this.onComplete) {
-      this.onComplete.call(
-        this,
-        new (BMCompleteEvent as any)(name, this.frameMult)
-      )
+      this.onComplete.call(this, new BMCompleteEvent(name, this.frameMult))
     }
     if (name === 'segmentStart' && this.onSegmentStart) {
       this.onSegmentStart.call(
         this,
-        new (BMSegmentStartEvent as any)(
-          name,
-          this.firstFrame,
-          this.totalFrames
-        )
+        new BMSegmentStartEvent(name, this.firstFrame, this.totalFrames)
       )
     }
     if (name === 'destroy' && this.onDestroy) {
-      this.onDestroy.call(this, new (BMDestroyEvent as any)(name, this))
+      this.onDestroy.call(this, new BMDestroyEvent(name, this))
     }
   }
   public triggerConfigError(nativeError: unknown) {
-    const error = new (BMConfigErrorEvent as any)(
-      nativeError,
-      this.currentFrame
-    )
+    const error = new BMConfigErrorEvent(nativeError, this.currentFrame)
     this.triggerEvent('error', error)
 
     if (this.onError) {
@@ -892,10 +862,7 @@ export default class AnimationItem {
     }
   }
   public triggerRenderFrameError(nativeError: unknown) {
-    const error = new (BMRenderFrameErrorEvent as any)(
-      nativeError,
-      this.currentFrame
-    )
+    const error = new BMRenderFrameErrorEvent(nativeError, this.currentFrame)
 
     this.triggerEvent('error', error)
 
@@ -920,7 +887,7 @@ export default class AnimationItem {
     index: number
   ) {
     try {
-      const element = this.renderer.getElementByPath(path)
+      const element = this.renderer?.getElementByPath(path)
       element.updateDocumentData(documentData, index)
     } catch (_error) {
       // TODO: decide how to handle catch case
@@ -930,12 +897,10 @@ export default class AnimationItem {
     if (!this.renderer) {
       return
     }
-    if (this.renderer.globalData.fontManager.isLoaded) {
+    if (this.renderer?.globalData.fontManager?.isLoaded) {
       this.checkLoaded()
     } else {
       setTimeout(this.waitForFontsLoaded.bind(this), 20)
     }
   }
 }
-
-extendPrototype([BaseEvent], AnimationItem)

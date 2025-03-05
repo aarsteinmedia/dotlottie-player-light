@@ -30,6 +30,8 @@ export type AnimationEventName =
   | '_pause'
   | '_idle'
   | '_active'
+  | 'configError'
+  | 'renderFrameError'
 export type AnimationEventCallback<T = unknown> = (args: T) => void
 
 export interface ShapeGroupHandler {
@@ -55,13 +57,15 @@ export interface LayerInterFace {
   registerMaskInterface: (effect: unknown) => void
 }
 
-export interface ElementInterface {
+export interface ElementInterface extends AnimationItem {
   addDynamicProperty: (prop: DynamicPropertyContainer) => void
   animationItem: AnimationItem
   baseElement: SVGElement
   comp: ElementInterface
   completeLayers: boolean
+  configAnimation: (animData: AnimationData) => void
   data: LottieLayer
+  destroy: () => void
   dynamicProperties: unknown[]
   effectsManager: unknown
   elements: ElementInterface[]
@@ -79,6 +83,7 @@ export interface ElementInterface {
   ) => void
   initFrame: () => void
   initHierarchy: (hierarchy?: unknown[]) => void
+  initItems: () => void
   initTransform: (
     data: LottieLayer,
     globalData: GlobalData,
@@ -93,6 +98,7 @@ export interface ElementInterface {
   renderConfig: SVGRendererConfig
   renderedFrame: number
   rendererType: RendererType
+  searchExtraCompositions: (assets: LottieAsset[]) => void
   supports3d: boolean
   svgElement?: SVGSVGElement
   tm: number
@@ -533,7 +539,7 @@ export interface LottieManifest {
 export type AnimateOnScroll = boolean | '' | null
 export type Autoplay = boolean | '' | 'autoplay' | null
 export type Controls = boolean | '' | 'controls' | null
-export type Loop = boolean | '' | 'loop' | null
+export type Loop = boolean | '' | 'loop' | null | number
 export type Subframe = boolean | '' | null
 
 export interface CEMConfig {
@@ -1231,7 +1237,7 @@ export interface AssetHandler {
   loadedImages: () => boolean
   path: string
   setAssetsPath: (path: string) => void
-  setCacheType: (type: string, elementHelper: SVGElement) => void
+  setCacheType: (type: string, elementHelper?: SVGElement) => void
   setPath: (path?: string) => void
   testImageLoaded: (image: SVGImageElement) => void
   totalFootages: number
@@ -1249,18 +1255,18 @@ export interface IntersectData {
   width: number
 }
 
-export interface BMEvent {
-  currentLoop: number
-  currentTime: number
-  direction: AnimationDirection
-  firstFrame: number
-  nativeError: unknown
-  target: BMEvent
-  totalFrames: number
-  totalLoops: number
-  totalTime: number
-  type: string
-}
+// export interface BMEvent {
+//   currentLoop: number
+//   currentTime: number
+//   direction: AnimationDirection
+//   firstFrame: number
+//   nativeError: unknown
+//   target: BMEvent
+//   totalFrames: number
+//   totalLoops: number
+//   totalTime: number
+//   type: string
+// }
 
 declare module 'react' {
   namespace JSX {
