@@ -179,7 +179,7 @@ BaseRenderer.prototype.setupGlobalData = function (
   animData: AnimationData,
   fontsContainer: any
 ) {
-  this.globalData.fontManager = new (FontManager as any)()
+  this.globalData.fontManager = new FontManager()
   this.globalData.slotManager = slotFactory(animData)
   this.globalData.fontManager.addChars(animData.chars)
   this.globalData.fontManager.addFonts(animData.fonts, fontsContainer)

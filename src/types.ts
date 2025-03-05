@@ -915,19 +915,19 @@ export interface FontList {
   }
 }
 
-export interface FontHandler {
-  _warned?: boolean
-  chars: Characacter[] | null
-  checkLoadedFonts: (args: unknown) => void
-  checkLoadedFontsBinded: (args: unknown) => void
-  fonts: FontList[]
-  getFontByName: (name?: string) => FontList
-  initTime: number
-  isLoaded: boolean
-  setIsLoaded: (val: boolean) => void
-  setIsLoadedBinded: (val: boolean) => void
-  typekitLoaded: number
-}
+// export interface FontHandler {
+//   _warned?: boolean
+//   chars: Characacter[] | null
+//   checkLoadedFonts: (args: unknown) => void
+//   checkLoadedFontsBinded: (args: unknown) => void
+//   fonts: FontList[]
+//   getFontByName: (name?: string) => FontList
+//   initTime: number
+//   isLoaded: boolean
+//   setIsLoaded: (val: boolean) => void
+//   setIsLoadedBinded: (val: boolean) => void
+//   typekitLoaded: number
+// }
 
 export interface Characacter {
   ch?: Characacter
@@ -1182,7 +1182,7 @@ export interface GlobalData {
   audioController?: unknown
   compSize?: unknown
   defs?: SVGDefsElement
-  fontManager?: typeof FontManager
+  fontManager?: FontManager
   frameId?: number
   frameNum?: number
   frameRate?: number
