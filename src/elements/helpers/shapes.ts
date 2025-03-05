@@ -1,4 +1,4 @@
-import { lineCapEnum, lineJoinEnum } from '@/enums'
+import { lineCapEnum, lineJoinEnum, RendererType } from '@/enums'
 import {
   ElementInterface,
   GenericAnimatedProperty,
@@ -295,7 +295,7 @@ export function SVGStrokeStyleData(
   this: any,
   elem: ElementInterface,
   data: Shape,
-  styleOb: StyleObject
+  styleObj: StyleObject
 ) {
   this.initDynamicPropertyContainer(elem)
   this.getValue = this.iterateDynamicProperties
@@ -303,42 +303,54 @@ export function SVGStrokeStyleData(
   this.w = PropertyFactory.getProp(elem, data.w, 0, null, this)
   this.d = new (DashProperty as any)(elem, data.d || {}, 'svg', this)
   this.c = PropertyFactory.getProp(elem, data.c, 1, 255, this)
-  this.style = styleOb
+  this.style = styleObj
   this._isAnimated = !!this._isAnimated
 }
 
 extendPrototype([DynamicPropertyContainer], SVGStrokeStyleData)
 
-/**
- *
- */
-export function SVGFillStyleData(
-  this: any,
-  elem: ElementInterface,
-  data: Shape,
-  styleOb: StyleObject
-) {
-  this.initDynamicPropertyContainer(elem)
-  this.getValue = this.iterateDynamicProperties
-  this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, this)
-  this.c = PropertyFactory.getProp(elem, data.c, 1, 255, this)
-  this.style = styleOb
+export class _SVGStrokeStyleData extends DynamicPropertyContainer {
+  constructor(elem: ElementInterface, data: Shape, styleObj: StyleObject) {
+    super()
+    this.initDynamicPropertyContainer(elem)
+    this.getValue = this.iterateDynamicProperties
+    this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, this)
+    this.w = PropertyFactory.getProp(elem, data.w, 0, null, this)
+    this.d = new DashProperty(elem, data.d || [], RendererType.SVG, this)
+    this.c = PropertyFactory.getProp(elem, data.c, 1, 255, this)
+    this.style = styleObj
+    this._isAnimated = !!this._isAnimated
+  }
+  getValue: () => void
+  style: StyleObject
+  o: ItemData
+  c: ItemData
+  w: ItemData
+  d: DashProperty
 }
 
-extendPrototype([DynamicPropertyContainer], SVGFillStyleData)
-
-/**
- *
- */
-export function SVGNoStyleData(
-  this: any,
-  elem: ElementInterface,
-  _data: Shape,
-  styleOb: StyleObject
-) {
-  this.initDynamicPropertyContainer(elem)
-  this.getValue = this.iterateDynamicProperties
-  this.style = styleOb
+export class SVGFillStyleData extends DynamicPropertyContainer {
+  constructor(elem: ElementInterface, data: Shape, styleObj: StyleObject) {
+    super()
+    this.initDynamicPropertyContainer(elem)
+    this.getValue = this.iterateDynamicProperties
+    this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, this)
+    this.c = PropertyFactory.getProp(elem, data.c, 1, 255, this)
+    this.style = styleObj
+  }
+  getValue: () => void
+  style: StyleObject
+  o: ItemData
+  c: ItemData
 }
 
-extendPrototype([DynamicPropertyContainer], SVGNoStyleData)
+export class SVGNoStyleData extends DynamicPropertyContainer {
+  constructor(elem: ElementInterface, _data: Shape, styleObj: StyleObject) {
+    super()
+    this.initDynamicPropertyContainer(elem)
+    this.getValue = this.iterateDynamicProperties
+    this.style = styleObj
+  }
+  getValue: () => void
+  style: StyleObject
+}

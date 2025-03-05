@@ -4,13 +4,13 @@ import 'react/jsx-dev-runtime'
 import type AnimationItem from '@/animation/AnimationItem'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
+import type { RendererType, PlayMode, ShapeType } from '@/enums'
 import type FontManager from '@/utils/FontManager'
+import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 import type Matrix from '@/utils/Matrix'
 import type PropertyFactory from '@/utils/PropertyFactory'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
-
-import { RendererType, type PlayMode, type ShapeType } from '@/enums'
 
 export type AnimationDirection = 1 | -1
 export type AnimationEventName =
@@ -56,6 +56,7 @@ export interface LayerInterFace {
 }
 
 export interface ElementInterface {
+  addDynamicProperty: (prop: DynamicPropertyContainer) => void
   animationItem: AnimationItem
   baseElement: SVGElement
   comp: ElementInterface
@@ -125,7 +126,7 @@ export interface ItemData {
   elem: any
   frameId: number
   g: any
-  getValue: (val: unknown) => unknown
+  getValue: (val?: unknown) => unknown
   gf: SVGElement
   interpolateValue: (frame: number, caching: any) => void
   k: boolean
@@ -386,6 +387,13 @@ export interface ShapeDataProperty {
   }
 }
 
+export interface StrokeData {
+  n: 'o' | 'd' | 'g'
+  nm?: 'offset' | 'dash' | 'gap'
+  p: ItemData
+  v?: VectorProperty
+}
+
 export interface Shape {
   _processed?: boolean
   _render?: boolean
@@ -409,11 +417,7 @@ export interface Shape {
   /** CSS Class */
   cl?: string
   closed?: boolean
-  d?: {
-    n: 'o' | 'd' | 'g'
-    nm: 'offset' | 'dash' | 'gap'
-    v: VectorProperty
-  }[]
+  d?: StrokeData[]
   /** Endpoint for gradient */
   e?: VectorProperty<Vector2>
   /** Gradient colors */
