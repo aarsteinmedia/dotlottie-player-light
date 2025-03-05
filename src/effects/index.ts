@@ -1,102 +1,96 @@
-import type { ElementInterface, ItemData, ShapeData } from '@/types'
+import type { GroupEffect } from '@/effects/EffectsManager'
+import type { EffectValue, ElementInterface, ItemData } from '@/types'
 
 import PropertyFactory from '@/utils/PropertyFactory'
 
-/**
- *
- */
-export function SliderEffect(
-  this: {
-    p: ItemData
-  },
-  data: ShapeData,
-  elem: ElementInterface,
-  container?: ElementInterface
-) {
-  this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+export class SliderEffect {
+  p: ItemData
+
+  constructor(
+    data: EffectValue,
+    elem: ElementInterface,
+    container: GroupEffect
+  ) {
+    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+  }
 }
 
-/**
- *
- */
-export function AngleEffect(
-  this: {
-    p: ItemData
-  },
-  data: ShapeData,
-  elem: ElementInterface,
-  container?: ElementInterface
-) {
-  this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+export class AngleEffect {
+  p: ItemData
+
+  constructor(
+    data: EffectValue,
+    elem: ElementInterface,
+    container: GroupEffect
+  ) {
+    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+  }
 }
-/**
- *
- */
-export function ColorEffect(
-  this: {
-    p: ItemData
-  },
-  data: ShapeData,
-  elem: ElementInterface,
-  container?: ElementInterface
-) {
-  this.p = PropertyFactory.getProp(elem, data.v, 1, 0, container)
+
+export class ColorEffect {
+  p: ItemData
+
+  constructor(
+    data: EffectValue,
+    elem: ElementInterface,
+    container: GroupEffect
+  ) {
+    this.p = PropertyFactory.getProp(elem, data.v, 1, 0, container)
+  }
 }
-/**
- *
- */
-export function PointEffect(
-  this: {
-    p: ItemData
-  },
-  data: ShapeData,
-  elem: ElementInterface,
-  container?: ElementInterface
-) {
-  this.p = PropertyFactory.getProp(elem, data.v, 1, 0, container)
+
+export class PointEffect {
+  p: ItemData
+
+  constructor(
+    data: EffectValue,
+    elem: ElementInterface,
+    container: GroupEffect
+  ) {
+    this.p = PropertyFactory.getProp(elem, data.v, 1, 0, container)
+  }
 }
-/**
- *
- */
-export function LayerIndexEffect(
-  this: {
-    p: ItemData
-  },
-  data: ShapeData,
-  elem: ElementInterface,
-  container?: ElementInterface
-) {
-  this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+
+export class LayerIndexEffect {
+  p: ItemData
+
+  constructor(
+    data: EffectValue,
+    elem: ElementInterface,
+    container: GroupEffect
+  ) {
+    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+  }
 }
-/**
- *
- */
-export function MaskIndexEffect(
-  this: {
-    p: ItemData
-  },
-  data: ShapeData,
-  elem: ElementInterface,
-  container?: ElementInterface
-) {
-  this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+
+export class MaskIndexEffect {
+  p: ItemData
+
+  constructor(
+    data: EffectValue,
+    elem: ElementInterface,
+    container: GroupEffect
+  ) {
+    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+  }
 }
-/**
- *
- */
-export function CheckboxEffect(
-  this: {
-    p: ItemData
-  },
-  data: ShapeData,
-  elem: ElementInterface,
-  container?: ElementInterface
-) {
-  this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+
+export class CheckboxEffect {
+  p: ItemData
+
+  constructor(
+    data: EffectValue,
+    elem: ElementInterface,
+    container: GroupEffect
+  ) {
+    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+  }
 }
-/**
- *
- */
-export function NoValueEffect(this: { p: object }) {
-  this.p = {}
+
+export class NoValueEffect {
+  p: object
+
+  constructor() {
+    this.p = {}
+  }
 }

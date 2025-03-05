@@ -1,33 +1,45 @@
-import type { GlobalData, LottieLayer } from '@/types'
+import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
 
 import EffectsManager from '@/effects/EffectsManager'
 import { getBlendMode } from '@/utils'
 import { createElementID, getExpressionInterfaces } from '@/utils/getterSetter'
 
-export default function BaseElement() {}
+export default class BaseElement {
+  baseElement?: SVGSVGElement
+  comp!: ElementInterface
+  compInterface: any
+  data!: LottieLayer
+  effectsManager!: EffectsManager
+  globalData!: GlobalData
+  itemsData: any
+  layerElement!: SVGGElement
+  layerId!: string
+  layerInterface: any
+  maskManager?: any
+  shapesData: any
+  type: any
 
-BaseElement.prototype = {
-  checkMasks: function () {
+  checkMasks() {
     if (!this.data.hasMask) {
       return false
     }
     let i = 0
-    const len = this.data.masksProperties.length
+    const len = this.data.masksProperties?.length || 0
     while (i < len) {
       if (
-        this.data.masksProperties[i].mode !== 'n' &&
-        this.data.masksProperties[i].cl !== false
+        this.data.masksProperties?.[i].mode !== 'n' &&
+        this.data.masksProperties?.[i].cl !== false
       ) {
         return true
       }
       i++
     }
     return false
-  },
-  getType: function () {
+  }
+  getType() {
     return this.type
-  },
-  initBaseData: function (
+  }
+  initBaseData(
     data: LottieLayer,
     globalData: GlobalData,
     comp: any // CompElement TODO:
@@ -41,13 +53,13 @@ BaseElement.prototype = {
     if (!this.data.sr) {
       this.data.sr = 1
     }
-    this.effectsManager = new (EffectsManager as any)(
+    this.effectsManager = new EffectsManager(
       this.data,
       this
       // this.dynamicProperties
     )
-  },
-  initExpressions: function () {
+  }
+  initExpressions() {
     const expressionsInterfaces = getExpressionInterfaces()
     if (!expressionsInterfaces) {
       return
@@ -61,7 +73,6 @@ BaseElement.prototype = {
     if (this.data.hasMask && this.maskManager) {
       this.layerInterface.registerMaskInterface(this.maskManager)
     }
-    // @ts-expect-error: TODO: fint right type
     const effectsInterface = EffectsExpressionInterface.createEffectsInterface(
       this,
       this.layerInterface
@@ -73,7 +84,6 @@ BaseElement.prototype = {
     } else if (this.data.ty === 4) {
       this.layerInterface.shapeInterface = ShapeExpressionInterface(
         this.shapesData,
-        // @ts-expect-error: TODO: fint right type
         this.itemsData,
         this.layerInterface
       )
@@ -82,12 +92,12 @@ BaseElement.prototype = {
       this.layerInterface.textInterface = TextExpressionInterface(this)
       this.layerInterface.text = this.layerInterface.textInterface
     }
-  },
-  setBlendMode: function () {
+  }
+  setBlendMode() {
     const blendModeValue = getBlendMode(this.data.bm)
     const elem = this.baseElement || this.layerElement
 
-    elem.style['mix-blend-mode'] = blendModeValue
-  },
-  sourceRectAtTime: function () {},
+    elem.style.mixBlendMode = blendModeValue
+  }
+  sourceRectAtTime() {}
 }

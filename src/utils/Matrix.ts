@@ -29,15 +29,189 @@ import { createTypedArray } from '@/utils/helpers/arrays'
  * @prop {CanvasRenderingContext2D|null} [context=null] - set or get current canvas context
  */
 export default class Matrix {
-  private props: Float32Array
   private _identity: boolean
   private _identityCalculated: boolean
+  private props: Float32Array
 
   constructor() {
     this.props = createTypedArray(ArrayType.Float32, 16) as Float32Array
     this._identity = true
     this._identityCalculated = false
     this.reset()
+  }
+
+  applyToPoint(
+    x: number,
+    y: number,
+    z: number
+  ): { x: number; y: number; z: number } {
+    return {
+      x:
+        x * this.props[0] +
+        y * this.props[4] +
+        z * this.props[8] +
+        this.props[12],
+      y:
+        x * this.props[1] +
+        y * this.props[5] +
+        z * this.props[9] +
+        this.props[13],
+      z:
+        x * this.props[2] +
+        y * this.props[6] +
+        z * this.props[10] +
+        this.props[14],
+    }
+  }
+
+  applyToPointArray(x: number, y: number, z: number): number[] {
+    if (this.isIdentity()) {
+      return [x, y, z]
+    }
+    return [
+      x * this.props[0] +
+        y * this.props[4] +
+        z * this.props[8] +
+        this.props[12],
+      x * this.props[1] +
+        y * this.props[5] +
+        z * this.props[9] +
+        this.props[13],
+      x * this.props[2] +
+        y * this.props[6] +
+        z * this.props[10] +
+        this.props[14],
+    ]
+  }
+
+  applyToPointStringified(x: number, y: number): string {
+    if (this.isIdentity()) {
+      return `${x},${y}`
+    }
+    const _p = this.props
+    return `${Math.round((x * _p[0] + y * _p[4] + _p[12]) * 100) / 100},${
+      Math.round((x * _p[1] + y * _p[5] + _p[13]) * 100) / 100
+    }`
+  }
+
+  applyToTriplePoints(
+    pt1: number[],
+    pt2: number[],
+    pt3: number[]
+  ): Float32Array {
+    const arr = createTypedArray(ArrayType.Float32, 6) as Float32Array
+    if (this.isIdentity()) {
+      arr.set([pt1[0], pt1[1], pt2[0], pt2[1], pt3[0], pt3[1]])
+    } else {
+      const p0 = this.props[0]
+      const p1 = this.props[1]
+      const p4 = this.props[4]
+      const p5 = this.props[5]
+      const p12 = this.props[12]
+      const p13 = this.props[13]
+      arr.set([
+        pt1[0] * p0 + pt1[1] * p4 + p12,
+        pt1[0] * p1 + pt1[1] * p5 + p13,
+        pt2[0] * p0 + pt2[1] * p4 + p12,
+        pt2[0] * p1 + pt2[1] * p5 + p13,
+        pt3[0] * p0 + pt3[1] * p4 + p12,
+        pt3[0] * p1 + pt3[1] * p5 + p13,
+      ])
+    }
+    return arr
+  }
+
+  applyToX(x: number, y: number, z: number): number {
+    return (
+      x * this.props[0] + y * this.props[4] + z * this.props[8] + this.props[12]
+    )
+  }
+
+  applyToY(x: number, y: number, z: number): number {
+    return (
+      x * this.props[1] + y * this.props[5] + z * this.props[9] + this.props[13]
+    )
+  }
+
+  applyToZ(x: number, y: number, z: number): number {
+    return (
+      x * this.props[2] +
+      y * this.props[6] +
+      z * this.props[10] +
+      this.props[14]
+    )
+  }
+
+  clone(matr: Matrix): Matrix {
+    matr.props.set(this.props)
+    return matr
+  }
+
+  cloneFromProps(props: number[]): this {
+    this.props.set(props)
+    return this
+  }
+
+  equals(matr: Matrix): boolean {
+    return this.props.every((val, i) => val === matr.props[i])
+  }
+
+  getInverseMatrix(): Matrix {
+    const determinant =
+      this.props[0] * this.props[5] - this.props[1] * this.props[4]
+    const a = this.props[5] / determinant
+    const b = -this.props[1] / determinant
+    const c = -this.props[4] / determinant
+    const d = this.props[0] / determinant
+    const e =
+      (this.props[4] * this.props[13] - this.props[5] * this.props[12]) /
+      determinant
+    const f =
+      -(this.props[0] * this.props[13] - this.props[1] * this.props[12]) /
+      determinant
+
+    const inverseMatrix = new Matrix()
+    inverseMatrix.setTransform(a, b, 0, 0, c, d, 0, 0, 0, 0, 1, 0, e, f, 0, 1)
+    return inverseMatrix
+  }
+
+  inversePoint(pt: number[]): { x: number; y: number; z: number } {
+    const inverseMatrix = this.getInverseMatrix()
+    return inverseMatrix.applyToPoint(pt[0], pt[1], pt[2] || 0)
+  }
+
+  inversePoints(pts: number[][]): { x: number; y: number; z: number }[] {
+    return pts.map((pt) => this.inversePoint(pt))
+  }
+
+  isIdentity(): boolean {
+    if (!this._identityCalculated) {
+      this._identity = !(
+        this.props[0] !== 1 ||
+        this.props[1] !== 0 ||
+        this.props[2] !== 0 ||
+        this.props[3] !== 0 ||
+        this.props[4] !== 0 ||
+        this.props[5] !== 1 ||
+        this.props[6] !== 0 ||
+        this.props[7] !== 0 ||
+        this.props[8] !== 0 ||
+        this.props[9] !== 0 ||
+        this.props[10] !== 1 ||
+        this.props[11] !== 0 ||
+        this.props[12] !== 0 ||
+        this.props[13] !== 0 ||
+        this.props[14] !== 0 ||
+        this.props[15] !== 1
+      )
+      this._identityCalculated = true
+    }
+    return this._identity
+  }
+
+  multiply(matrix: Matrix): this {
+    // @ts-expect-error: spread
+    return this.transform(...matrix.props)
   }
 
   reset(): this {
@@ -81,22 +255,6 @@ export default class Matrix {
     return this._t(mCos, -mSin, 0, 0, mSin, mCos, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
   }
 
-  shear(sx: number, sy: number): this {
-    return this._t(1, sy, sx, 1, 0, 0)
-  }
-
-  skew(ax: number, ay: number): this {
-    return this.shear(Math.tan(ax), Math.tan(ay))
-  }
-
-  skewFromAxis(ax: number, angle: number): this {
-    const mCos = Math.cos(angle)
-    const mSin = Math.sin(angle)
-    return this._t(mCos, mSin, 0, 0, -mSin, mCos, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-      ._t(1, 0, 0, 0, Math.tan(ax), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-      ._t(mCos, -mSin, 0, 0, mSin, mCos, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-  }
-
   scale(sx: number, sy: number, sz: number = 1): this {
     if (sx === 1 && sy === 1 && sz === 1) {
       return this
@@ -126,11 +284,40 @@ export default class Matrix {
     return this
   }
 
-  translate(tx: number, ty: number, tz: number = 0): this {
-    if (tx !== 0 || ty !== 0 || tz !== 0) {
-      return this._t(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1)
+  shear(sx: number, sy: number): this {
+    return this._t(1, sy, sx, 1, 0, 0)
+  }
+
+  skew(ax: number, ay: number): this {
+    return this.shear(Math.tan(ax), Math.tan(ay))
+  }
+
+  skewFromAxis(ax: number, angle: number): this {
+    const mCos = Math.cos(angle)
+    const mSin = Math.sin(angle)
+    return this._t(mCos, mSin, 0, 0, -mSin, mCos, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+      ._t(1, 0, 0, 0, Math.tan(ax), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+      ._t(mCos, -mSin, 0, 0, mSin, mCos, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+  }
+
+  to2dCSS(): string {
+    const _a = this.roundMatrixProperty(this.props[0])
+    const _b = this.roundMatrixProperty(this.props[1])
+    const _c = this.roundMatrixProperty(this.props[4])
+    const _d = this.roundMatrixProperty(this.props[5])
+    const _e = this.roundMatrixProperty(this.props[12])
+    const _f = this.roundMatrixProperty(this.props[13])
+    return `matrix(${_a},${_b},${_c},${_d},${_e},${_f})`
+  }
+
+  toCSS(): string {
+    let cssValue = 'matrix3d('
+    const v = 10000
+    for (let i = 0; i < 16; i++) {
+      cssValue += Math.round(this.props[i] * v) / v
+      cssValue += i === 15 ? ')' : ','
     }
-    return this
+    return cssValue
   }
 
   transform(
@@ -216,198 +403,16 @@ export default class Matrix {
     return this
   }
 
-  multiply(matrix: Matrix): this {
-    // @ts-expect-error: spread
-    return this.transform(...matrix.props)
-  }
-
-  isIdentity(): boolean {
-    if (!this._identityCalculated) {
-      this._identity = !(
-        this.props[0] !== 1 ||
-        this.props[1] !== 0 ||
-        this.props[2] !== 0 ||
-        this.props[3] !== 0 ||
-        this.props[4] !== 0 ||
-        this.props[5] !== 1 ||
-        this.props[6] !== 0 ||
-        this.props[7] !== 0 ||
-        this.props[8] !== 0 ||
-        this.props[9] !== 0 ||
-        this.props[10] !== 1 ||
-        this.props[11] !== 0 ||
-        this.props[12] !== 0 ||
-        this.props[13] !== 0 ||
-        this.props[14] !== 0 ||
-        this.props[15] !== 1
-      )
-      this._identityCalculated = true
+  translate(tx: number, ty: number, tz: number = 0): this {
+    if (tx !== 0 || ty !== 0 || tz !== 0) {
+      return this._t(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1)
     }
-    return this._identity
-  }
-
-  equals(matr: Matrix): boolean {
-    return this.props.every((val, i) => val === matr.props[i])
-  }
-
-  clone(matr: Matrix): Matrix {
-    matr.props.set(this.props)
-    return matr
-  }
-
-  cloneFromProps(props: number[]): this {
-    this.props.set(props)
     return this
   }
 
-  applyToPoint(
-    x: number,
-    y: number,
-    z: number
-  ): { x: number; y: number; z: number } {
-    return {
-      x:
-        x * this.props[0] +
-        y * this.props[4] +
-        z * this.props[8] +
-        this.props[12],
-      y:
-        x * this.props[1] +
-        y * this.props[5] +
-        z * this.props[9] +
-        this.props[13],
-      z:
-        x * this.props[2] +
-        y * this.props[6] +
-        z * this.props[10] +
-        this.props[14],
-    }
-  }
-
-  applyToX(x: number, y: number, z: number): number {
-    return (
-      x * this.props[0] + y * this.props[4] + z * this.props[8] + this.props[12]
-    )
-  }
-
-  applyToY(x: number, y: number, z: number): number {
-    return (
-      x * this.props[1] + y * this.props[5] + z * this.props[9] + this.props[13]
-    )
-  }
-
-  applyToZ(x: number, y: number, z: number): number {
-    return (
-      x * this.props[2] +
-      y * this.props[6] +
-      z * this.props[10] +
-      this.props[14]
-    )
-  }
-
-  getInverseMatrix(): Matrix {
-    const determinant =
-      this.props[0] * this.props[5] - this.props[1] * this.props[4]
-    const a = this.props[5] / determinant
-    const b = -this.props[1] / determinant
-    const c = -this.props[4] / determinant
-    const d = this.props[0] / determinant
-    const e =
-      (this.props[4] * this.props[13] - this.props[5] * this.props[12]) /
-      determinant
-    const f =
-      -(this.props[0] * this.props[13] - this.props[1] * this.props[12]) /
-      determinant
-
-    const inverseMatrix = new Matrix()
-    inverseMatrix.setTransform(a, b, 0, 0, c, d, 0, 0, 0, 0, 1, 0, e, f, 0, 1)
-    return inverseMatrix
-  }
-
-  inversePoint(pt: number[]): { x: number; y: number; z: number } {
-    const inverseMatrix = this.getInverseMatrix()
-    return inverseMatrix.applyToPoint(pt[0], pt[1], pt[2] || 0)
-  }
-
-  inversePoints(pts: number[][]): { x: number; y: number; z: number }[] {
-    return pts.map((pt) => this.inversePoint(pt))
-  }
-
-  applyToTriplePoints(
-    pt1: number[],
-    pt2: number[],
-    pt3: number[]
-  ): Float32Array {
-    const arr = createTypedArray(ArrayType.Float32, 6) as Float32Array
-    if (this.isIdentity()) {
-      arr.set([pt1[0], pt1[1], pt2[0], pt2[1], pt3[0], pt3[1]])
-    } else {
-      const p0 = this.props[0]
-      const p1 = this.props[1]
-      const p4 = this.props[4]
-      const p5 = this.props[5]
-      const p12 = this.props[12]
-      const p13 = this.props[13]
-      arr.set([
-        pt1[0] * p0 + pt1[1] * p4 + p12,
-        pt1[0] * p1 + pt1[1] * p5 + p13,
-        pt2[0] * p0 + pt2[1] * p4 + p12,
-        pt2[0] * p1 + pt2[1] * p5 + p13,
-        pt3[0] * p0 + pt3[1] * p4 + p12,
-        pt3[0] * p1 + pt3[1] * p5 + p13,
-      ])
-    }
-    return arr
-  }
-
-  applyToPointArray(x: number, y: number, z: number): number[] {
-    if (this.isIdentity()) {
-      return [x, y, z]
-    }
-    return [
-      x * this.props[0] +
-        y * this.props[4] +
-        z * this.props[8] +
-        this.props[12],
-      x * this.props[1] +
-        y * this.props[5] +
-        z * this.props[9] +
-        this.props[13],
-      x * this.props[2] +
-        y * this.props[6] +
-        z * this.props[10] +
-        this.props[14],
-    ]
-  }
-
-  applyToPointStringified(x: number, y: number): string {
-    if (this.isIdentity()) {
-      return `${x},${y}`
-    }
-    const _p = this.props
-    return `${Math.round((x * _p[0] + y * _p[4] + _p[12]) * 100) / 100},${
-      Math.round((x * _p[1] + y * _p[5] + _p[13]) * 100) / 100
-    }`
-  }
-
-  toCSS(): string {
-    let cssValue = 'matrix3d('
-    const v = 10000
-    for (let i = 0; i < 16; i++) {
-      cssValue += Math.round(this.props[i] * v) / v
-      cssValue += i === 15 ? ')' : ','
-    }
-    return cssValue
-  }
-
-  to2dCSS(): string {
-    const _a = this.roundMatrixProperty(this.props[0])
-    const _b = this.roundMatrixProperty(this.props[1])
-    const _c = this.roundMatrixProperty(this.props[4])
-    const _d = this.roundMatrixProperty(this.props[5])
-    const _e = this.roundMatrixProperty(this.props[12])
-    const _f = this.roundMatrixProperty(this.props[13])
-    return `matrix(${_a},${_b},${_c},${_d},${_e},${_f})`
+  private _t(...args: number[]): this {
+    // @ts-expect-error: spread
+    return this.transform(...args)
   }
 
   private roundMatrixProperty(val: number): number {
@@ -416,10 +421,5 @@ export default class Matrix {
       return Math.round(val * v) / v
     }
     return val
-  }
-
-  private _t(...args: number[]): this {
-    // @ts-expect-error: spread
-    return this.transform(...args)
   }
 }

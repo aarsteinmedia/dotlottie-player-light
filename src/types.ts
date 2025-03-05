@@ -874,14 +874,16 @@ export interface TextData {
   }
 }
 
+export interface EffectValue {
+  ty: number
+  v: {
+    a: 1 | 0
+    k: number | Vector3 | Vector4
+  }
+}
+
 export interface Effect {
-  ef: {
-    ty: number
-    v: {
-      a: 1 | 0
-      k: number | Vector3 | Vector4
-    }
-  }[]
+  ef: EffectValue[]
   en: 1 | 0
   ix?: number
   nm?: string
