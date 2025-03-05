@@ -18,7 +18,7 @@ import OffsetPathModifier from '@/utils/shapes/OffsetPathModifier'
 import { RendererType } from '@/enums'
 import animationManager from '@/animation/AnimationManager'
 import type { AnimationConfiguration, ExpressionsPlugin } from '@/types'
-import SVGRenderer from './renderers/SVGRenderer'
+import SVGRenderer from '@/renderers/SVGRenderer'
 
 /**
  *
