@@ -1,7 +1,8 @@
+import type { GlobalData, LottieLayer } from '@/types'
+
+import EffectsManager from '@/effects/EffectsManager'
 import { getBlendMode } from '@/utils'
 import { createElementID, getExpressionInterfaces } from '@/utils/getterSetter'
-import EffectsManager from '@/effects/EffectsManager'
-import { GlobalData, LottieLayer } from '@/types'
 
 export default function BaseElement() {}
 

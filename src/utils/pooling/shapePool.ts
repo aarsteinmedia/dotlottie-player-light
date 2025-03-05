@@ -1,10 +1,9 @@
-// import ShapeP
-
 import type { ShapeData } from '@/types'
-import { pointPool, poolFactory } from '@/utils/pooling'
-import ShapePath from '../shapes/ShapePath'
 
-const shapePool = (function () {
+import { pointPool, poolFactory } from '@/utils/pooling'
+import ShapePath from '@/utils/shapes/ShapePath'
+
+const shapePool = (() => {
   /**
    *
    */

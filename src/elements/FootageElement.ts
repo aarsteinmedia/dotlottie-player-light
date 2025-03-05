@@ -1,9 +1,10 @@
-import { extendPrototype } from '@/utils/functionExtensions'
+import type { GlobalData, LottieLayer } from '@/types'
+
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import RenderableElement from '@/elements/helpers/RenderableElement'
+import { extendPrototype } from '@/utils/functionExtensions'
 import { getExpressionInterfaces } from '@/utils/getterSetter'
-import { GlobalData, LottieLayer } from '@/types'
 
 /**
  *

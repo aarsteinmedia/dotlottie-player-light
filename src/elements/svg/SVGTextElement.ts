@@ -1,23 +1,24 @@
 /* eslint-disable max-depth */
-import { createNS } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
-import { createSizedArray } from '@/utils/helpers/arrays'
-import BaseElement from '@/elements/BaseElement'
-import TransformElement from '@/elements/helpers/TransformElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
-import FrameElement from '@/elements/helpers/FrameElement'
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import ITextElement from '@/elements/TextElement'
-import SVGBaseElement from '@/elements/svg/SVGBaseElement'
-import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type {
   ElementInterface,
   GlobalData,
   LottieLayer,
   TextHandler,
 } from '@/types'
-import { RendererType } from '@/enums'
+
+import BaseElement from '@/elements/BaseElement'
+import FrameElement from '@/elements/helpers/FrameElement'
+import HierarchyElement from '@/elements/helpers/HierarchyElement'
+import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+import TransformElement from '@/elements/helpers/TransformElement'
+import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGCompElement from '@/elements/svg/SVGCompElement'
+import SVGShapeElement from '@/elements/svg/SVGShapeElement'
+import ITextElement from '@/elements/TextElement'
+import { RendererType } from '@/enums'
+import { createNS } from '@/utils'
+import { extendPrototype } from '@/utils/functionExtensions'
+import { createSizedArray } from '@/utils/helpers/arrays'
 
 const emptyShapeData = {
   shapes: [],

@@ -1,14 +1,13 @@
 import type { ShapeData, Vector2 } from '@/types'
+
 import { ArrayType } from '@/enums'
 import { getDefaultCurveSegments } from '@/utils/getterSetter'
-import { bezierLengthPool, segmentsLengthPool } from '@/utils/pooling'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
+import { bezierLengthPool, segmentsLengthPool } from '@/utils/pooling'
 /**
  *
  */
 export default function bezFunction() {
-  const math = Math
-
   /**
    *
    */
@@ -41,14 +40,14 @@ export default function bezFunction() {
     if (z1 === 0 && z2 === 0 && z3 === 0) {
       return pointOnLine2D(x1, y1, x2, y2, x3, y3)
     }
-    const dist1 = math.sqrt(
-      math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2) + math.pow(z2 - z1, 2)
+    const dist1 = Math.sqrt(
+      Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2)
     )
-    const dist2 = math.sqrt(
-      math.pow(x3 - x1, 2) + math.pow(y3 - y1, 2) + math.pow(z3 - z1, 2)
+    const dist2 = Math.sqrt(
+      Math.pow(x3 - x1, 2) + Math.pow(y3 - y1, 2) + Math.pow(z3 - z1, 2)
     )
-    const dist3 = math.sqrt(
-      math.pow(x3 - x2, 2) + math.pow(y3 - y2, 2) + math.pow(z3 - z2, 2)
+    const dist3 = Math.sqrt(
+      Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2) + Math.pow(z3 - z2, 2)
     )
     let diffDist: number
     if (dist1 > dist2) {
@@ -284,7 +283,7 @@ export default function bezFunction() {
     const t1 = getDistancePerc(percent, bezierData)
     const u1 = 1 - t1
     const ptX =
-      math.round(
+      Math.round(
         (u1 * u1 * u1 * pt1[0] +
           (t1 * u1 * u1 + u1 * t1 * u1 + u1 * u1 * t1) * pt3[0] +
           (t1 * t1 * u1 + u1 * t1 * t1 + t1 * u1 * t1) * pt4[0] +
@@ -292,7 +291,7 @@ export default function bezFunction() {
           1000
       ) / 1000
     const ptY =
-      math.round(
+      Math.round(
         (u1 * u1 * u1 * pt1[1] +
           (t1 * u1 * u1 + u1 * t1 * u1 + u1 * u1 * t1) * pt3[1] +
           (t1 * t1 * u1 + u1 * t1 * t1 + t1 * u1 * t1) * pt4[1] +
@@ -353,7 +352,7 @@ export default function bezFunction() {
     const t1t1t1 = t1 * t1 * t1
     for (let i = 0; i < pt1.length; i++) {
       bezierSegmentPoints[i * 4] =
-        math.round(
+        Math.round(
           (u0u0u0 * pt1[i] +
             t0u0u0_3 * pt3[i] +
             t0t0u0_3 * pt4[i] +
@@ -361,7 +360,7 @@ export default function bezFunction() {
             1000
         ) / 1000
       bezierSegmentPoints[i * 4 + 1] =
-        math.round(
+        Math.round(
           (u0u0u1 * pt1[i] +
             t0u0u1_3 * pt3[i] +
             t0t0u1_3 * pt4[i] +
@@ -369,7 +368,7 @@ export default function bezFunction() {
             1000
         ) / 1000
       bezierSegmentPoints[i * 4 + 2] =
-        math.round(
+        Math.round(
           (u0u1u1 * pt1[i] +
             t0u1u1_3 * pt3[i] +
             t0t1u1_3 * pt4[i] +
@@ -377,7 +376,7 @@ export default function bezFunction() {
             1000
         ) / 1000
       bezierSegmentPoints[i * 4 + 3] =
-        math.round(
+        Math.round(
           (u1u1u1 * pt1[i] +
             t1u1u1_3 * pt3[i] +
             t1t1u1_3 * pt4[i] +

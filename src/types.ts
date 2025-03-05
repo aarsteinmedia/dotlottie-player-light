@@ -99,9 +99,10 @@ export interface ElementInterface {
 
 export interface ItemData {
   _caching: {
+    _lastKeyframeIndex?: number
     lastFrame: number
     lastIndex: number
-    value: number[]
+    value: number | number[]
   }
   _frameId?: number
   _isFirstFrame: boolean
@@ -111,7 +112,7 @@ export interface ItemData {
   canResize?: boolean
   comp: any
   completeTextData: (data?: Partial<DocumentData>) => void
-  container?: HTMLElement
+  container?: unknown
   copyData: (data?: Partial<DocumentData>, b?: any) => void
   currentData?: Partial<DocumentData>
   d: ItemData
@@ -128,7 +129,7 @@ export interface ItemData {
   gf: SVGElement
   interpolateValue: (frame: number, caching: any) => void
   k: boolean
-  keyframes: any[]
+  keyframes: number[]
   keyframesMetadata: unknown[]
   keysIndex?: number
   kf: boolean
@@ -137,13 +138,14 @@ export interface ItemData {
   o: ItemData
   offsetTime: number
   pos: number
-  propType: 'multidimensional' | 'uniidimensional'
-  pv: string | number[]
+  propType: 'multidimensional' | 'unidimensional'
+  pv: string | number[] | number
   s: any
   searchProperty: () => boolean
   setVValue: (val: any) => void
   style: StyleData
-  v: string | number[]
+  v: string | number[] | number
+  vel: number | number[]
   w: ItemData
 }
 
@@ -363,6 +365,15 @@ export interface GradientColor {
   p: number
 }
 
+export interface PathData {
+  _length: number
+  _maxLength: number
+  c: boolean
+  i: Float32Array
+  o: Float32Array
+  v: Float32Array
+}
+
 export interface ShapeDataProperty {
   _mdf?: boolean
   a: 1 | 0
@@ -371,13 +382,7 @@ export interface ShapeDataProperty {
   paths: {
     _length: number
     _maxLength: number
-    shapes: {
-      c: boolean
-      i: Float32Array
-      o: Float32Array
-      v: Float32Array
-      _length: number
-    }[]
+    shapes: PathData[]
   }
 }
 

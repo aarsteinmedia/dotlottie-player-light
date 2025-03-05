@@ -1,7 +1,7 @@
-import shapeCollectionPool from '@/utils/pooling/shapeCollectionPool'
+import { extendPrototype } from '@/utils/functionExtensions'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import { extendPrototype } from '@/utils/functionExtensions'
+import shapeCollectionPool from '@/utils/pooling/shapeCollectionPool'
 
 export default function ShapeModifier() {}
 ShapeModifier.prototype.initModifierProperties = function () {}

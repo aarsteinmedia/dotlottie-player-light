@@ -1,8 +1,9 @@
+import type { AnimationData, LottieAsset, LottieLayer } from '@/types'
+import type ProjectInterface from '@/utils/helpers/ProjectInterface'
+
 import AudioElement from '@/elements/AudioElement'
 import FootageElement from '@/elements/FootageElement'
-import type { AnimationData, LottieAsset, LottieLayer } from '@/types'
 import FontManager from '@/utils/FontManager'
-import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 import slotFactory from '@/utils/SlotManager'
 
 export default function BaseRenderer() {}

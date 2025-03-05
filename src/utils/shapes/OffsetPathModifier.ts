@@ -1,4 +1,5 @@
-import { ShapeData } from '@/types'
+import type { ShapeData } from '@/types'
+
 import PolynomialBezier from '@/elements/PolynomialBezier'
 import {
   joinLines,
@@ -14,6 +15,7 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 export default function OffsetPathModifier() {}
 
 extendPrototype([ShapeModifier], OffsetPathModifier)
+
 OffsetPathModifier.prototype.initModifierProperties = function (
   elem: any,
   data: any

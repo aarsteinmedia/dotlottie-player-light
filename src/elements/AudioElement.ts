@@ -1,9 +1,10 @@
 import type { GlobalData } from '@/types'
+
+import BaseElement from '@/elements/BaseElement'
+import FrameElement from '@/elements/helpers/FrameElement'
+import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 import PropertyFactory from '@/utils/PropertyFactory'
-import BaseElement from '@/elements/BaseElement'
-import RenderableElement from '@/elements/helpers/RenderableElement'
-import FrameElement from '@/elements/helpers/FrameElement'
 
 /**
  *

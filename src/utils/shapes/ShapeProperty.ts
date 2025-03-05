@@ -1,15 +1,16 @@
-import BezierFactory from '@/utils/BezierFactory'
-import shapePool from '@/utils/pooling/shapePool'
-import shapeCollectionPool from '@/utils/pooling/shapeCollectionPool'
-import { roundCorner } from '@/utils/getterSetter'
-import { LottieComp, Shape, ShapeData } from '@/types'
-import PropertyFactory from '@/utils/PropertyFactory'
-import { degToRads } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
-const ShapePropertyFactory = (function () {
+import { LottieComp, Shape, ShapeData } from '@/types'
+import { degToRads } from '@/utils'
+import BezierFactory from '@/utils/BezierFactory'
+import { extendPrototype } from '@/utils/functionExtensions'
+import { roundCorner } from '@/utils/getterSetter'
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
+import shapeCollectionPool from '@/utils/pooling/shapeCollectionPool'
+import shapePool from '@/utils/pooling/shapePool'
+import PropertyFactory from '@/utils/PropertyFactory'
+
+const ShapePropertyFactory = (() => {
   const initFrame = -999999
 
   /**

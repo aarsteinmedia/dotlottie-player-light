@@ -1,11 +1,14 @@
 import type { ShapeData } from '@/types'
+
 import { extendPrototype } from '@/utils/functionExtensions'
 import shapePool from '@/utils/pooling/shapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
 export default function PuckerAndBloatModifier() {}
+
 extendPrototype([ShapeModifier], PuckerAndBloatModifier)
+
 PuckerAndBloatModifier.prototype.initModifierProperties = function (
   elem: any,
   data: any

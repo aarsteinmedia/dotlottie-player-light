@@ -1,7 +1,8 @@
 import type { ImageData, LottieAsset, AssetHandler } from '@/types'
-import { createNS, createTag, isSafari, isServer } from '@/utils'
-import { RendererType } from '@/enums'
+
 import dataManager from '@/dataManager'
+import { RendererType } from '@/enums'
+import { createNS, createTag, isSafari, isServer } from '@/utils'
 
 const ImagePreloader = (() => {
   const proxyImage = (() => {

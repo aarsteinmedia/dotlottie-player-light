@@ -1,13 +1,16 @@
-import { getProjectingAngle, setPoint } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
-import ShapeModifier from '@/utils/shapes/ShapeModifier'
-import PropertyFactory from '@/utils/PropertyFactory'
 import PolynomialBezier from '@/elements/PolynomialBezier'
 import { AnimationDirection, ShapeData } from '@/types'
+import { getProjectingAngle, setPoint } from '@/utils'
+import { extendPrototype } from '@/utils/functionExtensions'
+import PropertyFactory from '@/utils/PropertyFactory'
+import ShapeModifier from '@/utils/shapes/ShapeModifier'
+
 import shapePool from '../pooling/shapePool'
 
 export default function ZigZagModifier() {}
+
 extendPrototype([ShapeModifier], ZigZagModifier)
+
 ZigZagModifier.prototype.initModifierProperties = function (
   elem: any,
   data: any

@@ -1,16 +1,18 @@
+import type { PathData } from '@/types'
+
 import { createSizedArray } from '@/utils/helpers/arrays'
 import { pointPool } from '@/utils/pooling'
 
 /**
  *
  */
-export default function ShapePath(this: any) {
+export default function ShapePath(this: PathData) {
   this.c = false
   this._length = 0
   this._maxLength = 8
-  this.v = createSizedArray(this._maxLength)
-  this.o = createSizedArray(this._maxLength)
-  this.i = createSizedArray(this._maxLength)
+  this.v = createSizedArray(this._maxLength) as any
+  this.o = createSizedArray(this._maxLength) as any
+  this.i = createSizedArray(this._maxLength) as any
 }
 
 ShapePath.prototype.setPathData = function (closed: boolean, len: number) {

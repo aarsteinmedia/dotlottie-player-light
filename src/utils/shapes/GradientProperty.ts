@@ -1,9 +1,10 @@
+import type { GradientColor } from '@/types'
+
 import { ArrayType } from '@/enums'
-import { GradientColor } from '@/types'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { createTypedArray } from '@/utils/helpers/arrays'
-import PropertyFactory from '@/utils/PropertyFactory'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
+import PropertyFactory from '@/utils/PropertyFactory'
 
 /**
  *

@@ -5,7 +5,7 @@ interface Project {
   currentFrame: number
 }
 
-const ProjectInterface = (function () {
+const ProjectInterface = (() => {
   /**
    *
    */
@@ -13,7 +13,7 @@ const ProjectInterface = (function () {
     this.compositions.push(comp)
   }
 
-  return function () {
+  return () => {
     /**
      *
      */
@@ -38,8 +38,7 @@ const ProjectInterface = (function () {
       return null
     }
 
-    // @ts-expect-error: ignore
-    _thisProjectFunction.compositions = []
+    _thisProjectFunction.compositions = [] as any[]
     _thisProjectFunction.currentFrame = 0
 
     _thisProjectFunction.registerComposition = registerComposition

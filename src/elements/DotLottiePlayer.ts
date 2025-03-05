@@ -1,24 +1,4 @@
-import Lottie from '@/Lottie'
-import renderPlayer from '@/templates/player'
-import renderControls from '@/templates/controls'
-import {
-  aspectRatio,
-  download,
-  frameOutput,
-  getAnimationData,
-  getFilename,
-  handleErrors,
-  isServer,
-  useId,
-} from '@/utils'
-import {
-  ObjectFit,
-  PlayMode,
-  PlayerEvents,
-  PlayerState,
-  PreserveAspectRatio,
-  RendererType,
-} from '@/enums'
+import type AnimationItem from '@/animation/AnimationItem'
 import type {
   AnimationConfiguration,
   AnimationData,
@@ -32,9 +12,30 @@ import type {
   Subframe,
   Vector2,
 } from '@/types'
+
 import EnhancedElement from '@/elements/helpers/EnhancedElement'
+import {
+  ObjectFit,
+  PlayMode,
+  PlayerEvents,
+  PlayerState,
+  PreserveAspectRatio,
+  RendererType,
+} from '@/enums'
+import Lottie from '@/Lottie'
 import styles from '@/styles.css'
-import type AnimationItem from '@/animation/AnimationItem'
+import renderControls from '@/templates/controls'
+import renderPlayer from '@/templates/player'
+import {
+  aspectRatio,
+  download,
+  frameOutput,
+  getAnimationData,
+  getFilename,
+  handleErrors,
+  isServer,
+  useId,
+} from '@/utils'
 
 /**
  * dotLottie Player Web Component

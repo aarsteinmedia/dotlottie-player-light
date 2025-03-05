@@ -4,17 +4,11 @@ import type {
   Shape,
   ShapeDataInterface,
 } from '@/types'
-import { getBlendMode } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
-import Matrix from '@/utils/Matrix'
+
 import BaseElement from '@/elements/BaseElement'
-import TransformElement from '@/elements/helpers/TransformElement'
-import SVGBaseElement from '@/elements/svg/SVGBaseElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import FrameElement from '@/elements/helpers/FrameElement'
+import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import { lineCapEnum, lineJoinEnum } from '@/enums'
-import { getLocationHref } from '@/utils/getterSetter'
 import {
   ShapeGroupData,
   SVGFillStyleData,
@@ -26,11 +20,18 @@ import {
   SVGStyleData,
   SVGTransformData,
 } from '@/elements/helpers/shapes'
+import TransformElement from '@/elements/helpers/TransformElement'
 import IShapeElement from '@/elements/ShapeElement'
-import TransformPropertyFactory from '@/utils/TransformProperty'
-import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
+import SVGBaseElement from '@/elements/svg/SVGBaseElement'
+import { lineCapEnum, lineJoinEnum } from '@/enums'
 import SVGElementsRenderer from '@/renderers/SVGElementsRenderer'
+import { getBlendMode } from '@/utils'
+import { extendPrototype } from '@/utils/functionExtensions'
+import { getLocationHref } from '@/utils/getterSetter'
+import Matrix from '@/utils/Matrix'
 import ShapeModifiers from '@/utils/shapes/ShapeModifiers'
+import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
+import TransformPropertyFactory from '@/utils/TransformProperty'
 
 /**
  *

@@ -1,16 +1,4 @@
 /* eslint-disable max-depth */
-import {
-  addBrightnessToRGB,
-  addHueToRGB,
-  addSaturationToRGB,
-  degToRads,
-} from '@/utils'
-import { createSizedArray } from '@/utils/helpers/arrays'
-import bezFunction from '@/utils/bez'
-import PropertyFactory from '@/utils/PropertyFactory'
-import BezierFactory from '@/utils/BezierFactory'
-import Matrix from '@/utils/Matrix'
-import { RendererType } from '@/enums'
 import type {
   DocumentData,
   TextData,
@@ -18,9 +6,22 @@ import type {
   Vector2,
   Vector3,
 } from '@/types'
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import LetterProps from '@/utils/text/LetterProps'
+
+import { RendererType } from '@/enums'
+import {
+  addBrightnessToRGB,
+  addHueToRGB,
+  addSaturationToRGB,
+  degToRads,
+} from '@/utils'
+import bezFunction from '@/utils/bez'
+import BezierFactory from '@/utils/BezierFactory'
 import { extendPrototype } from '@/utils/functionExtensions'
+import { createSizedArray } from '@/utils/helpers/arrays'
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
+import Matrix from '@/utils/Matrix'
+import PropertyFactory from '@/utils/PropertyFactory'
+import LetterProps from '@/utils/text/LetterProps'
 
 const bez = bezFunction()
 /**

@@ -1,18 +1,19 @@
+import type { AnimationData } from '@/types'
+
+import IImageElement from '@/elements/ImageElement'
+import NullElement from '@/elements/NullElement'
+import ISolidElement from '@/elements/SolidElement'
+import SVGShapeElement from '@/elements/svg/SVGShapeElement'
+import SVGTextLottieElement from '@/elements/svg/SVGTextElement'
+import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
-import { createSizedArray } from '@/utils/helpers/arrays'
+import { extendPrototype } from '@/utils/functionExtensions'
 import {
   createElementID,
   getExpressionsPlugin,
   getLocationHref,
 } from '@/utils/getterSetter'
-import NullElement from '@/elements/NullElement'
-import BaseRenderer from '@/renderers/BaseRenderer'
-import type { AnimationData } from '@/types'
-import SVGShapeElement from '@/elements/svg/SVGShapeElement'
-import SVGTextLottieElement from '@/elements/svg/SVGTextElement'
-import IImageElement from '@/elements/ImageElement'
-import ISolidElement from '@/elements/SolidElement'
-import { extendPrototype } from '@/utils/functionExtensions'
+import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default function SVGRendererBase() {}
 

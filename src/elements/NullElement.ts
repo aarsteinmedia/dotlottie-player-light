@@ -1,9 +1,10 @@
 import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
-import { extendPrototype } from '@/utils/functionExtensions'
+
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
-import TransformElement from '@/elements/helpers/TransformElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
+import TransformElement from '@/elements/helpers/TransformElement'
+import { extendPrototype } from '@/utils/functionExtensions'
 
 /**
  *

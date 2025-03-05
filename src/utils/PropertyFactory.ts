@@ -1,11 +1,12 @@
 /* eslint-disable max-depth */
+import type { GlobalData, ItemData, Vector3, VectorProperty } from '@/types'
+
 import { ArrayType } from '@/enums'
 import { createQuaternion, quaternionToEuler, slerp } from '@/utils'
 import bezFunction from '@/utils/bez'
-import { initialDefaultFrame } from '@/utils/getterSetter'
-import type { GlobalData, ItemData, Vector3 } from '@/types'
-import { createTypedArray } from '@/utils/helpers/arrays'
 import BezierFactory from '@/utils/BezierFactory'
+import { initialDefaultFrame } from '@/utils/getterSetter'
+import { createTypedArray } from '@/utils/helpers/arrays'
 
 const initFrame = initialDefaultFrame
 
@@ -64,10 +65,10 @@ const PropertyFactory = (() => {
  *
  */
 function ValueProperty(
-  this: any,
-  elem: any,
-  data: any,
-  mult: any,
+  this: ItemData,
+  elem: ItemData,
+  data: VectorProperty,
+  mult: number,
   container: any
 ) {
   this.propType = 'unidimensional'
@@ -93,11 +94,11 @@ function ValueProperty(
  *
  */
 function MultiDimensionalProperty(
-  this: any,
-  elem: any,
-  data: any,
+  this: ItemData,
+  elem: ItemData,
+  data: VectorProperty<number[]>,
   mult?: number,
-  container?: any
+  container?: unknown
 ) {
   this.propType = 'multidimensional'
   this.mult = mult || 1
@@ -109,12 +110,11 @@ function MultiDimensionalProperty(
   this.k = false
   this.kf = false
   this.frameId = -1
-  let i
-  const len = data.k.length
-  this.v = createTypedArray(ArrayType.Float32, len)
-  this.pv = createTypedArray(ArrayType.Float32, len)
-  this.vel = createTypedArray(ArrayType.Float32, len)
-  for (i = 0; i < len; i++) {
+  const { length } = data.k
+  this.v = createTypedArray(ArrayType.Float32, length) as number[]
+  this.pv = createTypedArray(ArrayType.Float32, length) as number[]
+  this.vel = createTypedArray(ArrayType.Float32, length) as number[]
+  for (let i = 0; i < length; i++) {
     this.v[i] = data.k[i] * this.mult
     this.pv[i] = data.k[i]
   }
@@ -129,9 +129,9 @@ function MultiDimensionalProperty(
  *
  */
 function KeyframedValueProperty(
-  this: any,
-  elem: any,
-  data: any,
+  this: ItemData,
+  elem: ItemData,
+  data: VectorProperty<number[]>,
   mult?: number,
   container?: any
 ) {
@@ -168,8 +168,8 @@ function KeyframedValueProperty(
  */
 function KeyframedMultidimensionalProperty(
   this: ItemData,
-  elem: any,
-  data: any,
+  elem: ItemData,
+  data: VectorProperty<any[]>,
   mult?: number,
   container?: HTMLElement
 ) {
@@ -282,25 +282,25 @@ function KeyframedMultidimensionalProperty(
 /**
  *
  */
-function setVValue(this: any, val: any) {
+function setVValue(this: ItemData, val: number | number[]) {
   let multipliedValue
-  if (this.propType === 'unidimensional') {
+  if (typeof val === 'number' && this.propType === 'unidimensional') {
     multipliedValue = val * this.mult
-    if (Math.abs(this.v - multipliedValue) > 0.00001) {
+    if (Math.abs((this.v as number) - multipliedValue) > 0.00001) {
       this.v = multipliedValue
       this._mdf = true
     }
-  } else {
-    let i = 0
-    const len = this.v.length
-    while (i < len) {
-      multipliedValue = val[i] * this.mult
-      if (Math.abs(this.v[i] - multipliedValue) > 0.00001) {
-        this.v[i] = multipliedValue
-        this._mdf = true
-      }
-      i++
+    return
+  }
+  let i = 0
+  const len = (this.v as number[]).length
+  while (i < len) {
+    multipliedValue = (val as number[])[i] * this.mult
+    if (Math.abs((this.v as number[])[i] - multipliedValue) > 0.00001) {
+      ;(this.v as number[])[i] = multipliedValue
+      this._mdf = true
     }
+    i++
   }
 }
 

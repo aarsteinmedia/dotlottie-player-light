@@ -1,8 +1,8 @@
 import { ArrayType, RendererType } from '@/enums'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
-import PropertyFactory from '@/utils/PropertyFactory'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
+import PropertyFactory from '@/utils/PropertyFactory'
 
 /**
  *

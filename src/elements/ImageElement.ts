@@ -4,27 +4,28 @@ import type {
   LottieAsset,
   LottieLayer,
 } from '@/types'
-import { createNS } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
+
 import BaseElement from '@/elements/BaseElement'
+import FrameElement from '@/elements/helpers/FrameElement'
+import HierarchyElement from '@/elements/helpers/HierarchyElement'
+import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
-import FrameElement from '@/elements/helpers/FrameElement'
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+import { createNS } from '@/utils'
+import { extendPrototype } from '@/utils/functionExtensions'
 
 interface ImageElement {
   assetData: LottieAsset | null
+  globalData: GlobalData
+  initElement: (data: LottieLayer, globalData: GlobalData, comp: any) => void
+  innerElem: SVGImageElement
+  layerElement: SVGElement
   sourceRect: {
     height: number
     left: number
     top: number
     width: number
   }
-  initElement: (data: LottieLayer, globalData: GlobalData, comp: any) => void
-  innerElem: SVGImageElement
-  globalData: GlobalData
-  layerElement: SVGElement
 }
 
 /**

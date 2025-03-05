@@ -1,5 +1,6 @@
-import { PlayerState, PlayMode } from '@/enums'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+
+import { PlayerState, PlayMode } from '@/enums'
 
 /**
  * Render Controls

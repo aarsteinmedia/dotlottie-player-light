@@ -1,7 +1,8 @@
 import type { GlobalData, LottieLayer, Mask, ShapeData } from '@/types'
+
 import { createNS } from '@/utils'
-import { createSizedArray } from '@/utils/helpers/arrays'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
+import { createSizedArray } from '@/utils/helpers/arrays'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
 /**

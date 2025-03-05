@@ -1,7 +1,8 @@
 import type { GlobalData } from '@/types'
+
+import IImageElement from '@/elements/ImageElement'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
-import IImageElement from '@/elements/ImageElement'
 
 /**
  *

@@ -8,8 +8,8 @@ const createTypedArray = (function () {
     const arr = []
     let value
     switch (type) {
-      case 'int16':
-      case 'uint8c':
+      case ArrayType.Int16:
+      case ArrayType.Uint8c:
         value = 1
         break
       default:

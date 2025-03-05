@@ -1,9 +1,10 @@
+import type { LottieLayer, Shape, ShapeData } from '@/types'
+
 import { extendPrototype } from '@/utils/functionExtensions'
-import ShapeModifier from '@/utils/shapes/ShapeModifier'
-import PropertyFactory from '@/utils/PropertyFactory'
-import TransformPropertyFactory from '@/utils/TransformProperty'
 import Matrix from '@/utils/Matrix'
-import { LottieLayer, Shape, ShapeData } from '@/types'
+import PropertyFactory from '@/utils/PropertyFactory'
+import ShapeModifier from '@/utils/shapes/ShapeModifier'
+import TransformPropertyFactory from '@/utils/TransformProperty'
 
 export default function RepeaterModifier() {}
 extendPrototype([ShapeModifier], RepeaterModifier)

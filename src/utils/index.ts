@@ -1,4 +1,3 @@
-import { strFromU8, unzip as unzipOrg, type Unzipped } from 'fflate'
 import type {
   AnimationData,
   AnimationDirection,
@@ -12,12 +11,14 @@ import type {
   Vector3,
   Vector4,
 } from '@/types'
-import { ObjectFit } from '@/enums'
+
 import PolynomialBezier from '@/elements/PolynomialBezier'
+import { ObjectFit } from '@/enums'
 import { roundCorner } from '@/utils/getterSetter'
+import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
-import Matrix from '@/utils/Matrix'
+import { strFromU8, unzip as unzipOrg, type Unzipped } from 'fflate'
 
 export class CustomError extends Error {
   status?: number
@@ -75,7 +76,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     pathNodes: ShapeData,
     length: number,
     closed: boolean,
-    mat: any
+    mat: Matrix
   ) => {
     if (length === 0) {
       return ''

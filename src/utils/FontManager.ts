@@ -1,5 +1,6 @@
+import type { Characacter, FontHandler, FontList } from '@/types'
+
 import { RendererType } from '@/enums'
-import { Characacter, FontHandler, FontList } from '@/types'
 import { createNS, createTag, isServer } from '@/utils'
 
 const FontManager = (() => {

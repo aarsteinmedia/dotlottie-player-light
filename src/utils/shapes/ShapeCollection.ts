@@ -1,4 +1,5 @@
 import type { ShapeData } from '@/types'
+
 import { createSizedArray } from '@/utils/helpers/arrays'
 import shapePool from '@/utils/pooling/shapePool'
 

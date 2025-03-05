@@ -1,8 +1,9 @@
-import { extendPrototype } from '@/utils/functionExtensions'
-import shapePool from '@/utils/pooling/shapePool'
 import type { ShapeData } from '@/types'
-import PropertyFactory from '@/utils/PropertyFactory'
+
+import { extendPrototype } from '@/utils/functionExtensions'
 import { roundCorner } from '@/utils/getterSetter'
+import shapePool from '@/utils/pooling/shapePool'
+import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
 export default function RoundCornersModifier() {}

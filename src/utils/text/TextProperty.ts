@@ -5,6 +5,7 @@ import type {
   ItemData,
   TextData,
 } from '@/types'
+
 import FontManager, { getFontProperties } from '@/utils/FontManager'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 
@@ -71,7 +72,7 @@ export default function TextProperty(
 
 TextProperty.prototype.defaultBoxWidth = [0, 0]
 
-TextProperty.prototype.copyData = function (obj: TextData, data: TextData) {
+TextProperty.prototype.copyData = (obj: TextData, data: TextData) => {
   for (const s in data) {
     if (Object.prototype.hasOwnProperty.call(data, s)) {
       // @ts-expect-error: ignore

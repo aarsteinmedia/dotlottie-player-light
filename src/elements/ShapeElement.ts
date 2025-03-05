@@ -1,4 +1,5 @@
 import type { Shape } from '@/types'
+
 import { ProcessedElement } from '@/elements/helpers/shapes'
 
 export default function IShapeElement() {}

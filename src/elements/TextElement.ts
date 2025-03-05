@@ -1,7 +1,3 @@
-import { buildShapeString } from '@/utils'
-import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
-import LetterProps from '@/utils/text/LetterProps'
-import TextProperty from '@/utils/text/TextProperty'
 import type {
   DocumentData,
   GlobalData,
@@ -11,6 +7,11 @@ import type {
   Vector3,
 } from '@/types'
 import type Matrix from '@/utils/Matrix'
+
+import { buildShapeString } from '@/utils'
+import LetterProps from '@/utils/text/LetterProps'
+import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
+import TextProperty from '@/utils/text/TextProperty'
 
 export default function ITextElement() {}
 

@@ -1,16 +1,20 @@
-import { extendPrototype } from '@/utils/functionExtensions'
-import PropertyFactory from '@/utils/PropertyFactory'
-import { segmentsLengthPool } from '@/utils/pooling'
-import bezFunction from '@/utils/bez'
 import { ShapeData, Vector2 } from '@/types'
+import bezFunction from '@/utils/bez'
+import { extendPrototype } from '@/utils/functionExtensions'
+import { segmentsLengthPool } from '@/utils/pooling'
 import shapePool from '@/utils/pooling/shapePool'
+import PropertyFactory from '@/utils/PropertyFactory'
+
 import type ShapeCollection from './ShapeCollection'
+
 import ShapeModifier from './ShapeModifier'
 
 const bez = bezFunction()
 
 export default function TrimModifier() {}
+
 extendPrototype([ShapeModifier], TrimModifier)
+
 TrimModifier.prototype.initModifierProperties = function (
   elem: any,
   data: any
@@ -28,17 +32,17 @@ TrimModifier.prototype.initModifierProperties = function (
     !!this.o.effectsSequence.length
 }
 
-TrimModifier.prototype.addShapeToModifier = function (shapeData: any) {
+TrimModifier.prototype.addShapeToModifier = (shapeData: any) => {
   shapeData.pathsData = []
 }
 
-TrimModifier.prototype.calculateShapeEdges = function (
+TrimModifier.prototype.calculateShapeEdges = (
   s: any,
   e: any,
   shapeLength: number,
   addedLength: number,
   totalModifierLength: number
-) {
+) => {
   const segments = []
   if (e <= 1) {
     segments.push({
@@ -92,10 +96,9 @@ TrimModifier.prototype.calculateShapeEdges = function (
   return shapeSegments
 }
 
-TrimModifier.prototype.releasePathsData = function (pathsData: any) {
-  let i
+TrimModifier.prototype.releasePathsData = (pathsData: any) => {
   const len = pathsData.length
-  for (i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     segmentsLengthPool.release(pathsData[i])
   }
   pathsData.length = 0

@@ -1,4 +1,4 @@
-const BezierFactory = (function () {
+const BezierFactory = (() => {
   /**
    * BezierEasing - use bezier curve for transition easing function
    * by Gaëtan Renaudeau 2014 - 2015 – MIT License

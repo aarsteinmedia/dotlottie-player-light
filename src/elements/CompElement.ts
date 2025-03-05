@@ -1,10 +1,11 @@
-import { extendPrototype } from '@/utils/functionExtensions'
 import type { GlobalData, LottieComp } from '@/types'
+
 import BaseElement from '@/elements/BaseElement'
-import TransformElement from '@/elements/helpers/TransformElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import FrameElement from '@/elements/helpers/FrameElement'
+import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+import TransformElement from '@/elements/helpers/TransformElement'
+import { extendPrototype } from '@/utils/functionExtensions'
 
 export default function ICompElement() {}
 

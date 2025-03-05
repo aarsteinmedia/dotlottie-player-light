@@ -1,11 +1,12 @@
+import type AnimationItem from '@/animation/AnimationItem'
+import type { GlobalData, LottieLayer, SVGRendererConfig } from '@/types'
+
+import SVGCompElement from '@/elements/svg/SVGCompElement'
+import { RendererType } from '@/enums'
+import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { createElementID } from '@/utils/getterSetter'
-import { RendererType } from '@/enums'
-import SVGCompElement from '@/elements/svg/SVGCompElement'
-import SVGRendererBase from '@/renderers/SVGRendererBase'
-import type AnimationItem from '@/animation/AnimationItem'
-import type { GlobalData, LottieLayer, SVGRendererConfig } from '@/types'
 
 /**
  *

@@ -1,6 +1,6 @@
 type Factory = (elem: any, data?: unknown) => void
 
-const ShapeModifiers = (function () {
+const ShapeModifiers = (() => {
   const modifiers: Record<string, Factory> = {}
 
   /**

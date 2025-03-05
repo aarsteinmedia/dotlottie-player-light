@@ -1,5 +1,5 @@
-import { getDefaultCurveSegments } from '@/utils/getterSetter'
 import { ArrayType } from '@/enums'
+import { getDefaultCurveSegments } from '@/utils/getterSetter'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
 
 export const poolFactory = <Release = unknown>(

@@ -1,6 +1,6 @@
 import { createSizedArray } from '@/utils/helpers/arrays'
-import shapePool from '@/utils/pooling/shapePool'
 import { pooling } from '@/utils/pooling'
+import shapePool from '@/utils/pooling/shapePool'
 import ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 const shapeCollectionPool = (function () {

@@ -1,5 +1,5 @@
-import { expect } from '@esm-bundle/chai'
 import { getExt } from '@/utils'
+import { expect } from '@esm-bundle/chai'
 
 it('Get extension from filename, URL or path', () => {
   expect(getExt('cat.jpg')).to.equal('jpg')
