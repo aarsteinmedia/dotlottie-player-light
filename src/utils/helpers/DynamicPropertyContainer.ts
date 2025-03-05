@@ -1,10 +1,11 @@
-import type { ElementInterface, ItemData } from '@/types'
+import type { SVGStrokeStyleData } from '@/elements/helpers/shapes'
+import type { ItemData } from '@/types'
 
 export default class DynamicPropertyContainer {
-  private container: ElementInterface | null
-  private dynamicProperties: ItemData[]
-  _mdf: boolean
   _isAnimated: boolean
+  _mdf: boolean
+  private container: SVGStrokeStyleData | null
+  private dynamicProperties: ItemData[]
 
   constructor() {
     this.container = null
@@ -16,12 +17,12 @@ export default class DynamicPropertyContainer {
   addDynamicProperty(prop: ItemData): void {
     if (this.dynamicProperties.indexOf(prop) === -1) {
       this.dynamicProperties.push(prop)
-      this.container?.addDynamicProperty(this)
+      this.container?.addDynamicProperty(this as any) // TODO:
       this._isAnimated = true
     }
   }
 
-  initDynamicPropertyContainer(container: ElementInterface): void {
+  initDynamicPropertyContainer(container: SVGStrokeStyleData): void {
     this.container = container
     this.dynamicProperties = []
     this._mdf = false

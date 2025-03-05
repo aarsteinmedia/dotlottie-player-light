@@ -1,49 +1,50 @@
 import type AnimationItem from '@/animation/AnimationItem'
 
-import { AnimationEventName, BMEvent } from '@/types'
+import { AnimationDirection, AnimationEventName, BMEvent } from '@/types'
 
-/**
- *
- */
-export function BMEnterFrameEvent(
-  this: BMEvent,
-  type: string,
-  currentTime: number,
-  totalTime: number,
-  frameMultiplier: number
-) {
-  this.type = type
-  this.currentTime = currentTime
-  this.totalTime = totalTime
-  this.direction = frameMultiplier < 0 ? -1 : 1
+export class BMEnterFrameEvent {
+  currentTime: number
+  direction: AnimationDirection
+  totalTime: number
+  type: AnimationEventName
+  constructor(
+    type: AnimationEventName,
+    currentTime: number,
+    totalTime: number,
+    frameMultiplier: number
+  ) {
+    this.type = type
+    this.currentTime = currentTime
+    this.totalTime = totalTime
+    this.direction = frameMultiplier < 0 ? -1 : 1
+  }
 }
 
-/**
- *
- */
-export function BMCompleteEvent(
-  this: BMEvent,
-  type: string,
-  frameMultiplier: number
-) {
-  this.type = type
-  this.direction = frameMultiplier < 0 ? -1 : 1
+export class BMCompleteEvent {
+  direction: AnimationDirection
+  type: AnimationEventName
+  constructor(type: AnimationEventName, frameMultiplier: number) {
+    this.type = type
+    this.direction = frameMultiplier < 0 ? -1 : 1
+  }
 }
 
-/**
- *
- */
-export function BMCompleteLoopEvent(
-  this: BMEvent,
-  type: string,
-  totalLoops: number,
-  currentLoop: number,
-  frameMultiplier: number
-) {
-  this.type = type
-  this.currentLoop = currentLoop
-  this.totalLoops = totalLoops
-  this.direction = frameMultiplier < 0 ? -1 : 1
+export class BMCompleteLoopEvent {
+  currentLoop: number
+  direction: AnimationDirection
+  totalLoops: number
+  type: AnimationEventName
+  constructor(
+    type: AnimationEventName,
+    totalLoops: number,
+    currentLoop: number,
+    frameMultiplier: number
+  ) {
+    this.type = type
+    this.currentLoop = currentLoop
+    this.totalLoops = totalLoops
+    this.direction = frameMultiplier < 0 ? -1 : 1
+  }
 }
 
 /**

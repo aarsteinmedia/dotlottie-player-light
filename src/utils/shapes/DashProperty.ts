@@ -1,3 +1,4 @@
+import type { SVGStrokeStyleData } from '@/elements/helpers/shapes'
 import type { ElementInterface, StrokeData } from '@/types'
 
 import { ArrayType, RendererType } from '@/enums'
@@ -6,11 +7,19 @@ import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import PropertyFactory from '@/utils/PropertyFactory'
 
 export default class DashProperty extends DynamicPropertyContainer {
+  dashArray: Float32Array
+  dashoffset: Float32Array
+  dashStr: string
+  dataProps: StrokeData[]
+  elem: ElementInterface
+  frameId: number
+  k: boolean
+  renderer: RendererType
   constructor(
     elem: ElementInterface,
     data: StrokeData[],
     renderer: RendererType,
-    container: ElementInterface
+    container: SVGStrokeStyleData
   ) {
     super()
     this.elem = elem
@@ -38,14 +47,6 @@ export default class DashProperty extends DynamicPropertyContainer {
     }
     this._isAnimated = this.k
   }
-  renderer: any
-  dataProps: StrokeData[]
-  elem: ElementInterface
-  frameId: number
-  k: boolean
-  dashStr: string
-  dashArray: Float32Array
-  dashoffset: Float32Array
   getValue(forceRender?: boolean) {
     if (this.elem.globalData.frameId === this.frameId && !forceRender) {
       return
