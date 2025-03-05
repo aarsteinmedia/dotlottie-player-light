@@ -1,3 +1,8 @@
+import type { AnimationConfiguration, ExpressionsPlugin } from '@/types'
+
+import animationManager from '@/animation/AnimationManager'
+import { RendererType } from '@/enums'
+import SVGRenderer from '@/renderers/SVGRenderer'
 import { getFactory, inBrowser, isServer } from '@/utils'
 import {
   registerRenderer,
@@ -8,17 +13,13 @@ import {
   setSubframeEnabled,
   setWebWorker,
 } from '@/utils/getterSetter'
-import ShapeModifiers from '@/utils/shapes/ShapeModifiers'
-import TrimModifier from '@/utils/shapes/TrimModifier'
+import OffsetPathModifier from '@/utils/shapes/OffsetPathModifier'
 import PuckerAndBloatModifier from '@/utils/shapes/PuckerAndBloatModifier'
 import RepeaterModifier from '@/utils/shapes/RepeaterModifier'
 import RoundCornersModifier from '@/utils/shapes/RoundCornersModifier'
+import ShapeModifiers from '@/utils/shapes/ShapeModifiers'
+import TrimModifier from '@/utils/shapes/TrimModifier'
 import ZigZagModifier from '@/utils/shapes/ZigZagModifier'
-import OffsetPathModifier from '@/utils/shapes/OffsetPathModifier'
-import { RendererType } from '@/enums'
-import animationManager from '@/animation/AnimationManager'
-import type { AnimationConfiguration, ExpressionsPlugin } from '@/types'
-import SVGRenderer from '@/renderers/SVGRenderer'
 
 /**
  *

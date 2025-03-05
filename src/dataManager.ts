@@ -1,4 +1,5 @@
 /* eslint-disable max-depth */
+import type AnimationItem from '@/animation/AnimationItem'
 import type {
   AnimationData,
   AssetLoader,
@@ -9,11 +10,13 @@ import type {
   Vector3,
   WorkerEvent,
   LottieAsset,
+  MaskData,
+  Characacter,
 } from '@/types'
-import { isServer } from '@/utils'
+
 import { ShapeType } from '@/enums'
+import { isServer } from '@/utils'
 import { getWebWorker } from '@/utils/getterSetter'
-import type AnimationItem from '@/animation/AnimationItem'
 
 const dataManager = (() => {
   let _counterId = 1
@@ -167,24 +170,32 @@ const dataManager = (() => {
             }
             layers[i].completed = true
             if (layers[i].hasMask) {
-              const maskProps = layers[i].masksProperties
-              jLen = maskProps?.length || 0
+              if (!layers[i].masksProperties) {
+                continue
+              }
+              jLen = layers[i].masksProperties!.length
               for (j = 0; j < jLen; j++) {
-                if (maskProps?.[j].pt.k.i) {
-                  convertPathsToAbsoluteValues(maskProps[j].pt.k)
+                if ((layers[i].masksProperties![j].pt.k as MaskData).i) {
+                  convertPathsToAbsoluteValues(
+                    layers[i].masksProperties![j].pt.k
+                  )
                   continue
                 }
-                kLen = (maskProps?.[j].pt.k.length as unknown as number) || 0
+                if (!layers[i].masksProperties![j]) {
+                  continue
+                }
+                kLen = (layers[i].masksProperties![j].pt.k as MaskData[]).length
                 for (k = 0; k < kLen; k++) {
-                  // @ts-expect-error: ignore
-                  if (maskProps?.[j].pt.k[k].s) {
-                    // @ts-expect-error: ignore
-                    convertPathsToAbsoluteValues(maskProps[j].pt.k[k].s[0])
+                  if ((layers[i].masksProperties![j].pt.k as MaskData[])[k].s) {
+                    convertPathsToAbsoluteValues(
+                      (layers[i].masksProperties![j].pt.k as MaskData[])[k].s[0]
+                    )
                   }
-                  // @ts-expect-error: ignore
-                  if (maskProps?.[j].pt.k[k].e) {
-                    // @ts-expect-error: ignore
-                    convertPathsToAbsoluteValues(maskProps[j].pt.k[k].e[0])
+                  if ((layers[i].masksProperties![j].pt.k as MaskData[])[k].e) {
+                    convertPathsToAbsoluteValues(
+                      (layers[i].masksProperties![j].pt.k as MaskData[])[k]
+                        .e?.[0]
+                    )
                   }
                 }
               }
@@ -204,7 +215,7 @@ const dataManager = (() => {
          *
          */
         function completeChars(
-          chars: any[],
+          chars: Characacter[],
           assets: (LottieLayer | LottieAsset)[]
         ) {
           if (!chars) {
@@ -230,7 +241,7 @@ const dataManager = (() => {
             //   s: { k: [100, 100], a: 0 },
             //   o: { k: 100, a: 0 },
             // };
-            completeLayers(chars[i].data.layers, assets)
+            completeLayers(chars[i].data.layers || [], assets)
           }
         }
 
@@ -641,21 +652,23 @@ const dataManager = (() => {
                 const maskProps = layers[i].masksProperties
                 jLen = Number(maskProps?.length)
                 for (j = 0; j < jLen; j++) {
-                  if (maskProps?.[j].pt.k.i) {
-                    maskProps[j].pt.k.c = !!maskProps[j].cl
+                  if (!maskProps) {
                     continue
                   }
-                  kLen = maskProps?.[j].pt.k.length as unknown as number
+                  if ((maskProps[j].pt.k as MaskData).i) {
+                    ;(maskProps[j].pt.k as MaskData).c = !!maskProps[j].cl
+                    continue
+                  }
+                  kLen = (maskProps[j].pt.k as MaskData[])
+                    .length as unknown as number
                   for (k = 0; k < kLen; k += 1) {
-                    // @ts-expect-error: TODO: Check if this is error or wrong typing
-                    if (maskProps[j].pt.k[k].s) {
-                      // @ts-expect-error: TODO: Check if this is error or wrong typing
-                      maskProps[j].pt.k[k].s[0].c = !!maskProps?.[j].cl
+                    if ((maskProps[j].pt.k as MaskData[])[k].s) {
+                      ;(maskProps[j].pt.k as MaskData[])[k].s[0].c =
+                        !!maskProps?.[j].cl
                     }
-                    // @ts-expect-error: TODO: Check if this is error or wrong typing
-                    if (maskProps[j].pt.k[k].e) {
-                      // @ts-expect-error: TODO: Check if this is error or wrong typing
-                      maskProps[j].pt.k[k].e[0].c = !!maskProps?.[j].cl
+                    if ((maskProps[j].pt.k as MaskData[])[k].e) {
+                      ;(maskProps[j].pt.k as MaskData[])[k].e![0].c =
+                        !!maskProps?.[j].cl
                     }
                   }
                 }

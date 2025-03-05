@@ -578,6 +578,21 @@ export type VectorProperty<T = Vector1> = {
   ix?: number
 }
 
+interface Coordinates {
+  c?: boolean
+  x: number
+  y: number
+}
+
+export interface MaskData {
+  c?: boolean
+  e?: Coordinates[]
+  i: Coordinates
+  o: Coordinates
+  s: Coordinates[]
+  t: number
+}
+
 export interface Mask {
   cl?: boolean
   inv: boolean
@@ -590,7 +605,7 @@ export interface Mask {
   }
   pt: {
     a: 0 | 1
-    k: ShapeData
+    k: MaskData | MaskData[]
     ix?: number
   }
   x: {
