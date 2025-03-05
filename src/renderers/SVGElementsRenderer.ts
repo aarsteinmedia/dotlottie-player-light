@@ -142,9 +142,9 @@ const SVGElementsRenderer = (() => {
     if (itemData.c._mdf || isFirstFrame) {
       styleElem.pElem.setAttribute(
         'fill',
-        `rgb(${Math.floor(itemData.c.v[0] as number)},${Math.floor(
-          itemData.c.v[1] as number
-        )},${itemData.c.v[2]})`
+        `rgb(${Math.floor((itemData.c.v as number[])[0])},${Math.floor(
+          (itemData.c.v as number[])[1]
+        )},${(itemData.c.v as number[])[2]})`
       )
     }
     if (itemData.o._mdf || isFirstFrame) {
@@ -292,7 +292,7 @@ const SVGElementsRenderer = (() => {
     if (itemData.c && (itemData.c._mdf || isFirstFrame)) {
       styleElem.pElem.setAttribute(
         'stroke',
-        `rgb(${Math.floor(itemData.c.v[0] as number)},${Math.floor(itemData.c.v[1] as number)},${itemData.c.v[2]})`
+        `rgb(${Math.floor((itemData.c.v as number[])[0])},${Math.floor((itemData.c.v as number[])[1])},${(itemData.c.v as number[])[2]})`
       )
     }
     if (itemData.o._mdf || isFirstFrame) {

@@ -156,7 +156,7 @@ export interface StyleData {
   data: Shape
   hd?: boolean
   lvl: number
-  msElem: SVGElement
+  msElem: SVGElement | null
   pElem: SVGPathElement
   t: number
   ty: ShapeType

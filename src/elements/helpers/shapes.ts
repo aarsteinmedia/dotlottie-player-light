@@ -4,6 +4,7 @@ import {
   GenericAnimatedProperty,
   ItemData,
   Shape,
+  ShapeDataProperty,
   ShapeGroupHandler,
   ShapeHandler,
   StyleData,
@@ -34,9 +35,9 @@ export function ShapeGroupData(this: ShapeGroupHandler) {
  */
 export function SVGShapeData(
   this: ShapeHandler,
-  transformers: ShapeHandler['transformers'],
+  transformers: Transformer[],
   level: number,
-  shape: Shape['ks']
+  shape: ShapeDataProperty
 ) {
   this.caches = []
   this.styles = []
@@ -139,8 +140,8 @@ SVGGradientFillStyleData.prototype.initGradientData = function (
     _isAnimated: boolean
   },
   elem: any,
-  data: any, // Shape,
-  styleOb: any
+  data: Shape,
+  styleOb: StyleData
 ) {
   this.o = PropertyFactory.getProp(
     elem,

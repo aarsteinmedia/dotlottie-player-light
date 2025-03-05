@@ -45,9 +45,7 @@
     "lint:js": "eslint",
     "lint:js:fix": "eslint --fix",
     "lint:css": "npx stylelint **/*.css",
-    "lint:css:fix": "npx stylelint **/*.css --fix",
-    "lint:pkg": "npmPkgJsonLint .",
-    "lint:pkg:fix": "npmPkgJsonLint . --fix"
+    "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
     "fflate": "^0.8.2"
@@ -86,8 +84,6 @@
     "eslint-plugin-prettier": "^5.2.3",
     "globals": "^16.0.0",
     "mocha": "^11.1.0",
-    "npm-package-json-lint": "^8.0.0",
-    "npm-package-json-lint-config-default": "^7.0.1",
     "playwright": "^1.50.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "prettier": "^3.5.3",
