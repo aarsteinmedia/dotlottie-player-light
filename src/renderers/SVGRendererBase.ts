@@ -1,6 +1,6 @@
 import type { AnimationData } from '@/types'
 
-import IImageElement from '@/elements/ImageElement'
+import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
 import ISolidElement from '@/elements/SolidElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
@@ -169,7 +169,7 @@ export default class SVGRendererBase {
   }
 
   createImage(data: any) {
-    return new (IImageElement as any)(data, this.globalData, this)
+    return new (ImageElement as any)(data, this.globalData, this)
   }
 
   createNull(data: any) {

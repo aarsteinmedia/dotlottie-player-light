@@ -15,7 +15,7 @@ if (isServer()) {
 /**
  * HTMLElement enhanced to track property changes
  */
-export default class EnhancedElement extends HTMLElement {
+export default class PropertyCallbackElement extends HTMLElement {
   constructor() {
     super()
     const { observedProperties = [] } = this.constructor as any

@@ -2,8 +2,7 @@ import type {
   ItemData,
   Shape,
   ShapeData,
-  ShapeDataProperty,
-  ShapeHandler,
+  ShapeDataInterface,
   StyleData,
 } from '@/types'
 
@@ -11,7 +10,7 @@ import { ShapeType } from '@/enums'
 import { buildShapeString } from '@/utils'
 import Matrix from '@/utils/Matrix'
 
-const SVGElementsRenderer = (() => {
+const SVGElementsRenderer = (function () {
   const _identityMatrix = new Matrix(),
     _matrixHelper = new Matrix()
 
@@ -71,7 +70,7 @@ const SVGElementsRenderer = (() => {
    */
   function renderPath(
     styleData: StyleData,
-    itemData: ShapeHandler,
+    itemData: ShapeDataInterface,
     isFirstFrame: boolean
   ) {
     let j: number
@@ -82,7 +81,7 @@ const SVGElementsRenderer = (() => {
     let l: number
     const lLen = itemData.styles.length
     const lvl = itemData.lvl
-    let paths: ShapeDataProperty['paths']
+    let paths: ShapeData
     let mat
     let iterations
     let k
@@ -110,7 +109,7 @@ const SVGElementsRenderer = (() => {
         mat = _identityMatrix
       }
       paths = itemData.sh.paths
-      jLen = paths._length
+      jLen = paths._length || 0
       if (redraw) {
         pathStringTransformed = ''
         for (j = 0; j < jLen; j += 1) {
@@ -119,7 +118,7 @@ const SVGElementsRenderer = (() => {
             pathStringTransformed += buildShapeString(
               pathNodes as unknown as ShapeData,
               pathNodes._length,
-              pathNodes.c,
+              !!pathNodes.c,
               mat
             )
           }

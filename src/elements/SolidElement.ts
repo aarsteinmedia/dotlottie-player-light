@@ -1,9 +1,9 @@
 import type { GlobalData } from '@/types'
 
-import IImageElement from '@/elements/ImageElement'
+import ImageElement from '@/elements/ImageElement'
 import { createNS } from '@/utils'
 
-class ISolidElement extends IImageElement {
+class ISolidElement extends ImageElement {
   constructor(data: any, globalData: GlobalData, comp: any) {
     super(data, globalData, comp)
     this.initElement(data, globalData, comp)

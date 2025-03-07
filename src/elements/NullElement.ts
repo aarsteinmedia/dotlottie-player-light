@@ -11,7 +11,7 @@ export default class NullElement {
     this.initFrame()
     this.initBaseData(data, globalData, comp)
     this.initFrame()
-    this.initTransform(data, globalData, comp)
+    this.initTransform()
     this.initHierarchy()
   }
 

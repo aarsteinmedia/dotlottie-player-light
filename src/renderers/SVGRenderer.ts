@@ -12,9 +12,9 @@ export default class SVGRenderer extends SVGRendererBase {
   animationItem: AnimationItem
   destroyed: boolean
   elements: any[]
-  globalData: null | GlobalData
+  globalData: GlobalData
   layerElement: SVGGElement
-  layers: null | LottieLayer[]
+  layers: LottieLayer[]
   pendingElements: any[]
   renderConfig: SVGRendererConfig
   renderedFrame: number

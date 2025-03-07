@@ -1,13 +1,26 @@
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
+import { GlobalData, LottieLayer } from '@/types'
 import { createNS, useId } from '@/utils'
 import { featureSupport, filtersFactory } from '@/utils/filters'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
-export default function SVGBaseElement() {}
+export default class SVGBaseElement {
+  _sizeChanged?: boolean
 
-SVGBaseElement.prototype = {
-  createContainerElements: function () {
+  baseElement?: SVGGElement
+  checkMasks!: () => boolean
+  data!: LottieLayer
+  globalData!: GlobalData
+  layerElement!: SVGGElement
+  layerId!: string
+  maskedElement?: SVGGElement
+  maskManager!: MaskElement
+  matteElement?: SVGGElement
+  matteMasks?: unknown
+  setBlendMode!: () => void
+  transformedElement?: SVGGElement
+  createContainerElements() {
     this.matteElement = createNS('g')
     this.transformedElement = this.layerElement
     this.maskedElement = this.layerElement
@@ -16,7 +29,7 @@ SVGBaseElement.prototype = {
     // If this layer acts as a mask for the following layer
     if (this.data.td) {
       this.matteMasks = {}
-      const gg = createNS('g')
+      const gg = createNS<SVGGElement>('g')
       gg.setAttribute('id', this.layerId)
       gg.appendChild(this.layerElement)
       layerElementParent = gg
@@ -50,7 +63,7 @@ SVGBaseElement.prototype = {
       this.globalData.defs.appendChild(cp)
 
       if (this.checkMasks()) {
-        const cpGroup = createNS('g')
+        const cpGroup = createNS<SVGGElement>('g')
         cpGroup.setAttribute('clip-path', `url(${getLocationHref()}#${clipId})`)
         cpGroup.appendChild(this.layerElement)
         this.transformedElement = cpGroup
@@ -69,28 +82,24 @@ SVGBaseElement.prototype = {
     if (this.data.bm !== 0) {
       this.setBlendMode()
     }
-  },
-  createRenderableComponents: function () {
-    this.maskManager = new (MaskElement as any)(
-      this.data,
-      this,
-      this.globalData
-    )
+  }
+  createRenderableComponents() {
+    this.maskManager = new MaskElement(this.data, this, this.globalData)
     this.renderableEffectsManager = new (SVGEffects as any)(this)
     this.searchEffectTransforms()
-  },
-  destroyBaseElement: function () {
+  }
+  destroyBaseElement() {
     this.layerElement = null
     this.matteElement = null
     this.maskManager.destroy()
-  },
-  getBaseElement: function () {
+  }
+  getBaseElement() {
     if (this.data.hd) {
       return null
     }
     return this.baseElement
-  },
-  getMatte: function (matteType: number) {
+  }
+  getMatte(matteType: number) {
     // This should not be a common case. But for backward compatibility, we'll create the matte object.
     // It solves animations that have two consecutive layers marked as matte masks.
     // Which is an undefined behavior in AE.
@@ -179,11 +188,11 @@ SVGBaseElement.prototype = {
       this.matteMasks[matteType] = id
     }
     return this.matteMasks[matteType]
-  },
-  initRendererElement: function () {
+  }
+  initRendererElement() {
     this.layerElement = createNS('g')
-  },
-  renderElement: function () {
+  }
+  renderElement() {
     if (this.finalTransform._localMatMdf) {
       this.transformedElement.setAttribute(
         'transform',
@@ -196,13 +205,13 @@ SVGBaseElement.prototype = {
         this.finalTransform.localOpacity
       )
     }
-  },
-  setMatte: function (id: string) {
+  }
+  setMatte(id: string) {
     if (!this.matteElement) {
       return
     }
     this.matteElement.setAttribute('mask', `url(${getLocationHref()}#${id})`)
-  },
+  }
 }
 
 // class SVGBaseElement {

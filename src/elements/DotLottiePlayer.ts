@@ -13,7 +13,7 @@ import type {
   Vector2,
 } from '@/types'
 
-import EnhancedElement from '@/elements/helpers/EnhancedElement'
+import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
 import {
   ObjectFit,
   PlayMode,
@@ -41,10 +41,10 @@ import {
  * dotLottie Player Web Component
  * @exports
  * @class DotLottiePlayer
- * @extends { EnhancedElement }
+ * @extends { PropertyCallbackElement }
  * @description Web Component for playing Lottie animations in your web app.
  */
-export default class DotLottiePlayer extends EnhancedElement {
+export default class DotLottiePlayer extends PropertyCallbackElement {
   /**
    * Attributes to observe
    */

@@ -7,9 +7,9 @@ import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
 
 export default class MaskElement {
-  data: null | LottieLayer
+  data: LottieLayer
   element: any
-  globalData: null | GlobalData
+  globalData: GlobalData
   maskElement: SVGElement | null
   masksProperties: null | Mask[]
   solidPath: string
@@ -66,7 +66,7 @@ export default class MaskElement {
         rect = null
       }
 
-      path = createNS('path')
+      path = createNS<SVGPathElement>('path')
       if (properties[i].mode === 'n') {
         // TODO: move this to a factory or to a constructor
         this.viewData[i] = {
@@ -217,9 +217,9 @@ export default class MaskElement {
 
   destroy() {
     this.element = null
-    this.globalData = null
+    this.globalData = null as any
     this.maskElement = null
-    this.data = null
+    this.data = null as any
     this.masksProperties = null
   }
 

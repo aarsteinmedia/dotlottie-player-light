@@ -102,7 +102,7 @@ class ITextElement {
     this.initBaseData(data, globalData, comp)
     this.textProperty = new TextProperty(this, data.t, this.dynamicProperties)
     this.textAnimator = new TextAnimatorProperty(data.t, this.renderType, this)
-    this.initTransform(data, globalData, comp)
+    this.initTransform()
     this.initHierarchy()
     this.initRenderable()
     this.initRendererElement()

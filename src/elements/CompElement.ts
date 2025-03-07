@@ -7,7 +7,7 @@ import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
-export default function ICompElement() {}
+export default class ICompElement {}
 
 extendPrototype(
   [
@@ -27,7 +27,7 @@ ICompElement.prototype.initElement = function (
 ) {
   this.initFrame()
   this.initBaseData(data, globalData, comp)
-  this.initTransform(data, globalData, comp)
+  this.initTransform()
   this.initRenderable()
   this.initHierarchy()
   this.initRendererElement()

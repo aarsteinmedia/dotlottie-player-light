@@ -1,7 +1,7 @@
 import type {
   ElementInterface,
   GlobalData,
-  LottieAsset,
+  // LottieAsset,
   LottieLayer,
 } from '@/types'
 
@@ -13,42 +13,55 @@ import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
+export default class ImageElement {
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
+    if (data.refId && globalData.getAssetData) {
+      this.assetData = globalData.getAssetData(data.refId)
+    }
+    if (this.assetData && this.assetData.sid) {
+      this.assetData = globalData.slotManager?.getProp(this.assetData) || null
+    }
+    this.initElement(data, globalData, comp)
+    this.sourceRect = {
+      height: Number(this.assetData?.h),
+      left: 0,
+      top: 0,
+      width: Number(this.assetData?.w),
+    }
+  }
 
-interface ImageElement {
-  assetData: LottieAsset | null
-  globalData: GlobalData
-  initElement: (data: LottieLayer, globalData: GlobalData, comp: any) => void
-  innerElem: SVGImageElement
-  layerElement: SVGElement
-  sourceRect: {
-    height: number
-    left: number
-    top: number
-    width: number
-  }
-}
+  createContent() {
+    let assetPath = ''
+    if (this.assetData && this.globalData.getAssetsPath) {
+      assetPath = this.globalData.getAssetsPath(this.assetData)
+    }
 
-/**
- *
- */
-export default function IImageElement(
-  this: ImageElement,
-  data: LottieLayer,
-  globalData: GlobalData,
-  comp: ElementInterface
-) {
-  if (data.refId && globalData.getAssetData) {
-    this.assetData = globalData.getAssetData(data.refId)
+    if (this.assetData) {
+      this.innerElem = createNS<SVGImageElement>('image')
+      this.innerElem.setAttribute('width', `${this.assetData.w}px`)
+      this.innerElem.setAttribute('height', `${this.assetData.h}px`)
+      this.innerElem.setAttribute(
+        'preserveAspectRatio',
+        this.assetData?.pr ||
+          this.globalData.renderConfig?.imagePreserveAspectRatio ||
+          ''
+      )
+      this.innerElem.setAttributeNS(
+        'http://www.w3.org/1999/xlink',
+        'href',
+        assetPath
+      )
+
+      this.layerElement.appendChild(this.innerElem)
+    }
   }
-  if (this.assetData && this.assetData.sid) {
-    this.assetData = globalData.slotManager?.getProp(this.assetData) || null
-  }
-  this.initElement(data, globalData, comp)
-  this.sourceRect = {
-    height: Number(this.assetData?.h),
-    left: 0,
-    top: 0,
-    width: Number(this.assetData?.w),
+
+  sourceRectAtTime() {
+    return this.sourceRect
   }
 }
 
@@ -61,38 +74,8 @@ extendPrototype(
     FrameElement,
     RenderableDOMElement,
   ],
-  IImageElement
+  ImageElement
 )
-
-IImageElement.prototype.createContent = function (this: ImageElement) {
-  let assetPath = ''
-  if (this.assetData && this.globalData.getAssetsPath) {
-    assetPath = this.globalData.getAssetsPath(this.assetData)
-  }
-
-  if (this.assetData) {
-    this.innerElem = createNS<SVGImageElement>('image')
-    this.innerElem.setAttribute('width', `${this.assetData.w}px`)
-    this.innerElem.setAttribute('height', `${this.assetData.h}px`)
-    this.innerElem.setAttribute(
-      'preserveAspectRatio',
-      this.assetData?.pr ||
-        this.globalData.renderConfig?.imagePreserveAspectRatio ||
-        ''
-    )
-    this.innerElem.setAttributeNS(
-      'http://www.w3.org/1999/xlink',
-      'href',
-      assetPath
-    )
-
-    this.layerElement.appendChild(this.innerElem)
-  }
-}
-
-IImageElement.prototype.sourceRectAtTime = function () {
-  return this.sourceRect
-}
 
 // interface ImageElement {
 //   assetData: LottieAsset | null
@@ -108,7 +91,7 @@ IImageElement.prototype.sourceRectAtTime = function () {
 //   }
 // }
 
-// class IImageElement {
+// class ImageElement {
 //   assetData: LottieAsset | null
 //   sourceRect: {
 //     height: number
@@ -165,7 +148,7 @@ IImageElement.prototype.sourceRectAtTime = function () {
 //   }
 // }
 
-// applyMixins(IImageElement, [
+// applyMixins(ImageElement, [
 //   BaseElement,
 //   TransformElement,
 //   SVGBaseElement,
@@ -174,7 +157,7 @@ IImageElement.prototype.sourceRectAtTime = function () {
 //   RenderableDOMElement,
 // ])
 
-// interface IImageElement
+// interface ImageElement
 //   extends BaseElement,
 //   TransformElement,
 //   SVGBaseElement,
@@ -182,4 +165,4 @@ IImageElement.prototype.sourceRectAtTime = function () {
 //   FrameElement,
 //   RenderableDOMElement { }
 
-// export default IImageElement
+// export default ImageElement

@@ -6,9 +6,9 @@ import { createElementID, getExpressionInterfaces } from '@/utils/getterSetter'
 
 export default class BaseElement {
   comp!: any // ElementInterface
-  data!: null | LottieLayer
+  data!: LottieLayer
   effectsManager!: EffectsManager
-  globalData!: null | GlobalData
+  globalData!: GlobalData
   layerId!: string
 
   checkMasks() {
@@ -33,7 +33,7 @@ export default class BaseElement {
   }
   initBaseData(
     data: LottieLayer,
-    globalData: null | GlobalData,
+    globalData: GlobalData,
     comp: any // CompElement TODO:
   ) {
     this.globalData = globalData

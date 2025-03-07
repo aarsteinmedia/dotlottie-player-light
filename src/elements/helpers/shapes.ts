@@ -3,6 +3,7 @@ import {
   ElementInterface,
   GenericAnimatedProperty,
   ItemData,
+  LottieLayerData,
   Shape,
   ShapeDataProperty,
   StyleData,
@@ -115,11 +116,10 @@ export class SVGStyleData {
     this._mdf = false
   }
 }
-
 export class ProcessedElement {
-  elem: ElementInterface
+  elem: LottieLayerData
   pos: number
-  constructor(element: ElementInterface, position: number) {
+  constructor(element: LottieLayerData, position: number) {
     this.elem = element
     this.pos = position
   }
@@ -158,35 +158,35 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
       0,
       0.01,
       this
-    ) as VectorProperty
+    ) as unknown as VectorProperty
     this.s = PropertyFactory.getProp(
       elem,
       data.s,
       1,
       null,
       this
-    ) as VectorProperty<Vector2>
+    ) as unknown as VectorProperty<Vector2>
     this.e = PropertyFactory.getProp(
       elem,
       data.e,
       1,
       null,
       this
-    ) as VectorProperty<Vector2>
+    ) as unknown as VectorProperty<Vector2>
     this.h = PropertyFactory.getProp(
       elem,
       data.h || { k: 0 },
       0,
       0.01,
       this
-    ) as GenericAnimatedProperty
+    ) as unknown as GenericAnimatedProperty
     this.a = PropertyFactory.getProp(
       elem,
       data.a || { k: 0 },
       0,
       degToRads,
       this
-    ) as VectorProperty<Vector2>
+    ) as unknown as VectorProperty<Vector2>
     this.g = new GradientProperty(elem, data.g!, this)
     this.style = styleData
     this.stops = []

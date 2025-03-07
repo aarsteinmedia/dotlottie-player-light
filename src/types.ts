@@ -107,6 +107,29 @@ export interface ElementInterface extends AnimationItem {
   tm: number
 }
 
+export interface ProcessedElements {
+  elem: LottieLayerData
+  pos: number
+}
+
+export interface AnimatedContent {
+  data: LottieLayerData
+  element: ShapeDataInterface
+  fn:
+    | null
+    | ((
+        styleData: StyleObject,
+        itemData: ItemData | ShapeDataInterface,
+        isFirstFrame: boolean
+      ) => void)
+}
+
+export interface ItemsData {
+  gr: SVGGElement
+  it: ShapeDataInterface[]
+  prevViewData: ItemsData[]
+}
+
 export interface ItemData {
   _caching: {
     _lastKeyframeIndex?: number
@@ -172,19 +195,6 @@ export interface StyleData {
   t: number
   ty: ShapeType
   type: ShapeType
-}
-
-export interface ShapeHandler {
-  _isAnimated?: boolean
-  caches: unknown[]
-  elements: ElementInterface[]
-  lStr: string
-  lvl: number
-  setAsAnimated(): void
-  sh: ShapeDataProperty
-  styles: StyleObject[]
-  transform: Transformer
-  transformers: Transformer[]
 }
 
 export interface AnimationEvents {
@@ -371,6 +381,7 @@ export interface ShapeData {
       _length: number
     }
   }
+  shapes: Shape[]
   /** Verticies */
   v: (Vector2 | null)[]
 }
@@ -415,6 +426,7 @@ export interface StrokeData {
 }
 
 export interface Shape {
+  _length: number
   _processed?: boolean
   _render?: boolean
   /** Anchor point / Highlight angle for radial gradient */
@@ -434,6 +446,7 @@ export interface Shape {
         }[]
     ix?: number
   }
+  cix?: number
   /** CSS Class */
   cl?: string
   closed?: boolean
@@ -801,6 +814,7 @@ export interface ShapeDataInterface {
   /** SVG Path Data */
   caches: string[]
   container: any
+  elements: ElementInterface[]
   lStr: string
   lvl: number
   setAsAnimated: () => void
@@ -810,8 +824,10 @@ export interface ShapeDataInterface {
     kf: boolean
     _mdf: boolean
     comp: ElementInterface
+    paths: ShapeData
   }
   styles: StyleObject[]
+  transform: Transformer
   transformers: Transformer[]
 }
 
@@ -1046,6 +1062,7 @@ export interface LottieLayerData {
     l?: number
   }
   autoOriented?: boolean
+  nm: string
   o: VectorProperty
   p: {
     a: 0 | 1
@@ -1077,6 +1094,7 @@ export interface LottieLayer {
   ao?: number
   /** Blend Mode */
   bm?: number
+  cl?: string
   completed?: boolean
   /** Whether transforms should be applied before or after masks */
   ct?: 0 | 1
@@ -1090,6 +1108,7 @@ export interface LottieLayer {
   ip: number
   ks: LottieLayerData
   layers?: LottieLayer[] & { __used?: boolean }
+  ln?: string
   masksProperties?: Mask[]
   nm: string
   /** Out point */
@@ -1255,7 +1274,7 @@ export interface GlobalData {
     w: number
     h: number
   }
-  defs?: SVGDefsElement
+  defs: SVGDefsElement
   fontManager?: FontManager
   frameId?: number
   frameNum?: number
