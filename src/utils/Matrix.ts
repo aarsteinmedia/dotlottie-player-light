@@ -31,7 +31,7 @@ import { createTypedArray } from '@/utils/helpers/arrays'
 export default class Matrix {
   private _identity: boolean
   private _identityCalculated: boolean
-  private props: Float32Array
+  props: Float32Array
 
   constructor() {
     this.props = createTypedArray(ArrayType.Float32, 16) as Float32Array

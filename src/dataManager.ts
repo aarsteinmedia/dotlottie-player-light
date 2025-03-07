@@ -715,7 +715,8 @@ const dataManager = (() => {
          *
          */
         function completeText(data: LottieLayer) {
-          if (data.t?.a.length === 0 && !('m' in data.t.p)) {
+          // @ts-expect-error: TODO:
+          if (data.t?.a?.length === 0 && !('m' in (data.t.p || {}))) {
             // data.singleShape = true;
           }
         }

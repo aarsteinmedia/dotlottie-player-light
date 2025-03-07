@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type { Shape } from '@/types'
 
 import { ProcessedElement } from '@/elements/helpers/shapes'
 
-export default function IShapeElement() {}
+import SVGShapeElement from './svg/SVGShapeElement'
 
-IShapeElement.prototype = {
-  addProcessedElement: function (elem: any, pos: number) {
+class IShapeElement {
+  addProcessedElement(elem: any, pos: number) {
     const elements = this.processedElements
     let i = elements.length
     while (i) {
@@ -15,15 +16,15 @@ IShapeElement.prototype = {
         return
       }
     }
-    elements.push(new (ProcessedElement as any)(elem, pos))
-  },
-  addShapeToModifiers: function (data: Shape) {
+    elements.push(new ProcessedElement(elem, pos))
+  }
+  addShapeToModifiers(data: Shape) {
     const { length } = this.shapeModifiers
     for (let i = 0; i < length; i++) {
       this.shapeModifiers[i].addShape(data)
     }
-  },
-  isShapeInAnimatedModifiers: function (data: Shape) {
+  }
+  isShapeInAnimatedModifiers(data: Shape) {
     let i = 0
     const len: number = this.shapeModifiers.length
     while (i < len) {
@@ -33,13 +34,13 @@ IShapeElement.prototype = {
       i++
     }
     return false
-  },
+  }
 
-  prepareFrame: function (num: number) {
+  prepareFrame(num: number) {
     this.prepareRenderableFrame(num)
     this.prepareProperties(num, this.isInRange)
-  },
-  renderModifiers: function () {
+  }
+  renderModifiers() {
     if (!this.shapeModifiers.length) {
       return
     }
@@ -60,8 +61,8 @@ IShapeElement.prototype = {
         break
       }
     }
-  },
-  searchProcessedElement: function (elem: any) {
+  }
+  searchProcessedElement(elem: any) {
     const elements = this.processedElements
     let i = 0
     const len = elements.length
@@ -72,5 +73,9 @@ IShapeElement.prototype = {
       i++
     }
     return 0
-  },
+  }
 }
+
+interface IShapeElement extends SVGShapeElement {}
+
+export default IShapeElement

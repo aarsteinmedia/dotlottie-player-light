@@ -1,34 +1,26 @@
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+import type { GlobalData, LottieLayer } from '@/types'
 
 import EffectsManager from '@/effects/EffectsManager'
 import { getBlendMode } from '@/utils'
 import { createElementID, getExpressionInterfaces } from '@/utils/getterSetter'
 
 export default class BaseElement {
-  baseElement?: SVGSVGElement
-  comp!: ElementInterface
-  compInterface: any
-  data!: LottieLayer
+  comp!: any // ElementInterface
+  data!: null | LottieLayer
   effectsManager!: EffectsManager
-  globalData!: GlobalData
-  itemsData: any
-  layerElement!: SVGGElement
+  globalData!: null | GlobalData
   layerId!: string
-  layerInterface: any
-  maskManager?: any
-  shapesData: any
-  type: any
 
   checkMasks() {
-    if (!this.data.hasMask) {
+    if (!this.data?.hasMask) {
       return false
     }
     let i = 0
-    const len = this.data.masksProperties?.length || 0
+    const len = this.data?.masksProperties?.length || 0
     while (i < len) {
       if (
-        this.data.masksProperties?.[i].mode !== 'n' &&
-        this.data.masksProperties?.[i].cl !== false
+        this.data?.masksProperties?.[i].mode !== 'n' &&
+        this.data?.masksProperties?.[i].cl !== false
       ) {
         return true
       }
@@ -97,7 +89,9 @@ export default class BaseElement {
     const blendModeValue = getBlendMode(this.data.bm)
     const elem = this.baseElement || this.layerElement
 
-    elem.style.mixBlendMode = blendModeValue
+    if (elem) {
+      elem.style.mixBlendMode = blendModeValue
+    }
   }
-  sourceRectAtTime() {}
+  // sourceRectAtTime() {}
 }

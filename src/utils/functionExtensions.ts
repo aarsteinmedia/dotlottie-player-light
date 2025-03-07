@@ -1,12 +1,31 @@
-import type { Constructor } from '@/types'
+// import type { Constructor } from '@/types'
 
 /**
  *
  */
-function extendPrototype<T>(
-  sources: (() => void)[],
-  destination: Constructor<T>
-) {
+function applyMixins(derivedCtor: any, constructors: any[]) {
+  const { length: len } = constructors
+  for (let i = 0; i < len; i++) {
+    const { length: jLen } = Object.getOwnPropertyNames(
+      constructors[i].prototype
+    )
+    for (let j = 0; j < jLen; j++) {
+      Object.defineProperty(
+        derivedCtor.prototype,
+        constructors[i].prototype[j],
+        Object.getOwnPropertyDescriptor(
+          constructors[i].prototype,
+          constructors[i].prototype[j]
+        ) || Object.create(null)
+      )
+    }
+  }
+}
+
+/**
+ *
+ */
+function extendPrototype(sources: any[], destination: any) {
   const { length } = sources
   for (let i = 0; i < length; i++) {
     const jLen = Object.getOwnPropertyNames(sources[i].prototype).length
@@ -36,4 +55,4 @@ function createProxyFunction<T = unknown>(prototype: T) {
   return ProxyFunction
 }
 
-export { extendPrototype, getDescriptor, createProxyFunction }
+export { applyMixins, extendPrototype, getDescriptor, createProxyFunction }

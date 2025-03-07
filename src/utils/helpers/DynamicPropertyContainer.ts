@@ -4,8 +4,8 @@ import type { ItemData } from '@/types'
 export default class DynamicPropertyContainer {
   _isAnimated: boolean
   _mdf: boolean
-  private container: SVGStrokeStyleData | null
-  private dynamicProperties: ItemData[]
+  container: SVGStrokeStyleData | null
+  dynamicProperties: ItemData[]
 
   constructor() {
     this.container = null

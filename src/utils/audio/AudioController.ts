@@ -1,9 +1,11 @@
 import type { Audio, AudioFactory } from '@/types'
 
-/**
- *
- */
 export default class AudioController {
+  public audioFactory?: AudioFactory
+
+  public audios: Audio[]
+  private _isMuted: boolean
+  private _volume: number
   constructor(audioFactory?: AudioFactory) {
     this.audios = []
     this.audioFactory = audioFactory
@@ -11,17 +13,6 @@ export default class AudioController {
     this._isMuted = false
   }
 
-  public audios: Audio[]
-  public audioFactory?: AudioFactory
-  private _volume: number
-  private _isMuted: boolean
-
-  private _updateVolume() {
-    const { length } = this.audios
-    for (let i = 0; i < length; i++) {
-      this.audios[i].volume(this._volume * (this._isMuted ? 0 : 1))
-    }
-  }
   public addAudio(audio: Audio) {
     this.audios.push(audio)
   }
@@ -81,5 +72,11 @@ export default class AudioController {
   public unmute() {
     this._isMuted = false
     this._updateVolume()
+  }
+  private _updateVolume() {
+    const { length } = this.audios
+    for (let i = 0; i < length; i++) {
+      this.audios[i].volume(this._volume * (this._isMuted ? 0 : 1))
+    }
   }
 }

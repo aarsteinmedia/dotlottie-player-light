@@ -1,29 +1,22 @@
-import type {
-  AnimationData,
-  GlobalData,
-  LottieAsset,
-  LottieLayer,
-} from '@/types'
-import type ProjectInterface from '@/utils/helpers/ProjectInterface'
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+import type BaseElement from '@/elements/BaseElement'
+import type SVGCompElement from '@/elements/svg/SVGCompElement'
+import type SVGRendererBase from '@/renderers/SVGRendererBase'
+import type { AnimationData, LottieLayer } from '@/types'
+// import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
 import FootageElement from '@/elements/FootageElement'
+import SVGRenderer from '@/renderers/SVGRenderer'
 import FontManager from '@/utils/FontManager'
 import slotFactory from '@/utils/SlotManager'
 
-export default class BaseRenderer {
-  completeLayers?: boolean
-  globalData!: GlobalData
-
-  layers: LottieLayer[] = []
-
-  pendingElements: unknown[] = []
-
+class BaseRenderer {
   addPendingElement(element: unknown) {
     this.pendingElements.push(element)
   }
   buildAllItems() {
-    const len = this.layers.length
+    const len = this.layers?.length || 0
     for (let i = 0; i < len; i++) {
       this.buildItem(i)
     }
@@ -31,15 +24,15 @@ export default class BaseRenderer {
   }
   buildElementParenting(
     element: any,
-    parentName: string,
-    hierarchy: unknown[]
+    parentName?: number,
+    hierarchy: unknown[] = []
   ) {
     const elements = this.elements
     const layers = this.layers
     let i = 0
-    const len = layers.length
+    const len = layers?.length || 0
     while (i < len) {
-      if (layers[i].ind == parentName) {
+      if (layers?.[i].ind === Number(parentName)) {
         if (!elements[i] || elements[i] === true) {
           this.buildItem(i)
           this.addPendingElement(element)
@@ -59,12 +52,12 @@ export default class BaseRenderer {
 
   checkLayers(num: number) {
     this.completeLayers = true
-    const { length } = this.layers
+    const { length } = this.layers || []
     for (let i = length - 1; i >= 0; i--) {
       if (!this.elements[i]) {
         if (
-          this.layers[i].ip - this.layers[i].st <= num - this.layers[i].st &&
-          this.layers[i].op - this.layers[i].st > num - this.layers[i].st
+          this.layers![i].ip - this.layers![i].st <= num - this.layers![i].st &&
+          this.layers![i].op - this.layers![i].st > num - this.layers![i].st
         ) {
           this.buildItem(i)
         }
@@ -74,16 +67,16 @@ export default class BaseRenderer {
     this.checkPendingElements()
   }
 
-  createAudio(data: any) {
-    return new (AudioElement as any)(data, this.globalData, this)
+  createAudio(data: LottieLayer) {
+    return new AudioElement(data, this.globalData!, this)
   }
 
-  createCamera = function () {
+  createCamera(_data: LottieLayer) {
     throw new Error("You're using a 3d camera. Try the html renderer.")
   }
 
   createFootage(data: any) {
-    return new (FootageElement as any)(data, this.globalData, this)
+    return new FootageElement(data, this.globalData, this)
   }
 
   createItem(layer: LottieLayer) {
@@ -145,12 +138,12 @@ export default class BaseRenderer {
     this.completeLayers = false
     const len = newLayers.length
     let j
-    const jLen = this.layers.length
+    const jLen = this.layers?.length || 0
     for (let i = 0; i < len; i++) {
       j = 0
       while (j < jLen) {
-        if (this.layers[j].id === newLayers[i].id) {
-          this.layers[j] = newLayers[i]
+        if (this.layers![j].id === newLayers[i].id) {
+          this.layers![j] = newLayers[i]
           break
         }
         j++
@@ -163,23 +156,29 @@ export default class BaseRenderer {
     }
   }
 
-  searchExtraCompositions(assets: LottieAsset[]) {
+  searchExtraCompositions(assets: LottieLayer[]) {
     let i
     const len = assets.length
     for (i = 0; i < len; i++) {
       if (assets[i].xt) {
         const comp = this.createComp(assets[i])
         comp.initExpressions()
-        this.globalData.projectInterface.registerComposition(comp)
+        this.globalData?.projectInterface?.registerComposition(comp)
       }
     }
   }
 
-  setProjectInterface(pInterface: ReturnType<typeof ProjectInterface>) {
+  setProjectInterface(pInterface: ProjectInterface) {
+    if (!this.globalData) {
+      return
+    }
     this.globalData.projectInterface = pInterface
   }
 
-  setupGlobalData(animData: AnimationData, fontsContainer: any) {
+  setupGlobalData(animData: AnimationData, fontsContainer: SVGDefsElement) {
+    if (!this.globalData) {
+      return
+    }
     this.globalData.fontManager = new FontManager()
     this.globalData.slotManager = slotFactory(animData)
     this.globalData.fontManager.addChars(animData.chars)
@@ -201,3 +200,11 @@ export default class BaseRenderer {
     }
   }
 }
+
+interface BaseRenderer
+  extends BaseElement,
+    SVGCompElement,
+    SVGRendererBase,
+    SVGRenderer {}
+
+export default BaseRenderer

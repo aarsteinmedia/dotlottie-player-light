@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   ElementInterface,
   GlobalData,
@@ -12,7 +13,7 @@ import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { createNS } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
+import { applyMixins } from '@/utils/functionExtensions'
 
 interface ImageElement {
   assetData: LottieAsset | null
@@ -28,68 +29,78 @@ interface ImageElement {
   }
 }
 
-/**
- *
- */
-export default function IImageElement(
-  this: ImageElement,
-  data: LottieLayer,
-  globalData: GlobalData,
-  comp: ElementInterface
-) {
-  if (data.refId && globalData.getAssetData) {
-    this.assetData = globalData.getAssetData(data.refId)
+class IImageElement {
+  assetData: LottieAsset | null
+  sourceRect: {
+    height: number
+    left: number
+    top: number
+    width: number
   }
-  if (this.assetData && this.assetData.sid) {
-    this.assetData = globalData.slotManager?.getProp(this.assetData) || null
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
+    this.assetData = globalData.getAssetData?.(data.refId!) || null
+    if (this.assetData && this.assetData.sid) {
+      this.assetData = globalData.slotManager?.getProp(this.assetData) || null
+    }
+    this.initElement(data, globalData, comp)
+    this.sourceRect = {
+      height: Number(this.assetData?.h),
+      left: 0,
+      top: 0,
+      width: Number(this.assetData?.w),
+    }
   }
-  this.initElement(data, globalData, comp)
-  this.sourceRect = {
-    height: Number(this.assetData?.h),
-    left: 0,
-    top: 0,
-    width: Number(this.assetData?.w),
+
+  createContent(this: ImageElement) {
+    let assetPath = ''
+    if (this.assetData && this.globalData.getAssetsPath) {
+      assetPath = this.globalData.getAssetsPath(this.assetData)
+    }
+
+    if (this.assetData) {
+      this.innerElem = createNS<SVGImageElement>('image')
+      this.innerElem.setAttribute('width', `${this.assetData.w}px`)
+      this.innerElem.setAttribute('height', `${this.assetData.h}px`)
+      this.innerElem.setAttribute(
+        'preserveAspectRatio',
+        this.assetData?.pr ||
+          this.globalData.renderConfig?.imagePreserveAspectRatio ||
+          ''
+      )
+      this.innerElem.setAttributeNS(
+        'http://www.w3.org/1999/xlink',
+        'href',
+        assetPath
+      )
+
+      this.layerElement.appendChild(this.innerElem)
+    }
+  }
+
+  sourceRectAtTime() {
+    return this.sourceRect
   }
 }
 
-extendPrototype(
-  [
-    BaseElement,
+applyMixins(IImageElement, [
+  BaseElement,
+  TransformElement,
+  SVGBaseElement,
+  HierarchyElement,
+  FrameElement,
+  RenderableDOMElement,
+])
+
+interface IImageElement
+  extends BaseElement,
     TransformElement,
     SVGBaseElement,
     HierarchyElement,
     FrameElement,
-    RenderableDOMElement,
-  ],
-  IImageElement
-)
+    RenderableDOMElement {}
 
-IImageElement.prototype.createContent = function (this: ImageElement) {
-  let assetPath = ''
-  if (this.assetData && this.globalData.getAssetsPath) {
-    assetPath = this.globalData.getAssetsPath(this.assetData)
-  }
-
-  if (this.assetData) {
-    this.innerElem = createNS<SVGImageElement>('image')
-    this.innerElem.setAttribute('width', `${this.assetData.w}px`)
-    this.innerElem.setAttribute('height', `${this.assetData.h}px`)
-    this.innerElem.setAttribute(
-      'preserveAspectRatio',
-      this.assetData?.pr ||
-        this.globalData.renderConfig?.imagePreserveAspectRatio ||
-        ''
-    )
-    this.innerElem.setAttributeNS(
-      'http://www.w3.org/1999/xlink',
-      'href',
-      assetPath
-    )
-
-    this.layerElement.appendChild(this.innerElem)
-  }
-}
-
-IImageElement.prototype.sourceRectAtTime = function () {
-  return this.sourceRect
-}
+export default IImageElement

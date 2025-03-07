@@ -3,9 +3,7 @@ import type {
   AnimationData,
   AnimationDirection,
   AnimationEventName,
-  AssetHandler,
   DocumentData,
-  ElementInterface,
   LottieAsset,
   MarkerData,
   Vector2,
@@ -19,10 +17,13 @@ import {
   BMCompleteLoopEvent,
   BMConfigErrorEvent,
   BMDestroyEvent,
+  BMDrawnFrameEvent,
   BMEnterFrameEvent,
   BMRenderFrameErrorEvent,
   BMSegmentStartEvent,
+  LottieEvent,
 } from '@/events'
+import SVGRenderer from '@/renderers/SVGRenderer'
 import { markerParser } from '@/utils'
 import AudioController from '@/utils/audio/AudioController'
 import {
@@ -45,17 +46,13 @@ export default class AnimationItem extends BaseEvent {
   public autoplay: boolean
   public currentFrame: number
   public currentRawFrame: number
-  public drawnFrameEvent: {
-    currentTime: number
-    totalTime: number
-    direction: AnimationDirection
-  }
+  public drawnFrameEvent: LottieEvent
   public expressionsPlugin: ReturnType<typeof getExpressionsPlugin>
   public firstFrame: number
   public frameModifier: AnimationDirection
   public frameMult: number
   public frameRate: number
-  public imagePreloader: null | AssetHandler
+  public imagePreloader: null | ImagePreloader
   public isLoaded: boolean
   public isPaused: boolean
   public isSubframeEnabled: boolean
@@ -67,9 +64,9 @@ export default class AnimationItem extends BaseEvent {
   public playCount: number
   public playDirection: AnimationDirection
   public playSpeed: number
-  public projectInterface: null | ReturnType<typeof ProjectInterface>
+  public projectInterface: null | ProjectInterface
 
-  public renderer: null | ElementInterface
+  public renderer: null | SVGRenderer
   public segmentPos: number
   public segments: Vector2[]
   public timeCompleted: number
@@ -118,14 +115,14 @@ export default class AnimationItem extends BaseEvent {
     this.segments = []
     this._idle = true
     this._completedLoop = false
-    this.projectInterface = ProjectInterface()
-    this.imagePreloader = new (ImagePreloader as any)()
+    this.projectInterface = new ProjectInterface()
+    this.imagePreloader = new ImagePreloader()
     this.audioController = new AudioController()
     this.markers = []
     this.configAnimation = this.configAnimation.bind(this)
     this.onSetupError = this.onSetupError.bind(this)
     this.onSegmentComplete = this.onSegmentComplete.bind(this)
-    this.drawnFrameEvent = new (BMEnterFrameEvent as any)('drawnFrame', 0, 0, 0)
+    this.drawnFrameEvent = new BMEnterFrameEvent('drawnFrame', 0, 0, 0)
     this.expressionsPlugin = getExpressionsPlugin()
   }
 
@@ -214,7 +211,7 @@ export default class AnimationItem extends BaseEvent {
   public checkLoaded() {
     if (
       !this.isLoaded &&
-      this.renderer?.globalData.fontManager?.isLoaded &&
+      this.renderer?.globalData?.fontManager?.isLoaded &&
       (this.imagePreloader?.loadedImages() ||
         this.renderer.rendererType !== 'canvas') &&
       this.imagePreloader?.loadedFootages()
@@ -224,7 +221,7 @@ export default class AnimationItem extends BaseEvent {
       if (expressionsPlugin) {
         expressionsPlugin.initExpressions(this)
       }
-      this.renderer.initItems()
+      this.renderer?.initItems()
       setTimeout(
         function (this: AnimationItem) {
           this.trigger('DOMLoaded')
@@ -314,12 +311,15 @@ export default class AnimationItem extends BaseEvent {
     }
     return null
   }
-  public getAssetsPath(assetData: LottieAsset) {
+  public getAssetsPath(assetData: null | LottieAsset) {
+    if (!assetData) {
+      return ''
+    }
     let path = ''
     if (assetData.e) {
       path = assetData.p || ''
     } else if (this.assetsPath) {
-      let imagePath = assetData.p
+      let imagePath = assetData?.p
       if (imagePath?.indexOf('images/') !== -1) {
         imagePath = imagePath?.split('/')[1]
       }
@@ -428,8 +428,8 @@ export default class AnimationItem extends BaseEvent {
       }
     }
     if (data.chars || data.fonts) {
-      this.renderer?.globalData.fontManager?.addChars(data.chars)
-      this.renderer?.globalData.fontManager?.addFonts(
+      this.renderer?.globalData?.fontManager?.addChars(data.chars)
+      this.renderer?.globalData?.fontManager?.addFonts(
         data.fonts,
         this.renderer.globalData.defs
       )
@@ -669,7 +669,7 @@ export default class AnimationItem extends BaseEvent {
       animType = params.renderer
     }
     const RendererClass = getRenderer(animType)
-    this.renderer = new (RendererClass as any)(this, params.rendererSettings)
+    this.renderer = new RendererClass(this, params.rendererSettings)
     this.imagePreloader?.setCacheType(animType, this.renderer?.globalData.defs)
     this.renderer?.setProjectInterface(this.projectInterface)
     this.animType = animType
@@ -791,10 +791,15 @@ export default class AnimationItem extends BaseEvent {
           )
           break
         case 'drawnFrame':
-          this.drawnFrameEvent.currentTime = this.currentFrame
-          this.drawnFrameEvent.totalTime = this.totalFrames
-          this.drawnFrameEvent.direction = this.frameModifier
-          this.triggerEvent(name, this.drawnFrameEvent)
+          this.triggerEvent(
+            name,
+            new BMDrawnFrameEvent(
+              name,
+              this.currentFrame,
+              this.frameModifier,
+              this.totalFrames
+            )
+          )
           break
         case 'loopComplete':
           this.triggerEvent(
@@ -897,7 +902,7 @@ export default class AnimationItem extends BaseEvent {
     if (!this.renderer) {
       return
     }
-    if (this.renderer?.globalData.fontManager?.isLoaded) {
+    if (this.renderer?.globalData?.fontManager?.isLoaded) {
       this.checkLoaded()
     } else {
       setTimeout(this.waitForFontsLoaded.bind(this), 20)

@@ -11,41 +11,35 @@ import { ShapeType } from '@/enums'
 import { buildShapeString } from '@/utils'
 import Matrix from '@/utils/Matrix'
 
-const SVGElementsRenderer = (() => {
-  const _identityMatrix = new Matrix(),
-    _matrixHelper = new Matrix()
+export default class SVGElementsRenderer {
+  private static _identityMatrix = new Matrix()
+  private static _matrixHelper = new Matrix()
 
-  /**
-   *
-   */
-  function createRenderFunction(data: Shape) {
+  static createRenderFunction(data: Shape) {
     switch (data.ty) {
       case ShapeType.Fill:
-        return renderFill
+        return this.renderFill
       case ShapeType.GradientFill:
-        return renderGradient
+        return this.renderGradient
       case ShapeType.GradientStroke:
-        return renderGradientStroke
+        return this.renderGradientStroke
       case ShapeType.Stroke:
-        return renderStroke
+        return this.renderStroke
       case ShapeType.Path:
       case ShapeType.Ellipse:
       case ShapeType.Rectangle:
       case ShapeType.PolygonStar:
-        return renderPath
+        return this.renderPath
       case ShapeType.Transform:
-        return renderContentTransform
+        return this.renderContentTransform
       case ShapeType.NoStyle:
-        return renderNoop
+        return this.renderNoop
       default:
         return null
     }
   }
 
-  /**
-   *
-   */
-  function renderContentTransform(
+  private static renderContentTransform(
     _: any,
     itemData: any,
     isFirstFrame: boolean
@@ -64,79 +58,11 @@ const SVGElementsRenderer = (() => {
     }
   }
 
-  function renderNoop() {}
-
-  /**
-   *
-   */
-  function renderPath(
-    styleData: StyleData,
-    itemData: ShapeHandler,
+  private static renderFill(
+    _: StyleData,
+    itemData: ItemData,
     isFirstFrame: boolean
   ) {
-    let j: number
-    let jLen: number
-    let pathStringTransformed
-    let redraw
-    let pathNodes
-    let l: number
-    const lLen = itemData.styles.length
-    const lvl = itemData.lvl
-    let paths: ShapeDataProperty['paths']
-    let mat
-    let iterations
-    let k
-    for (l = 0; l < lLen; l += 1) {
-      redraw = itemData.sh?._mdf || isFirstFrame
-      if (itemData.styles[l].lvl < lvl) {
-        mat = _matrixHelper.reset()
-        iterations = lvl - itemData.styles[l].lvl
-        k = itemData.transformers.length - 1
-        while (!redraw && iterations > 0) {
-          redraw = itemData.transformers[k].mProps._mdf || redraw
-          iterations -= 1
-          k -= 1
-        }
-        if (redraw) {
-          iterations = lvl - itemData.styles[l].lvl
-          k = itemData.transformers.length - 1
-          while (iterations > 0) {
-            mat.multiply(itemData?.transformers[k].mProps.v)
-            iterations -= 1
-            k -= 1
-          }
-        }
-      } else {
-        mat = _identityMatrix
-      }
-      paths = itemData.sh.paths
-      jLen = paths._length
-      if (redraw) {
-        pathStringTransformed = ''
-        for (j = 0; j < jLen; j += 1) {
-          pathNodes = paths.shapes[j]
-          if (pathNodes && pathNodes._length) {
-            pathStringTransformed += buildShapeString(
-              pathNodes as unknown as ShapeData,
-              pathNodes._length,
-              pathNodes.c,
-              mat
-            )
-          }
-        }
-        itemData.caches[l] = pathStringTransformed
-      } else {
-        pathStringTransformed = itemData.caches[l]
-      }
-      itemData.styles[l].d += styleData.hd === true ? '' : pathStringTransformed
-      itemData.styles[l]._mdf = redraw || itemData.styles[l]._mdf
-    }
-  }
-
-  /**
-   *
-   */
-  function renderFill(_: StyleData, itemData: ItemData, isFirstFrame: boolean) {
     const styleElem = itemData.style
 
     if (itemData.c._mdf || isFirstFrame) {
@@ -152,22 +78,7 @@ const SVGElementsRenderer = (() => {
     }
   }
 
-  /**
-   *
-   */
-  function renderGradientStroke(
-    styleData: StyleData,
-    itemData: ItemData,
-    isFirstFrame: boolean
-  ) {
-    renderGradient(styleData, itemData, isFirstFrame)
-    renderStroke(styleData, itemData, isFirstFrame)
-  }
-
-  /**
-   *
-   */
-  function renderGradient(
+  private static renderGradient(
     styleData: StyleData,
     itemData: any,
     isFirstFrame: boolean
@@ -279,10 +190,86 @@ const SVGElementsRenderer = (() => {
     }
   }
 
-  /**
-   *
-   */
-  function renderStroke(_: any, itemData: ItemData, isFirstFrame: boolean) {
+  private static renderGradientStroke(
+    styleData: StyleData,
+    itemData: ItemData,
+    isFirstFrame: boolean
+  ) {
+    this.renderGradient(styleData, itemData, isFirstFrame)
+    this.renderStroke(styleData, itemData, isFirstFrame)
+  }
+
+  private static renderNoop() {}
+
+  private static renderPath(
+    styleData: StyleData,
+    itemData: ShapeHandler,
+    isFirstFrame: boolean
+  ) {
+    let j: number
+    let jLen: number
+    let pathStringTransformed
+    let redraw
+    let pathNodes
+    let l: number
+    const lLen = itemData.styles.length
+    const lvl = itemData.lvl
+    let paths: ShapeDataProperty['paths']
+    let mat
+    let iterations
+    let k
+    for (l = 0; l < lLen; l += 1) {
+      redraw = itemData.sh?._mdf || isFirstFrame
+      if (itemData.styles[l].lvl < lvl) {
+        mat = this._matrixHelper.reset()
+        iterations = lvl - itemData.styles[l].lvl
+        k = itemData.transformers.length - 1
+        while (!redraw && iterations > 0) {
+          redraw = itemData.transformers[k].mProps._mdf || redraw
+          iterations -= 1
+          k -= 1
+        }
+        if (redraw) {
+          iterations = lvl - itemData.styles[l].lvl
+          k = itemData.transformers.length - 1
+          while (iterations > 0) {
+            mat.multiply(itemData?.transformers[k].mProps.v)
+            iterations -= 1
+            k -= 1
+          }
+        }
+      } else {
+        mat = this._identityMatrix
+      }
+      paths = itemData.sh.paths
+      jLen = paths._length
+      if (redraw) {
+        pathStringTransformed = ''
+        for (j = 0; j < jLen; j += 1) {
+          pathNodes = paths.shapes[j]
+          if (pathNodes && pathNodes._length) {
+            pathStringTransformed += buildShapeString(
+              pathNodes as unknown as ShapeData,
+              pathNodes._length,
+              pathNodes.c,
+              mat
+            )
+          }
+        }
+        itemData.caches[l] = pathStringTransformed
+      } else {
+        pathStringTransformed = itemData.caches[l]
+      }
+      itemData.styles[l].d += styleData.hd === true ? '' : pathStringTransformed
+      itemData.styles[l]._mdf = redraw || itemData.styles[l]._mdf
+    }
+  }
+
+  private static renderStroke(
+    _: any,
+    itemData: ItemData,
+    isFirstFrame: boolean
+  ) {
     const styleElem = itemData.style
     const d = itemData.d
     if (d && (d._mdf || isFirstFrame) && d.dashStr) {
@@ -305,10 +292,4 @@ const SVGElementsRenderer = (() => {
       }
     }
   }
-
-  return {
-    createRenderFunction,
-  }
-})()
-
-export default SVGElementsRenderer
+}

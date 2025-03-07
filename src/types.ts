@@ -62,6 +62,7 @@ export interface ElementInterface extends AnimationItem {
   animationItem: AnimationItem
   baseElement: SVGElement
   comp: ElementInterface
+  compInterface: ElementInterface
   completeLayers: boolean
   configAnimation: (animData: AnimationData) => void
   data: LottieLayer
@@ -95,6 +96,7 @@ export interface ElementInterface extends AnimationItem {
   maskManager: unknown
   matteElement: SVGGElement
   pendingElements: unknown[]
+  prepareFrame?: (val: number) => void
   renderConfig: SVGRendererConfig
   renderedFrame: number
   rendererType: RendererType
@@ -165,6 +167,7 @@ export interface StyleData {
   lvl: number
   msElem: SVGElement | null
   pElem: SVGPathElement
+  pt?: AnimatedProperty
   t: number
   ty: ShapeType
   type: ShapeType
@@ -176,8 +179,9 @@ export interface ShapeHandler {
   elements: ElementInterface[]
   lStr: string
   lvl: number
+  setAsAnimated(): void
   sh: ShapeDataProperty
-  styles: any[]
+  styles: StyleObject[]
   transform: Transformer
   transformers: Transformer[]
 }
@@ -276,15 +280,15 @@ export type SVGRendererConfig = BaseRendererConfig & {
   id?: string
 }
 
-export interface TextHandler {
-  initElement: (
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: ElementInterface
-  ) => void
-  renderType: RendererType
-  textSpans: string[]
-}
+// export interface TextHandler {
+//   initElement: (
+//     data: LottieLayer,
+//     globalData: GlobalData,
+//     comp: ElementInterface
+//   ) => void
+//   renderType: RendererType
+//   textSpans: string[]
+// }
 
 export type CanvasRendererConfig = BaseRendererConfig & {
   clearCanvas?: boolean
@@ -328,10 +332,11 @@ export type AnimationConfiguration<T extends RendererType = RendererType.SVG> =
     prerender?: boolean
   }
 
-export interface Constructor<T = unknown> {
-  // new (...args: any[]): T
-  prototype: T
-}
+export type Constructor = new (...args: any[]) => object
+// export interface Constructor<T = unknown> {
+//   // new (...args: any[]): T
+//   prototype: T
+// }
 
 type BoolInt = 0 | 1
 
@@ -342,6 +347,7 @@ export interface ShapeData {
   /** In tangents */
   i: (Vector2 | null)[]
   length(): number
+  localShapeCollection?: Shape[]
   /** Out tangents */
   o: (Vector2 | null)[]
   setLength(length: number): void
@@ -357,6 +363,13 @@ export interface ShapeData {
   ): void
   // inflectionPoints(): number[]
   setXYAt(a: number, b: number, c: string, d: number): void
+  shape: {
+    _mdf?: boolean
+    paths: {
+      shapes: Shape[]
+      _length: number
+    }
+  }
   /** Verticies */
   v: (Vector2 | null)[]
 }
@@ -448,6 +461,7 @@ export interface Shape {
   o?: VectorProperty
   /** Position */
   p?: VectorProperty<Vector2 | Vector3>
+  pt?: VectorProperty
   /** Rotation (for transforms) | Fill-rule (for fills) */
   r?: number | VectorProperty
   /** Scale / StartPoint for gradient */
@@ -585,6 +599,7 @@ export type Vector4 = [number, number, number, number]
 export type VectorProperty<T = Vector1> = {
   a: 1 | 0
   k: T
+  v?: number
   ix?: number
 }
 
@@ -760,6 +775,7 @@ export interface TextRangeValue {
     k: number
   }
   t: 0 | 1
+  totalChars: number
   /** Max Ease */
   xe: {
     a: 0 | 1
@@ -768,10 +784,14 @@ export interface TextRangeValue {
 }
 
 export interface StyleObject {
+  _mdf?: boolean
+  closed?: boolean
   d: string
   data: Shape
   lvl: number
   msElem?: SVGElement
+  pElem?: SVGPathElement
+  reset(): void
   type: ShapeType
 }
 
@@ -794,70 +814,88 @@ export interface ShapeDataInterface {
   transformers: Transformer[]
 }
 
-export interface TextData {
-  __complete?: boolean
-  /** Text range */
+export interface TextAnimatorAnimatables {
+  /** Text Style */
   a: {
-    nm: string
-    s: TextRangeValue
-    /** Text Style */
-    a: {
-      /** Position */
-      p: {
-        a: 0 | 1
-        k: Vector2 | Vector3
-      }
-      /** Rotation */
-      r: {
-        a: 0 | 1
-        k: number
-      }
-      /** Opacity */
-      o: {
-        a: 0 | 1
-        k: number
-      }
-      /** Fill Color */
-      fc: {
-        a: 0 | 1
-        k: Vector3 | Vector4
-      }
-      /** Fill hue */
-      fh: {
-        a: 0 | 1
-        k: number
-      }
-      /** Fill Saturation */
-      fs: {
-        a: 0 | 1
-        k: number
-      }
-      /** Fill Brightness */
-      fb: {
-        a: 0 | 1
-        k: number
-      }
-      /** Stroke color */
-      sc?: {
-        a: 0 | 1
-        k: Vector3 | Vector4
-      }
-      /** Stroke Width */
-      sw?: {
-        a: 0 | 1
-        k: number
-      }
-      /** Letter Spacing */
-      t: {
-        a: 0 | 1
-        k: number
-      }
+    /** Position */
+    p: {
+      a: 0 | 1
+      k: Vector2 | Vector3
     }
-  }[]
+    /** Rotation */
+    r: {
+      a: 0 | 1
+      k: number
+    }
+    /** Opacity */
+    o: {
+      a: 0 | 1
+      k: number
+    }
+    /** Fill Color */
+    fc: {
+      a: 0 | 1
+      k: Vector3 | Vector4
+    }
+    /** Fill hue */
+    fh: {
+      a: 0 | 1
+      k: number
+    }
+    /** Fill Saturation */
+    fs: {
+      a: 0 | 1
+      k: number
+    }
+    /** Fill Brightness */
+    fb: {
+      a: 0 | 1
+      k: number
+    }
+    /** Stroke color */
+    sc?: {
+      a: 0 | 1
+      k: Vector3 | Vector4
+    }
+    /** Stroke Width */
+    sw?: {
+      a: 0 | 1
+      k: number
+    }
+    /** Letter Spacing */
+    t: {
+      a: 0 | 1
+      k: number
+    }
+    propType: boolean
+  }
+  nm: string
+  s: TextRangeValue
+}
+
+export interface TextData {
+  __complete: boolean
+  /** Text range */
+  a?: TextAnimatorAnimatables
+  ascent: number
+  boxWidth: Vector2
   /** Text Document */
-  d: DocumentData
+  d?: DocumentData
+  f: string
+  fc: string
+  fillColorAnim: boolean
+  finalLineHeight: number
+  finalSize: number
+  finalText: string[]
+  fStyle: string
+  fWeight: string
+  justifyOffset: number
+  l: Letter[]
+  lh: number
+  lineWidths: number[]
+  ls: number
   /** Text Alignment */
-  m: {
+  m?: {
     /** Grouping */
     g: number
     a: {
@@ -866,12 +904,22 @@ export interface TextData {
       ix?: number
     }
   }
+  of: string
   /** Text Follow Path TODO: */
-  p: {
+  p?: {
     a: unknown
     p: unknown
     r: unknown
   }
+  ps: null | Vector2
+  s: number
+  sc: string
+  strokeColorAnim: boolean
+  strokeWidthAnim: boolean
+  sw: number
+  t: number
+  tr: number
+  yOffset: number
 }
 
 export interface EffectValue {
@@ -984,6 +1032,40 @@ export interface AnimationData {
   w: number
 }
 
+export interface LottieLayerData {
+  a: {
+    a: 0 | 1
+    k: number[]
+    ix?: number
+    l?: number
+  }
+  autoOriented?: boolean
+  o: VectorProperty
+  p: {
+    a: 0 | 1
+    k: number[]
+    ix?: number
+    l?: number
+  }
+  r: VectorProperty
+  s: {
+    a: 0 | 1
+    k: number[]
+    ix?: number
+    l?: number
+  }
+  sa: {
+    a: 0 | 1
+    k: number
+    ix?: number
+  }
+  sk: {
+    a: 0 | 1
+    k: number
+    ix?: number
+  }
+}
+
 export interface LottieLayer {
   __used?: boolean
   ao?: number
@@ -995,44 +1077,14 @@ export interface LottieLayer {
   ddd?: 0 | 1
   ef?: Readonly<Effect[]>
   hasMask?: boolean
+  height?: number
   id?: string
   ind?: number
   /** In point */
   ip: number
-  ks: {
-    o: VectorProperty
-    r: VectorProperty
-    p: {
-      a: 0 | 1
-      k: number[]
-      ix?: number
-      l?: number
-    }
-    a: {
-      a: 0 | 1
-      k: number[]
-      ix?: number
-      l?: number
-    }
-    s: {
-      a: 0 | 1
-      k: number[]
-      ix?: number
-      l?: number
-    }
-    sk: {
-      a: 0 | 1
-      k: number
-      ix?: number
-    }
-    sa: {
-      a: 0 | 1
-      k: number
-      ix?: number
-    }
-  }
+  ks: LottieLayerData
   layers?: LottieLayer[] & { __used?: boolean }
-  masksProperties?: Readonly<Mask[]>
+  masksProperties?: Mask[]
   nm: string
   /** Out point */
   op: number
@@ -1042,6 +1094,7 @@ export interface LottieLayer {
   sc?: string
   sh?: number
   shapes?: Shape[] // Readonly<Shape[]>
+  singleShape?: boolean
   /** Time stretch */
   sr?: number
   /** Start time */
@@ -1052,6 +1105,10 @@ export interface LottieLayer {
   t?: TextData
   /** Matte target: If set to 1 it means a layer is using this layer as a track matte */
   td?: 0 | 1
+  textData?: {
+    height: number
+    width: number
+  }
   /** Time remappoing */
   tm?: AnimatedProperty
   /** Matte reference (for shape) */
@@ -1060,12 +1117,15 @@ export interface LottieLayer {
   tt?: number
   /** Layer type */
   ty: number
+  width?: number
   xt?: number
 }
 
-interface AnimatedProperty {
+export interface AnimatedProperty {
+  _placeholder?: boolean
   a: 0 | 1
   ix?: number
+  v?: number | number[]
 }
 
 export interface UniDimensionalAnimatedProperty extends AnimatedProperty {
@@ -1143,9 +1203,12 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
 export interface Audio {
   pause(): void
   play(): void
+  playing(): boolean
+  rate(val: number): void
   resume(): void
-  setRate(x: number): void
-  volume(x: number): void
+  seek(val?: number): number
+  setRate(val: number): void
+  volume(val: number): void
 }
 
 export type AudioFactory = (path: string) => Audio
@@ -1182,18 +1245,21 @@ export interface SegmentPool {
 export interface GlobalData {
   _mdf?: boolean
   audioController?: unknown
-  compSize?: unknown
+  compSize?: {
+    w: number
+    h: number
+  }
   defs?: SVGDefsElement
   fontManager?: FontManager
   frameId?: number
   frameNum?: number
-  frameRate?: number
+  frameRate: number
   getAssetData?: AnimationItem['getAssetData']
   getAssetsPath?: AnimationItem['getAssetsPath']
   imageLoader?: any
   nm?: string
   progressiveLoad?: boolean
-  projectInterface?: ReturnType<typeof ProjectInterface>
+  projectInterface?: ProjectInterface
   renderConfig?: SVGRendererConfig | CanvasRendererConfig | HTMLRendererConfig
   slotManager?: typeof PropertyFactory
 }
@@ -1215,35 +1281,6 @@ export interface TransformHandler {
   s: SequenceValue<number[]>
   sa: SequenceValue
   sk: SequenceValue<number[]>
-}
-
-export interface AssetHandler {
-  _createImageData: (assetData: LottieAsset) => ImageData
-  _elementHelper: SVGElement
-  _footageLoaded: () => void
-  _imageLoaded: () => void
-  assetsPath: string
-  createFootageData: (assetData: LottieAsset) => ImageData
-  createImageData: (assetData: LottieAsset) => ImageData
-  createImgData: (assetData: LottieAsset) => ImageData
-  destroy: () => void
-  footageLoaded: () => void
-  getAsset: (assetData: LottieAsset) => LottieAsset
-  imageLoaded: (this: AssetHandler) => void
-  images: ImageData[]
-  imagesLoadedCb: null | ((images: ImageData[] | null) => void)
-  loadAssets: (assets: LottieAsset[], cb?: (arg: unknown) => void) => void
-  loadedAssets: number
-  loadedFootages: () => boolean
-  loadedFootagesCount: number
-  loadedImages: () => boolean
-  path: string
-  setAssetsPath: (path: string) => void
-  setCacheType: (type: string, elementHelper?: SVGElement) => void
-  setPath: (path?: string) => void
-  testImageLoaded: (image: SVGImageElement) => void
-  totalFootages: number
-  totalImages: number
 }
 
 export interface IntersectData {

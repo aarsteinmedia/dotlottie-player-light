@@ -5,6 +5,7 @@ import { AnimationDirection, AnimationEventName } from '@/types'
 export class BMEnterFrameEvent {
   currentTime: number
   direction: AnimationDirection
+  target?: AnimationItem
   totalTime: number
   type: AnimationEventName
   constructor(
@@ -22,6 +23,7 @@ export class BMEnterFrameEvent {
 
 export class BMCompleteEvent {
   direction: AnimationDirection
+  target?: AnimationItem
   type: AnimationEventName
   constructor(type: AnimationEventName, frameMultiplier: number) {
     this.type = type
@@ -29,9 +31,29 @@ export class BMCompleteEvent {
   }
 }
 
+export class BMDrawnFrameEvent {
+  currentTime: number
+  direction: AnimationDirection
+  target?: AnimationItem
+  totalTime: number
+  type: AnimationEventName
+  constructor(
+    type: AnimationEventName,
+    currentTime: number,
+    direction: AnimationDirection,
+    totalTime: number
+  ) {
+    this.type = type
+    this.direction = direction
+    this.currentTime = currentTime
+    this.totalTime = totalTime
+  }
+}
+
 export class BMCompleteLoopEvent {
   currentLoop: number
   direction: AnimationDirection
+  target?: AnimationItem
   totalLoops: number | boolean
   type: AnimationEventName
   constructor(
@@ -49,6 +71,7 @@ export class BMCompleteLoopEvent {
 
 export class BMSegmentStartEvent {
   firstFrame: number
+  target?: AnimationItem
   totalFrames: number
   type: AnimationEventName
   constructor(
@@ -74,6 +97,7 @@ export class BMDestroyEvent {
 export class BMRenderFrameErrorEvent {
   currentTime: number
   nativeError: unknown
+  target?: AnimationItem
   type: AnimationEventName
   constructor(nativeError: unknown, currentTime: number) {
     this.type = 'renderFrameError'
@@ -84,6 +108,7 @@ export class BMRenderFrameErrorEvent {
 
 export class BMConfigErrorEvent {
   nativeError: unknown
+  target?: AnimationItem
   type: AnimationEventName
   constructor(nativeError: unknown, _: number) {
     this.type = 'configError'
@@ -93,6 +118,7 @@ export class BMConfigErrorEvent {
 
 export class BMAnimationConfigErrorEvent {
   nativeError: unknown
+  target?: AnimationItem
   type: AnimationEventName
   constructor(type: AnimationEventName, nativeError: unknown) {
     this.type = type
@@ -102,12 +128,12 @@ export class BMAnimationConfigErrorEvent {
 
 export class BaseEvent {
   _cbs: Partial<
-    Record<AnimationEventName, ((x?: unknown) => unknown)[] | null>
+    Record<AnimationEventName, ((ev?: LottieEvent) => unknown)[] | null>
   > = {}
 
   addEventListener(
     eventName: AnimationEventName,
-    callback: (x?: unknown) => unknown
+    callback: (ev?: LottieEvent) => unknown
   ): () => void {
     if (!this._cbs[eventName]) {
       this._cbs[eventName] = []
@@ -121,7 +147,7 @@ export class BaseEvent {
 
   removeEventListener(
     eventName: AnimationEventName,
-    callback?: (x?: unknown) => unknown
+    callback?: (ev: LottieEvent) => unknown
   ): void {
     if (!callback) {
       this._cbs[eventName] = null
@@ -145,12 +171,23 @@ export class BaseEvent {
     }
   }
 
-  triggerEvent(eventName: AnimationEventName, args?: unknown): void {
+  triggerEvent(eventName: AnimationEventName, ev?: LottieEvent): void {
     if (this._cbs[eventName]) {
       const { length } = this._cbs[eventName]
       for (let i = 0; i < length; i++) {
-        this._cbs[eventName][i](args)
+        this._cbs[eventName][i](ev)
       }
     }
   }
 }
+
+export type LottieEvent =
+  | BMAnimationConfigErrorEvent
+  | BMEnterFrameEvent
+  | BMCompleteEvent
+  | BMCompleteLoopEvent
+  | BMSegmentStartEvent
+  | BMAnimationConfigErrorEvent
+  | BMConfigErrorEvent
+  | BMDestroyEvent
+  | BMDrawnFrameEvent

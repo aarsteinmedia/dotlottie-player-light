@@ -1,50 +1,57 @@
-import MaskElement from '@/elements/MaskElement'
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+import type MaskElement from '@/elements/MaskElement'
+
 import SVGEffects from '@/elements/svg/SVGEffects'
 import { createNS, useId } from '@/utils'
 import { featureSupport, filtersFactory } from '@/utils/filters'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
-export default function SVGBaseElement() {}
+class SVGBaseElement {
+  baseElement?: null | SVGGElement
+  layerElement!: null | SVGGElement
+  maskedElement?: null | SVGGElement
+  maskManager?: MaskElement
+  matteElement?: null | SVGGElement
+  transformedElement?: null | SVGGElement
 
-SVGBaseElement.prototype = {
-  createContainerElements: function () {
-    this.matteElement = createNS('g')
+  createContainerElements() {
+    this.matteElement = createNS<SVGGElement>('g')
     this.transformedElement = this.layerElement
     this.maskedElement = this.layerElement
     this._sizeChanged = false
-    let layerElementParent = null
+    let layerElementParent: SVGGElement | null | undefined
     // If this layer acts as a mask for the following layer
     if (this.data.td) {
       this.matteMasks = {}
-      const gg = createNS('g')
+      const gg = createNS<SVGGElement>('g')
       gg.setAttribute('id', this.layerId)
       gg.appendChild(this.layerElement)
       layerElementParent = gg
       this.globalData.defs.appendChild(gg)
     } else if (this.data.tt) {
-      this.matteElement.appendChild(this.layerElement)
+      this.matteElement?.appendChild(this.layerElement!)
       layerElementParent = this.matteElement
       this.baseElement = this.matteElement
     } else {
       this.baseElement = this.layerElement
     }
     if (this.data.ln) {
-      this.layerElement.setAttribute('id', this.data.ln)
+      this.layerElement?.setAttribute('id', this.data.ln)
     }
     if (this.data.cl) {
-      this.layerElement.setAttribute('class', this.data.cl)
+      this.layerElement?.setAttribute('class', this.data.cl)
     }
     // Clipping compositions to hide content that exceeds boundaries. If collapsed transformations is on, component should not be clipped
     if (this.data.ty === 0 && !this.data.hd) {
-      const cp = createNS('clipPath')
-      const pt = createNS('path')
+      const cp = createNS<SVGClipPathElement>('clipPath')
+      const pt = createNS<SVGPathElement>('path')
       pt.setAttribute(
         'd',
         `M0,0 L${this.data.w},0 L${this.data.w},${this.data.h} L0,${
           this.data.h
         }z`
       )
-      const clipId = useId() // createElementID()
+      const clipId = createElementID()
       cp.setAttribute('id', clipId)
       cp.appendChild(pt)
       this.globalData.defs.appendChild(cp)
@@ -55,12 +62,12 @@ SVGBaseElement.prototype = {
         cpGroup.appendChild(this.layerElement)
         this.transformedElement = cpGroup
         if (layerElementParent) {
-          layerElementParent.appendChild(this.transformedElement)
+          layerElementParent.appendChild(this.transformedElement!)
         } else {
           this.baseElement = this.transformedElement
         }
       } else {
-        this.layerElement.setAttribute(
+        this.layerElement?.setAttribute(
           'clip-path',
           `url(${getLocationHref()}#${clipId})`
         )
@@ -69,28 +76,24 @@ SVGBaseElement.prototype = {
     if (this.data.bm !== 0) {
       this.setBlendMode()
     }
-  },
-  createRenderableComponents: function () {
-    this.maskManager = new (MaskElement as any)(
-      this.data,
-      this,
-      this.globalData
-    )
+  }
+  createRenderableComponents() {
+    this.maskManager = new MaskElement(this.data, this, this.globalData)
     this.renderableEffectsManager = new (SVGEffects as any)(this)
     this.searchEffectTransforms()
-  },
-  destroyBaseElement: function () {
+  }
+  destroyBaseElement() {
     this.layerElement = null
     this.matteElement = null
     this.maskManager.destroy()
-  },
-  getBaseElement: function () {
+  }
+  getBaseElement() {
     if (this.data.hd) {
       return null
     }
     return this.baseElement
-  },
-  getMatte: function (matteType: number) {
+  }
+  getMatte(matteType: number) {
     // This should not be a common case. But for backward compatibility, we'll create the matte object.
     // It solves animations that have two consecutive layers marked as matte masks.
     // Which is an undefined behavior in AE.
@@ -179,11 +182,11 @@ SVGBaseElement.prototype = {
       this.matteMasks[matteType] = id
     }
     return this.matteMasks[matteType]
-  },
-  initRendererElement: function () {
+  }
+  initRendererElement() {
     this.layerElement = createNS('g')
-  },
-  renderElement: function () {
+  }
+  renderElement() {
     if (this.finalTransform._localMatMdf) {
       this.transformedElement.setAttribute(
         'transform',
@@ -196,11 +199,15 @@ SVGBaseElement.prototype = {
         this.finalTransform.localOpacity
       )
     }
-  },
-  setMatte: function (id: string) {
+  }
+  setMatte(id: string) {
     if (!this.matteElement) {
       return
     }
     this.matteElement.setAttribute('mask', `url(${getLocationHref()}#${id})`)
-  },
+  }
 }
+
+interface SVGBaseElement extends MaskElement {}
+
+export default SVGBaseElement

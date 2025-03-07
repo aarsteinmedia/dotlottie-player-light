@@ -1,10 +1,10 @@
 import type { GroupEffect } from '@/effects/EffectsManager'
-import type { EffectValue, ElementInterface, ItemData } from '@/types'
+import type { EffectValue, ElementInterface } from '@/types'
 
-import PropertyFactory from '@/utils/PropertyFactory'
+import PropertyFactory, { type PropertyType } from '@/utils/PropertyFactory'
 
 export class SliderEffect {
-  p: ItemData
+  p?: PropertyType
 
   constructor(
     data: EffectValue,
@@ -16,7 +16,7 @@ export class SliderEffect {
 }
 
 export class AngleEffect {
-  p: ItemData
+  p?: PropertyType
 
   constructor(
     data: EffectValue,
@@ -28,7 +28,7 @@ export class AngleEffect {
 }
 
 export class ColorEffect {
-  p: ItemData
+  p?: PropertyType
 
   constructor(
     data: EffectValue,
@@ -40,7 +40,7 @@ export class ColorEffect {
 }
 
 export class PointEffect {
-  p: ItemData
+  p?: PropertyType
 
   constructor(
     data: EffectValue,
@@ -52,7 +52,7 @@ export class PointEffect {
 }
 
 export class LayerIndexEffect {
-  p: ItemData
+  p?: PropertyType
 
   constructor(
     data: EffectValue,
@@ -64,7 +64,7 @@ export class LayerIndexEffect {
 }
 
 export class MaskIndexEffect {
-  p: ItemData
+  p?: PropertyType
 
   constructor(
     data: EffectValue,
@@ -76,7 +76,7 @@ export class MaskIndexEffect {
 }
 
 export class CheckboxEffect {
-  p: ItemData
+  p?: PropertyType
 
   constructor(
     data: EffectValue,
