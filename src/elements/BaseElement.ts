@@ -33,7 +33,7 @@ export default class BaseElement {
   }
   initBaseData(
     data: LottieLayer,
-    globalData: GlobalData,
+    globalData: null | GlobalData,
     comp: any // CompElement TODO:
   ) {
     this.globalData = globalData

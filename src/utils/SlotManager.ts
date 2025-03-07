@@ -1,6 +1,6 @@
 import type { AnimationData, LottieAsset } from '@/types'
 
-class SlotManager {
+export class SlotManager {
   animationData: AnimationData
   constructor(animationData: AnimationData) {
     this.animationData = animationData

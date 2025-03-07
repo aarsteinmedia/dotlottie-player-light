@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type BaseElement from '@/elements/BaseElement'
-import type SVGCompElement from '@/elements/svg/SVGCompElement'
-import type SVGRendererBase from '@/renderers/SVGRendererBase'
+// import type SVGCompElement from '@/elements/svg/SVGCompElement'
+// import type SVGRendererBase from '@/renderers/SVGRendererBase'
 import type { AnimationData, LottieLayer } from '@/types'
-// import type ProjectInterface from '@/utils/helpers/ProjectInterface'
+import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
 import FootageElement from '@/elements/FootageElement'
@@ -12,6 +12,7 @@ import FontManager from '@/utils/FontManager'
 import slotFactory from '@/utils/SlotManager'
 
 class BaseRenderer {
+  completeLayers?: boolean
   addPendingElement(element: unknown) {
     this.pendingElements.push(element)
   }
@@ -22,6 +23,7 @@ class BaseRenderer {
     }
     this.checkPendingElements()
   }
+
   buildElementParenting(
     element: any,
     parentName?: number,
@@ -49,7 +51,6 @@ class BaseRenderer {
       i++
     }
   }
-
   checkLayers(num: number) {
     this.completeLayers = true
     const { length } = this.layers || []
@@ -168,7 +169,7 @@ class BaseRenderer {
     }
   }
 
-  setProjectInterface(pInterface: ProjectInterface) {
+  setProjectInterface(pInterface: typeof ProjectInterface) {
     if (!this.globalData) {
       return
     }
@@ -203,8 +204,8 @@ class BaseRenderer {
 
 interface BaseRenderer
   extends BaseElement,
-    SVGCompElement,
-    SVGRendererBase,
+    // SVGCompElement,
+    // SVGRendererBase,
     SVGRenderer {}
 
 export default BaseRenderer

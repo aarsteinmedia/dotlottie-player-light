@@ -10,13 +10,13 @@ import { getExpressionInterfaces } from '@/utils/getterSetter'
 class FootageElement {
   assetData: null | LottieAsset = null
   footageData: SVGElement
-  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+  constructor(data: LottieLayer, globalData: null | GlobalData, comp: any) {
     this.initFrame()
     this.initRenderable()
-    if (data.refId && globalData.getAssetData) {
+    if (data.refId && globalData?.getAssetData) {
       this.assetData = globalData.getAssetData(data.refId)
     }
-    this.footageData = globalData.imageLoader.getAsset(this.assetData)
+    this.footageData = globalData?.imageLoader.getAsset(this.assetData)
     this.initBaseData(data, globalData, comp)
   }
 

@@ -9,7 +9,8 @@ import type FontManager from '@/utils/FontManager'
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 // import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 import type Matrix from '@/utils/Matrix'
-import type PropertyFactory from '@/utils/PropertyFactory'
+import type { SlotManager } from '@/utils/SlotManager'
+// import type PropertyFactory from '@/utils/PropertyFactory'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 export type AnimationDirection = 1 | -1
@@ -1266,7 +1267,7 @@ export interface GlobalData {
   progressiveLoad?: boolean
   projectInterface?: any // ProjectInterface
   renderConfig?: SVGRendererConfig | CanvasRendererConfig | HTMLRendererConfig
-  slotManager?: typeof PropertyFactory
+  slotManager?: SlotManager
 }
 
 interface SequenceValue<T = number> {
