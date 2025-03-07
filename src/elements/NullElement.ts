@@ -42,3 +42,31 @@ extendPrototype(
   [BaseElement, TransformElement, HierarchyElement, FrameElement],
   NullElement
 )
+
+// class NullElement {
+//   constructor(
+//     data: LottieLayer,
+//     globalData: GlobalData,
+//     comp: any
+//   ) {
+//     this.initFrame()
+//     this.initBaseData(data, globalData, comp)
+//     this.initFrame()
+//     this.initTransform(data, globalData, comp)
+//     this.initHierarchy()
+//   }
+
+//   prepareFrame(num: number) {
+//     this.prepareProperties(num, true)
+//   }
+
+//   getBaseElement() {
+//     return null
+//   }
+// }
+
+// applyMixins(NullElement, [BaseElement, TransformElement, HierarchyElement, FrameElement])
+
+// interface NullElement extends BaseElement, TransformElement, HierarchyElement, FrameElement { }
+
+// export default NullElement

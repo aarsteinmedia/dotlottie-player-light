@@ -5,13 +5,11 @@ import { isServer } from '@/utils'
  * @author Leonardo Favre <https://github.com/leofavre/observed-properties>
  */
 
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 const UPDATE_ON_CONNECTED = Symbol('UPDATE_ON_CONNECTED')
 
 if (isServer()) {
   // Mock HTMLElement for server-side rendering
-  // @ts-ignore
-  global.HTMLElement = class EmptyHTMLElement {}
+  global.HTMLElement = class EmptyHTMLElement {} as any
 }
 
 /**
@@ -20,8 +18,7 @@ if (isServer()) {
 export default class EnhancedElement extends HTMLElement {
   constructor() {
     super()
-    // @ts-ignore
-    const { observedProperties = [] } = this.constructor
+    const { observedProperties = [] } = this.constructor as any
     if (UPDATE_ON_CONNECTED in this) {
       this[UPDATE_ON_CONNECTED] = []
     }
@@ -35,7 +32,7 @@ export default class EnhancedElement extends HTMLElement {
         const initialValue = this[observedProperties[i] as keyof this],
           CACHED_VALUE = Symbol(observedProperties[i] as string)
 
-        // @ts-ignore
+        // @ts-expect-error: ingore
         this[CACHED_VALUE] = initialValue
 
         Object.defineProperty(this, observedProperties[i], {
