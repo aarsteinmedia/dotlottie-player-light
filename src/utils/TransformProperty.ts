@@ -1,9 +1,10 @@
+import type { TransformHandler, Vector2 } from '@/types'
+
+import { degToRads } from '@/utils'
+import { extendPrototype } from '@/utils/functionExtensions'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
-import { degToRads } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
-import type { TransformHandler, Vector2 } from '@/types'
 
 const TransformPropertyFactory = (function () {
   const defaultVector: Vector2 = [0, 0]

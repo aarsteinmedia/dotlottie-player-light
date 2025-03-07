@@ -1,5 +1,5 @@
 /* eslint-disable max-depth */
-import type { GlobalData, ItemData, Vector3, VectorProperty } from '@/types'
+import type { ItemData, Vector3, VectorProperty } from '@/types'
 
 import { ArrayType } from '@/enums'
 import { createQuaternion, quaternionToEuler, slerp } from '@/utils'
@@ -8,16 +8,12 @@ import BezierFactory from '@/utils/BezierFactory'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import { createTypedArray } from '@/utils/helpers/arrays'
 
-const initFrame = initialDefaultFrame
+const initFrame = initialDefaultFrame,
+  bez = bezFunction()
 
-const bez = bezFunction()
-
-/**
- *
- */
-const PropertyFactory = (() => {
-  const getProp = <T = unknown>(
-    elem: T & { globalData?: GlobalData },
+export default class PropertyFactory {
+  static getProp = (
+    elem: any, // T & { globalData?: GlobalData },
     dataFromProps?: any,
     type?: number,
     mult?: null | number,
@@ -29,254 +25,349 @@ const PropertyFactory = (() => {
     }
     let p
     if (!data.k.length) {
-      p = new (ValueProperty as any)(elem, data, mult, container)
+      p = new ValueProperty(elem, data, mult, container)
     } else if (typeof data.k[0] === 'number') {
-      p = new (MultiDimensionalProperty as any)(elem, data, mult, container)
+      p = new MultiDimensionalProperty(elem, data, mult, container)
     } else {
       switch (type) {
         case 0:
-          p = new (KeyframedValueProperty as any)(elem, data, mult, container)
+          p = new KeyframedValueProperty(elem, data, mult, container)
           break
         case 1:
-          p = new (KeyframedMultidimensionalProperty as any)(
-            elem,
-            data,
-            mult,
-            container
-          )
+          p = new KeyframedMultidimensionalProperty(elem, data, mult, container)
           break
         default:
           break
       }
     }
-    if (p.effectsSequence.length) {
+    if (p?.effectsSequence.length) {
       container.addDynamicProperty(p)
     }
     return p
   }
+}
 
-  const obj = {
-    getProp,
+export type PropertyType =
+  | ValueProperty
+  | MultiDimensionalProperty
+  | KeyframedValueProperty
+  | KeyframedMultidimensionalProperty
+
+class ValueProperty {
+  _isFirstFrame: boolean
+  _mdf: boolean
+  addEffect: (effect: unknown) => void
+  comp: any
+  container: unknown
+  data: any
+  e: any
+  effectsSequence: any
+  elem: any
+  g: any
+  getValue: (val?: unknown) => unknown
+  k: boolean
+  kf: boolean
+  mult: number
+  propType: 'unidimensional'
+  pv: string | number
+  s: any
+  setVValue: (val: any) => void
+  v: string | number
+  vel: number
+  constructor(
+    elem: any,
+    data: VectorProperty,
+    mult?: null | number,
+    container?: any
+  ) {
+    this.propType = 'unidimensional'
+    this.mult = mult ?? 1
+    this.data = data
+    this.v = data.k * (mult ?? 1)
+    this.pv = data.k
+    this._mdf = false
+    this.elem = elem
+    this.container = container
+    this.comp = elem.comp
+    this.k = false
+    this.kf = false
+    this.vel = 0
+    this.effectsSequence = []
+    this._isFirstFrame = true
+    this.getValue = processEffectsSequence
+    this.setVValue = setVValue
+    this.addEffect = addEffect
   }
-  return obj
-})()
+}
+
+class MultiDimensionalProperty {
+  _isFirstFrame: boolean
+  _mdf: boolean
+  addEffect: (effect: unknown) => void
+  comp: any
+  container: unknown
+  data: any
+  e: any
+  effectsSequence: any
+  elem: any
+  frameId: number
+  g: any
+  getValue: (val?: unknown) => unknown
+  k: boolean
+  kf: boolean
+  mult: number
+  propType: 'multidimensional'
+  pv: number[] | number
+  s: any
+  setVValue: (val: any) => void
+  v: string | number[]
+  vel: number[]
+  constructor(
+    elem: any,
+    data: VectorProperty<number[]>,
+    mult?: null | number,
+    container?: unknown
+  ) {
+    this.propType = 'multidimensional'
+    this.mult = mult || 1
+    this.data = data
+    this._mdf = false
+    this.elem = elem
+    this.container = container
+    this.comp = elem.comp
+    this.k = false
+    this.kf = false
+    this.frameId = -1
+    const { length } = data.k
+    this.v = createTypedArray(ArrayType.Float32, length) as number[]
+    this.pv = createTypedArray(ArrayType.Float32, length) as number[]
+    this.vel = createTypedArray(ArrayType.Float32, length) as number[]
+    for (let i = 0; i < length; i++) {
+      this.v[i] = data.k[i] * this.mult
+      this.pv[i] = data.k[i]
+    }
+    this._isFirstFrame = true
+    this.effectsSequence = []
+    this.getValue = processEffectsSequence
+    this.setVValue = setVValue
+    this.addEffect = addEffect
+  }
+}
 
 /**
  *
  */
-function ValueProperty(
-  this: ItemData,
-  elem: ItemData,
-  data: VectorProperty,
-  mult: number,
+class KeyframedValueProperty {
+  _caching: {
+    _lastKeyframeIndex: number
+    lastFrame: number
+    lastIndex: number
+    value: number
+  }
+  _isFirstFrame: boolean
+  addEffect: (effect: unknown) => void
+  comp: any
+  container: unknown
+  data: any
+  e: any
+  effectsSequence: any
+  elem: any
+  frameId: number
+  g: any
+  getValue: (val?: unknown) => unknown
+  interpolateValue: (val: number, caching: any) => void
+  k: boolean
+  keyframes: number[]
+  keyframesMetadata: unknown[]
+  kf: boolean
+  mult: number
+  offsetTime: number
+  propType: 'unidimensional'
+  pv: string | number
+  s: any
+  setVValue: (val: any) => void
+  v: string | number
+  constructor(
+    elem: any,
+    data: VectorProperty<number[]>,
+    mult?: null | number,
+    container?: any
+  ) {
+    this.propType = 'unidimensional'
+    this.keyframes = data.k
+    this.keyframesMetadata = []
+    this.offsetTime = elem.data.st
+    this.frameId = -1
+    this._caching = {
+      _lastKeyframeIndex: -1,
+      lastFrame: initFrame,
+      lastIndex: 0,
+      value: 0,
+    }
+    this.k = true
+    this.kf = true
+    this.data = data
+    this.mult = mult || 1
+    this.elem = elem
+    this.container = container
+    this.comp = elem.comp
+    this.v = initFrame
+    this.pv = initFrame
+    this._isFirstFrame = true
+    this.getValue = processEffectsSequence
+    this.setVValue = setVValue
+    this.interpolateValue = interpolateValue
+    this.effectsSequence = [getValueAtCurrentTime.bind(this)]
+    this.addEffect = addEffect
+  }
+}
+
+class KeyframedMultidimensionalProperty {
+  _caching: {
+    lastFrame: number
+    lastIndex: number
+    value: number[]
+  }
+  _isFirstFrame: boolean
+  addEffect: (func: any) => void
+  comp: any
   container: any
-) {
-  this.propType = 'unidimensional'
-  this.mult = mult || 1
-  this.data = data
-  this.v = mult ? data.k * mult : data.k
-  this.pv = data.k
-  this._mdf = false
-  this.elem = elem
-  this.container = container
-  this.comp = elem.comp
-  this.k = false
-  this.kf = false
-  this.vel = 0
-  this.effectsSequence = []
-  this._isFirstFrame = true
-  this.getValue = processEffectsSequence
-  this.setVValue = setVValue
-  this.addEffect = addEffect
-}
+  data: VectorProperty<any[]>
+  effectsSequence: ((arg: any) => void)[]
+  elem: any
+  frameId: number
+  getValue: () => void
+  interpolateValue: (
+    frame: number,
+    caching: {
+      lastFrame: number
+      lastIndex: number
+      value: number[]
+    }
+  ) => void
+  k: boolean
+  keyframes: number[]
+  keyframesMetadata: unknown[]
+  kf: boolean
+  mult?: number
+  offsetTime: number
+  propType: 'multidimensional'
+  pv: number[]
 
-/**
- *
- */
-function MultiDimensionalProperty(
-  this: ItemData,
-  elem: ItemData,
-  data: VectorProperty<number[]>,
-  mult?: number,
-  container?: unknown
-) {
-  this.propType = 'multidimensional'
-  this.mult = mult || 1
-  this.data = data
-  this._mdf = false
-  this.elem = elem
-  this.container = container
-  this.comp = elem.comp
-  this.k = false
-  this.kf = false
-  this.frameId = -1
-  const { length } = data.k
-  this.v = createTypedArray(ArrayType.Float32, length) as number[]
-  this.pv = createTypedArray(ArrayType.Float32, length) as number[]
-  this.vel = createTypedArray(ArrayType.Float32, length) as number[]
-  for (let i = 0; i < length; i++) {
-    this.v[i] = data.k[i] * this.mult
-    this.pv[i] = data.k[i]
-  }
-  this._isFirstFrame = true
-  this.effectsSequence = []
-  this.getValue = processEffectsSequence
-  this.setVValue = setVValue
-  this.addEffect = addEffect
-}
+  setVValue: (val: number[]) => void
+  v: number[]
 
-/**
- *
- */
-function KeyframedValueProperty(
-  this: ItemData,
-  elem: ItemData,
-  data: VectorProperty<number[]>,
-  mult?: number,
-  container?: any
-) {
-  this.propType = 'unidimensional'
-  this.keyframes = data.k
-  this.keyframesMetadata = []
-  this.offsetTime = elem.data.st
-  this.frameId = -1
-  this._caching = {
-    _lastKeyframeIndex: -1,
-    lastFrame: initFrame,
-    lastIndex: 0,
-    value: 0,
-  }
-  this.k = true
-  this.kf = true
-  this.data = data
-  this.mult = mult || 1
-  this.elem = elem
-  this.container = container
-  this.comp = elem.comp
-  this.v = initFrame
-  this.pv = initFrame
-  this._isFirstFrame = true
-  this.getValue = processEffectsSequence
-  this.setVValue = setVValue
-  this.interpolateValue = interpolateValue
-  this.effectsSequence = [getValueAtCurrentTime.bind(this)]
-  this.addEffect = addEffect
-}
-
-/**
- *
- */
-function KeyframedMultidimensionalProperty(
-  this: ItemData,
-  elem: ItemData,
-  data: VectorProperty<any[]>,
-  mult?: number,
-  container?: HTMLElement
-) {
-  this.propType = 'multidimensional'
-  let i
-  const len = data.k.length
-  let s
-  let e
-  let to
-  let ti
-  for (i = 0; i < len - 1; i++) {
-    if (data.k[i].to && data.k[i].s && data.k[i + 1] && data.k[i + 1].s) {
-      s = data.k[i].s
-      e = data.k[i + 1].s
-      to = data.k[i].to
-      ti = data.k[i].ti
-      if (
-        (s.length === 2 &&
-          !(s[0] === e[0] && s[1] === e[1]) &&
-          bez.pointOnLine2D(
-            s[0],
-            s[1],
-            e[0],
-            e[1],
-            s[0] + to[0],
-            s[1] + to[1]
-          ) &&
-          bez.pointOnLine2D(
-            s[0],
-            s[1],
-            e[0],
-            e[1],
-            e[0] + ti[0],
-            e[1] + ti[1]
-          )) ||
-        (s.length === 3 &&
-          !(s[0] === e[0] && s[1] === e[1] && s[2] === e[2]) &&
-          bez.pointOnLine3D(
-            s[0],
-            s[1],
-            s[2],
-            e[0],
-            e[1],
-            e[2],
-            s[0] + to[0],
-            s[1] + to[1],
-            s[2] + to[2]
-          ) &&
-          bez.pointOnLine3D(
-            s[0],
-            s[1],
-            s[2],
-            e[0],
-            e[1],
-            e[2],
-            e[0] + ti[0],
-            e[1] + ti[1],
-            e[2] + ti[2]
-          ))
-      ) {
-        data.k[i].to = null
-        data.k[i].ti = null
-      }
-      if (
-        s[0] === e[0] &&
-        s[1] === e[1] &&
-        to[0] === 0 &&
-        to[1] === 0 &&
-        ti[0] === 0 &&
-        ti[1] === 0
-      ) {
-        if (s.length === 2 || (s[2] === e[2] && to[2] === 0 && ti[2] === 0)) {
+  constructor(
+    elem: any,
+    data: VectorProperty<any[]>,
+    mult?: null | number,
+    container?: HTMLElement
+  ) {
+    this.propType = 'multidimensional'
+    let i
+    const len = data.k.length
+    let s
+    let e
+    let to
+    let ti
+    for (i = 0; i < len - 1; i++) {
+      if (data.k[i].to && data.k[i].s && data.k[i + 1] && data.k[i + 1].s) {
+        s = data.k[i].s
+        e = data.k[i + 1].s
+        to = data.k[i].to
+        ti = data.k[i].ti
+        if (
+          (s.length === 2 &&
+            !(s[0] === e[0] && s[1] === e[1]) &&
+            bez.pointOnLine2D(
+              s[0],
+              s[1],
+              e[0],
+              e[1],
+              s[0] + to[0],
+              s[1] + to[1]
+            ) &&
+            bez.pointOnLine2D(
+              s[0],
+              s[1],
+              e[0],
+              e[1],
+              e[0] + ti[0],
+              e[1] + ti[1]
+            )) ||
+          (s.length === 3 &&
+            !(s[0] === e[0] && s[1] === e[1] && s[2] === e[2]) &&
+            bez.pointOnLine3D(
+              s[0],
+              s[1],
+              s[2],
+              e[0],
+              e[1],
+              e[2],
+              s[0] + to[0],
+              s[1] + to[1],
+              s[2] + to[2]
+            ) &&
+            bez.pointOnLine3D(
+              s[0],
+              s[1],
+              s[2],
+              e[0],
+              e[1],
+              e[2],
+              e[0] + ti[0],
+              e[1] + ti[1],
+              e[2] + ti[2]
+            ))
+        ) {
           data.k[i].to = null
           data.k[i].ti = null
         }
+        if (
+          s[0] === e[0] &&
+          s[1] === e[1] &&
+          to[0] === 0 &&
+          to[1] === 0 &&
+          ti[0] === 0 &&
+          ti[1] === 0
+        ) {
+          if (s.length === 2 || (s[2] === e[2] && to[2] === 0 && ti[2] === 0)) {
+            data.k[i].to = null
+            data.k[i].ti = null
+          }
+        }
       }
     }
+    this.effectsSequence = [getValueAtCurrentTime.bind(this)]
+    this.data = data
+    this.keyframes = data.k
+    this.keyframesMetadata = []
+    this.offsetTime = elem.data.st
+    this.k = true
+    this.kf = true
+    this._isFirstFrame = true
+    this.mult = mult || 1
+    this.elem = elem
+    this.container = container
+    this.comp = elem.comp
+    this.getValue = processEffectsSequence
+    this.setVValue = setVValue
+    this.interpolateValue = interpolateValue
+    this.frameId = -1
+    const arrLen = data.k[0].s.length
+    this.v = createTypedArray(ArrayType.Float32, arrLen) as number[]
+    this.pv = createTypedArray(ArrayType.Float32, arrLen) as number[]
+    for (i = 0; i < arrLen; i++) {
+      this.v[i] = initFrame
+      this.pv[i] = initFrame
+    }
+    this._caching = {
+      lastFrame: initFrame,
+      lastIndex: 0,
+      value: createTypedArray(ArrayType.Float32, arrLen) as number[],
+    }
+    this.addEffect = addEffect
   }
-  this.effectsSequence = [getValueAtCurrentTime.bind(this)]
-  this.data = data
-  this.keyframes = data.k
-  this.keyframesMetadata = []
-  this.offsetTime = elem.data.st
-  this.k = true
-  this.kf = true
-  this._isFirstFrame = true
-  this.mult = mult || 1
-  this.elem = elem
-  this.container = container
-  this.comp = elem.comp
-  this.getValue = processEffectsSequence
-  this.setVValue = setVValue
-  this.interpolateValue = interpolateValue
-  this.frameId = -1
-  const arrLen = data.k[0].s.length
-  this.v = createTypedArray(ArrayType.Float32, arrLen) as number[]
-  this.pv = createTypedArray(ArrayType.Float32, arrLen) as number[]
-  for (i = 0; i < arrLen; i++) {
-    this.v[i] = initFrame
-    this.pv[i] = initFrame
-  }
-  this._caching = {
-    lastFrame: initFrame,
-    lastIndex: 0,
-    value: createTypedArray(ArrayType.Float32, arrLen) as number[],
-  }
-  this.addEffect = addEffect
 }
 
 /**
@@ -586,5 +677,3 @@ function interpolateValue(this: any, frameNum: number, caching: any) {
   caching.lastIndex = iterationIndex
   return newValue
 }
-
-export default PropertyFactory

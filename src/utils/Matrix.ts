@@ -29,9 +29,9 @@ import { createTypedArray } from '@/utils/helpers/arrays'
  * @prop {CanvasRenderingContext2D|null} [context=null] - set or get current canvas context
  */
 export default class Matrix {
+  props: Float32Array
   private _identity: boolean
   private _identityCalculated: boolean
-  private props: Float32Array
 
   constructor() {
     this.props = createTypedArray(ArrayType.Float32, 16) as Float32Array

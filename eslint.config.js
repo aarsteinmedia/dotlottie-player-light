@@ -37,6 +37,12 @@ export default TSESlint.config(
     rules: {
       ...ESLintPluginPrettier.configs?.recommended.rules,
       ...ESLintConfigPrettier.rules,
+      '@typescript-eslint/no-empty-object-type': [
+        'error',
+        {
+          allowInterfaces: 'always',
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'warn', // It's explicit, so I meant it
       '@typescript-eslint/no-namespace': 'warn',
       '@typescript-eslint/no-unused-vars': [

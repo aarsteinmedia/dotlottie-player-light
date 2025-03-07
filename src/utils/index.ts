@@ -645,7 +645,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     lerp(p0[0], p1[0], amount),
     lerp(p0[1], p1[1], amount),
   ],
-  linearOffset = (p1: Vector2, p2: Vector2, amount: number) => {
+  linearOffset = (p1: Vector2, p2: Vector2, amount: number): Vector2[] => {
     const angle = Math.atan2(p2[0] - p1[0], p2[1] - p1[1])
     return [polarOffset(p1, angle, amount), polarOffset(p2, angle, amount)]
   },
@@ -718,10 +718,10 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     }
     return markers
   },
-  offsetSegment = (segment: any, amount: number) => {
-    let e
+  offsetSegment = (segment: { points: Vector2[] }, amount: number) => {
+    let e: Vector2[]
     e = linearOffset(segment.points[0], segment.points[1], amount)
-    const p0 = e[0]
+    const p0: Vector2 = e[0]
     const p1a = e[1]
     e = linearOffset(segment.points[1], segment.points[2], amount)
     const p1b = e[0]
@@ -748,7 +748,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
       p2 = p2a as Vector2
     }
 
-    return new (PolynomialBezier as any)(p0, p1, p2, p3)
+    return new PolynomialBezier(p0, p1, p2, p3)
   },
   offsetSegmentSplit = (segment: any, amount: number) => {
     /*
@@ -799,7 +799,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     Math.hypot(p1[0] - p2[0], p1[1] - p2[1]),
   pointEqual = (p1: Vector2, p2: Vector2) =>
     floatEqual(p1[0], p2[0]) && floatEqual(p1[1], p2[1]),
-  polarOffset = (p: Vector2, angle: number, length: number) => [
+  polarOffset = (p: Vector2, angle: number, length: number): Vector2 => [
     p[0] + Math.cos(angle) * length,
     p[1] - Math.sin(angle) * length,
   ],

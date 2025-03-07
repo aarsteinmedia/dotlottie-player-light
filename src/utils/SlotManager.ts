@@ -1,32 +1,27 @@
 import type { AnimationData, LottieAsset } from '@/types'
 
-/**
- *
- */
-function SlotManager(
-  this: {
-    animationData: AnimationData
-  },
+class SlotManager {
   animationData: AnimationData
-) {
-  this.animationData = animationData
-}
-SlotManager.prototype.getProp = function (data: LottieAsset) {
-  if (
-    data.sid &&
-    this.animationData.slots &&
-    this.animationData.slots[data.sid]
-  ) {
-    return Object.assign(data, this.animationData.slots[data.sid].p)
+  constructor(animationData: AnimationData) {
+    this.animationData = animationData
   }
-  return data
+  getProp(data: LottieAsset) {
+    if (
+      data.sid &&
+      this.animationData.slots &&
+      this.animationData.slots[data.sid]
+    ) {
+      return Object.assign(data, this.animationData.slots[data.sid].p)
+    }
+    return data
+  }
 }
 
 /**
  *
  */
 export function slotFactory(animationData: AnimationData) {
-  return new (SlotManager as any)(animationData)
+  return new SlotManager(animationData)
 }
 
 export default slotFactory
