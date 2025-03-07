@@ -1,4 +1,4 @@
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+import type { GlobalData, LottieLayer } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -6,67 +6,33 @@ import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
-/**
- *
- */
-export default function NullElement(
-  this: ElementInterface,
-  data: LottieLayer,
-  globalData: GlobalData,
-  comp: any
-) {
-  this.initFrame()
-  this.initBaseData(data, globalData, comp)
-  this.initFrame()
-  this.initTransform(data, globalData, comp)
-  this.initHierarchy()
+export default class NullElement {
+  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+    this.initFrame()
+    this.initBaseData(data, globalData, comp)
+    this.initFrame()
+    this.initTransform(data, globalData, comp)
+    this.initHierarchy()
+  }
+
+  destroy() {}
+
+  getBaseElement() {
+    return null
+  }
+
+  hide() {}
+
+  prepareFrame(num: number) {
+    this.prepareProperties(num, true)
+  }
+
+  renderFrame() {}
+
+  sourceRectAtTime() {}
 }
-
-NullElement.prototype.prepareFrame = function (num: number) {
-  this.prepareProperties(num, true)
-}
-
-NullElement.prototype.renderFrame = function () {}
-
-NullElement.prototype.getBaseElement = function () {
-  return null
-}
-
-NullElement.prototype.destroy = function () {}
-
-NullElement.prototype.sourceRectAtTime = function () {}
-
-NullElement.prototype.hide = function () {}
 
 extendPrototype(
   [BaseElement, TransformElement, HierarchyElement, FrameElement],
   NullElement
 )
-
-// class NullElement {
-//   constructor(
-//     data: LottieLayer,
-//     globalData: GlobalData,
-//     comp: any
-//   ) {
-//     this.initFrame()
-//     this.initBaseData(data, globalData, comp)
-//     this.initFrame()
-//     this.initTransform(data, globalData, comp)
-//     this.initHierarchy()
-//   }
-
-//   prepareFrame(num: number) {
-//     this.prepareProperties(num, true)
-//   }
-
-//   getBaseElement() {
-//     return null
-//   }
-// }
-
-// applyMixins(NullElement, [BaseElement, TransformElement, HierarchyElement, FrameElement])
-
-// interface NullElement extends BaseElement, TransformElement, HierarchyElement, FrameElement { }
-
-// export default NullElement
