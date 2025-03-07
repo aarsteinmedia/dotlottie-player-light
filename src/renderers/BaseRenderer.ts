@@ -7,7 +7,7 @@ import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
 import FootageElement from '@/elements/FootageElement'
-import SVGRenderer from '@/renderers/SVGRenderer'
+// import SVGRenderer from '@/renderers/SVGRenderer'
 import FontManager from '@/utils/FontManager'
 import slotFactory from '@/utils/SlotManager'
 
@@ -202,10 +202,10 @@ class BaseRenderer {
   }
 }
 
-interface BaseRenderer
-  extends BaseElement,
-    // SVGCompElement,
-    // SVGRendererBase,
-    SVGRenderer {}
+interface BaseRenderer extends BaseElement {
+  // SVGCompElement,
+  // SVGRendererBase,
+  // SVGRenderer
+}
 
 export default BaseRenderer
