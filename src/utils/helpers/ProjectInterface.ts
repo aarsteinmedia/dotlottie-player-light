@@ -1,15 +1,45 @@
-import type { LottieComp } from '@/types'
+// import type AnimationItem from '@/animation/AnimationItem'
+import type { ElementInterface } from '@/types'
 
-interface Project {
-  compositions: any[]
-  currentFrame: number
-}
+// TODO: Fix this
+// class ProjectInterface {
+//   static compositions: ElementInterface[] = []
+//   static currentFrame = 0
+//   constructor(name?: string) {
+//     let i = 0
+//     const len = ProjectInterface.compositions.length
+//     while (i < len) {
+//       if (
+//         ProjectInterface.compositions[i].data &&
+//         ProjectInterface.compositions[i].data.nm === name
+//       ) {
+//         if (
+//           ProjectInterface.compositions[i].prepareFrame &&
+//           ProjectInterface.compositions[i].data.xt
+//         ) {
+//           ProjectInterface.compositions[i].prepareFrame!(
+//             ProjectInterface.currentFrame
+//           )
+//         }
+//         ProjectInterface.compositions[i].compInterface
+//         break
+//       }
+//       i++
+//     }
+//   }
+
+//   static registerComposition(comp: ElementInterface) {
+//     ProjectInterface.compositions.push(comp)
+//   }
+// }
+
+// interface ProjectInterface extends AnimationItem {}
 
 const ProjectInterface = (() => {
   /**
    *
    */
-  function registerComposition(this: Project, comp: LottieComp) {
+  function registerComposition(this: any, comp: ElementInterface) {
     this.compositions.push(comp)
   }
 
@@ -17,7 +47,7 @@ const ProjectInterface = (() => {
     /**
      *
      */
-    function _thisProjectFunction(this: Project, name: string) {
+    function _thisProjectFunction(this: any, name: string) {
       let i = 0
       const len = this.compositions.length
       while (i < len) {

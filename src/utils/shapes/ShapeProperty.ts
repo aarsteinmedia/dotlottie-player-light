@@ -5,8 +5,8 @@ import { degToRads } from '@/utils'
 import BezierFactory from '@/utils/BezierFactory'
 import { initialDefaultFrame, roundCorner } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import shapeCollectionPool from '@/utils/pooling/shapeCollectionPool'
-import shapePool from '@/utils/pooling/shapePool'
+import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
+import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory, { PropertyType } from '@/utils/PropertyFactory'
 
 export default class ShapePropertyFactory {
@@ -64,9 +64,9 @@ class RectShapeProperty extends DynamicPropertyContainer {
 
   constructor(elem: any, data: any) {
     super()
-    this.v = shapePool.newElement()
+    this.v = ShapePool.newElement()
     this.v.c = true
-    this.localShapeCollection = shapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.localShapeCollection.addShape(this.v)
     this.paths = this.localShapeCollection
     this.elem = elem
@@ -346,7 +346,7 @@ class StarShapeProperty extends DynamicPropertyContainer {
 
   constructor(elem: any, data: any) {
     super()
-    this.v = shapePool.newElement()
+    this.v = ShapePool.newElement()
     this.v.setPathData(true, 0)
     this.elem = elem
     this.comp = elem.comp
@@ -366,7 +366,7 @@ class StarShapeProperty extends DynamicPropertyContainer {
     this.r = PropertyFactory.getProp(elem, data.r, 0, degToRads, this)
     this.or = PropertyFactory.getProp(elem, data.or, 0, 0, this)
     this.os = PropertyFactory.getProp(elem, data.os, 0, 0.01, this)
-    this.localShapeCollection = shapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.localShapeCollection.addShape(this.v)
     this.paths = this.localShapeCollection
     if (this.dynamicProperties.length) {
@@ -487,9 +487,9 @@ class EllShapeProperty extends DynamicPropertyContainer {
 
   constructor(elem: any, data: Shape) {
     super()
-    this.v = shapePool.newElement()
+    this.v = ShapePool.newElement()
     this.v.setPathData(true, 4)
-    this.localShapeCollection = shapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.localShapeCollection.addShape(this.v)
     this.d = data.d
@@ -584,9 +584,9 @@ class ShapeProperty {
     this.kf = false
     this._mdf = false
     const pathData = type === 3 ? data.pt.k : data.ks.k
-    this.v = shapePool.clone(pathData)
-    this.pv = shapePool.clone(this.v)
-    this.localShapeCollection = shapeCollectionPool.newShapeCollection()
+    this.v = ShapePool.clone(pathData)
+    this.pv = ShapePool.clone(this.v)
+    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)
     this.reset = resetShape
@@ -636,10 +636,10 @@ class KeyframedShapeProperty {
     this.k = true
     this.kf = true
     const len = this.keyframes[0].s[0].i.length
-    this.v = shapePool.newElement()
+    this.v = ShapePool.newElement()
     this.v.setPathData(this.keyframes[0].s[0].c, len)
-    this.pv = shapePool.clone(this.v)
-    this.localShapeCollection = shapeCollectionPool.newShapeCollection()
+    this.pv = ShapePool.clone(this.v)
+    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)
     this.lastFrame = initialDefaultFrame
@@ -701,7 +701,7 @@ function processEffectsSequence(this: any) {
  */
 function setVValue(this: any, newPath: ShapeData) {
   if (!shapesEqual(this.v, newPath)) {
-    this.v = shapePool.clone(newPath)
+    this.v = ShapePool.clone(newPath)
     this.localShapeCollection.releaseShapes()
     this.localShapeCollection.addShape(this.v)
     this._mdf = true

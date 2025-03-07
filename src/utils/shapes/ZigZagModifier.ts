@@ -1,7 +1,7 @@
 import PolynomialBezier from '@/elements/PolynomialBezier'
 import { AnimationDirection, Shape, ShapeData } from '@/types'
 import { getProjectingAngle, setPoint } from '@/utils'
-import shapePool from '@/utils/pooling/shapePool'
+import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory, { type PropertyType } from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
@@ -107,7 +107,7 @@ class ZigZagModifier extends ShapeModifier {
     pointType: number
   ) {
     let count = path._length
-    const clonedPath = shapePool.newElement<ShapeData>()
+    const clonedPath = ShapePool.newElement<ShapeData>()
     clonedPath.c = path.c
 
     if (!path.c) {

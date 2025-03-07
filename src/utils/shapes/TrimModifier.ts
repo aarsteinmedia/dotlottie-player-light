@@ -3,7 +3,7 @@ import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 import { ShapeData, Vector2 } from '@/types'
 import bezFunction from '@/utils/bez'
 import { segmentsLengthPool } from '@/utils/pooling'
-import shapePool from '@/utils/pooling/shapePool'
+import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
@@ -68,7 +68,7 @@ export default class TrimModifier extends ShapeModifier {
       segmentCount = shapePath._length
       initPos = shapePath._length
     } else {
-      shapePath = shapePool.newElement()
+      shapePath = ShapePool.newElement()
       segmentCount = 0
       initPos = 0
     }
@@ -177,7 +177,7 @@ export default class TrimModifier extends ShapeModifier {
         break
       }
       if (i < len - 1) {
-        shapePath = shapePool.newElement()
+        shapePath = ShapePool.newElement()
         newShape = true
         shapes.push(shapePath)
         segmentCount = 0

@@ -1,6 +1,6 @@
 import type { ShapeData } from '@/types'
 
-import shapePool from '@/utils/pooling/shapePool'
+import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory, { type PropertyType } from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
@@ -24,7 +24,7 @@ export default class PuckerAndBloatModifier extends ShapeModifier {
     }
     centerPoint[0] /= pathLength
     centerPoint[1] /= pathLength
-    const clonedPath = shapePool.newElement<ShapeData>()
+    const clonedPath = ShapePool.newElement<ShapeData>()
     clonedPath.c = path.c
     let vX
     let vY

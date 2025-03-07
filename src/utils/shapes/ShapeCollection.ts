@@ -1,7 +1,7 @@
 import type { ShapeData } from '@/types'
 
 import { createSizedArray } from '@/utils/helpers/arrays'
-import shapePool from '@/utils/pooling/shapePool'
+import ShapePool from '@/utils/pooling/ShapePool'
 
 export default class ShapeCollection {
   public _length: number
@@ -23,7 +23,7 @@ export default class ShapeCollection {
   releaseShapes() {
     const { _length } = this
     for (let i = 0; i < _length; i++) {
-      shapePool.release(this.shapes[i])
+      ShapePool.release(this.shapes[i])
     }
     this._length = 0
   }

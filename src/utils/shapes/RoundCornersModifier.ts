@@ -1,7 +1,7 @@
 import type { ShapeData } from '@/types'
 
 import { roundCorner } from '@/utils/getterSetter'
-import shapePool from '@/utils/pooling/shapePool'
+import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory, { PropertyType } from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
@@ -15,7 +15,7 @@ export default class RoundCornersModifier extends ShapeModifier {
   }
 
   processPath(path: ShapeData, round: number) {
-    const clonedPath = shapePool.newElement<ShapeData>()
+    const clonedPath = ShapePool.newElement<ShapeData>()
     clonedPath.c = path.c
     const len = Number(path._length)
     let currentV

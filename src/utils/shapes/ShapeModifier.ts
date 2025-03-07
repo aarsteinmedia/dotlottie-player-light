@@ -1,7 +1,7 @@
 import { ElementInterface, ShapeData, ShapeDataInterface } from '@/types'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import shapeCollectionPool from '@/utils/pooling/shapeCollectionPool'
+import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 
 class ShapeModifier extends DynamicPropertyContainer {
   closed!: boolean
@@ -15,7 +15,7 @@ class ShapeModifier extends DynamicPropertyContainer {
       data.sh?.container.addDynamicProperty(data.sh)
       const shapeData = {
         data: data,
-        localShapeCollection: shapeCollectionPool.newShapeCollection(),
+        localShapeCollection: ShapeCollectionPool.newShapeCollection(),
         shape: data.sh,
       }
       this.shapes.push(shapeData)

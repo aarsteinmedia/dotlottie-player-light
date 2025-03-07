@@ -7,7 +7,7 @@ import {
   pointEqual,
   pruneIntersections,
 } from '@/utils'
-import shapePool from '@/utils/pooling/shapePool'
+import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory, { PropertyType } from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
@@ -30,7 +30,7 @@ export default class OffsetPathModifier extends ShapeModifier {
     lineJoin: number,
     miterLimit: number
   ) {
-    const outputBezier = shapePool.newElement<ShapeData>()
+    const outputBezier = ShapePool.newElement<ShapeData>()
     outputBezier.c = inputBezier.c
     let count = inputBezier.length()
     if (!inputBezier.c) {
