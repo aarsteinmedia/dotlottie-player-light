@@ -56,6 +56,7 @@ class BaseProperty {
   }
   _isFirstFrame?: boolean
   _mdf?: boolean
+  _placeholder?: boolean
   addEffect!: (effect: unknown) => void
   comp!: any
   container!: unknown
@@ -80,8 +81,8 @@ class BaseProperty {
   kf!: boolean
   mult!: number
   offsetTime!: number
-  propType!: 'multidimensional' | 'unidimensional'
 
+  propType!: 'multidimensional' | 'unidimensional'
   pv!: string | number | number[]
   s: any
   setVValue!: (val: any) => void

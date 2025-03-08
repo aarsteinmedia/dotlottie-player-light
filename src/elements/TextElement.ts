@@ -19,7 +19,7 @@ import LetterProps from '@/utils/text/LetterProps'
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
 
-class ITextElement {
+class TextElement {
   emptyProp = new LetterProps()
   lettersChangedFlag!: boolean
   textAnimator!: TextAnimatorProperty
@@ -101,7 +101,7 @@ class ITextElement {
     this.initFrame()
     this.initBaseData(data, globalData, comp)
     this.textProperty = new TextProperty(this, data.t, this.dynamicProperties)
-    this.textAnimator = new TextAnimatorProperty(data.t, this.renderType, this)
+    this.textAnimator = new TextAnimatorProperty(data.t!, this.renderType, this)
     this.initTransform()
     this.initHierarchy()
     this.initRenderable()
@@ -136,7 +136,7 @@ class ITextElement {
   }
 }
 
-interface ITextElement
+interface TextElement
   extends FrameElement,
     TransformElement,
     RenderableElement,
@@ -144,4 +144,4 @@ interface ITextElement
     ISolidElement,
     SVGTextElement {}
 
-export default ITextElement
+export default TextElement

@@ -4,8 +4,14 @@ import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
 class RenderableDOMElement {
+  _isFirstFrame?: boolean
   _mdf?: boolean
+  baseElement?: SVGGElement
+  data!: LottieLayer
+  hidden?: boolean
   isInRange?: boolean
+  isTransparent?: boolean
+  layerElement!: SVGGElement
   prepareRenderableFrame!: (num: number) => void
   destroy() {
     this.innerElem = null

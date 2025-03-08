@@ -11,7 +11,7 @@ import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGCompElement from '@/elements/svg/SVGCompElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
-import ITextElement from '@/elements/TextElement'
+import TextElement from '@/elements/TextElement'
 import { RendererType } from '@/enums'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
@@ -375,7 +375,7 @@ extendPrototype(
     HierarchyElement,
     FrameElement,
     RenderableDOMElement,
-    ITextElement,
+    TextElement,
   ],
   SVGTextLottieElement
 )
@@ -386,6 +386,6 @@ interface SVGTextLottieElement
     HierarchyElement,
     FrameElement,
     RenderableDOMElement,
-    ITextElement {}
+    TextElement {}
 
 export default SVGTextLottieElement

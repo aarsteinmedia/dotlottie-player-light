@@ -1,9 +1,9 @@
 import type { Shape } from '@/types'
 
 import { ProcessedElement } from '@/elements/helpers/shapes'
-import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 
 class ShapeElement {
+  processedElements!: ProcessedElement[]
   addProcessedElement(elem: any, pos: number) {
     const elements = this.processedElements
     let i = elements.length

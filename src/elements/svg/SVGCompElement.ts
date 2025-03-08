@@ -11,7 +11,9 @@ import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
-import PropertyFactory from '@/utils/PropertyFactory'
+import PropertyFactory, {
+  KeyframedValueProperty,
+} from '@/utils/PropertyFactory'
 /**
  *
  */
@@ -26,7 +28,7 @@ class SVGCompElement extends SVGBaseElement {
   layers: LottieLayer[]
   pendingElements: any[]
   supports3d: boolean
-  tm: AnimatedProperty
+  tm?: KeyframedValueProperty
   constructor(
     // this: ElementInterface,
     data: LottieLayer,
