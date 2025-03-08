@@ -12,7 +12,7 @@ import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContai
 import type Matrix from '@/utils/Matrix'
 // import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 import type ShapePath from '@/utils/shapes/ShapePath'
-import type { SlotManager } from '@/utils/SlotManager'
+import type SlotManager from '@/utils/SlotManager'
 // import type PropertyFactory from '@/utils/PropertyFactory'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
@@ -42,6 +42,13 @@ export interface ShapeGroupHandler {
   gr: SVGElement
   it: unknown[]
   prevViewData: unknown[]
+}
+
+export interface SVGGeometry {
+  cx: number
+  cy: number
+  height: number
+  width: number
 }
 
 export interface Transformer {
@@ -584,6 +591,7 @@ export type VectorProperty<T = Vector1> = {
   k: T
   v?: number
   ix?: number
+  sid?: number
 }
 
 interface Coordinates {

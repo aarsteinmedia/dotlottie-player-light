@@ -9,7 +9,7 @@ import AudioElement from '@/elements/AudioElement'
 import FootageElement from '@/elements/FootageElement'
 // import SVGRenderer from '@/renderers/SVGRenderer'
 import FontManager from '@/utils/FontManager'
-import slotFactory from '@/utils/SlotManager'
+import SlotManager from '@/utils/SlotManager'
 
 class BaseRenderer {
   completeLayers?: boolean
@@ -181,7 +181,7 @@ class BaseRenderer {
       return
     }
     this.globalData.fontManager = new FontManager()
-    this.globalData.slotManager = slotFactory(animData)
+    this.globalData.slotManager = new SlotManager(animData)
     this.globalData.fontManager.addChars(animData.chars)
     this.globalData.fontManager.addFonts(animData.fonts, fontsContainer)
     this.globalData.getAssetData = this.animationItem.getAssetData.bind(

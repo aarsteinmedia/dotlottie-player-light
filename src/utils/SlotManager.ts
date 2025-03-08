@@ -1,11 +1,11 @@
-import type { AnimationData, LottieAsset } from '@/types'
+import type { AnimationData, VectorProperty } from '@/types'
 
-export class SlotManager {
+export default class SlotManager {
   animationData: AnimationData
   constructor(animationData: AnimationData) {
     this.animationData = animationData
   }
-  getProp(data: LottieAsset) {
+  getProp(data: VectorProperty) {
     if (
       data.sid &&
       this.animationData.slots &&
@@ -16,12 +16,3 @@ export class SlotManager {
     return data
   }
 }
-
-/**
- *
- */
-export function slotFactory(animationData: AnimationData) {
-  return new SlotManager(animationData)
-}
-
-export default slotFactory

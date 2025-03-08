@@ -11,7 +11,7 @@ import {
 export default class PropertyFactory {
   static getProp = (
     elem: ElementInterface,
-    dataFromProps?: VectorProperty<number | any[]>,
+    dataFromProps?: VectorProperty<number | number[]>,
     type?: number,
     mult?: null | number,
     container?: any

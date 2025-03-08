@@ -258,7 +258,7 @@ export default class SVGRendererBase {
     this.layerElement.style.display = 'block'
   }
 
-  updateContainerSize() {}
+  updateContainerSize(_width?: number, _height?: number) {}
 }
 
 extendPrototype([BaseRenderer], SVGRendererBase)

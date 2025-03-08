@@ -1,4 +1,5 @@
-import type { ShapeData, Vector2 } from '@/types'
+import type { Vector2 } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { ArrayType } from '@/enums'
 import { getDefaultCurveSegments } from '@/utils/getterSetter'
@@ -21,7 +22,9 @@ export default class Bezier {
     pt3: Vector2,
     pt4: Vector2
   ) {
-    const storedData = {} as any
+    const storedData: {
+      [key: string]: BezierData
+    } = {}
     const bezierName = `${pt1[0]}_${pt1[1]}_${pt2[0]}_${pt2[1]}_${pt3[0]}_${
       pt3[1]
     }_${pt4[0]}_${pt4[1]}`.replace(/\./g, 'p')
@@ -57,10 +60,10 @@ export default class Bezier {
       ) {
         curveSegments = 2
       }
-      const bezierData = new BezierData(curveSegments)
-      const len = pt3.length
+      const bezierData = new BezierData(curveSegments),
+        len = pt3.length
       for (k = 0; k < curveSegments; k += 1) {
-        point = createSizedArray(len)
+        point = createSizedArray(len) as Vector2
         perc = k / (curveSegments - 1)
         ptDistance = 0
         for (i = 0; i < len; i++) {
@@ -76,7 +79,7 @@ export default class Bezier {
         }
         ptDistance = Math.sqrt(ptDistance)
         addedLength += ptDistance
-        bezierData.points[k] = new (PointData as any)(ptDistance, point)
+        bezierData.points[k] = new PointData(ptDistance, point)
         lastPoint = point
       }
       bezierData.segmentLength = addedLength
@@ -196,7 +199,7 @@ export default class Bezier {
     return [ptX, ptY]
   }
 
-  static getSegmentsLength(shapeData: ShapeData) {
+  static getSegmentsLength(shapeData: ShapePath) {
     const segmentsLength: {
       lengths: any[]
       totalLength: number
@@ -365,7 +368,7 @@ export default class Bezier {
   }
 }
 
-class BezierData {
+export class BezierData {
   points: Array<unknown>
   segmentLength: number
   constructor(length: number) {

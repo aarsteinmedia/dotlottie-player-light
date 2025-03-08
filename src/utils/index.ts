@@ -6,11 +6,12 @@ import type {
   LottieManifest,
   Marker,
   MarkerData,
-  ShapeData,
+  SVGGeometry,
   Vector2,
   Vector3,
   Vector4,
 } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
 import { ObjectFit } from '@/enums'
@@ -69,11 +70,11 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
         return 'xMidYMid meet'
     }
   },
-  boxIntersect = (b1: any, b2: any) =>
+  boxIntersect = (b1: SVGGeometry, b2: SVGGeometry) =>
     Math.abs(b1.cx - b2.cx) * 2 < b1.width + b2.width &&
     Math.abs(b1.cy - b2.cy) * 2 < b1.height + b2.height,
   buildShapeString = (
-    pathNodes: ShapeData,
+    pathNodes: ShapePath,
     length: number,
     closed: boolean,
     mat: Matrix
@@ -392,7 +393,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     ]
     return rotatedVector
   },
-  getProjectingAngle = (path: ShapeData, cur: number) => {
+  getProjectingAngle = (path: ShapePath, cur: number) => {
     const prevIndex = cur === 0 ? path.length() - 1 : cur - 1
     const nextIndex = (cur + 1) % path.length()
     const prevPoint = path.v[prevIndex]
@@ -570,7 +571,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
   },
   isServer = () => !(typeof window !== 'undefined' && window.document),
   joinLines = (
-    outputBezier: ShapeData,
+    outputBezier: ShapePath,
     seg1: any,
     seg2: any,
     lineJoin: number,
@@ -980,7 +981,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     return [h, s, v]
   },
   setPoint = (
-    outputBezier: ShapeData,
+    outputBezier: ShapePath,
     point: Vector2,
     angle: number,
     direction: AnimationDirection,
@@ -1003,8 +1004,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
       outputBezier.length()
     )
   },
-  singlePoint = (p: number[]) =>
-    new (PolynomialBezier as any)(p, p, p, p, false),
+  singlePoint = (p: number[]) => new PolynomialBezier(p, p, p, p, false),
   // based on @Toji's https://github.com/toji/gl-matrix/
   slerp = (a: Vector4, b: Vector4, t: number): Vector4 => {
     const out: Vector4 = [0, 0, 0, 0]
