@@ -1,21 +1,19 @@
 import { lineCapEnum, lineJoinEnum, RendererType, ShapeType } from '@/enums'
 import {
   ElementInterface,
-  GenericAnimatedProperty,
-  ItemData,
   LottieLayerData,
   Shape,
   ShapeDataProperty,
-  StyleData,
-  StyleObject,
   Transformer,
-  Vector2,
-  VectorProperty,
 } from '@/types'
 import { createNS, degToRads } from '@/utils'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import PropertyFactory from '@/utils/PropertyFactory'
+import PropertyFactory, {
+  type KeyframedValueProperty,
+  type MultiDimensionalProperty,
+  type ValueProperty,
+} from '@/utils/PropertyFactory'
 import DashProperty from '@/utils/shapes/DashProperty'
 import GradientProperty from '@/utils/shapes/GradientProperty'
 
@@ -32,13 +30,14 @@ export class ShapeGroupData {
 
 export class SVGShapeData {
   _isAnimated: boolean
-
   caches: unknown[]
+  hd?: boolean
   lStr: string
   lvl: number
   sh: ShapeDataProperty
   styles: any[]
   transformers: Transformer[]
+  ty?: ShapeType
   constructor(
     transformers: Transformer[],
     level: number,
@@ -96,12 +95,12 @@ export class SVGStyleData {
   _mdf: boolean
   closed: boolean
   d: string
-  data: Shape
+  data: SVGShapeData
   lvl: number
-  msElem: null | SVGMaskElement
+  msElem: null | SVGMaskElement | SVGPathElement
   pElem: SVGPathElement
-  type: ShapeType
-  constructor(data: Shape, level: number) {
+  type?: ShapeType
+  constructor(data: SVGShapeData, level: number) {
     this.data = data
     this.type = data.ty
     this.d = ''
@@ -126,67 +125,43 @@ export class ProcessedElement {
 }
 
 export class SVGGradientFillStyleData extends DynamicPropertyContainer {
-  a?: VectorProperty<Vector2>
+  a?: MultiDimensionalProperty
   cst?: SVGElement[]
 
-  e?: VectorProperty<Vector2>
+  e?: MultiDimensionalProperty
 
   g?: GradientProperty
 
   getValue: () => void
   gf?: SVGGradientElement
-  h?: GenericAnimatedProperty
+  h?: KeyframedValueProperty
   maskId?: string
   ms?: SVGMaskElement
-  o?: VectorProperty
+  o?: ValueProperty
   of?: SVGElement
 
   ost?: SVGStopElement[]
-  s?: VectorProperty<Vector2>
+  s?: MultiDimensionalProperty
   stops?: SVGStopElement[]
-  style?: StyleData
-  constructor(elem: any, data: any, styleData: StyleData) {
+  style?: SVGStyleData
+  constructor(elem: any, data: Shape, styleData: SVGStyleData) {
     super()
     this.initDynamicPropertyContainer(elem)
     this.getValue = this.iterateDynamicProperties
     this.initGradientData(elem, data, styleData)
   }
-  initGradientData(elem: any, data: Shape, styleData: StyleData) {
-    this.o = PropertyFactory.getProp(
-      elem,
-      data.o,
-      0,
-      0.01,
-      this
-    ) as unknown as VectorProperty
-    this.s = PropertyFactory.getProp(
-      elem,
-      data.s,
-      1,
-      null,
-      this
-    ) as unknown as VectorProperty<Vector2>
-    this.e = PropertyFactory.getProp(
-      elem,
-      data.e,
-      1,
-      null,
-      this
-    ) as unknown as VectorProperty<Vector2>
-    this.h = PropertyFactory.getProp(
-      elem,
-      data.h || { k: 0 },
-      0,
-      0.01,
-      this
-    ) as unknown as GenericAnimatedProperty
+  initGradientData(elem: any, data: Shape, styleData: SVGStyleData) {
+    this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, this)
+    this.s = PropertyFactory.getProp(elem, data.s, 1, null, this)
+    this.e = PropertyFactory.getProp(elem, data.e, 1, null, this)
+    this.h = PropertyFactory.getProp(elem, data.h || { k: 0 }, 0, 0.01, this)
     this.a = PropertyFactory.getProp(
       elem,
       data.a || { k: 0 },
       0,
       degToRads,
       this
-    ) as unknown as VectorProperty<Vector2>
+    )
     this.g = new GradientProperty(elem, data.g!, this)
     this.style = styleData
     this.stops = []
@@ -202,11 +177,11 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
     gfill.setAttribute('id', gradientId)
     gfill.setAttribute('spreadMethod', 'pad')
     gfill.setAttribute('gradientUnits', 'userSpaceOnUse')
-    const stops = []
+    const stops: SVGStopElement[] = []
     let stop
     const jLen = (data.g?.p || 1) * 4
     for (let j = 0; j < jLen; j += 4) {
-      stop = createNS('stop')
+      stop = createNS<SVGStopElement>('stop')
       gfill.appendChild(stop)
       stops.push(stop)
     }
@@ -217,20 +192,17 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
     this.gf = gfill
     this.cst = stops
   }
-  setGradientOpacity(data: Shape, styleData: StyleData) {
+  setGradientOpacity(data: Shape, styleData: SVGStyleData) {
     if (this.g?._hasOpacity && !this.g._collapsable) {
       let stop
-      const mask = createNS('mask')
-      const maskElement = createNS('path')
-      if (
-        !(maskElement instanceof SVGPathElement) ||
-        !(mask instanceof SVGMaskElement)
-      ) {
+      const mask = createNS<SVGMaskElement>('mask'),
+        maskElement = createNS<SVGPathElement>('path')
+      if (!maskElement || !mask) {
         throw new Error('Could not create svg element')
       }
       mask.appendChild(maskElement)
-      const opacityId = createElementID()
-      const maskId = createElementID()
+      const opacityId = createElementID(),
+        maskId = createElementID()
       mask.setAttribute('id', maskId)
       const opFill = createNS(
         data.t === 1 ? 'linearGradient' : 'radialGradient'
@@ -239,8 +211,8 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
       opFill.setAttribute('spreadMethod', 'pad')
       opFill.setAttribute('gradientUnits', 'userSpaceOnUse')
       const jLen =
-        (data.g?.k.k[0].s ? data.g.k.k[0].s.length : data.g?.k.k.length) || 0
-      const stops = this.stops || []
+          (data.g?.k.k[0].s ? data.g.k.k[0].s.length : data.g?.k.k.length) || 0,
+        stops = this.stops || []
       for (let j = (data.g?.p || 1) * 4; j < jLen; j += 2) {
         stop = createNS<SVGStopElement>('stop')
         if (!stop) {
@@ -272,8 +244,8 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
 
 export class SVGGradientStrokeStyleData extends SVGGradientFillStyleData {
   d: DashProperty
-  w: ItemData
-  constructor(elem: ElementInterface, data: Shape, styleData: StyleData) {
+  w?: ValueProperty
+  constructor(elem: ElementInterface, data: Shape, styleData: SVGStyleData) {
     super(elem, data, styleData)
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
@@ -285,13 +257,13 @@ export class SVGGradientStrokeStyleData extends SVGGradientFillStyleData {
 }
 
 export class SVGStrokeStyleData extends DynamicPropertyContainer {
-  c: ItemData
+  c?: MultiDimensionalProperty
   d: DashProperty
   getValue: () => void
-  o: ItemData
-  style: StyleObject
-  w: ItemData
-  constructor(elem: ElementInterface, data: Shape, styleObj: StyleObject) {
+  o?: ValueProperty
+  style: SVGStyleData
+  w?: ValueProperty
+  constructor(elem: ElementInterface, data: Shape, styleObj: SVGStyleData) {
     super()
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
@@ -305,11 +277,11 @@ export class SVGStrokeStyleData extends DynamicPropertyContainer {
 }
 
 export class SVGFillStyleData extends DynamicPropertyContainer {
-  c: ItemData
+  c?: MultiDimensionalProperty
   getValue: () => void
-  o: ItemData
-  style: StyleObject
-  constructor(elem: ElementInterface, data: Shape, styleObj: StyleObject) {
+  o?: ValueProperty
+  style: SVGStyleData
+  constructor(elem: ElementInterface, data: Shape, styleObj: SVGStyleData) {
     super()
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
@@ -321,8 +293,12 @@ export class SVGFillStyleData extends DynamicPropertyContainer {
 
 export class SVGNoStyleData extends DynamicPropertyContainer {
   getValue: () => void
-  style: StyleObject
-  constructor(elem: ElementInterface, _data: Shape, styleObj: StyleObject) {
+  style: SVGStyleData
+  constructor(
+    elem: ElementInterface,
+    _data: SVGShapeData,
+    styleObj: SVGStyleData
+  ) {
     super()
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties

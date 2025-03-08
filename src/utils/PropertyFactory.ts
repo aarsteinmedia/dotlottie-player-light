@@ -47,39 +47,55 @@ export default class PropertyFactory {
   }
 }
 
-export type PropertyType =
-  | ValueProperty
-  | MultiDimensionalProperty
-  | KeyframedValueProperty
-  | KeyframedMultidimensionalProperty
+class BaseProperty {
+  _caching!: {
+    _lastKeyframeIndex?: number
+    lastFrame: number
+    lastIndex: number
+    value: number | number[]
+  }
+  _isFirstFrame?: boolean
+  _mdf?: boolean
+  addEffect!: (effect: unknown) => void
+  comp!: any
+  container!: unknown
+  data!: any
+  e!: any
+  effectsSequence!: any
+  elem!: any
+  frameId?: number
+  g!: any
+  getValue!: (val?: unknown) => unknown
+  interpolateValue!: (
+    frame: number,
+    caching: {
+      lastFrame: number
+      lastIndex: number
+      value: number[]
+    }
+  ) => void
+  k!: boolean
+  keyframes!: number[]
+  keyframesMetadata!: unknown[]
+  kf!: boolean
+  mult!: number
+  offsetTime!: number
+  propType!: 'multidimensional' | 'unidimensional'
 
-class ValueProperty {
-  _isFirstFrame: boolean
-  _mdf: boolean
-  addEffect: (effect: unknown) => void
-  comp: any
-  container: unknown
-  data: any
-  e: any
-  effectsSequence: any
-  elem: any
-  g: any
-  getValue: (val?: unknown) => unknown
-  k: boolean
-  kf: boolean
-  mult: number
-  propType: 'unidimensional'
-  pv: string | number
+  pv!: string | number | number[]
   s: any
-  setVValue: (val: any) => void
-  v: string | number
-  vel: number
+  setVValue!: (val: any) => void
+  v!: string | number | number[]
+  vel!: number | number[]
+}
+export class ValueProperty extends BaseProperty {
   constructor(
     elem: any,
     data: VectorProperty,
     mult?: null | number,
     container?: any
   ) {
+    super()
     this.propType = 'unidimensional'
     this.mult = mult ?? 1
     this.data = data
@@ -100,34 +116,14 @@ class ValueProperty {
   }
 }
 
-class MultiDimensionalProperty {
-  _isFirstFrame: boolean
-  _mdf: boolean
-  addEffect: (effect: unknown) => void
-  comp: any
-  container: unknown
-  data: any
-  e: any
-  effectsSequence: any
-  elem: any
-  frameId: number
-  g: any
-  getValue: (val?: unknown) => unknown
-  k: boolean
-  kf: boolean
-  mult: number
-  propType: 'multidimensional'
-  pv: number[] | number
-  s: any
-  setVValue: (val: any) => void
-  v: string | number[]
-  vel: number[]
+export class MultiDimensionalProperty extends BaseProperty {
   constructor(
     elem: any,
     data: VectorProperty<number[]>,
     mult?: null | number,
     container?: unknown
   ) {
+    super()
     this.propType = 'multidimensional'
     this.mult = mult || 1
     this.data = data
@@ -153,46 +149,14 @@ class MultiDimensionalProperty {
     this.addEffect = addEffect
   }
 }
-
-/**
- *
- */
-class KeyframedValueProperty {
-  _caching: {
-    _lastKeyframeIndex: number
-    lastFrame: number
-    lastIndex: number
-    value: number
-  }
-  _isFirstFrame: boolean
-  addEffect: (effect: unknown) => void
-  comp: any
-  container: unknown
-  data: any
-  e: any
-  effectsSequence: any
-  elem: any
-  frameId: number
-  g: any
-  getValue: (val?: unknown) => unknown
-  interpolateValue: (val: number, caching: any) => void
-  k: boolean
-  keyframes: number[]
-  keyframesMetadata: unknown[]
-  kf: boolean
-  mult: number
-  offsetTime: number
-  propType: 'unidimensional'
-  pv: string | number
-  s: any
-  setVValue: (val: any) => void
-  v: string | number
+export class KeyframedValueProperty extends BaseProperty {
   constructor(
     elem: any,
     data: VectorProperty<number[]>,
     mult?: null | number,
     container?: any
   ) {
+    super()
     this.propType = 'unidimensional'
     this.keyframes = data.k
     this.keyframesMetadata = []
@@ -222,47 +186,14 @@ class KeyframedValueProperty {
   }
 }
 
-class KeyframedMultidimensionalProperty {
-  _caching: {
-    lastFrame: number
-    lastIndex: number
-    value: number[]
-  }
-  _isFirstFrame: boolean
-  addEffect: (func: any) => void
-  comp: any
-  container: any
-  data: VectorProperty<any[]>
-  effectsSequence: ((arg: any) => void)[]
-  elem: any
-  frameId: number
-  getValue: () => void
-  interpolateValue: (
-    frame: number,
-    caching: {
-      lastFrame: number
-      lastIndex: number
-      value: number[]
-    }
-  ) => void
-  k: boolean
-  keyframes: number[]
-  keyframesMetadata: unknown[]
-  kf: boolean
-  mult?: number
-  offsetTime: number
-  propType: 'multidimensional'
-  pv: number[]
-
-  setVValue: (val: number[]) => void
-  v: number[]
-
+export class KeyframedMultidimensionalProperty extends BaseProperty {
   constructor(
     elem: any,
     data: VectorProperty<any[]>,
     mult?: null | number,
     container?: HTMLElement
   ) {
+    super()
     this.propType = 'multidimensional'
     let i
     const len = data.k.length

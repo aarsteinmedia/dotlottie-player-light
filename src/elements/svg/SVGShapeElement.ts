@@ -6,7 +6,6 @@ import type {
   LottieLayer,
   Shape,
   ShapeDataInterface,
-  StyleObject,
 } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
@@ -45,9 +44,9 @@ class SVGShapeElement {
   prevViewData: ItemsData['prevViewData']
   processedElements: ProcessedElement[]
   shapeModifiers: any[]
-  shapes: ShapeDataInterface[]
+  shapes: SVGShapeData[]
   shapesData: Shape[]
-  stylesList: StyleObject[]
+  stylesList: SVGStyleData[]
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
     // List of drawable elements
     this.shapes = []
@@ -125,17 +124,13 @@ class SVGShapeElement {
       ty,
       this
     )
-    const elementData = new (SVGShapeData as any)(
-      ownTransformers,
-      level,
-      shapeProperty
-    )
+    const elementData = new SVGShapeData(ownTransformers, level, shapeProperty)
     this.shapes.push(elementData)
     this.addShapeToModifiers(elementData)
     this.addToAnimatedContents(data, elementData)
     return elementData
   }
-  createStyleElement(data: Shape, level: number) {
+  createStyleElement(data: SVGShapeData, level: number) {
     // TODO: prevent drawing of hidden styles
     let elementData
     const styleOb = new SVGStyleData(data, level)
@@ -159,7 +154,7 @@ class SVGShapeElement {
         )
       }
     } else if (data.ty === 'no') {
-      elementData = new (SVGNoStyleData as any)(this, data, styleOb)
+      elementData = new SVGNoStyleData(this, data, styleOb)
     }
 
     if (data.ty === 'st' || data.ty === 'gs') {
@@ -182,7 +177,7 @@ class SVGShapeElement {
       pathElement.setAttribute('class', data.cl)
     }
     if (data.bm) {
-      pathElement.style['mix-blend-mode'] = getBlendMode(data.bm)
+      pathElement.style.mixBlendMode = getBlendMode(data.bm)
     }
     this.stylesList.push(styleOb)
     this.addToAnimatedContents(data, elementData)
