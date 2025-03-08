@@ -1,4 +1,5 @@
-import type { IntersectData, ShapeData, Vector2 } from '@/types'
+import type { IntersectData, Vector2 } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import {
   floatZero,
@@ -32,17 +33,17 @@ export default class PolynomialBezier {
     if (linearize && pointEqual(p2, p3)) {
       p2 = lerpPoint(p0, p3, 2 / 3)
     }
-    const coeffx = polynomialCoefficients(p0[0], p1[0], p2[0], p3[0])
-    const coeffy = polynomialCoefficients(p0[1], p1[1], p2[1], p3[1])
+    const coeffx = polynomialCoefficients(p0[0], p1[0], p2[0], p3[0]),
+      coeffy = polynomialCoefficients(p0[1], p1[1], p2[1], p3[1])
     this.a = [coeffx[0], coeffy[0]]
     this.b = [coeffx[1], coeffy[1]]
     this.c = [coeffx[2], coeffy[2]]
     this.d = [coeffx[3], coeffy[3]]
     this.points = [p0, p1, p2, p3]
   }
-  static shapeSegment(shapePath: ShapeData, index: number) {
+  static shapeSegment(shapePath: ShapePath, index: number) {
     const nextIndex = (index + 1) % shapePath.length()
-    return new (PolynomialBezier as any)(
+    return new PolynomialBezier(
       shapePath.v[index]!,
       shapePath.o[index]!,
       shapePath.i[nextIndex]!,
@@ -50,9 +51,9 @@ export default class PolynomialBezier {
       true
     )
   }
-  static shapeSegmentInverted(shapePath: ShapeData, index: number) {
+  static shapeSegmentInverted(shapePath: ShapePath, index: number) {
     const nextIndex = (index + 1) % shapePath.length()
-    return new (PolynomialBezier as any)(
+    return new PolynomialBezier(
       shapePath.v[nextIndex]!,
       shapePath.i[nextIndex]!,
       shapePath.o[index]!,
@@ -107,13 +108,11 @@ export default class PolynomialBezier {
       }
       return []
     }
-    return [tcusp - root, tcusp + root].filter(function (r) {
-      return r > 0 && r < 1
-    })
+    return [tcusp - root, tcusp + root].filter((r) => r > 0 && r < 1)
   }
 
   intersections(
-    other: typeof PolynomialBezier,
+    other: PolynomialBezier,
     toleranceFromProps: number,
     maxRecursionFromProps: number
   ) {
@@ -172,7 +171,7 @@ export default class PolynomialBezier {
     return Math.atan2(p[1], p[0])
   }
 
-  private _extrema(bez: any, comp: number) {
+  private _extrema(bez: PolynomialBezier, comp: number) {
     let min = bez.points[0][comp]
     let max = bez.points[bez.points.length - 1][comp]
     if (min > max) {

@@ -1,18 +1,23 @@
-import { ElementInterface, ShapeData, ShapeDataInterface } from '@/types'
+import type { ElementInterface } from '@/types'
+// import type ShapePath from '@/utils/shapes/ShapePath'
+
+import { type SVGShapeData } from '@/elements/helpers/shapes'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
+import { type ShapeProperty } from '@/utils/shapes/ShapeProperty'
 
 class ShapeModifier extends DynamicPropertyContainer {
   closed!: boolean
   elem!: ElementInterface
-  frameId!: number
+  frameId?: number
   k!: boolean
-  shapes!: ShapeData[]
-  addShape(data: ShapeDataInterface) {
+  shapes!: ShapeProperty[]
+  addShape(data: SVGShapeData) {
+    // console.log(data)
     if (!this.closed) {
       // Adding shape to dynamic properties. It covers the case where a shape has no effects applied, to reset it's _mdf state on every tick.
-      data.sh?.container.addDynamicProperty(data.sh)
+      data.sh.container.addDynamicProperty(data.sh)
       const shapeData = {
         data: data,
         localShapeCollection: ShapeCollectionPool.newShapeCollection(),

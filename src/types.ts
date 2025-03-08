@@ -10,6 +10,8 @@ import type FontManager from '@/utils/FontManager'
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 // import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 import type Matrix from '@/utils/Matrix'
+// import type ShapeCollection from '@/utils/shapes/ShapeCollection'
+import type ShapePath from '@/utils/shapes/ShapePath'
 import type { SlotManager } from '@/utils/SlotManager'
 // import type PropertyFactory from '@/utils/PropertyFactory'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
@@ -353,41 +355,6 @@ export type Constructor = new (...args: any[]) => object
 
 type BoolInt = 0 | 1
 
-export interface ShapeData {
-  _length?: number
-  /** isClosed */
-  c: 0 | 1 | boolean
-  /** In tangents */
-  i: (Vector2 | null)[]
-  length(): number
-  localShapeCollection?: Shape[]
-  /** Out tangents */
-  o: (Vector2 | null)[]
-  setLength(length: number): void
-  setPathData(data: any, length: number): void
-  setTripleAt(
-    a: number,
-    b: number,
-    c: number,
-    d: number,
-    e: number,
-    f: number,
-    g: number
-  ): void
-  // inflectionPoints(): number[]
-  setXYAt(a: number, b: number, c: string, d: number): void
-  shape: {
-    _mdf?: boolean
-    paths: {
-      shapes: Shape[]
-      _length: number
-    }
-  }
-  shapes: Shape[]
-  /** Verticies */
-  v: (Vector2 | null)[]
-}
-
 export interface GradientColor {
   k: {
     a: 1 | 0
@@ -412,7 +379,7 @@ export interface ShapeDataProperty {
   _mdf?: boolean
   a: 1 | 0
   ix?: number
-  k: ShapeData
+  k: ShapePath
   paths: {
     _length: number
     _maxLength: number
@@ -477,7 +444,7 @@ export interface Shape {
   o?: VectorProperty
   /** Position */
   p?: VectorProperty<Vector2 | Vector3>
-  pt?: VectorProperty
+  pt?: VectorProperty<ShapePath>
   /** Rotation (for transforms) | Fill-rule (for fills) */
   r?: number | VectorProperty
   /** Scale / StartPoint for gradient */
@@ -826,7 +793,7 @@ export interface ShapeDataInterface {
     kf: boolean
     _mdf: boolean
     comp: ElementInterface
-    paths: ShapeData
+    paths: ShapePath[]
   }
   styles: SVGStyleData[]
   transform: Transformer
@@ -1151,11 +1118,11 @@ export interface LottieLayer {
   xt?: number
 }
 
-export interface AnimatedProperty {
+export interface AnimatedProperty<T = number> {
   _placeholder?: boolean
   a: 0 | 1
   ix?: number
-  v?: number | number[]
+  v?: T
 }
 
 export interface UniDimensionalAnimatedProperty extends AnimatedProperty {

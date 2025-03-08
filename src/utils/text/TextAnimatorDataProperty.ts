@@ -1,22 +1,43 @@
-import type { TextAnimatorAnimatables } from '@/types'
+// import type { TextAnimatorAnimatables } from '@/types'
 
 import { degToRads } from '@/utils'
-import PropertyFactory from '@/utils/PropertyFactory'
+import PropertyFactory, {
+  ValueProperty,
+  // type KeyframedMultidimensionalProperty,
+  type NoProperty,
+} from '@/utils/PropertyFactory'
 import TextSelectorProperty from '@/utils/text/TextSelectorProperty'
 
 export default class TextAnimatorDataProperty {
-  a: TextAnimatorAnimatables['a']
-  s: any
+  a: {
+    a: unknown
+    fb: unknown
+    fc: unknown
+    fh: unknown
+    fs: unknown
+    o: ValueProperty
+    p: unknown
+    r: unknown
+    rx: unknown
+    ry: unknown
+    s: unknown
+    sa: unknown
+    sc: unknown
+    sk: unknown
+    sw: unknown
+    t: unknown
+  }
+  s: TextSelectorProperty
   constructor(
     elem: any,
     animatorProps: TextAnimatorDataProperty,
     container: any
   ) {
-    const defaultData = { propType: false }
+    const defaultData: NoProperty = { propType: false }
     const { getProp } = PropertyFactory
     const textAnimatorAnimatables = animatorProps.a
     this.a = {
-      a: textAnimatorAnimatables?.a
+      a: textAnimatorAnimatables.a
         ? getProp(elem, textAnimatorAnimatables.a, 1, 0, container)
         : defaultData,
       fb: textAnimatorAnimatables.fb

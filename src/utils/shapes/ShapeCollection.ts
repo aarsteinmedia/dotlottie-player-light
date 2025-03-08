@@ -1,4 +1,4 @@
-import type { ShapeData } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { createSizedArray } from '@/utils/helpers/arrays'
 import ShapePool from '@/utils/pooling/ShapePool'
@@ -6,13 +6,13 @@ import ShapePool from '@/utils/pooling/ShapePool'
 export default class ShapeCollection {
   public _length: number
   public _maxLength: number
-  public shapes: ShapeData[]
+  public shapes: ShapePath[]
   constructor() {
     this._length = 0
     this._maxLength = 4
     this.shapes = createSizedArray(this._maxLength)
   }
-  addShape(shapeData: ShapeData) {
+  addShape(shapeData: ShapePath) {
     if (this._length === this._maxLength) {
       this.shapes = this.shapes.concat(createSizedArray(this._maxLength))
       this._maxLength *= 2

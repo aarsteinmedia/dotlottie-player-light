@@ -1,5 +1,3 @@
-import type { ShapeData } from '@/types'
-
 import { pointPool, poolFactory } from '@/utils/pooling'
 import ShapePath from '@/utils/shapes/ShapePath'
 
@@ -10,8 +8,8 @@ export default class ShapePool {
 
   static release = this._factory.release
 
-  static clone(shape: ShapeData) {
-    const cloned = ShapePool.newElement<ShapeData>()
+  static clone(shape: ShapePath) {
+    const cloned = ShapePool.newElement<ShapePath>()
     const len = shape._length === undefined ? shape.v.length : shape._length
     cloned.setLength(len)
     cloned.c = shape.c
@@ -34,16 +32,15 @@ export default class ShapePool {
     return new ShapePath()
   }
 
-  private static _release(shapePath: ShapeData) {
-    const len = shapePath._length || 0
-    let i
-    for (i = 0; i < len; i++) {
+  private static _release(shapePath: ShapePath) {
+    const len = shapePath._length
+    for (let i = 0; i < len; i++) {
       pointPool.release(shapePath.v[i])
       pointPool.release(shapePath.i[i])
       pointPool.release(shapePath.o[i])
-      shapePath.v[i] = null
-      shapePath.i[i] = null
-      shapePath.o[i] = null
+      shapePath.v[i] = null as any
+      shapePath.i[i] = null as any
+      shapePath.o[i] = null as any
     }
     shapePath._length = 0
     shapePath.c = false

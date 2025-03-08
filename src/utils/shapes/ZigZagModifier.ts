@@ -1,18 +1,23 @@
+import type ShapePath from '@/utils/shapes/ShapePath'
+
 import PolynomialBezier from '@/elements/PolynomialBezier'
-import { AnimationDirection, Shape, ShapeData } from '@/types'
+import { AnimationDirection, Shape, Vector2 } from '@/types'
 import { getProjectingAngle, setPoint } from '@/utils'
 import ShapePool from '@/utils/pooling/ShapePool'
-import PropertyFactory, { type PropertyType } from '@/utils/PropertyFactory'
+import PropertyFactory, {
+  type MultiDimensionalProperty,
+  type ValueProperty,
+} from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
 class ZigZagModifier extends ShapeModifier {
-  amplitude?: PropertyType
-  frequency?: PropertyType
+  amplitude?: ValueProperty
+  frequency?: ValueProperty
   getValue!: () => void
-  pointsType?: PropertyType
+  pointsType?: MultiDimensionalProperty
   static zigZagCorner(
-    outputBezier: ShapeData,
-    path: ShapeData,
+    outputBezier: ShapePath,
+    path: ShapePath,
     cur: number,
     amplitude: number,
     frequency: number,
@@ -40,7 +45,7 @@ class ZigZagModifier extends ShapeModifier {
 
     setPoint(
       outputBezier,
-      path.v[cur % Number(path._length)] || [0, 0],
+      (path.v[cur % Number(path._length)] || [0, 0]) as Vector2,
       angle,
       direction,
       amplitude,
@@ -53,8 +58,8 @@ class ZigZagModifier extends ShapeModifier {
    *
    */
   static zigZagSegment(
-    outputBezier: ShapeData,
-    segment: any,
+    outputBezier: ShapePath,
+    segment: Vector2,
     amplitude: number,
     frequency: number,
     pointType: number,

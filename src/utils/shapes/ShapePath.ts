@@ -1,3 +1,5 @@
+import type { Vector2 } from '@/types'
+
 import { createSizedArray } from '@/utils/helpers/arrays'
 import { pointPool } from '@/utils/pooling'
 
@@ -5,16 +7,16 @@ export default class ShapePath {
   _length: number
   _maxLength: number
   c: boolean
-  i: number[][]
-  o: number[][]
-  v: number[][]
+  i: Vector2[]
+  o: Vector2[]
+  v: Vector2[]
   constructor() {
     this.c = false
     this._length = 0
     this._maxLength = 8
-    this.v = createSizedArray(this._maxLength) as number[][]
-    this.o = createSizedArray(this._maxLength) as number[][]
-    this.i = createSizedArray(this._maxLength) as number[][]
+    this.v = createSizedArray(this._maxLength) as Vector2[]
+    this.o = createSizedArray(this._maxLength) as Vector2[]
+    this.i = createSizedArray(this._maxLength) as Vector2[]
   }
 
   doubleArrayLength() {
@@ -94,14 +96,14 @@ export default class ShapePath {
     iX: number,
     iY: number,
     pos: number,
-    replace: boolean
+    replace?: boolean
   ) {
     this.setXYAt(vX, vY, 'v', pos, replace)
     this.setXYAt(oX, oY, 'o', pos, replace)
     this.setXYAt(iX, iY, 'i', pos, replace)
   }
 
-  setXYAt(x: number, y: number, type: string, pos: number, replace: boolean) {
+  setXYAt(x: number, y: number, type: string, pos: number, replace?: boolean) {
     let arr: number[][]
     this._length = Math.max(this._length, pos + 1)
     if (this._length >= this._maxLength) {

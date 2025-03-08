@@ -76,6 +76,7 @@ export default class TextProperty {
     }
     this.copyData(this.currentData, this.data.d?.k[0].s)
 
+    // console.log(this.data)
     if (!this.searchProperty()) {
       this.completeTextData(this.currentData)
     }

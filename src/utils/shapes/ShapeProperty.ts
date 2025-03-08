@@ -1,4 +1,4 @@
-import type { LottieComp, Shape, ShapeData, StrokeData } from '@/types'
+import type { ElementInterface, LottieComp, Shape, StrokeData } from '@/types'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import { degToRads } from '@/utils'
@@ -7,7 +7,8 @@ import { initialDefaultFrame, roundCorner } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 import ShapePool from '@/utils/pooling/ShapePool'
-import PropertyFactory, { PropertyType } from '@/utils/PropertyFactory'
+import PropertyFactory, { type ValueProperty } from '@/utils/PropertyFactory'
+import ShapePath from '@/utils/shapes/ShapePath'
 
 export default class ShapePropertyFactory {
   static getConstructorFunction() {
@@ -18,12 +19,17 @@ export default class ShapePropertyFactory {
     return KeyframedShapeProperty
   }
 
-  static getShapeProp(elem: any, data: any, type: number, _?: unknown) {
+  static getShapeProp(
+    elem: ElementInterface,
+    data: Shape,
+    type: number,
+    _?: unknown
+  ) {
     let prop
     if (type === 3 || type === 4) {
       const dataProp = type === 3 ? data.pt : data.ks
-      const keys = dataProp.k
-      if (keys.length) {
+      const keys = dataProp?.k
+      if (keys?.length) {
         prop = new KeyframedShapeProperty(elem, data, type)
       } else {
         prop = new ShapeProperty(elem, data, type)
@@ -48,18 +54,18 @@ class RectShapeProperty extends DynamicPropertyContainer {
   data: any
   elem: any
   frameId: number
-  ir?: PropertyType
-  is?: PropertyType
+  ir?: ValueProperty
+  is?: ValueProperty
   k: boolean
   localShapeCollection: ShapeCollection
-  or?: PropertyType
-  os?: PropertyType
-  p?: PropertyType
+  or?: ValueProperty
+  os?: ValueProperty
+  p: ValueProperty
   paths: ShapeCollection
-  pt?: PropertyType
-  r?: PropertyType
+  pt?: ValueProperty
+  r: ValueProperty
   reset = resetShape
-  s?: PropertyType
+  s: ValueProperty
   v: any
 
   constructor(elem: any, data: any) {
@@ -330,19 +336,19 @@ class StarShapeProperty extends DynamicPropertyContainer {
   data: any
   elem: any
   frameId: number
-  ir?: PropertyType
-  is?: PropertyType
+  ir?: ValueProperty
+  is?: ValueProperty
   k: boolean
   localShapeCollection: ShapeCollection
-  or?: PropertyType
-  os?: PropertyType
-  p?: PropertyType
+  or: ValueProperty
+  os: ValueProperty
+  p: ValueProperty
   paths: ShapeCollection
-  pt?: PropertyType
-  r?: PropertyType
+  pt: ValueProperty
+  r: ValueProperty
   reset = resetShape
-  s?: PropertyType
-  v: any
+  s?: ValueProperty
+  v: ShapePath
 
   constructor(elem: any, data: any) {
     super()
@@ -478,11 +484,11 @@ class EllShapeProperty extends DynamicPropertyContainer {
   frameId: number
   k: boolean
   localShapeCollection: ShapeCollection
-  p?: PropertyType
+  p: ValueProperty
   paths: ShapeCollection
   reset = resetShape
-  s?: PropertyType
-  v: any
+  s: ValueProperty
+  v: ShapePath
   private _cPoint = roundCorner
 
   constructor(elem: any, data: Shape) {
@@ -551,14 +557,14 @@ class EllShapeProperty extends DynamicPropertyContainer {
   }
 }
 
-class ShapeProperty {
+export class ShapeProperty {
   public _mdf: boolean
   public addEffect: (func: any) => void
   public comp: LottieComp
   public container: unknown
-  public data: ShapeData
+  public data: Shape
   public effectsSequence: unknown[]
-  public elem: unknown
+  public elem: ElementInterface
   public getValue: () => void
   public interpolateShape: (
     frame: number,
@@ -570,11 +576,11 @@ class ShapeProperty {
   public localShapeCollection: ShapeCollection
   public paths: ShapeCollection
   public propType: string
-  public pv: ShapeData
+  public pv: ShapePath
   public reset
-  public setVValue: (shape: ShapeData) => void
-  public v: ShapeData
-  constructor(elem: any, data: any, type: number) {
+  public setVValue: (shape: ShapePath) => void
+  public v: ShapePath
+  constructor(elem: ElementInterface, data: Shape, type: number) {
     this.propType = 'shape'
     this.comp = elem.comp
     this.container = elem
@@ -583,7 +589,10 @@ class ShapeProperty {
     this.k = false
     this.kf = false
     this._mdf = false
-    const pathData = type === 3 ? data.pt.k : data.ks.k
+    const pathData = type === 3 ? data.pt?.k : data.ks?.k
+    if (!pathData) {
+      throw new Error('Could now get Path Data')
+    }
     this.v = ShapePool.clone(pathData)
     this.pv = ShapePool.clone(this.v)
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
