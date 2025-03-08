@@ -1,9 +1,4 @@
-import type {
-  GlobalData,
-  LayerInterFace,
-  LottieComp,
-  LottieLayer,
-} from '@/types'
+import type { GlobalData, LayerInterFace, LottieLayer } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'

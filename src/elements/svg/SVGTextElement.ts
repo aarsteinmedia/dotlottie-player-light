@@ -1,10 +1,5 @@
 /* eslint-disable max-depth */
-import type {
-  ElementInterface,
-  GlobalData,
-  LottieLayer,
-  TextHandler,
-} from '@/types'
+import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -27,15 +22,23 @@ const emptyShapeData = {
 /**
  *
  */
-export default function SVGTextLottieElement(
-  this: TextHandler,
-  data: LottieLayer,
-  globalData: GlobalData,
-  comp: ElementInterface
-) {
-  this.textSpans = []
-  this.renderType = RendererType.SVG
-  this.initElement(data, globalData, comp)
+export default class SVGTextLottieElement {
+  renderType: RendererType
+  textSpans: string[]
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
+    this.textSpans = []
+    this.renderType = RendererType.SVG
+    this.initElement(data, globalData, comp)
+  }
+  createContent() {
+    if (this.data.singleShape && !this.globalData.fontManager.chars) {
+      this.textContainer = createNS('text')
+    }
+  }
 }
 
 extendPrototype(
@@ -50,12 +53,6 @@ extendPrototype(
   ],
   SVGTextLottieElement
 )
-
-SVGTextLottieElement.prototype.createContent = function () {
-  if (this.data.singleShape && !this.globalData.fontManager.chars) {
-    this.textContainer = createNS('text')
-  }
-}
 
 SVGTextLottieElement.prototype.buildTextContents = function (
   textArray: string[]
