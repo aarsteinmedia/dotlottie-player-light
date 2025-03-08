@@ -1,5 +1,5 @@
 /* eslint-disable max-depth */
-import type { ItemData, Vector3, VectorProperty } from '@/types'
+import type { ElementInterface, Vector3, VectorProperty } from '@/types'
 
 import { ArrayType } from '@/enums'
 import { createQuaternion, quaternionToEuler, slerp } from '@/utils'
@@ -7,23 +7,24 @@ import Bezier from '@/utils/Bezier'
 import BezierFactory from '@/utils/BezierFactory'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import { createTypedArray } from '@/utils/helpers/arrays'
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
 const initFrame = initialDefaultFrame
 
 export default class PropertyFactory {
   static getProp = (
-    elem: any, // T & { globalData?: GlobalData },
-    dataFromProps?: any,
+    elem: ElementInterface,
+    dataFromProps?: VectorProperty<number | any[]>,
     type?: number,
     mult?: null | number,
     container?: any
   ) => {
     let data = dataFromProps
-    if ('sid' in data && data.sid) {
+    if (data && 'sid' in data && data.sid) {
       data = elem.globalData?.slotManager?.getProp(data)
     }
     let p
-    if (!data.k.length) {
+    if (!data?.k.length) {
       p = new ValueProperty(elem, data, mult, container)
     } else if (typeof data.k[0] === 'number') {
       p = new MultiDimensionalProperty(elem, data, mult, container)
@@ -39,6 +40,9 @@ export default class PropertyFactory {
           break
       }
     }
+    if (!p) {
+      p = new NoProperty()
+    }
     if (p?.effectsSequence.length) {
       container.addDynamicProperty(p)
     }
@@ -46,27 +50,25 @@ export default class PropertyFactory {
   }
 }
 
-class BaseProperty {
-  _caching!: {
+class BaseProperty extends DynamicPropertyContainer {
+  _caching?: {
     _lastKeyframeIndex?: number
     lastFrame: number
     lastIndex: number
     value: number | number[]
   }
   _isFirstFrame?: boolean
-  _mdf?: boolean
   _placeholder?: boolean
-  addEffect!: (effect: unknown) => void
-  comp!: any
-  container!: unknown
-  data!: any
-  e!: any
-  effectsSequence!: any
-  elem!: any
+  addEffect?: (effect: unknown) => void
+  comp?: any
+  data?: any
+  e?: any
+  effectsSequence?: any
+  elem?: any
   frameId?: number
-  g!: any
-  getValue!: (val?: unknown) => unknown
-  interpolateValue!: (
+  g?: any
+  getValue?: (val?: unknown) => unknown
+  interpolateValue?: (
     frame: number,
     caching: {
       lastFrame: number
@@ -74,26 +76,26 @@ class BaseProperty {
       value: number[]
     }
   ) => void
-  k!: boolean
-  keyframes!: number[]
-  keyframesMetadata!: unknown[]
-  kf!: boolean
-  mult!: number
-  offsetTime!: number
+  k?: boolean
+  keyframes?: number[]
+  keyframesMetadata?: unknown[]
+  kf?: boolean
+  mult?: number
+  offsetTime?: number
 
-  propType!: 'multidimensional' | 'unidimensional'
-  pv!: string | number | number[]
-  s: any
-  setVValue!: (val: any) => void
-  v!: string | number | number[]
-  vel!: number | number[]
+  propType!: false | 'multidimensional' | 'unidimensional'
+  pv?: string | number | any[]
+  s?: any
+  setVValue?: (val: any) => void
+  v?: string | number | any[]
+  vel?: number | any[]
 }
 export class ValueProperty extends BaseProperty {
   constructor(
-    elem: any,
+    elem: ElementInterface,
     data: VectorProperty,
-    mult?: null | number,
-    container?: any
+    mult: null | number = null,
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'unidimensional'
@@ -116,12 +118,14 @@ export class ValueProperty extends BaseProperty {
   }
 }
 
-export class MultiDimensionalProperty extends BaseProperty {
+export class MultiDimensionalProperty<
+  T extends Array<any>,
+> extends BaseProperty {
   constructor(
-    elem: any,
-    data: VectorProperty<number[]>,
-    mult?: null | number,
-    container?: unknown
+    elem: ElementInterface,
+    data: VectorProperty<T>,
+    mult: null | number = null,
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'multidimensional'
@@ -135,9 +139,9 @@ export class MultiDimensionalProperty extends BaseProperty {
     this.kf = false
     this.frameId = -1
     const { length } = data.k
-    this.v = createTypedArray(ArrayType.Float32, length) as number[]
-    this.pv = createTypedArray(ArrayType.Float32, length) as number[]
-    this.vel = createTypedArray(ArrayType.Float32, length) as number[]
+    this.v = createTypedArray(ArrayType.Float32, length) as any[]
+    this.pv = createTypedArray(ArrayType.Float32, length) as any[]
+    this.vel = createTypedArray(ArrayType.Float32, length) as any[]
     for (let i = 0; i < length; i++) {
       this.v[i] = data.k[i] * this.mult
       this.pv[i] = data.k[i]
@@ -151,10 +155,10 @@ export class MultiDimensionalProperty extends BaseProperty {
 }
 export class KeyframedValueProperty extends BaseProperty {
   constructor(
-    elem: any,
+    elem: ElementInterface,
     data: VectorProperty<number[]>,
-    mult?: null | number,
-    container?: any
+    mult: null | number = null,
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'unidimensional'
@@ -190,8 +194,8 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
   constructor(
     elem: any,
     data: VectorProperty<any[]>,
-    mult?: null | number,
-    container?: HTMLElement
+    mult: null | number = null,
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'multidimensional'
@@ -301,13 +305,20 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
   }
 }
 
+export class NoProperty extends BaseProperty {
+  constructor() {
+    super()
+    this.propType = false
+  }
+}
+
 /**
  *
  */
-function setVValue(this: ItemData, val: number | number[]) {
+function setVValue(val: number | number[]) {
   let multipliedValue
   if (typeof val === 'number' && this.propType === 'unidimensional') {
-    multipliedValue = val * this.mult
+    multipliedValue = val * Number(this.mult)
     if (Math.abs((this.v as number) - multipliedValue) > 0.00001) {
       this.v = multipliedValue
       this._mdf = true
@@ -317,7 +328,7 @@ function setVValue(this: ItemData, val: number | number[]) {
   let i = 0
   const len = (this.v as number[]).length
   while (i < len) {
-    multipliedValue = (val as number[])[i] * this.mult
+    multipliedValue = (val as number[])[i] * Number(this.mult)
     if (Math.abs((this.v as number[])[i] - multipliedValue) > 0.00001) {
       ;(this.v as number[])[i] = multipliedValue
       this._mdf = true
@@ -329,34 +340,37 @@ function setVValue(this: ItemData, val: number | number[]) {
 /**
  *
  */
-function getValueAtCurrentTime(this: any) {
-  const frameNum = this.comp.renderedFrame - this.offsetTime
-  const initTime = this.keyframes[0].t - this.offsetTime
-  const endTime = this.keyframes[this.keyframes.length - 1].t - this.offsetTime
+function getValueAtCurrentTime() {
+  const offsetTime = Number(this.offsetTime),
+    frameNum = this.comp.renderedFrame - offsetTime,
+    initTime = Number(this.keyframes?.[0].t) - offsetTime,
+    length = Number(this.keyframes?.length) - 1,
+    endTime = Number(this.keyframes?.[length].t) - offsetTime,
+    lastFrame = Number(this._caching?.lastFrame)
   if (
     !(
-      frameNum === this._caching.lastFrame ||
-      (this._caching.lastFrame !== initialDefaultFrame &&
-        ((this._caching.lastFrame >= endTime && frameNum >= endTime) ||
-          (this._caching.lastFrame < initTime && frameNum < initTime)))
+      frameNum === lastFrame ||
+      (lastFrame !== initialDefaultFrame &&
+        ((lastFrame >= endTime && frameNum >= endTime) ||
+          (lastFrame < initTime && frameNum < initTime)))
     )
   ) {
-    if (this._caching.lastFrame >= frameNum) {
-      this._caching._lastKeyframeIndex = -1
-      this._caching.lastIndex = 0
+    if (lastFrame >= frameNum) {
+      this._caching!._lastKeyframeIndex = -1
+      this._caching!.lastIndex = 0
     }
 
     const renderResult = this.interpolateValue(frameNum, this._caching)
     this.pv = renderResult
   }
-  this._caching.lastFrame = frameNum
+  this._caching!.lastFrame = frameNum
   return this.pv
 }
 
 /**
  *
  */
-function addEffect(this: any, effectFunction: any) {
+function addEffect(effectFunction: any) {
   this.effectsSequence.push(effectFunction)
   this.container.addDynamicProperty(this)
 }
@@ -364,7 +378,7 @@ function addEffect(this: any, effectFunction: any) {
 /**
  *
  */
-function processEffectsSequence(this: any) {
+function processEffectsSequence() {
   if (
     this.elem.globalData.frameId === this.frameId ||
     !this.effectsSequence.length
@@ -372,11 +386,11 @@ function processEffectsSequence(this: any) {
     return
   }
   if (this.lock) {
-    this.setVValue(this.pv)
+    this.setVValue(this.pv as any)
     return
   }
   this.lock = true
-  this._mdf = this._isFirstFrame
+  this._mdf = !!this._isFirstFrame
   const len = this.effectsSequence.length
   let finalValue = this.kf ? this.pv : this.data.k
   for (let i = 0; i < len; i++) {
@@ -391,30 +405,30 @@ function processEffectsSequence(this: any) {
 /**
  *
  */
-function interpolateValue(this: any, frameNum: number, caching: any) {
-  const offsetTime = this.offsetTime
+function interpolateValue(frameNum: number, caching: any) {
+  const offsetTime = Number(this.offsetTime)
   let newValue
   if (this.propType === 'multidimensional') {
-    newValue = createTypedArray(ArrayType.Float32, this.pv.length)
+    newValue = createTypedArray(ArrayType.Float32, (this.pv as any[])?.length)
   }
   let iterationIndex = caching.lastIndex
   let i = iterationIndex
-  let len = this.keyframes.length - 1
+  let len = Number(this.keyframes?.length) - 1
   let flag = true
   let keyData
   let nextKeyData
 
   while (flag) {
-    keyData = this.keyframes[i]
-    nextKeyData = this.keyframes[i + 1]
-    if (i === len - 1 && frameNum >= nextKeyData.t - offsetTime) {
-      if (keyData.h) {
+    keyData = this.keyframes?.[i]
+    nextKeyData = this.keyframes?.[i + 1]
+    if (i === len - 1 && frameNum >= Number(nextKeyData?.t) - offsetTime) {
+      if (keyData?.h) {
         keyData = nextKeyData
       }
       iterationIndex = 0
       break
     }
-    if (nextKeyData.t - offsetTime > frameNum) {
+    if (Number(nextKeyData?.t) - offsetTime > frameNum) {
       iterationIndex = i
       break
     }
@@ -425,7 +439,7 @@ function interpolateValue(this: any, frameNum: number, caching: any) {
       flag = false
     }
   }
-  const keyframeMetadata = this.keyframesMetadata[i] || {}
+  const keyframeMetadata = this.keyframesMetadata?.[i] || {}
 
   let k
   let kLen
@@ -433,11 +447,11 @@ function interpolateValue(this: any, frameNum: number, caching: any) {
   let jLen
   let j
   let fnc
-  const nextKeyTime = nextKeyData.t - offsetTime
-  const keyTime = keyData.t - offsetTime
+  const nextKeyTime = Number(nextKeyData?.t) - offsetTime
+  const keyTime = Number(keyData?.t) - offsetTime
   let endValue
-  if (keyData.to) {
-    if (!keyframeMetadata.bezierData) {
+  if (keyData?.to) {
+    if (!keyframeMetadata?.bezierData) {
       keyframeMetadata.bezierData = Bezier.buildBezierData(
         keyData.s,
         nextKeyData.s || keyData.e,
@@ -445,7 +459,7 @@ function interpolateValue(this: any, frameNum: number, caching: any) {
         keyData.ti
       )
     }
-    const bezierData = keyframeMetadata.bezierData
+    const bezierData = keyframeMetadata?.bezierData
     if (frameNum >= nextKeyTime || frameNum < keyTime) {
       const ind = frameNum >= nextKeyTime ? bezierData.points.length - 1 : 0
       kLen = bezierData.points[ind].point.length
@@ -546,14 +560,14 @@ function interpolateValue(this: any, frameNum: number, caching: any) {
         newValue[1] = keyData.s[1]
         newValue[2] = keyData.s[2]
       } else {
-        const quatStart = createQuaternion(keyData.s)
+        const quatStart = createQuaternion(keyData?.s)
         const quatEnd = createQuaternion(endValue)
         const time = (frameNum - keyTime) / (nextKeyTime - keyTime)
         quaternionToEuler(newValue as Vector3, slerp(quatStart, quatEnd, time))
       }
     } else {
       for (i = 0; i < len; i++) {
-        if (keyData.h !== 1) {
+        if (keyData?.h !== 1) {
           if (frameNum >= nextKeyTime) {
             perc = 1
           } else if (frameNum < keyTime) {
