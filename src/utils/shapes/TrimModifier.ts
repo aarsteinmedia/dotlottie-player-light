@@ -1,13 +1,11 @@
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import { ShapeData, Vector2 } from '@/types'
-import bezFunction from '@/utils/bez'
+import Bezier from '@/utils/Bezier'
 import { segmentsLengthPool } from '@/utils/pooling'
 import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
-
-const bez = bezFunction()
 
 export default class TrimModifier extends ShapeModifier {
   addPaths(newPaths: ShapeData[], localShapeCollection: ShapeCollection) {
@@ -103,7 +101,7 @@ export default class TrimModifier extends ShapeModifier {
           )
           newShape = false
         } else {
-          segment = bez.getNewSegment(
+          segment = Bezier.getNewSegment(
             shapePaths[i].v[j - 1],
             shapePaths[i].v[j],
             shapePaths[i].o[j - 1],
@@ -139,7 +137,7 @@ export default class TrimModifier extends ShapeModifier {
             )
             newShape = false
           } else {
-            segment = bez.getNewSegment(
+            segment = Bezier.getNewSegment(
               shapePaths[i].v[j - 1],
               shapePaths[i].v[0],
               shapePaths[i].o[j - 1],
@@ -341,7 +339,7 @@ export default class TrimModifier extends ShapeModifier {
           } else {
             pathsData = this.releasePathsData(shapeData.pathsData)
             for (j = 0; j < jLen; j++) {
-              pathData = bez.getSegmentsLength(shapePaths.shapes[j])
+              pathData = Bezier.getSegmentsLength(shapePaths.shapes[j])
               pathsData.push(pathData)
               totalShapeLength += pathData.totalLength
             }

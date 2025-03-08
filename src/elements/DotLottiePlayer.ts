@@ -34,8 +34,8 @@ import {
   getFilename,
   handleErrors,
   isServer,
-  useId,
 } from '@/utils'
+import { createElementID } from '@/utils/getterSetter'
 
 /**
  * dotLottie Player Web Component
@@ -348,7 +348,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
   protected _errorMessage = 'Something went wrong'
 
-  protected _identifier = this.id || useId('dotlottie')
+  protected _identifier = this.id || createElementID()
 
   /**
    * @state
@@ -655,7 +655,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
           {
             autoplay: !this.animateOnScroll && this.autoplay,
             direction: this.direction,
-            id: useId(),
+            id: createElementID(),
             loop: this.loop,
             mode: this.mode,
             speed: this.speed,

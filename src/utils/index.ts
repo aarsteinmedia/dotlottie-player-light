@@ -14,7 +14,7 @@ import type {
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
 import { ObjectFit } from '@/enums'
-import { roundCorner } from '@/utils/getterSetter'
+import { createElementID, roundCorner } from '@/utils/getterSetter'
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
@@ -161,7 +161,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     }
   ) => {
     const blob = new Blob([data], { type: options?.mimeType }),
-      fileName = options?.name || useId(),
+      fileName = options?.name || createElementID(),
       dataURL = URL.createObjectURL(blob),
       link = document.createElement('a')
 
@@ -1047,22 +1047,22 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
 
     return out
   },
-  splitData = (data: any) => {
+  splitData = (data: IntersectData) => {
     const split = data.bez.split(0.5)
     return [
       intersectData(split[0], data.t1, data.t),
       intersectData(split[1], data.t, data.t2),
     ]
   },
-  styleDiv = (element: HTMLElement) => {
-    element.style.position = 'absolute'
-    element.style.top = '0'
-    element.style.left = '0'
-    element.style.display = 'block'
-    element.style.transformOrigin = '0 0'
-    element.style.backfaceVisibility = 'visible'
-    element.style.transformStyle = 'preserve-3d'
-  },
+  // styleDiv = (element: HTMLElement) => {
+  //   element.style.position = 'absolute'
+  //   element.style.top = '0'
+  //   element.style.left = '0'
+  //   element.style.display = 'block'
+  //   element.style.transformOrigin = '0 0'
+  //   element.style.backfaceVisibility = 'visible'
+  //   element.style.transformStyle = 'preserve-3d'
+  // },
   unzip = async (
     resp: Response
     // filter: UnzipFileFilter = () => true
@@ -1081,9 +1081,9 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
       })
     // console.log('unzipped', unzipped)
     return unzipped
-  },
-  useId = (prefix?: string) => {
-    const s4 = () =>
-      (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-    return `${prefix ?? `:${s4()}`}-${s4()}`
   }
+// useId = (prefix?: string) => {
+//   const s4 = () =>
+//     (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+//   return `${prefix ?? `:${s4()}`}-${s4()}`
+// }

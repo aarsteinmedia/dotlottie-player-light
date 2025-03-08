@@ -162,8 +162,8 @@ export default class PolynomialBezier {
     const p21 = lerpPoint(p11, p12, t)
     const p3 = lerpPoint(p20, p21, t)
     return [
-      new (PolynomialBezier as any)(this.points[0], p10, p20, p3, true),
-      new (PolynomialBezier as any)(p3, p21, p12, this.points[3], true),
+      new PolynomialBezier(this.points[0], p10, p20, p3, true),
+      new PolynomialBezier(p3, p21, p12, this.points[3], true),
     ]
   }
 

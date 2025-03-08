@@ -1,7 +1,7 @@
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
 import { GlobalData, LottieLayer } from '@/types'
-import { createNS, useId } from '@/utils'
+import { createNS } from '@/utils'
 import { featureSupport, filtersFactory } from '@/utils/filters'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
@@ -59,7 +59,7 @@ export default class SVGBaseElement {
           this.data.h
         }z`
       )
-      const clipId = useId() // createElementID()
+      const clipId = createElementID()
       cp.setAttribute('id', clipId)
       cp.appendChild(pt)
       this.globalData.defs.appendChild(cp)
@@ -146,7 +146,7 @@ export default class SVGBaseElement {
         maskGroup.setAttribute('mask-type', 'alpha')
         const maskGrouper = createNS('g')
         maskGroup.appendChild(maskGrouper)
-        filId = useId() // createElementID()
+        filId = createElementID()
         fil = filtersFactory.createFilter(filId)
         // / /
         const feCTr = createNS('feComponentTransfer')

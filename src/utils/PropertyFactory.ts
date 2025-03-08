@@ -3,13 +3,12 @@ import type { ItemData, Vector3, VectorProperty } from '@/types'
 
 import { ArrayType } from '@/enums'
 import { createQuaternion, quaternionToEuler, slerp } from '@/utils'
-import bezFunction from '@/utils/bez'
+import Bezier from '@/utils/Bezier'
 import BezierFactory from '@/utils/BezierFactory'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import { createTypedArray } from '@/utils/helpers/arrays'
 
-const initFrame = initialDefaultFrame,
-  bez = bezFunction()
+const initFrame = initialDefaultFrame
 
 export default class PropertyFactory {
   static getProp = (
@@ -211,7 +210,7 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
         if (
           (s.length === 2 &&
             !(s[0] === e[0] && s[1] === e[1]) &&
-            bez.pointOnLine2D(
+            Bezier.pointOnLine2D(
               s[0],
               s[1],
               e[0],
@@ -219,7 +218,7 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
               s[0] + to[0],
               s[1] + to[1]
             ) &&
-            bez.pointOnLine2D(
+            Bezier.pointOnLine2D(
               s[0],
               s[1],
               e[0],
@@ -229,7 +228,7 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
             )) ||
           (s.length === 3 &&
             !(s[0] === e[0] && s[1] === e[1] && s[2] === e[2]) &&
-            bez.pointOnLine3D(
+            Bezier.pointOnLine3D(
               s[0],
               s[1],
               s[2],
@@ -240,7 +239,7 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
               s[1] + to[1],
               s[2] + to[2]
             ) &&
-            bez.pointOnLine3D(
+            Bezier.pointOnLine3D(
               s[0],
               s[1],
               s[2],
@@ -439,7 +438,7 @@ function interpolateValue(this: any, frameNum: number, caching: any) {
   let endValue
   if (keyData.to) {
     if (!keyframeMetadata.bezierData) {
-      keyframeMetadata.bezierData = bez.buildBezierData(
+      keyframeMetadata.bezierData = Bezier.buildBezierData(
         keyData.s,
         nextKeyData.s || keyData.e,
         keyData.to,

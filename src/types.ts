@@ -1314,7 +1314,7 @@ export interface TransformHandler {
 }
 
 export interface IntersectData {
-  bez: typeof PolynomialBezier
+  bez: PolynomialBezier
   cx: number
   cy: number
   height: number
