@@ -4,7 +4,7 @@ import type HierarchyElement from '@/elements/helpers/HierarchyElement'
 
 class FrameElement {
   _isFirstFrame!: boolean
-  _mdf!: boolean
+  _mdf?: boolean
   dynamicProperties!: any[]
 
   addDynamicProperty(prop: unknown) {
