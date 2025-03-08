@@ -3,6 +3,7 @@ import 'react/jsx-dev-runtime'
 
 import type AnimationItem from '@/animation/AnimationItem'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+import type { SVGStyleData } from '@/elements/helpers/shapes'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
 import type FontManager from '@/utils/FontManager'
@@ -61,6 +62,7 @@ export interface LayerInterFace {
 export interface ElementInterface extends AnimationItem {
   addDynamicProperty: (prop: DynamicPropertyContainer) => void
   animationItem: AnimationItem
+  assetData: ImageData
   baseElement: SVGElement
   comp: ElementInterface
   compInterface: ElementInterface
@@ -118,7 +120,7 @@ export interface AnimatedContent {
   fn:
     | null
     | ((
-        styleData: StyleObject,
+        styleData: SVGStyleData,
         itemData: ItemData | ShapeDataInterface,
         isFirstFrame: boolean
       ) => void)
@@ -459,7 +461,7 @@ export interface Shape {
   h?: GenericAnimatedProperty
   hd?: boolean
   ind?: number
-  it?: Omit<Shape, 'np'>[]
+  it?: Shape[]
   ix?: number
   ks?: ShapeDataProperty
   lc?: 1 | 2 | 3
@@ -826,7 +828,7 @@ export interface ShapeDataInterface {
     comp: ElementInterface
     paths: ShapeData
   }
-  styles: StyleObject[]
+  styles: SVGStyleData[]
   transform: Transformer
   transformers: Transformer[]
 }

@@ -1,7 +1,7 @@
 import type { Vector3 } from '@/types'
 
 import Matrix from '@/utils/Matrix'
-import TransformPropertyFactory from '@/utils/TransformProperty'
+import TransformProperty from '@/utils/TransformProperty'
 
 const effectTypes = {
   TRANSFORM_EFFECT: 'transformEFfect',
@@ -45,11 +45,7 @@ TransformElement.prototype = {
       localOpacity: 1,
       mat: mat,
       mProp: this.data.ks
-        ? TransformPropertyFactory.getTransformProperty(
-            this,
-            this.data.ks,
-            this
-          )
+        ? new TransformProperty(this, this.data.ks, this)
         : { o: 0 },
     }
     if (this.data.ao) {

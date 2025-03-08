@@ -25,7 +25,7 @@ class ShapeModifier extends DynamicPropertyContainer {
       }
     }
   }
-  init(elem: ElementInterface, data: any) {
+  init(elem: ElementInterface, data: any, _a: any, _b: any) {
     this.shapes = []
     this.elem = elem
     this.initDynamicPropertyContainer(elem)

@@ -36,7 +36,7 @@ import { getLocationHref } from '@/utils/getterSetter'
 // import Matrix from '@/utils/Matrix'
 import ShapeModifiers from '@/utils/shapes/ShapeModifiers'
 import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
-import TransformPropertyFactory from '@/utils/TransformProperty'
+import TransformProperty from '@/utils/TransformProperty'
 class SVGShapeElement {
   // identityMatrix = new Matrix()
 
@@ -138,17 +138,17 @@ class SVGShapeElement {
   createStyleElement(data: Shape, level: number) {
     // TODO: prevent drawing of hidden styles
     let elementData
-    const styleOb = new (SVGStyleData as any)(data, level)
+    const styleOb = new SVGStyleData(data, level)
 
     const pathElement = styleOb.pElem
     if (data.ty === 'st') {
-      elementData = new (SVGStrokeStyleData as any)(this, data, styleOb)
+      elementData = new SVGStrokeStyleData(this, data, styleOb)
     } else if (data.ty === 'fl') {
-      elementData = new (SVGFillStyleData as any)(this, data, styleOb)
+      elementData = new SVGFillStyleData(this, data, styleOb)
     } else if (data.ty === 'gf' || data.ty === 'gs') {
       const GradientConstructor =
         data.ty === 'gf' ? SVGGradientFillStyleData : SVGGradientStrokeStyleData
-      elementData = new (GradientConstructor as any)(this, data, styleOb)
+      elementData = new GradientConstructor(this, data, styleOb)
       this.globalData.defs.appendChild(elementData.gf)
       if (elementData.maskId) {
         this.globalData.defs.appendChild(elementData.ms)
@@ -189,12 +189,8 @@ class SVGShapeElement {
     return elementData
   }
   createTransformElement(data: Shape, container: SVGGElement) {
-    const transformProperty = TransformPropertyFactory.getTransformProperty(
-      this,
-      data,
-      this
-    )
-    const elementData = new (SVGTransformData as any)(
+    const transformProperty = new TransformProperty(this, data, this)
+    const elementData = new SVGTransformData(
       transformProperty,
       transformProperty.o,
       container

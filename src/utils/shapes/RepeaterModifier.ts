@@ -1,11 +1,20 @@
-import type { LottieLayer, Shape, ShapeData } from '@/types'
+import type { ElementInterface, LottieLayer, Shape, ShapeData } from '@/types'
 
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
-import TransformPropertyFactory from '@/utils/TransformProperty'
+import TransformProperty from '@/utils/TransformProperty'
 
 export default class RepeaterModifier extends ShapeModifier {
+  matrix!: Matrix
+
+  pMatrix!: Matrix
+
+  rMatrix!: Matrix
+
+  sMatrix!: Matrix
+
+  tMatrix!: Matrix
   applyTransforms(
     pMatrix: Matrix,
     rMatrix: Matrix,
@@ -29,7 +38,6 @@ export default class RepeaterModifier extends ShapeModifier {
     sMatrix.scale(inv ? 1 / scaleX : scaleX, inv ? 1 / scaleY : scaleY)
     sMatrix.translate(transform.a.v[0], transform.a.v[1], transform.a.v[2])
   }
-
   changeGroupRender(elements: Shape[], renderFlag?: boolean) {
     const { length } = elements
     for (let i = 0; i < length; i++) {
@@ -39,14 +47,12 @@ export default class RepeaterModifier extends ShapeModifier {
       }
     }
   }
-
   cloneElements(elements: Shape[]) {
     const newElements = JSON.parse(JSON.stringify(elements))
     this.resetElements(newElements)
     return newElements
   }
-
-  init(
+  override init(
     elem: Shape,
     arr: LottieLayer[],
     posFromProps: number,
@@ -74,12 +80,11 @@ export default class RepeaterModifier extends ShapeModifier {
       this.getValue(true)
     }
   }
-
-  initModifierProperties(elem: any, data: Shape) {
+  initModifierProperties(elem: ElementInterface, data: Shape) {
     this.getValue = this.processKeys
     this.c = PropertyFactory.getProp(elem, data.c, 0, null, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, null, this)
-    this.tr = TransformPropertyFactory.getTransformProperty(elem, data.tr, this)
+    this.tr = new TransformProperty(elem, data.tr, this)
     this.so = PropertyFactory.getProp(elem, data.tr?.so, 0, 0.01, this)
     this.eo = PropertyFactory.getProp(elem, data.tr?.eo, 0, 0.01, this)
     this.data = data
@@ -93,7 +98,6 @@ export default class RepeaterModifier extends ShapeModifier {
     this.tMatrix = new Matrix()
     this.matrix = new Matrix()
   }
-
   processShapes(_isFirstFrame: boolean) {
     let items
     let itemsTransform
@@ -337,7 +341,7 @@ export default class RepeaterModifier extends ShapeModifier {
     for (let i = 0; i < length; i++) {
       elements[i]._processed = false
       if (elements[i].ty === 'gr') {
-        this.resetElements(elements[i].it)
+        this.resetElements(elements[i].it!)
       }
     }
   }

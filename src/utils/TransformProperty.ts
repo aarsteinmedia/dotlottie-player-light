@@ -1,18 +1,113 @@
-import type { TransformHandler, Vector2 } from '@/types'
+import type { ElementInterface, LottieLayer, Vector2 } from '@/types'
 
 import { degToRads } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
-
-const TransformPropertyFactory = (function () {
-  const defaultVector: Vector2 = [0, 0]
-
-  /**
-   *
-   */
-  function applyToMatrix(this: any, mat: Matrix) {
+export default class TransformProperty extends DynamicPropertyContainer {
+  _addDynamicProperty = DynamicPropertyContainer.prototype.addDynamicProperty
+  _isDirty?: boolean
+  // _mdf?: boolean
+  appliedTransformations: number
+  data: LottieLayer
+  elem: ElementInterface
+  frameId: number
+  pre: Matrix
+  propType: 'transform'
+  v: Matrix
+  private defaultVector: Vector2 = [0, 0]
+  constructor(
+    elem: ElementInterface,
+    data: LottieLayer,
+    container: ElementInterface
+  ) {
+    super()
+    this.elem = elem
+    this.frameId = -1
+    this.propType = 'transform'
+    this.data = data
+    this.v = new Matrix()
+    // Precalculated matrix with non animated properties
+    this.pre = new Matrix()
+    this.appliedTransformations = 0
+    this.initDynamicPropertyContainer(container || elem)
+    if (data.p && data.p.s) {
+      this.px = PropertyFactory.getProp(elem, data.p.x, 0, 0, this)
+      this.py = PropertyFactory.getProp(elem, data.p.y, 0, 0, this)
+      if (data.p.z) {
+        this.pz = PropertyFactory.getProp(elem, data.p.z, 0, 0, this)
+      }
+    } else {
+      this.p = PropertyFactory.getProp(
+        elem,
+        data.p || { k: [0, 0, 0] },
+        1,
+        0,
+        this
+      )
+    }
+    if (data.rx) {
+      this.rx = PropertyFactory.getProp(elem, data.rx, 0, degToRads, this)
+      this.ry = PropertyFactory.getProp(elem, data.ry, 0, degToRads, this)
+      this.rz = PropertyFactory.getProp(elem, data.rz, 0, degToRads, this)
+      if (data.or.k[0].ti) {
+        let i
+        const len = data.or.k.length
+        for (i = 0; i < len; i += 1) {
+          data.or.k[i].to = null
+          data.or.k[i].ti = null
+        }
+      }
+      this.or = PropertyFactory.getProp(elem, data.or, 1, degToRads, this)
+      // sh Indicates it needs to be capped between -180 and 180
+      this.or.sh = true
+    } else {
+      this.r = PropertyFactory.getProp(
+        elem,
+        data.r || { k: 0 },
+        0,
+        degToRads,
+        this
+      )
+    }
+    if (data.sk) {
+      this.sk = PropertyFactory.getProp(elem, data.sk, 0, degToRads, this)
+      this.sa = PropertyFactory.getProp(elem, data.sa, 0, degToRads, this)
+    }
+    this.a = PropertyFactory.getProp(
+      elem,
+      data.a || { k: [0, 0, 0] },
+      1,
+      0,
+      this
+    )
+    this.s = PropertyFactory.getProp(
+      elem,
+      data.s || { k: [100, 100, 100] },
+      1,
+      0.01,
+      this
+    )
+    // Opacity is not part of the transform properties, that's why it won't use this.dynamicProperties. That way transforms won't get updated if opacity changes.
+    if (data.o) {
+      this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, elem)
+    } else {
+      this.o = { _mdf: false, v: 1 }
+    }
+    this._isDirty = true
+    if (!this.dynamicProperties.length) {
+      this.getValue(true)
+    }
+  }
+  addDynamicProperty(
+    // this: any,
+    prop: any
+  ) {
+    this._addDynamicProperty(prop)
+    this.elem.addDynamicProperty(prop)
+    this._isDirty = true
+  }
+  applyToMatrix(mat: Matrix) {
     const _mdf = this._mdf
     this.iterateDynamicProperties()
     this._mdf = this._mdf || _mdf
@@ -46,10 +141,12 @@ const TransformPropertyFactory = (function () {
       mat.translate(this.p.v[0], this.p.v[1], -this.p.v[2])
     }
   }
-  /**
-   *
-   */
-  function processKeys(this: any, forceRender?: boolean) {
+  autoOrient() {
+    //
+    // var prevP = this.getValueAtTime();
+  }
+
+  getValue(forceRender?: boolean) {
     if (this.elem.globalData.frameId === this.frameId) {
       return
     }
@@ -166,7 +263,7 @@ const TransformPropertyFactory = (function () {
             )
           }
         } else {
-          v2 = defaultVector
+          v2 = this.defaultVector
           v1 = v2
         }
         this.v.rotate(-Math.atan2(v1[1] - v2[1], v1[0] - v2[0]))
@@ -181,13 +278,9 @@ const TransformPropertyFactory = (function () {
         this.v.translate(this.p.v[0], this.p.v[1], -this.p.v[2])
       }
     }
-    this.frameId = this.elem.globalData.frameId
+    this.frameId = this.elem.globalData.frameId!
   }
-
-  /**
-   *
-   */
-  function precalculateMatrix(this: TransformHandler) {
+  precalculateMatrix() {
     this.appliedTransformations = 0
     this.pre.reset()
 
@@ -234,125 +327,4 @@ const TransformPropertyFactory = (function () {
       this.appliedTransformations = 4
     }
   }
-
-  function autoOrient() {
-    //
-    // var prevP = this.getValueAtTime();
-  }
-
-  /**
-   *
-   */
-  function addDynamicProperty(this: any, prop: any) {
-    this._addDynamicProperty(prop)
-    this.elem.addDynamicProperty(prop)
-    this._isDirty = true
-  }
-
-  /**
-   *
-   */
-  function TransformProperty(this: any, elem: any, data: any, container: any) {
-    this.elem = elem
-    this.frameId = -1
-    this.propType = 'transform'
-    this.data = data
-    this.v = new Matrix()
-    // Precalculated matrix with non animated properties
-    this.pre = new Matrix()
-    this.appliedTransformations = 0
-    this.initDynamicPropertyContainer(container || elem)
-    if (data.p && data.p.s) {
-      this.px = PropertyFactory.getProp(elem, data.p.x, 0, 0, this)
-      this.py = PropertyFactory.getProp(elem, data.p.y, 0, 0, this)
-      if (data.p.z) {
-        this.pz = PropertyFactory.getProp(elem, data.p.z, 0, 0, this)
-      }
-    } else {
-      this.p = PropertyFactory.getProp(
-        elem,
-        data.p || { k: [0, 0, 0] },
-        1,
-        0,
-        this
-      )
-    }
-    if (data.rx) {
-      this.rx = PropertyFactory.getProp(elem, data.rx, 0, degToRads, this)
-      this.ry = PropertyFactory.getProp(elem, data.ry, 0, degToRads, this)
-      this.rz = PropertyFactory.getProp(elem, data.rz, 0, degToRads, this)
-      if (data.or.k[0].ti) {
-        let i
-        const len = data.or.k.length
-        for (i = 0; i < len; i += 1) {
-          data.or.k[i].to = null
-          data.or.k[i].ti = null
-        }
-      }
-      this.or = PropertyFactory.getProp(elem, data.or, 1, degToRads, this)
-      // sh Indicates it needs to be capped between -180 and 180
-      this.or.sh = true
-    } else {
-      this.r = PropertyFactory.getProp(
-        elem,
-        data.r || { k: 0 },
-        0,
-        degToRads,
-        this
-      )
-    }
-    if (data.sk) {
-      this.sk = PropertyFactory.getProp(elem, data.sk, 0, degToRads, this)
-      this.sa = PropertyFactory.getProp(elem, data.sa, 0, degToRads, this)
-    }
-    this.a = PropertyFactory.getProp(
-      elem,
-      data.a || { k: [0, 0, 0] },
-      1,
-      0,
-      this
-    )
-    this.s = PropertyFactory.getProp(
-      elem,
-      data.s || { k: [100, 100, 100] },
-      1,
-      0.01,
-      this
-    )
-    // Opacity is not part of the transform properties, that's why it won't use this.dynamicProperties. That way transforms won't get updated if opacity changes.
-    if (data.o) {
-      this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, elem)
-    } else {
-      this.o = { _mdf: false, v: 1 }
-    }
-    this._isDirty = true
-    if (!this.dynamicProperties.length) {
-      this.getValue(true)
-    }
-  }
-
-  TransformProperty.prototype = {
-    applyToMatrix: applyToMatrix,
-    autoOrient: autoOrient,
-    getValue: processKeys,
-    precalculateMatrix: precalculateMatrix,
-  }
-
-  extendPrototype([DynamicPropertyContainer], TransformProperty)
-  TransformProperty.prototype.addDynamicProperty = addDynamicProperty
-  TransformProperty.prototype._addDynamicProperty =
-    DynamicPropertyContainer.prototype.addDynamicProperty
-
-  /**
-   *
-   */
-  function getTransformProperty(elem: any, data: any, container: any) {
-    return new (TransformProperty as any)(elem, data, container)
-  }
-
-  return {
-    getTransformProperty: getTransformProperty,
-  }
-})()
-
-export default TransformPropertyFactory
+}
