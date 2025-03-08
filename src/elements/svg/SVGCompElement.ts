@@ -1,6 +1,12 @@
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+import type {
+  AnimatedProperty,
+  ElementInterface,
+  GlobalData,
+  LottieLayer,
+} from '@/types'
 
-import ICompElement from '@/elements/CompElement'
+import CompElement from '@/elements/CompElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
@@ -9,25 +15,43 @@ import PropertyFactory from '@/utils/PropertyFactory'
 /**
  *
  */
-export default function SVGCompElement(
-  this: ElementInterface,
-  data: LottieLayer,
-  globalData: GlobalData,
-  comp: ElementInterface
-) {
-  this.layers = data.layers as LottieLayer[]
-  this.supports3d = true
-  this.completeLayers = false
-  this.pendingElements = []
-  this.elements = this.layers ? createSizedArray(this.layers.length) : []
-  this.initElement(data, globalData, comp)
-  this.tm = data.tm
-    ? PropertyFactory.getProp(this, data.tm, 0, globalData.frameRate, this)
-    : { _placeholder: true }
+class SVGCompElement extends SVGBaseElement {
+  completeLayers: boolean
+  elements: any[]
+  initElement!: (
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) => void
+  layers: LottieLayer[]
+  pendingElements: any[]
+  supports3d: boolean
+  tm: AnimatedProperty
+  constructor(
+    // this: ElementInterface,
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
+    super()
+    this.layers = data.layers!
+    this.supports3d = true
+    this.completeLayers = false
+    this.pendingElements = []
+    this.elements = this.layers ? createSizedArray(this.layers.length) : []
+    this.initElement(data, globalData, comp)
+    this.tm = data.tm
+      ? PropertyFactory.getProp(this, data.tm, 0, globalData.frameRate, this)
+      : { _placeholder: true }
+  }
+
+  createComp(data: LottieLayer) {
+    return new SVGCompElement(data, this.globalData, this)
+  }
 }
 
-extendPrototype([SVGRendererBase, ICompElement, SVGBaseElement], SVGCompElement)
+extendPrototype([SVGRendererBase, CompElement], SVGCompElement)
 
-SVGCompElement.prototype.createComp = function (data: LottieLayer) {
-  return new (SVGCompElement as any)(data, this.globalData, this)
-}
+interface SVGCompElement extends SVGRendererBase, CompElement {}
+
+export default SVGCompElement

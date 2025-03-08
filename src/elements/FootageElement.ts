@@ -4,13 +4,14 @@ import type { GlobalData, LottieAsset, LottieLayer } from '@/types'
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import RenderableElement from '@/elements/helpers/RenderableElement'
-import { applyMixins } from '@/utils/functionExtensions'
+import { extendPrototype } from '@/utils/functionExtensions'
 import { getExpressionInterfaces } from '@/utils/getterSetter'
 
-class FootageElement {
+class FootageElement extends FrameElement {
   assetData: null | LottieAsset = null
   footageData: SVGElement
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+    super()
     this.initFrame()
     this.initRenderable()
     if (data.refId && globalData?.getAssetData) {
@@ -28,7 +29,7 @@ class FootageElement {
     return this.footageData
   }
 
-  initExpressions() {
+  override initExpressions() {
     const expressionsInterfaces = getExpressionInterfaces()
     if (!expressionsInterfaces) {
       return
@@ -38,8 +39,8 @@ class FootageElement {
   }
 }
 
-applyMixins(FootageElement, [RenderableElement, BaseElement, FrameElement])
+extendPrototype([RenderableElement, BaseElement], FootageElement)
 
-interface FootageElement extends RenderableElement, BaseElement, FrameElement {}
+interface FootageElement extends RenderableElement, BaseElement {}
 
 export default FootageElement

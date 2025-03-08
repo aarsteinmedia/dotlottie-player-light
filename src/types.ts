@@ -1100,7 +1100,9 @@ export interface LottieLayer {
   ct?: 0 | 1
   ddd?: 0 | 1
   ef?: Readonly<Effect[]>
+  h?: number
   hasMask?: boolean
+  hd?: boolean
   height?: number
   id?: string
   ind?: number
@@ -1142,6 +1144,7 @@ export interface LottieLayer {
   tt?: number
   /** Layer type */
   ty: number
+  w?: number
   width?: number
   xt?: number
 }

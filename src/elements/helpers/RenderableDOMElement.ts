@@ -3,7 +3,7 @@ import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
 import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
-export default class RenderableDOMElement {
+class RenderableDOMElement {
   _mdf?: boolean
   isInRange?: boolean
   prepareRenderableFrame!: (num: number) => void
@@ -71,3 +71,7 @@ export default class RenderableDOMElement {
 }
 
 extendPrototype([RenderableElement], RenderableDOMElement)
+
+// interface RenderableDOMElement extends RenderableElement {}
+
+export default RenderableDOMElement

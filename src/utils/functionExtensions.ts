@@ -3,24 +3,24 @@
 /**
  *
  */
-function applyMixins(derivedCtor: any, constructors: any[]) {
-  const { length: len } = constructors
-  for (let i = 0; i < len; i++) {
-    const { length: jLen } = Object.getOwnPropertyNames(
-      constructors[i].prototype
-    )
-    for (let j = 0; j < jLen; j++) {
-      Object.defineProperty(
-        derivedCtor.prototype,
-        constructors[i].prototype[j],
-        Object.getOwnPropertyDescriptor(
-          constructors[i].prototype,
-          constructors[i].prototype[j]
-        ) || Object.create(null)
-      )
-    }
-  }
-}
+// function applyMixins(derivedCtor: any, constructors: any[]) {
+//   const { length: len } = constructors
+//   for (let i = 0; i < len; i++) {
+//     const { length: jLen } = Object.getOwnPropertyNames(
+//       constructors[i].prototype
+//     )
+//     for (let j = 0; j < jLen; j++) {
+//       Object.defineProperty(
+//         derivedCtor.prototype,
+//         constructors[i].prototype[j],
+//         Object.getOwnPropertyDescriptor(
+//           constructors[i].prototype,
+//           constructors[i].prototype[j]
+//         ) || Object.create(null)
+//       )
+//     }
+//   }
+// }
 
 /**
  *
@@ -55,4 +55,4 @@ function createProxyFunction<T = unknown>(prototype: T) {
   return ProxyFunction
 }
 
-export { applyMixins, extendPrototype, getDescriptor, createProxyFunction }
+export { extendPrototype, getDescriptor, createProxyFunction }

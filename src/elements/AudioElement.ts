@@ -1,16 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type {
-  AnimatedProperty,
-  Audio,
-  GlobalData,
-  LottieAsset,
-  Vector2,
-} from '@/types'
+import type { AnimatedProperty, Audio, GlobalData, LottieAsset } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import RenderableElement from '@/elements/helpers/RenderableElement'
-import { applyMixins } from '@/utils/functionExtensions'
+import { extendPrototype } from '@/utils/functionExtensions'
 import PropertyFactory from '@/utils/PropertyFactory'
 
 class AudioElement {
@@ -119,7 +113,7 @@ class AudioElement {
   }
 }
 
-applyMixins(AudioElement, [RenderableElement, BaseElement, FrameElement])
+extendPrototype([RenderableElement, BaseElement, FrameElement], AudioElement)
 
 interface AudioElement extends RenderableElement, BaseElement, FrameElement {}
 
