@@ -1,13 +1,14 @@
+import type {
+  MultiDimensionalProperty,
+  ValueProperty,
+} from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
 import { AnimationDirection, Shape, Vector2 } from '@/types'
 import { getProjectingAngle, setPoint } from '@/utils'
 import ShapePool from '@/utils/pooling/ShapePool'
-import PropertyFactory, {
-  type MultiDimensionalProperty,
-  type ValueProperty,
-} from '@/utils/PropertyFactory'
+import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
 class ZigZagModifier extends ShapeModifier {

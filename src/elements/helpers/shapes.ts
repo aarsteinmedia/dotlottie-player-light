@@ -1,3 +1,9 @@
+import type {
+  KeyframedValueProperty,
+  MultiDimensionalProperty,
+  ValueProperty,
+} from '@/utils/Properties'
+
 import { lineCapEnum, lineJoinEnum, RendererType, ShapeType } from '@/enums'
 import {
   ElementInterface,
@@ -9,11 +15,7 @@ import {
 import { createNS, degToRads } from '@/utils'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import PropertyFactory, {
-  type KeyframedValueProperty,
-  type MultiDimensionalProperty,
-  type ValueProperty,
-} from '@/utils/PropertyFactory'
+import PropertyFactory from '@/utils/PropertyFactory'
 import DashProperty from '@/utils/shapes/DashProperty'
 import GradientProperty from '@/utils/shapes/GradientProperty'
 
