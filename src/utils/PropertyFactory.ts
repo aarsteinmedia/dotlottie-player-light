@@ -18,20 +18,35 @@ export default class PropertyFactory {
   ) => {
     let data = dataFromProps
     if (data && 'sid' in data && data.sid) {
-      data = elem.globalData?.slotManager?.getProp(data)
+      data = elem.globalData?.slotManager?.getProp(data as VectorProperty)
     }
     let p
-    if (!data?.k.length) {
-      p = new ValueProperty(elem, data, mult, container)
-    } else if (typeof data.k[0] === 'number') {
-      p = new MultiDimensionalProperty(elem, data, mult, container)
+    if (!(data?.k as number[]).length) {
+      p = new ValueProperty(elem, data as VectorProperty, mult, container)
+    } else if (typeof (data?.k as number[])[0] === 'number') {
+      p = new MultiDimensionalProperty(
+        elem,
+        data as VectorProperty<number[]>,
+        mult,
+        container
+      )
     } else {
       switch (type) {
         case 0:
-          p = new KeyframedValueProperty(elem, data, mult, container)
+          p = new KeyframedValueProperty(
+            elem,
+            data as VectorProperty<number[]>,
+            mult,
+            container
+          )
           break
         case 1:
-          p = new KeyframedMultidimensionalProperty(elem, data, mult, container)
+          p = new KeyframedMultidimensionalProperty(
+            elem,
+            data as VectorProperty<number[]>,
+            mult,
+            container
+          )
           break
         default:
           break

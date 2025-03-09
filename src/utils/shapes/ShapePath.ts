@@ -7,8 +7,10 @@ export default class ShapePath {
   _length: number
   _maxLength: number
   c: boolean
+  e?: ShapePath[]
   i: Vector2[]
   o: Vector2[]
+  s?: ShapePath[]
   v: Vector2[]
   constructor() {
     this.c = false

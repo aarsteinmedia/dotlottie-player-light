@@ -1369,7 +1369,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         ),
         roundedScroll = clampedScroll / 3
 
-      requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
         if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
           this.playerState = PlayerState.Playing
           this._lottieInstance?.goToAndStop(roundedScroll, true)

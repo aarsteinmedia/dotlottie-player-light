@@ -369,7 +369,7 @@ export default class Bezier {
 }
 
 export class BezierData {
-  points: Array<unknown>
+  points: { point: number[]; partialLength: number }[]
   segmentLength: number
   constructor(length: number) {
     this.segmentLength = 0

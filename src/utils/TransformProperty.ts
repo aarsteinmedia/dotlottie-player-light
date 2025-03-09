@@ -1,4 +1,5 @@
-import type { ElementInterface, LottieLayer, Vector2 } from '@/types'
+import type { ElementInterface, Shape, Vector2 } from '@/types'
+import type { ValueProperty } from '@/utils/Properties'
 
 import { degToRads } from '@/utils'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -7,18 +8,29 @@ import PropertyFactory from '@/utils/PropertyFactory'
 export default class TransformProperty extends DynamicPropertyContainer {
   _addDynamicProperty = DynamicPropertyContainer.prototype.addDynamicProperty
   _isDirty?: boolean
+  a?: ValueProperty
   // _mdf?: boolean
   appliedTransformations: number
-  data: LottieLayer
+  autoOriented?: boolean
+  data: Shape
   elem: ElementInterface
   frameId: number
+  o?: ValueProperty
+  or?: ValueProperty
+  p?: ValueProperty
   pre: Matrix
   propType: 'transform'
+  px?: ValueProperty
+  py?: ValueProperty
+  pz?: ValueProperty
+  rx?: ValueProperty
+  ry?: ValueProperty
+  rz?: ValueProperty
   v: Matrix
   private defaultVector: Vector2 = [0, 0]
   constructor(
     elem: ElementInterface,
-    data: LottieLayer,
+    data: Shape,
     container: ElementInterface
   ) {
     super()
@@ -99,7 +111,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
       this.getValue(true)
     }
   }
-  addDynamicProperty(
+  override addDynamicProperty(
     // this: any,
     prop: any
   ) {

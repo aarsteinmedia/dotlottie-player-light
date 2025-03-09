@@ -142,12 +142,7 @@ export interface ItemsData {
 }
 
 export interface ItemData {
-  _caching: {
-    _lastKeyframeIndex?: number
-    lastFrame: number
-    lastIndex: number
-    value: number | number[]
-  }
+  _caching: Caching
   _frameId?: number
   _isFirstFrame: boolean
   _mdf?: boolean
@@ -259,11 +254,11 @@ export type BaseRendererConfig = {
   className?: string
 }
 
-export interface Process {
-  [key: string]: unknown
-  onComplete<T>(data: T): void
-  onError(): void
-}
+// export interface Process {
+//   [key: string]: unknown
+//   onComplete<T>(data: T): void
+//   onError(): void
+// }
 
 export type FilterSizeConfig = {
   width: string
@@ -386,7 +381,7 @@ export interface ShapeDataProperty {
   _mdf?: boolean
   a: 1 | 0
   ix?: number
-  k: ShapePath
+  k: ShapePath | ShapePath[]
   paths: {
     _length: number
     _maxLength: number
@@ -401,6 +396,18 @@ export interface StrokeData {
   v?: VectorProperty
 }
 
+interface ShapeColor {
+  a: 1 | 0
+  ix?: number
+  k: number | number[] | ShapeColorValue[]
+}
+
+export interface ShapeColorValue {
+  e: Vector4
+  i: Vector4
+  s: Vector4
+}
+
 export interface Shape {
   _length: number
   _processed?: boolean
@@ -410,18 +417,7 @@ export interface Shape {
   /** Blend Mode */
   bm?: number
   /** Color */
-  c?: {
-    a: 1 | 0
-    k:
-      | number
-      | number[]
-      | {
-          i: Vector4
-          s: Vector4
-          e: Vector4
-        }[]
-    ix?: number
-  }
+  c?: ShapeColor
   cix?: number
   /** CSS Class */
   cl?: string
@@ -450,7 +446,9 @@ export interface Shape {
   np?: number
   o?: VectorProperty
   /** Position */
-  p?: VectorProperty<Vector2 | Vector3>
+  p?:
+    | { s: number; x: VectorProperty; y: VectorProperty; z: VectorProperty }
+    | VectorProperty
   pt?: VectorProperty<ShapePath>
   /** Rotation (for transforms) | Fill-rule (for fills) */
   r?: number | VectorProperty
@@ -483,6 +481,7 @@ interface LottieTransform {
 }
 
 export interface LottieAsset {
+  __used?: boolean
   /** Whether the data is embedded/encoded */
   e?: BoolInt
   /** Height of image in pixels */
@@ -491,7 +490,7 @@ export interface LottieAsset {
   /** id/slug of asset – e.g. image_0 / audio_0 */
   id?: string
 
-  layers?: LottieLayer[]
+  layers?: LottieLayer[] & { __used?: boolean }
 
   /** Name of asset – e.g. "Black Mouse Ears" */
   nm?: string
@@ -1165,16 +1164,9 @@ export interface DataFunctionManager {
   checkColors?: (animationData: AnimationData) => void
   checkPathProperties?: (animationData: AnimationData) => void
   checkShapes?: (animationData: AnimationData) => void
-  completeData?: (animationData: AnimationData | AnimationItem) => void
+  completeData?: (animationData: AnimationData) => void
   completeLayers?: (layers: LottieLayer[], comps: LottieComp[]) => void
 }
-
-export type AssetLoader = (
-  path: string,
-  fullPath: string,
-  onComplete: (data: AnimationData) => void,
-  onError?: (x?: unknown) => unknown
-) => void
 
 export interface WorkerEvent {
   data: {
@@ -1182,7 +1174,7 @@ export interface WorkerEvent {
     type: string
     path: string
     fullPath: string
-    animation: AnimationItem
+    animation: AnimationData
   }
 }
 
@@ -1225,13 +1217,32 @@ export interface ImageData {
   img: null | SVGElement | HTMLCanvasElement | HTMLMediaElement
 }
 
+export interface Keyframe {
+  e: Vector2
+  h?: number
+  i: {
+    x: number | number[]
+    y: number | number[]
+  }
+  keyframeMetadata: any
+  n: string
+  o: {
+    x: number | number[]
+    y: number | number[]
+  }
+  s: Vector3
+  t: number
+  ti: Vector2
+  to: Vector2
+}
+
 export interface Caching {
   _lastAddedLength: number
   _lastKeyframeIndex: number
   _lastPoint: number
   lastFrame: number
   lastIndex: number
-  value: number
+  value: any
 }
 
 export interface PropertyElement {

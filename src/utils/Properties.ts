@@ -1,6 +1,9 @@
 /* eslint-disable max-depth */
 import type {
+  Caching,
   ElementInterface,
+  Keyframe,
+  Shape,
   Vector2,
   Vector3,
   VectorProperty,
@@ -14,15 +17,10 @@ import { initialDefaultFrame } from '@/utils/getterSetter'
 import { createTypedArray } from '@/utils/helpers/arrays'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 class BaseProperty extends DynamicPropertyContainer {
-  _caching?: {
-    _lastKeyframeIndex?: number
-    lastFrame: number
-    lastIndex: number
-    value: number | number[]
-  }
+  _caching?: Caching
   _isFirstFrame?: boolean
   _placeholder?: boolean
-  comp?: any
+  comp?: ElementInterface
   data?: any
   e?: any
   effectsSequence?: any
@@ -32,17 +30,19 @@ class BaseProperty extends DynamicPropertyContainer {
   getValue?: (val?: unknown) => unknown
   initFrame = initialDefaultFrame
   k?: boolean
-  keyframes?: number[]
+  keyframes?: Keyframe[]
   keyframesMetadata?: {
     bezierData?: BezierData
+    __fnct?: ((val: number) => number) | ((val: number) => number)[]
   }[]
   kf?: boolean
+  lock?: boolean
   mult?: number
   offsetTime?: number
   propType!: false | 'multidimensional' | 'unidimensional'
   pv?: string | number | any[]
-
   s?: any
+  sh?: Shape
   v?: string | number | any[]
   vel?: number | any[]
   addEffect(effectFunction: any) {
@@ -51,7 +51,7 @@ class BaseProperty extends DynamicPropertyContainer {
   }
   getValueAtCurrentTime() {
     const offsetTime = Number(this.offsetTime),
-      frameNum = this.comp.renderedFrame - offsetTime,
+      frameNum = Number(this.comp?.renderedFrame) - offsetTime,
       initTime = Number(this.keyframes?.[0].t) - offsetTime,
       length = Number(this.keyframes?.length) - 1,
       endTime = Number(this.keyframes?.[length].t) - offsetTime,
@@ -70,18 +70,18 @@ class BaseProperty extends DynamicPropertyContainer {
       }
 
       const renderResult = this.interpolateValue(frameNum, this._caching)
-      this.pv = renderResult
+      this.pv = renderResult as any
     }
     this._caching!.lastFrame = frameNum
     return this.pv
   }
-  interpolateValue(frameNum: number, caching: any) {
+  interpolateValue(frameNum: number, caching?: Caching) {
     const offsetTime = Number(this.offsetTime)
     let newValue
     if (this.propType === 'multidimensional') {
       newValue = createTypedArray(ArrayType.Float32, (this.pv as any[])?.length)
     }
-    let iterationIndex = caching.lastIndex
+    let iterationIndex = Number(caching?.lastIndex)
     let i = iterationIndex
     let len = Number(this.keyframes?.length) - 1
     let flag = true
@@ -116,15 +116,15 @@ class BaseProperty extends DynamicPropertyContainer {
     let perc
     let jLen
     let j
-    let fnc
+    let fnc: (val: number) => number
     const nextKeyTime = Number(nextKeyData?.t) - offsetTime
     const keyTime = Number(keyData?.t) - offsetTime
     let endValue
     if (keyData?.to) {
       if (!keyframeMetadata?.bezierData) {
         keyframeMetadata.bezierData = Bezier.buildBezierData(
-          keyData.s,
-          nextKeyData.s || keyData.e,
+          keyData.s as unknown as Vector2,
+          (nextKeyData?.s || keyData.e) as unknown as Vector2,
           keyData.to,
           keyData.ti
         )
@@ -141,13 +141,13 @@ class BaseProperty extends DynamicPropertyContainer {
         // caching._lastKeyframeIndex = -1;
       } else {
         if (keyframeMetadata.__fnct) {
-          fnc = keyframeMetadata.__fnct
+          fnc = keyframeMetadata.__fnct as (val: number) => number
         } else {
           fnc = BezierFactory.getBezierEasing(
-            keyData.o.x,
-            keyData.o.y,
-            keyData.i.x,
-            keyData.i.y,
+            keyData.o.x as number,
+            keyData.o.y as number,
+            keyData.i.x as number,
+            keyData.i.y as number,
             keyData.n
           ).get
           keyframeMetadata.__fnct = fnc
@@ -157,12 +157,14 @@ class BaseProperty extends DynamicPropertyContainer {
 
         let segmentPerc
         let addedLength =
-          caching.lastFrame < frameNum && caching._lastKeyframeIndex === i
-            ? caching._lastAddedLength
+          Number(caching?.lastFrame) < frameNum &&
+          caching?._lastKeyframeIndex === i
+            ? caching?._lastAddedLength
             : 0
         j =
-          caching.lastFrame < frameNum && caching._lastKeyframeIndex === i
-            ? caching._lastPoint
+          Number(caching?.lastFrame) < frameNum &&
+          caching?._lastKeyframeIndex === i
+            ? caching?._lastPoint
             : 0
         flag = true
         jLen = bezierData.points.length
@@ -208,10 +210,10 @@ class BaseProperty extends DynamicPropertyContainer {
             flag = false
           }
         }
-        caching._lastPoint = j
-        caching._lastAddedLength =
+        caching!._lastPoint = j
+        caching!._lastAddedLength =
           addedLength - bezierData.points[j].partialLength
-        caching._lastKeyframeIndex = i
+        caching!._lastKeyframeIndex = i
       }
     } else {
       let outX
@@ -219,20 +221,20 @@ class BaseProperty extends DynamicPropertyContainer {
       let inX
       let inY
       let keyValue
-      len = keyData.s.length
-      endValue = nextKeyData.s || keyData.e
-      if (Array.isArray(newValue) && this.sh && keyData.h !== 1) {
+      len = keyData?.s.length || 0
+      endValue = nextKeyData?.s || keyData?.e || []
+      if (Array.isArray(newValue) && this.sh && keyData?.h !== 1) {
         if (frameNum >= nextKeyTime) {
           newValue[0] = endValue[0]
           newValue[1] = endValue[1]
-          newValue[2] = endValue[2]
+          newValue[2] = Number(endValue[2])
         } else if (frameNum <= keyTime) {
-          newValue[0] = keyData.s[0]
-          newValue[1] = keyData.s[1]
-          newValue[2] = keyData.s[2]
+          newValue[0] = Number(keyData?.s[0])
+          newValue[1] = Number(keyData?.s[1])
+          newValue[2] = Number(keyData?.s[2])
         } else {
-          const quatStart = createQuaternion(keyData?.s)
-          const quatEnd = createQuaternion(endValue)
+          const quatStart = createQuaternion(keyData?.s as Vector3)
+          const quatEnd = createQuaternion(endValue as Vector3)
           const time = (frameNum - keyTime) / (nextKeyTime - keyTime)
           quaternionToEuler(
             newValue as Vector3,
@@ -247,41 +249,41 @@ class BaseProperty extends DynamicPropertyContainer {
             } else if (frameNum < keyTime) {
               perc = 0
             } else {
-              if (keyData.o.x.constructor === Array) {
+              if (keyData?.o.x.constructor === Array) {
                 if (!keyframeMetadata.__fnct) {
                   keyframeMetadata.__fnct = []
                 }
-                if (keyframeMetadata.__fnct[i]) {
-                  fnc = keyframeMetadata.__fnct[i]
+                if ((keyframeMetadata.__fnct as any)[i]) {
+                  fnc = (keyframeMetadata.__fnct as any)[i]
                 } else {
                   outX =
                     keyData.o.x[i] === undefined
                       ? keyData.o.x[0]
                       : keyData.o.x[i]
                   outY =
-                    keyData.o.y[i] === undefined
-                      ? keyData.o.y[0]
-                      : keyData.o.y[i]
+                    (keyData.o.y as number[])[i] === undefined
+                      ? (keyData.o.y as number[])[0]
+                      : (keyData.o.y as number[])[i]
                   inX =
-                    keyData.i.x[i] === undefined
-                      ? keyData.i.x[0]
-                      : keyData.i.x[i]
+                    (keyData.o.x as number[])[i] === undefined
+                      ? (keyData.o.x as number[])[0]
+                      : (keyData.o.x as number[])[i]
                   inY =
-                    keyData.i.y[i] === undefined
-                      ? keyData.i.y[0]
-                      : keyData.i.y[i]
+                    (keyData.i.y as number[])[i] === undefined
+                      ? (keyData.i.y as number[])[0]
+                      : (keyData.i.y as number[])[i]
                   fnc = BezierFactory.getBezierEasing(outX, outY, inX, inY).get
-                  keyframeMetadata.__fnct[i] = fnc
+                  ;(keyframeMetadata.__fnct as any[])[i] = fnc
                 }
               } else if (keyframeMetadata.__fnct) {
-                fnc = keyframeMetadata.__fnct
+                fnc = keyframeMetadata.__fnct as any
               } else {
-                outX = keyData.o.x
-                outY = keyData.o.y
-                inX = keyData.i.x
-                inY = keyData.i.y
+                outX = Number(keyData?.o.x)
+                outY = Number(keyData?.o.y)
+                inX = Number(keyData?.i.x)
+                inY = Number(keyData?.i.y)
                 fnc = BezierFactory.getBezierEasing(outX, outY, inX, inY).get
-                keyData.keyframeMetadata = fnc
+                keyData!.keyframeMetadata = fnc
               }
               perc = fnc((frameNum - keyTime) / (nextKeyTime - keyTime))
             }
@@ -291,17 +293,18 @@ class BaseProperty extends DynamicPropertyContainer {
           keyValue =
             keyData?.h === 1
               ? keyData.s[i]
-              : keyData.s[i] + (endValue[i] - keyData.s[i]) * perc
+              : Number(keyData?.s[i]) +
+                (Number(endValue?.[i]) - Number(keyData?.s[i])) * Number(perc)
 
           if (this.propType === 'multidimensional') {
-            newValue[i] = keyValue
+            ;(newValue as number[])[i] = keyValue
           } else {
             newValue = keyValue
           }
         }
       }
     }
-    caching.lastIndex = iterationIndex
+    caching!.lastIndex = iterationIndex
     return newValue
   }
   processEffectsSequence() {
@@ -411,7 +414,7 @@ export class MultiDimensionalProperty<
 export class KeyframedValueProperty extends BaseProperty {
   constructor(
     elem: ElementInterface,
-    data: VectorProperty<number[]>,
+    data: VectorProperty<Keyframe[]>,
     mult: null | number = null,
     container: ElementInterface | null = null
   ) {
@@ -426,7 +429,7 @@ export class KeyframedValueProperty extends BaseProperty {
       lastFrame: this.initFrame,
       lastIndex: 0,
       value: 0,
-    }
+    } as Caching
     this.k = true
     this.kf = true
     this.data = data
@@ -549,8 +552,8 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
     this._caching = {
       lastFrame: this.initFrame,
       lastIndex: 0,
-      value: createTypedArray(ArrayType.Float32, arrLen) as number[],
-    }
+      value: createTypedArray(ArrayType.Float32, arrLen),
+    } as Caching
   }
 }
 

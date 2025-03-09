@@ -9,7 +9,7 @@ import type {
   Vector2,
 } from '@/types'
 
-import dataManager from '@/dataManager'
+import DataManager from '@/DataManager'
 import { RendererType } from '@/enums'
 import {
   BaseEvent,
@@ -37,6 +37,7 @@ import ProjectInterface from '@/utils/helpers/ProjectInterface'
 import ImagePreloader from '@/utils/ImagePreloader'
 
 export default class AnimationItem extends BaseEvent {
+  public __complete?: boolean
   public animationData: Partial<AnimationData>
   public animationID: string
   public assets: LottieAsset[]
@@ -441,7 +442,7 @@ export default class AnimationItem extends BaseEvent {
       }
     }
     this.animationData.__complete = false
-    dataManager.completeAnimation(
+    DataManager.completeAnimation(
       this.animationData as AnimationData,
       this.onSegmentComplete
     )
@@ -457,7 +458,7 @@ export default class AnimationItem extends BaseEvent {
     this.timeCompleted = Number(segment?.time) * this.frameRate
     const segmentPath = `${this.path + this.fileName}_${this.segmentPos}.json`
     this.segmentPos++
-    dataManager.loadData(
+    DataManager.loadData(
       segmentPath,
       this.includeLayers.bind(this),
       function (this: AnimationItem) {
@@ -711,7 +712,7 @@ export default class AnimationItem extends BaseEvent {
         0,
         this.fileName.lastIndexOf('.json')
       )
-      dataManager.loadAnimation(
+      DataManager.loadAnimation(
         params.path,
         this.configAnimation,
         this.onSetupError
@@ -746,7 +747,7 @@ export default class AnimationItem extends BaseEvent {
     this.isSubframeEnabled = !!flag
   }
   public setupAnimation(data: AnimationData) {
-    dataManager.completeAnimation(data, this.configAnimation)
+    DataManager.completeAnimation(data, this.configAnimation)
   }
   public setVolume(val: number, name?: string) {
     if (name && this.name !== name) {
