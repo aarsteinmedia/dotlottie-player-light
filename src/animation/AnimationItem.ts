@@ -506,6 +506,7 @@ export default class AnimationItem extends BaseEvent {
     if (name && this.name !== name) {
       return
     }
+
     if (this.isPaused === true) {
       this.isPaused = false
       this.trigger('_play')
@@ -780,7 +781,7 @@ export default class AnimationItem extends BaseEvent {
   public trigger(name: AnimationEventName) {
     if (this._cbs?.[name]) {
       switch (name) {
-        case 'enterFrame':
+        case 'enterFrame': {
           this.triggerEvent(
             name,
             new BMEnterFrameEvent(
@@ -790,7 +791,17 @@ export default class AnimationItem extends BaseEvent {
               this.frameModifier
             )
           )
+          this.onEnterFrame?.call(
+            this,
+            new BMEnterFrameEvent(
+              name,
+              this.currentFrame,
+              this.totalFrames,
+              this.frameMult
+            )
+          )
           break
+        }
         case 'drawnFrame':
           this.triggerEvent(
             name,
@@ -802,7 +813,7 @@ export default class AnimationItem extends BaseEvent {
             )
           )
           break
-        case 'loopComplete':
+        case 'loopComplete': {
           this.triggerEvent(
             name,
             new BMCompleteLoopEvent(
@@ -812,51 +823,41 @@ export default class AnimationItem extends BaseEvent {
               this.frameMult
             )
           )
+          this.onLoopComplete?.call(
+            this,
+            new BMCompleteLoopEvent(
+              name,
+              this.loop,
+              this.playCount,
+              this.frameMult
+            )
+          )
           break
-        case 'complete':
+        }
+        case 'complete': {
           this.triggerEvent(name, new BMCompleteEvent(name, this.frameMult))
+          this.onComplete?.call(this, new BMCompleteEvent(name, this.frameMult))
           break
-        case 'segmentStart':
+        }
+        case 'segmentStart': {
           this.triggerEvent(
             name,
             new BMSegmentStartEvent(name, this.firstFrame, this.totalFrames)
           )
+          this.onSegmentStart?.call(
+            this,
+            new BMSegmentStartEvent(name, this.firstFrame, this.totalFrames)
+          )
           break
-        case 'destroy':
+        }
+        case 'destroy': {
           this.triggerEvent(name, new BMDestroyEvent(name, this))
+          this.onDestroy?.call(this, new BMDestroyEvent(name, this))
           break
+        }
         default:
           this.triggerEvent(name)
       }
-    }
-    if (name === 'enterFrame' && this.onEnterFrame) {
-      this.onEnterFrame.call(
-        this,
-        new BMEnterFrameEvent(
-          name,
-          this.currentFrame,
-          this.totalFrames,
-          this.frameMult
-        )
-      )
-    }
-    if (name === 'loopComplete' && this.onLoopComplete) {
-      this.onLoopComplete.call(
-        this,
-        new BMCompleteLoopEvent(name, this.loop, this.playCount, this.frameMult)
-      )
-    }
-    if (name === 'complete' && this.onComplete) {
-      this.onComplete.call(this, new BMCompleteEvent(name, this.frameMult))
-    }
-    if (name === 'segmentStart' && this.onSegmentStart) {
-      this.onSegmentStart.call(
-        this,
-        new BMSegmentStartEvent(name, this.firstFrame, this.totalFrames)
-      )
-    }
-    if (name === 'destroy' && this.onDestroy) {
-      this.onDestroy.call(this, new BMDestroyEvent(name, this))
     }
   }
   public triggerConfigError(nativeError: unknown) {
