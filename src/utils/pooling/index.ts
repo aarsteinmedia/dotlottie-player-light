@@ -33,7 +33,7 @@ export default class PoolFactory {
   }
   release<T = unknown>(element: T) {
     if (this._length === this._maxLength) {
-      this.pool = pooling.double(this.pool)
+      this.pool = Pooling.double(this.pool)
       this._maxLength *= 2
     }
     if (this._release) {
