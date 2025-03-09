@@ -10,7 +10,7 @@ import { RendererType } from '@/enums'
 import { createTag, isServer } from '@/utils'
 
 export default class AnimationManager {
-  private static _isFrozen = true
+  private static _isFrozen = false
   private static _stopped = true
   private static initTime = 0
   private static len = 0
