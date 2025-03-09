@@ -1,25 +1,35 @@
-import type { ElementInterface, PropertyHandler, ShapeData } from '@/types';
-export declare function SliderEffect(this: {
-    p: PropertyHandler;
-}, data: ShapeData, elem: ElementInterface, container?: ElementInterface): void;
-export declare function AngleEffect(this: {
-    p: PropertyHandler;
-}, data: ShapeData, elem: ElementInterface, container?: ElementInterface): void;
-export declare function ColorEffect(this: {
-    p: PropertyHandler;
-}, data: ShapeData, elem: ElementInterface, container?: ElementInterface): void;
-export declare function PointEffect(this: {
-    p: PropertyHandler;
-}, data: ShapeData, elem: ElementInterface, container?: ElementInterface): void;
-export declare function LayerIndexEffect(this: {
-    p: PropertyHandler;
-}, data: ShapeData, elem: ElementInterface, container?: ElementInterface): void;
-export declare function MaskIndexEffect(this: {
-    p: PropertyHandler;
-}, data: ShapeData, elem: ElementInterface, container?: ElementInterface): void;
-export declare function CheckboxEffect(this: {
-    p: PropertyHandler;
-}, data: ShapeData, elem: ElementInterface, container?: ElementInterface): void;
-export declare function NoValueEffect(this: {
+import type { GroupEffect } from '@/effects/EffectsManager';
+import type { EffectValue, CompInterface } from '@/types';
+import type { ValueProperty } from '@/utils/Properties';
+export declare class SliderEffect {
+    p?: ValueProperty;
+    constructor(data: EffectValue, elem: CompInterface, container: GroupEffect);
+}
+export declare class AngleEffect {
+    p?: ValueProperty;
+    constructor(data: EffectValue, elem: CompInterface, container: GroupEffect);
+}
+export declare class ColorEffect {
+    p?: ValueProperty;
+    constructor(data: EffectValue, elem: CompInterface, container: GroupEffect);
+}
+export declare class PointEffect {
+    p?: ValueProperty;
+    constructor(data: EffectValue, elem: CompInterface, container: GroupEffect);
+}
+export declare class LayerIndexEffect {
+    p?: ValueProperty;
+    constructor(data: EffectValue, elem: CompInterface, container: GroupEffect);
+}
+export declare class MaskIndexEffect {
+    p?: ValueProperty;
+    constructor(data: EffectValue, elem: CompInterface, container: GroupEffect);
+}
+export declare class CheckboxEffect {
+    p?: ValueProperty;
+    constructor(data: EffectValue, elem: CompInterface, container: GroupEffect);
+}
+export declare class NoValueEffect {
     p: object;
-}): void;
+    constructor();
+}

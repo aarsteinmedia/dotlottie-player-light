@@ -1,16 +1,20 @@
-import { RendererType } from '@/enums';
 import type AnimationItem from '@/animation/AnimationItem';
 import type { GlobalData, LottieLayer, SVGRendererConfig } from '@/types';
-export default function SVGRenderer(this: {
+import SVGCompElement from '@/elements/svg/SVGCompElement';
+import { RendererType } from '@/enums';
+import SVGRendererBase from '@/renderers/SVGRendererBase';
+export default class SVGRenderer extends SVGRendererBase {
     animationItem: AnimationItem;
-    layers: null | LottieLayer[];
-    renderedFrame: number;
-    svgElement: SVGSVGElement;
-    layerElement: SVGGElement;
-    renderConfig: SVGRendererConfig;
-    globalData: GlobalData;
-    elements: any[];
-    pendingElements: any[];
     destroyed: boolean;
+    elements: any[];
+    globalData: GlobalData;
+    layerElement: SVGGElement;
+    layers: LottieLayer[];
+    pendingElements: any[];
+    renderConfig: SVGRendererConfig;
+    renderedFrame: number;
     rendererType: RendererType;
-}, animationItem: AnimationItem, config?: SVGRendererConfig): void;
+    svgElement: SVGSVGElement;
+    constructor(animationItem: AnimationItem, config?: SVGRendererConfig);
+    createComp(data: LottieLayer): SVGCompElement;
+}

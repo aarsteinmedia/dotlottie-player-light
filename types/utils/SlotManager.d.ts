@@ -1,3 +1,6 @@
 import type { AnimationData } from '@/types';
-export declare function slotFactory(animationData: AnimationData): any;
-export default slotFactory;
+export default class SlotManager {
+    animationData: AnimationData;
+    constructor(animationData: AnimationData);
+    getProp(data: any): any;
+}

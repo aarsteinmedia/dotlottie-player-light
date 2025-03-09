@@ -1,2 +1,17 @@
-import { GradientColor } from '@/types';
-export declare function GradientProperty(this: any, elem: any, data: GradientColor, container: any): void;
+import type { GradientColor } from '@/types';
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+export default class GradientProperty extends DynamicPropertyContainer {
+    _cmdf: boolean;
+    _collapsable: boolean;
+    _hasOpacity: number;
+    _omdf: boolean;
+    c: Uint8ClampedArray;
+    data: GradientColor;
+    k: any;
+    o: Float32Array;
+    prop: any;
+    constructor(elem: any, data: GradientColor, container: any);
+    checkCollapsable(): boolean;
+    comparePoints(values: number[], points: number): boolean;
+    getValue(forceRender?: boolean): void;
+}

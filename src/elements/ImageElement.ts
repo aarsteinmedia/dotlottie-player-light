@@ -1,5 +1,5 @@
 import type {
-  ElementInterface,
+  CompInterface,
   GlobalData,
   // LottieAsset,
   LottieLayer,
@@ -14,11 +14,7 @@ import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 export default class ImageElement {
-  constructor(
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: ElementInterface
-  ) {
+  constructor(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
     if (data.refId && globalData.getAssetData) {
       this.assetData = globalData.getAssetData(data.refId)
     }
@@ -102,7 +98,7 @@ extendPrototype(
 //   constructor(
 //     data: LottieLayer,
 //     globalData: GlobalData,
-//     comp: ElementInterface
+//     comp: CompInterface
 //   ) {
 //     this.assetData = globalData.getAssetData?.(data.refId!) || null
 //     if (this.assetData && this.assetData.sid) {

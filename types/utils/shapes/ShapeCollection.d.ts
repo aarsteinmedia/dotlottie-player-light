@@ -1,9 +1,9 @@
-import type { ShapeData } from '@/types';
+import type ShapePath from '@/utils/shapes/ShapePath';
 export default class ShapeCollection {
-    constructor();
     _length: number;
     _maxLength: number;
-    shapes: ShapeData[];
-    addShape(shapeData: ShapeData): void;
+    shapes: ShapePath[];
+    constructor();
+    addShape(shapeData: ShapePath): void;
     releaseShapes(): void;
 }

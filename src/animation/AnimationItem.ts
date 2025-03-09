@@ -65,7 +65,7 @@ export default class AnimationItem extends BaseEvent {
   public playCount: number
   public playDirection: AnimationDirection
   public playSpeed: number
-  public projectInterface: null | ProjectInterface
+  public projectInterface: null | typeof ProjectInterface
 
   public renderer: null | SVGRenderer
   public segmentPos: number
@@ -116,7 +116,7 @@ export default class AnimationItem extends BaseEvent {
     this.segments = []
     this._idle = true
     this._completedLoop = false
-    this.projectInterface = ProjectInterface()
+    this.projectInterface = ProjectInterface
     this.imagePreloader = new ImagePreloader()
     this.audioController = new AudioController()
     this.markers = []

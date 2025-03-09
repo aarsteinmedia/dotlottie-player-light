@@ -71,31 +71,31 @@ export interface LayerInterFace {
   registerMaskInterface: (effect: unknown) => void
 }
 
-export interface ElementInterface extends AnimationItem {
+export interface CompInterface extends AnimationItem {
   addDynamicProperty: (prop: TextProperty | DynamicPropertyContainer) => void
   animationItem: AnimationItem
   assetData: ImageData
   baseElement: SVGElement
-  comp: ElementInterface
-  compInterface: ElementInterface
+  comp: CompInterface
+  compInterface: CompInterface
   completeLayers: boolean
   configAnimation: (animData: AnimationData) => void
   data: LottieLayer
   destroy: () => void
   dynamicProperties: unknown[]
   effectsManager: unknown
-  elements: ElementInterface[]
+  elements: CompInterface[]
   globalData: GlobalData
   hierarchy: boolean
   initBaseData: (
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: CompInterface
   ) => void
   initElement: (
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: CompInterface
   ) => void
   initFrame: () => void
   initHierarchy: (hierarchy?: unknown[]) => void
@@ -103,7 +103,7 @@ export interface ElementInterface extends AnimationItem {
   initTransform: (
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: CompInterface
   ) => void
   layerElement: SVGGElement
   layers: LottieLayer[]
@@ -309,7 +309,7 @@ export type SVGRendererConfig = BaseRendererConfig & {
 //   initElement: (
 //     data: LottieLayer,
 //     globalData: GlobalData,
-//     comp: ElementInterface
+//     comp: CompInterface
 //   ) => void
 //   renderType: RendererType
 //   textSpans: string[]
@@ -799,7 +799,7 @@ export interface ShapeDataInterface {
   /** SVG Path Data */
   caches: string[]
   container: any
-  elements: ElementInterface[]
+  elements: CompInterface[]
   lStr: string
   lvl: number
   setAsAnimated: () => void
@@ -808,7 +808,7 @@ export interface ShapeDataInterface {
     k: boolean
     kf: boolean
     _mdf: boolean
-    comp: ElementInterface
+    comp: CompInterface
     paths: ShapePath[]
   }
   styles: SVGStyleData[]

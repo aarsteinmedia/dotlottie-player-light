@@ -1,4 +1,33 @@
-declare const TransformPropertyFactory: {
-    getTransformProperty: (elem: any, data: any, container: any) => any;
-};
-export default TransformPropertyFactory;
+import type { CompInterface, Shape } from '@/types';
+import type { ValueProperty } from '@/utils/Properties';
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+import Matrix from '@/utils/Matrix';
+export default class TransformProperty extends DynamicPropertyContainer {
+    _addDynamicProperty: (prop: import("@/types").ItemData) => void;
+    _isDirty?: boolean;
+    a?: ValueProperty;
+    appliedTransformations: number;
+    autoOriented?: boolean;
+    data: Shape;
+    elem: CompInterface;
+    frameId: number;
+    o?: ValueProperty;
+    or?: ValueProperty;
+    p?: ValueProperty;
+    pre: Matrix;
+    propType: 'transform';
+    px?: ValueProperty;
+    py?: ValueProperty;
+    pz?: ValueProperty;
+    rx?: ValueProperty;
+    ry?: ValueProperty;
+    rz?: ValueProperty;
+    v: Matrix;
+    private defaultVector;
+    constructor(elem: CompInterface, data: Shape, container: CompInterface);
+    addDynamicProperty(prop: any): void;
+    applyToMatrix(mat: Matrix): void;
+    autoOrient(): void;
+    getValue(forceRender?: boolean): void;
+    precalculateMatrix(): void;
+}

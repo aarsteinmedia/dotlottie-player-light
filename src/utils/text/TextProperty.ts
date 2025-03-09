@@ -1,6 +1,6 @@
 import type {
   DocumentData,
-  ElementInterface,
+  CompInterface,
   Letter,
   LetterProperties,
   TextData,
@@ -15,12 +15,12 @@ export default class TextProperty {
   _isFirstFrame: boolean
   _mdf: boolean
   canResize: boolean
-  comp: ElementInterface['comp']
+  comp: CompInterface['comp']
   currentData: DocumentData
   data: TextData
   defaultBoxWidth: Vector2 = [0, 0]
   effectsSequence: any[]
-  elem: ElementInterface
+  elem: CompInterface
   frameId?: number
   keysIndex: number
   kf: boolean
@@ -29,7 +29,7 @@ export default class TextProperty {
   pv: DocumentData | string
   v: DocumentData | string
 
-  constructor(elem: ElementInterface, data: TextData) {
+  constructor(elem: CompInterface, data: TextData) {
     this._frameId = initialDefaultFrame
     this.pv = ''
     this.v = ''
@@ -408,7 +408,7 @@ export default class TextProperty {
             (letterData.n || letterData.val === ' ' || i === len - 1)) ||
           (based === 4 && (letterData.n || i === len - 1))
         ) {
-          if (animatorData.s?.rn === 1) {
+          if (animatorData.s.rn === 1) {
             indexes.push(ind)
           }
           ind += 1

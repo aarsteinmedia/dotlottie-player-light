@@ -1,2 +1,34 @@
-import type { ElementInterface, PropertyHandler, TextData } from '@/types';
-export default function TextProperty(this: PropertyHandler, elem: ElementInterface, data: TextData): void;
+import type { DocumentData, CompInterface, LetterProperties, TextData, Vector2 } from '@/types';
+export default class TextProperty {
+    _frameId: number;
+    _isFirstFrame: boolean;
+    _mdf: boolean;
+    canResize: boolean;
+    comp: CompInterface['comp'];
+    currentData: DocumentData;
+    data: TextData;
+    defaultBoxWidth: Vector2;
+    effectsSequence: any[];
+    elem: CompInterface;
+    frameId?: number;
+    keysIndex: number;
+    kf: boolean;
+    lock?: boolean;
+    minimumFontSize: number;
+    pv: DocumentData | string;
+    v: DocumentData | string;
+    constructor(elem: CompInterface, data: TextData);
+    addEffect(effectFunction: unknown): void;
+    buildFinalText(text: string): string[];
+    canResizeFont(_canResize: boolean): void;
+    completeTextData(documentData: DocumentData): void;
+    copyData(obj: DocumentData, data?: DocumentData | LetterProperties): DocumentData;
+    getKeyframeValue(): DocumentData | LetterProperties | undefined;
+    getValue(_finalValue: unknown): void;
+    recalculate(index: number): void;
+    searchKeyframes(): boolean;
+    searchProperty(): boolean;
+    setCurrentData(data: DocumentData): void;
+    setMinimumFontSize(_fontValue: number): void;
+    updateDocumentData(newData: DocumentData, indexFromProps: number): void;
+}

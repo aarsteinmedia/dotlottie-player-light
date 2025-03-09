@@ -1,80 +1,68 @@
-// import type AnimationItem from '@/animation/AnimationItem'
-import type { ElementInterface } from '@/types'
+import type { CompInterface } from '@/types'
 
-// TODO: Fix this
-// class ProjectInterface {
-//   static compositions: ElementInterface[] = []
-//   static currentFrame = 0
-//   constructor(name?: string) {
-//     let i = 0
-//     const len = ProjectInterface.compositions.length
-//     while (i < len) {
-//       if (
-//         ProjectInterface.compositions[i].data &&
-//         ProjectInterface.compositions[i].data.nm === name
-//       ) {
-//         if (
-//           ProjectInterface.compositions[i].prepareFrame &&
-//           ProjectInterface.compositions[i].data.xt
-//         ) {
-//           ProjectInterface.compositions[i].prepareFrame!(
-//             ProjectInterface.currentFrame
-//           )
-//         }
-//         ProjectInterface.compositions[i].compInterface
-//         break
-//       }
-//       i++
-//     }
-//   }
-
-//   static registerComposition(comp: ElementInterface) {
-//     ProjectInterface.compositions.push(comp)
-//   }
-// }
-
-// interface ProjectInterface extends AnimationItem {}
-
-const ProjectInterface = (() => {
-  /**
-   *
-   */
-  function registerComposition(this: any, comp: ElementInterface) {
+export default class ProjectInterface {
+  compInterface: CompInterface | null = null
+  compositions: CompInterface[] = []
+  currentFrame = 0
+  constructor(name?: string) {
+    let i = 0
+    const len = this.compositions.length
+    while (i < len) {
+      if (this.compositions[i].data && this.compositions[i].data.nm === name) {
+        if (this.compositions[i].prepareFrame && this.compositions[i].data.xt) {
+          this.compositions[i].prepareFrame?.(this.currentFrame)
+        }
+        this.compInterface = this.compositions[i].compInterface
+        break
+      }
+      i++
+    }
+  }
+  registerComposition(comp: CompInterface) {
     this.compositions.push(comp)
   }
+}
 
-  return () => {
-    /**
-     *
-     */
-    function _thisProjectFunction(this: any, name: string) {
-      let i = 0
-      const len = this.compositions.length
-      while (i < len) {
-        if (
-          this.compositions[i].data &&
-          this.compositions[i].data.nm === name
-        ) {
-          if (
-            this.compositions[i].prepareFrame &&
-            this.compositions[i].data.xt
-          ) {
-            this.compositions[i].prepareFrame(this.currentFrame)
-          }
-          return this.compositions[i].compInterface
-        }
-        i++
-      }
-      return null
-    }
+// const ProjectInterface = (() => {
+//   /**
+//    *
+//    */
+//   function registerComposition(this: any, comp: CompInterface) {
+//     this.compositions.push(comp)
+//   }
 
-    _thisProjectFunction.compositions = [] as any[]
-    _thisProjectFunction.currentFrame = 0
+//   return () => {
+//     /**
+//      *
+//      */
+//     function _thisProjectFunction(this: any, name: string) {
+//       let i = 0
+//       const len = this.compositions.length
+//       while (i < len) {
+//         if (
+//           this.compositions[i].data &&
+//           this.compositions[i].data.nm === name
+//         ) {
+//           if (
+//             this.compositions[i].prepareFrame &&
+//             this.compositions[i].data.xt
+//           ) {
+//             this.compositions[i].prepareFrame(this.currentFrame)
+//           }
+//           return this.compositions[i].compInterface
+//         }
+//         i++
+//       }
+//       return null
+//     }
 
-    _thisProjectFunction.registerComposition = registerComposition
+//     _thisProjectFunction.compositions = [] as any[]
+//     _thisProjectFunction.currentFrame = 0
 
-    return _thisProjectFunction
-  }
-})()
+//     _thisProjectFunction.registerComposition = registerComposition
 
-export default ProjectInterface
+//     return _thisProjectFunction
+//   }
+// })()
+
+// export default ProjectInterface

@@ -1,7 +1,7 @@
 /* eslint-disable max-depth */
 import type {
   Caching,
-  ElementInterface,
+  CompInterface,
   Keyframe,
   Shape,
   Vector2,
@@ -20,7 +20,7 @@ class BaseProperty extends DynamicPropertyContainer {
   _caching?: Caching
   _isFirstFrame?: boolean
   _placeholder?: boolean
-  comp?: ElementInterface
+  comp?: CompInterface
   data?: any
   e?: any
   effectsSequence?: any
@@ -354,10 +354,10 @@ class BaseProperty extends DynamicPropertyContainer {
 }
 export class ValueProperty extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: CompInterface,
     data: VectorProperty,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: CompInterface | null = null
   ) {
     super()
     this.propType = 'unidimensional'
@@ -382,10 +382,10 @@ export class MultiDimensionalProperty<
   T extends Array<any> = Vector2,
 > extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: CompInterface,
     data: VectorProperty<T>,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: CompInterface | null = null
   ) {
     super()
     this.propType = 'multidimensional'
@@ -413,10 +413,10 @@ export class MultiDimensionalProperty<
 }
 export class KeyframedValueProperty extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: CompInterface,
     data: VectorProperty<Keyframe[]>,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: CompInterface | null = null
   ) {
     super()
     this.propType = 'unidimensional'
@@ -447,10 +447,10 @@ export class KeyframedValueProperty extends BaseProperty {
 
 export class KeyframedMultidimensionalProperty extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: CompInterface,
     data: VectorProperty<any[]>,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: CompInterface | null = null
   ) {
     super()
     this.propType = 'multidimensional'

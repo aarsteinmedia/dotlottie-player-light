@@ -2,17 +2,17 @@
 import type FrameElement from '@/elements/helpers/FrameElement'
 import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import type RenderableElement from '@/elements/helpers/RenderableElement'
-import type TransformElement from '@/elements/helpers/TransformElement'
+// import type TransformElement from '@/elements/helpers/TransformElement'
 import type ISolidElement from '@/elements/SolidElement'
 import type {
   DocumentData,
   GlobalData,
   LottieLayer,
   Shape,
-  ShapeData,
   Vector3,
 } from '@/types'
 import type Matrix from '@/utils/Matrix'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { buildShapeString } from '@/utils'
 import LetterProps from '@/utils/text/LetterProps'
@@ -79,13 +79,13 @@ class TextElement {
 
   createPathShape(matrixHelper: Matrix, shapes: Shape[]) {
     const jLen = shapes.length
-    let pathNodes: ShapeData
+    let pathNodes: ShapePath
     let shapeStr = ''
     for (let j = 0; j < jLen; j++) {
       if (shapes[j].ty !== 'sh' || !shapes[j].ks?.k) {
         continue
       }
-      pathNodes = shapes[j].ks!.k
+      pathNodes = shapes[j].ks!.k as ShapePath
       shapeStr += buildShapeString(
         pathNodes,
         pathNodes.i.length,
@@ -138,7 +138,7 @@ class TextElement {
 
 interface TextElement
   extends FrameElement,
-    TransformElement,
+    // TransformElement,
     RenderableElement,
     RenderableDOMElement,
     ISolidElement,

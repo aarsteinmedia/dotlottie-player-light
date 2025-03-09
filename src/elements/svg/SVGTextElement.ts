@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable max-depth */
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+import type { CompInterface, GlobalData, LottieLayer } from '@/types'
 import type Matrix from '@/utils/Matrix'
 
 import BaseElement from '@/elements/BaseElement'
@@ -33,11 +33,7 @@ class SVGTextLottieElement {
   private emptyShapeData = {
     shapes: [],
   }
-  constructor(
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: ElementInterface
-  ) {
+  constructor(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
     this.textSpans = []
     this.renderType = RendererType.SVG
     this.initElement(data, globalData, comp)
@@ -61,11 +57,13 @@ class SVGTextLottieElement {
       this.layerElement.setAttribute('stroke-width', documentData.sw)
     }
     this.layerElement.setAttribute('font-size', documentData.finalSize)
-    const fontData = this.globalData.fontManager.getFontByName(documentData.f)
-    if (fontData.fClass) {
+    const fontData = this.globalData.fontManager?.getFontByName(documentData.f)
+    if (fontData?.fClass) {
       this.layerElement.setAttribute('class', fontData.fClass)
     } else {
-      this.layerElement.setAttribute('font-family', fontData.fFamily)
+      if (fontData?.fFamily) {
+        this.layerElement.setAttribute('font-family', fontData.fFamily)
+      }
       const fWeight = documentData.fWeight
       const fStyle = documentData.fStyle
       this.layerElement.setAttribute('font-style', fStyle)
@@ -74,7 +72,7 @@ class SVGTextLottieElement {
     this.layerElement.setAttribute('aria-label', documentData.t)
 
     const letters = documentData.l || []
-    const usesGlyphs = !!this.globalData.fontManager.chars
+    const usesGlyphs = !!this.globalData.fontManager?.chars
     len = letters.length
 
     let tSpan: SVGTSpanElement

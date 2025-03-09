@@ -1,13 +1,19 @@
 import type { GlobalData, LottieLayer, Mask } from '@/types';
-export default function MaskElement(this: {
+import type ShapePath from '@/utils/shapes/ShapePath';
+export default class MaskElement {
     data: LottieLayer;
     element: any;
     globalData: GlobalData;
-    storedData: unknown[];
-    masksProperties: LottieLayer['masksProperties'];
     maskElement: SVGElement | null;
-    viewData: any[];
+    masksProperties: null | Mask[];
     solidPath: string;
-    createLayerSolidPath: () => string;
-    drawPath: (mask: Mask, b: any, c: any) => void;
-}, data: LottieLayer, element: any, globalData: GlobalData): void;
+    storedData: any[];
+    viewData: any[];
+    constructor(data: LottieLayer, element: any, globalData: GlobalData);
+    createLayerSolidPath(): string;
+    destroy(): void;
+    drawPath(pathData: null | Mask, pathNodes: ShapePath, viewData: any): void;
+    getMaskelement(): SVGElement | null;
+    getMaskProperty(pos: number): any;
+    renderFrame(isFirstFrame?: boolean): void;
+}

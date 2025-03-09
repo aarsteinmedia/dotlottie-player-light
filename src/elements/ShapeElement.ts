@@ -1,10 +1,10 @@
-import type { Shape } from '@/types'
+import type { CompInterface, Shape } from '@/types'
 
 import { ProcessedElement } from '@/elements/helpers/shapes'
 
 class ShapeElement {
   processedElements!: ProcessedElement[]
-  addProcessedElement(elem: any, pos: number) {
+  addProcessedElement(elem: CompInterface, pos: number) {
     const elements = this.processedElements
     let i = elements.length
     while (i) {

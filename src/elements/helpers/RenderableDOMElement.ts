@@ -1,4 +1,4 @@
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+import type { CompInterface, GlobalData, LottieLayer } from '@/types'
 
 import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
@@ -25,11 +25,7 @@ class RenderableDOMElement {
       this.hidden = true
     }
   }
-  initElement(
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: ElementInterface
-  ) {
+  initElement(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
     this.initFrame()
     this.initBaseData(data, globalData, comp)
     this.initTransform()

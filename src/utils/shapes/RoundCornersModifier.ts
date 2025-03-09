@@ -1,3 +1,4 @@
+import type { CompInterface, LottieLayer } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
@@ -9,7 +10,7 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 export default class RoundCornersModifier extends ShapeModifier {
   getValue!: () => void
   rd?: ValueProperty
-  initModifierProperties(elem: any, data: any) {
+  initModifierProperties(elem: CompInterface, data: LottieLayer) {
     this.getValue = this.processKeys
     this.rd = PropertyFactory.getProp(elem, data.r, 0, null, this)
     this._isAnimated = !!this.rd?.effectsSequence.length

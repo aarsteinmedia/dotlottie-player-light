@@ -6,7 +6,7 @@ import type {
 
 import { lineCapEnum, lineJoinEnum, RendererType, ShapeType } from '@/enums'
 import {
-  ElementInterface,
+  CompInterface,
   LottieLayerData,
   Shape,
   ShapeDataProperty,
@@ -73,7 +73,7 @@ export class SVGShapeData {
 
 export class SVGTransformData {
   _isAnimated: boolean
-  elements: ElementInterface[]
+  elements: CompInterface[]
   transform: Transformer
   constructor(
     mProps: Transformer['mProps'],
@@ -247,7 +247,7 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
 export class SVGGradientStrokeStyleData extends SVGGradientFillStyleData {
   d: DashProperty
   w?: ValueProperty
-  constructor(elem: ElementInterface, data: Shape, styleData: SVGStyleData) {
+  constructor(elem: CompInterface, data: Shape, styleData: SVGStyleData) {
     super(elem, data, styleData)
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
@@ -265,7 +265,7 @@ export class SVGStrokeStyleData extends DynamicPropertyContainer {
   o?: ValueProperty
   style: SVGStyleData
   w?: ValueProperty
-  constructor(elem: ElementInterface, data: Shape, styleObj: SVGStyleData) {
+  constructor(elem: CompInterface, data: Shape, styleObj: SVGStyleData) {
     super()
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
@@ -283,7 +283,7 @@ export class SVGFillStyleData extends DynamicPropertyContainer {
   getValue: () => void
   o?: ValueProperty
   style: SVGStyleData
-  constructor(elem: ElementInterface, data: Shape, styleObj: SVGStyleData) {
+  constructor(elem: CompInterface, data: Shape, styleObj: SVGStyleData) {
     super()
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
@@ -297,7 +297,7 @@ export class SVGNoStyleData extends DynamicPropertyContainer {
   getValue: () => void
   style: SVGStyleData
   constructor(
-    elem: ElementInterface,
+    elem: CompInterface,
     _data: SVGShapeData,
     styleObj: SVGStyleData
   ) {

@@ -1,5 +1,5 @@
 import type { SVGStrokeStyleData } from '@/elements/helpers/shapes'
-import type { ElementInterface, StrokeData } from '@/types'
+import type { CompInterface, StrokeData } from '@/types'
 
 import { ArrayType, RendererType } from '@/enums'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
@@ -11,12 +11,12 @@ export default class DashProperty extends DynamicPropertyContainer {
   dashoffset: Float32Array
   dashStr: string
   dataProps: StrokeData[]
-  elem: ElementInterface
+  elem: CompInterface
   frameId: number
   k: boolean
   renderer: RendererType
   constructor(
-    elem: ElementInterface,
+    elem: CompInterface,
     data: StrokeData[],
     renderer: RendererType,
     container: SVGStrokeStyleData

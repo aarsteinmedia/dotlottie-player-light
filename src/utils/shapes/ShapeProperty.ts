@@ -1,4 +1,10 @@
-import type { ElementInterface, LottieComp, Shape, StrokeData } from '@/types'
+import type {
+  CompInterface,
+  LottieComp,
+  Mask,
+  Shape,
+  StrokeData,
+} from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
@@ -21,8 +27,8 @@ export default class ShapePropertyFactory {
   }
 
   static getShapeProp(
-    elem: ElementInterface,
-    data: Shape,
+    elem: CompInterface,
+    data: Shape | Mask,
     type: number,
     _?: unknown
   ) {
@@ -565,7 +571,7 @@ export class ShapeProperty {
   public container: unknown
   public data: Shape
   public effectsSequence: unknown[]
-  public elem: ElementInterface
+  public elem: CompInterface
   public getValue: () => void
   public interpolateShape: (
     frame: number,
@@ -581,7 +587,7 @@ export class ShapeProperty {
   public reset
   public setVValue: (shape: ShapePath) => void
   public v: ShapePath
-  constructor(elem: ElementInterface, data: Shape, type: number) {
+  constructor(elem: CompInterface, data: Shape, type: number) {
     this.propType = 'shape'
     this.comp = elem.comp
     this.container = elem

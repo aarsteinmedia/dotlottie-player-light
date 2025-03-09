@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   AnimatedProperty,
-  ElementInterface,
+  CompInterface,
   GlobalData,
   LottieLayer,
 } from '@/types'
@@ -23,17 +23,17 @@ class SVGCompElement extends SVGBaseElement {
   initElement!: (
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: CompInterface
   ) => void
   layers: LottieLayer[]
   pendingElements: any[]
   supports3d: boolean
   tm?: KeyframedValueProperty
   constructor(
-    // this: ElementInterface,
+    // this: CompInterface,
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: CompInterface
   ) {
     super()
     this.layers = data.layers!

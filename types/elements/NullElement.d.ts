@@ -1,2 +1,10 @@
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types';
-export default function NullElement(this: ElementInterface, data: LottieLayer, globalData: GlobalData, comp: any): void;
+import type { GlobalData, LottieLayer } from '@/types';
+export default class NullElement {
+    constructor(data: LottieLayer, globalData: GlobalData, comp: any);
+    destroy(): void;
+    getBaseElement(): null;
+    hide(): void;
+    prepareFrame(num: number): void;
+    renderFrame(): void;
+    sourceRectAtTime(): void;
+}

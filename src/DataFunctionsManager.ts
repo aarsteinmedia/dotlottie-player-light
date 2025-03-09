@@ -4,7 +4,7 @@ import type {
   AnimationData,
   Characacter,
   DocumentData,
-  // ElementInterface,
+  // CompInterface,
   LottieAsset,
   LottieLayer,
   LottieLayerData,

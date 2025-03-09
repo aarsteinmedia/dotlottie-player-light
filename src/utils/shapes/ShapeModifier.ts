@@ -1,4 +1,4 @@
-import type { ElementInterface } from '@/types'
+import type { CompInterface } from '@/types'
 // import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { type SVGShapeData } from '@/elements/helpers/shapes'
@@ -9,7 +9,7 @@ import { type ShapeProperty } from '@/utils/shapes/ShapeProperty'
 
 class ShapeModifier extends DynamicPropertyContainer {
   closed!: boolean
-  elem!: ElementInterface
+  elem!: CompInterface
   frameId?: number
   k!: boolean
   shapes!: ShapeProperty[]
@@ -30,7 +30,7 @@ class ShapeModifier extends DynamicPropertyContainer {
       }
     }
   }
-  init(elem: ElementInterface, data: any, _a: any, _b: any) {
+  init(elem: CompInterface, data: any, _a: any, _b: any) {
     this.shapes = []
     this.elem = elem
     this.initDynamicPropertyContainer(elem)

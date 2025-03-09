@@ -1,6 +1,8 @@
 import ShapeCollection from '@/utils/shapes/ShapeCollection';
-declare const shapeCollectionPool: {
-    newShapeCollection: () => ShapeCollection;
-    release: (shapeCollection: ShapeCollection) => void;
-};
-export default shapeCollectionPool;
+export default class ShapeCollectionPool {
+    private static _length;
+    private static _maxLength;
+    private static pool;
+    static newShapeCollection(): ShapeCollection;
+    static release(shapeCollection: ShapeCollection): void;
+}

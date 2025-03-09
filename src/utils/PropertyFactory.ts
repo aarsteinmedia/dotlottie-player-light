@@ -1,4 +1,4 @@
-import type { ElementInterface, Keyframe, VectorProperty } from '@/types'
+import type { CompInterface, Keyframe, VectorProperty } from '@/types'
 
 import {
   KeyframedMultidimensionalProperty,
@@ -10,7 +10,7 @@ import {
 
 export default class PropertyFactory {
   static getProp = (
-    elem: ElementInterface,
+    elem: CompInterface,
     dataFromProps?: VectorProperty<number | number[]>,
     type?: number,
     mult?: null | number,

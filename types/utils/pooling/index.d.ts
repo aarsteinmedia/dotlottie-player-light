@@ -1,15 +1,14 @@
-export declare const poolFactory: <Release = unknown>(initialLength: number, _create: () => void, _release?: (el: Release) => void) => {
-    newElement: <T = unknown>() => T;
-    release: <T extends Release>(element: T) => void;
-}, pointPool: {
-    newElement: <T = unknown>() => T;
-    release: <T extends unknown>(element: T) => void;
-}, pooling: {
-    double: (arr: unknown[]) => unknown[];
-}, bezierLengthPool: {
-    newElement: <T = unknown>() => T;
-    release: <T extends unknown>(element: T) => void;
-}, segmentsLengthPool: {
-    newElement: <T = unknown>() => T;
-    release: <T extends any>(element: T) => void;
-};
+export default class PoolFactory {
+    private _create;
+    private _length;
+    private _maxLength;
+    private _release?;
+    private pool;
+    constructor(initialLength: number, _create: () => void, _release?: <Release = unknown>(el: Release) => void);
+    newElement<T = unknown>(): T;
+    release<T = unknown>(element: T): void;
+}
+export declare class Pooling {
+    static double(arr: unknown[]): unknown[];
+}
+export declare const pointPool: PoolFactory, bezierLengthPool: PoolFactory, segmentsLengthPool: PoolFactory;

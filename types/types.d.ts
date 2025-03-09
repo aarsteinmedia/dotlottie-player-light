@@ -1,26 +1,38 @@
 import 'react/jsx-runtime';
 import 'react/jsx-dev-runtime';
-import type { Plugin } from '@custom-elements-manifest/analyzer';
-import { RendererType, type PlayMode, type ShapeType } from '@/enums';
-import type DotLottiePlayer from '@/elements/DotLottiePlayer';
 import type AnimationItem from '@/animation/AnimationItem';
-import type PropertyFactory from '@/utils/PropertyFactory';
+import type DotLottiePlayer from '@/elements/DotLottiePlayer';
+import type { SVGStyleData } from '@/elements/helpers/shapes';
 import type PolynomialBezier from '@/elements/PolynomialBezier';
+import type { RendererType, PlayMode, ShapeType } from '@/enums';
 import type FontManager from '@/utils/FontManager';
-import type ProjectInterface from '@/utils/helpers/ProjectInterface';
+import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
 import type Matrix from '@/utils/Matrix';
+import type ShapePath from '@/utils/shapes/ShapePath';
+import type SlotManager from '@/utils/SlotManager';
+import type TextProperty from '@/utils/text/TextProperty';
+import type { Plugin } from '@custom-elements-manifest/analyzer';
+import TextAnimatorDataProperty from './utils/text/TextAnimatorDataProperty';
 export type AnimationDirection = 1 | -1;
-export type AnimationEventName = 'drawnFrame' | 'enterFrame' | 'loopComplete' | 'complete' | 'segmentStart' | 'destroy' | 'config_ready' | 'data_ready' | 'DOMLoaded' | 'error' | 'data_failed' | 'loaded_images' | '_play' | '_pause' | '_idle' | '_active';
+export type AnimationEventName = 'drawnFrame' | 'enterFrame' | 'loopComplete' | 'complete' | 'segmentStart' | 'destroy' | 'config_ready' | 'data_ready' | 'DOMLoaded' | 'error' | 'data_failed' | 'loaded_images' | '_play' | '_pause' | '_idle' | '_active' | 'configError' | 'renderFrameError';
 export type AnimationEventCallback<T = unknown> = (args: T) => void;
 export interface ShapeGroupHandler {
+    gr: SVGElement;
     it: unknown[];
     prevViewData: unknown[];
-    gr: SVGElement;
+}
+export interface SVGGeometry {
+    cx: number;
+    cy: number;
+    height: number;
+    width: number;
 }
 export interface Transformer {
     container: unknown;
     mProps: {
         dynamicProperties: unknown[];
+        v: Matrix;
+        _mdf?: boolean;
     };
     op: {
         effectsSequence: unknown[];
@@ -30,101 +42,129 @@ export interface LayerInterFace {
     registerEffectsInterface: (effect: unknown) => void;
     registerMaskInterface: (effect: unknown) => void;
 }
-export interface ElementInterface {
+export interface CompInterface extends AnimationItem {
+    addDynamicProperty: (prop: TextProperty | DynamicPropertyContainer) => void;
     animationItem: AnimationItem;
+    assetData: ImageData;
+    baseElement: SVGElement;
+    comp: CompInterface;
+    compInterface: CompInterface;
+    completeLayers: boolean;
+    configAnimation: (animData: AnimationData) => void;
     data: LottieLayer;
+    destroy: () => void;
+    dynamicProperties: unknown[];
+    effectsManager: unknown;
+    elements: CompInterface[];
     globalData: GlobalData;
-    elements: ElementInterface[];
+    hierarchy: boolean;
+    initBaseData: (data: LottieLayer, globalData: GlobalData, comp: CompInterface) => void;
+    initElement: (data: LottieLayer, globalData: GlobalData, comp: CompInterface) => void;
+    initFrame: () => void;
+    initHierarchy: (hierarchy?: unknown[]) => void;
+    initItems: () => void;
+    initTransform: (data: LottieLayer, globalData: GlobalData, comp: CompInterface) => void;
     layerElement: SVGGElement;
     layers: LottieLayer[];
+    maskedElement: SVGGElement;
+    maskManager: unknown;
+    matteElement: SVGGElement;
     pendingElements: unknown[];
+    prepareFrame?: (val: number) => void;
     renderConfig: SVGRendererConfig;
     renderedFrame: number;
     rendererType: RendererType;
-    svgElement?: SVGSVGElement;
-    baseElement: SVGElement;
-    comp: ElementInterface;
-    dynamicProperties: unknown[];
-    effectsManager: unknown;
-    hierarchy: boolean;
-    maskManager: unknown;
-    maskedElement: SVGGElement;
-    matteElement: SVGGElement;
+    searchExtraCompositions: (assets: LottieAsset[]) => void;
     supports3d: boolean;
-    completeLayers: boolean;
-    initElement: (data: LottieLayer, globalData: GlobalData, comp: ElementInterface) => void;
-    initBaseData: (data: LottieLayer, globalData: GlobalData, comp: ElementInterface) => void;
-    initTransform: (data: LottieLayer, globalData: GlobalData, comp: ElementInterface) => void;
-    initHierarchy: (hierarchy?: unknown[]) => void;
-    initFrame: () => void;
+    svgElement?: SVGSVGElement;
+    textProperty?: {
+        currentData: {
+            l: number[];
+        };
+    };
     tm: number;
 }
-export interface PropertyHandler {
-    propType: 'multidimensional' | 'uniidimensional';
-    effectsSequence: any;
-    data: any;
-    keyframes: any[];
-    keyframesMetadata: unknown[];
-    offsetTime: number;
-    k: boolean;
-    kf: boolean;
-    _isFirstFrame: boolean;
-    mult: number;
-    elem: any;
-    container?: HTMLElement;
-    comp: any;
-    getValue: (val: unknown) => unknown;
-    setVValue: (val: any) => void;
-    interpolateValue: (frame: number, caching: any) => void;
-    searchProperty: () => boolean;
-    copyData: (data?: Partial<DocumentData>, b?: any) => void;
-    completeTextData: (data?: Partial<DocumentData>) => void;
-    frameId: number;
-    v: string | number[];
-    pv: string | number[];
-    _caching: {
-        lastFrame: number;
-        lastIndex: number;
-        value: number[];
-    };
-    _frameId?: number;
-    _mdf?: boolean;
-    keysIndex?: number;
-    addEffect: (effect: Effect) => void;
-    canResize?: boolean;
-    minimumFontSize?: number;
-    currentData?: Partial<DocumentData>;
-    defaultBoxWidth?: number;
+export interface ProcessedElements {
+    elem: LottieLayerData;
     pos: number;
 }
-export interface StyleHandler {
-    data: Shape;
-    type: ShapeType;
-    d: string;
-    lvl: number;
+export interface AnimatedContent {
+    data: LottieLayerData;
+    element: ShapeDataInterface;
+    fn: null | ((styleData: SVGStyleData, itemData: ItemData | ShapeDataInterface, isFirstFrame: boolean) => void);
+}
+export interface ItemsData {
+    gr: SVGGElement;
+    it: ShapeDataInterface[];
+    prevViewData: ItemsData[];
+}
+export interface ItemData {
+    _caching: Caching;
+    _frameId?: number;
+    _isFirstFrame: boolean;
+    _mdf?: boolean;
+    addEffect: (effect: Effect) => void;
+    c: ItemData;
+    canResize?: boolean;
+    comp: any;
+    completeTextData: (data?: Partial<DocumentData>) => void;
+    container?: unknown;
+    copyData: (data?: Partial<DocumentData>, b?: any) => void;
+    currentData?: Partial<DocumentData>;
+    d: ItemData;
+    dashoffset: Float32Array;
+    dashStr: string;
+    data: any;
+    defaultBoxWidth?: number;
+    e: any;
+    effectsSequence: any;
+    elem: any;
+    frameId: number;
+    g: any;
+    getValue: (val?: unknown) => unknown;
+    gf: SVGElement;
+    interpolateValue: (frame: number, caching: any) => void;
+    k: boolean;
+    keyframes: number[];
+    keyframesMetadata: unknown[];
+    keysIndex?: number;
+    kf: boolean;
+    minimumFontSize?: number;
+    mult: number;
+    o: ItemData;
+    offsetTime: number;
+    pos: number;
+    propType: 'multidimensional' | 'unidimensional';
+    pv: string | number[] | number;
+    s: any;
+    searchProperty: () => boolean;
+    setVValue: (val: any) => void;
+    style: StyleData;
+    v: string | number[] | number;
+    vel: number | number[];
+    w: ItemData;
+}
+export interface StyleData {
     _mdf: boolean;
     closed: boolean;
-    pElem: SVGPathElement;
-    msElem: unknown;
-}
-export interface ShapeHandler {
-    caches: unknown[];
-    styles: unknown[];
-    elements: ElementInterface[];
-    transform: Transformer;
-    transformers: Transformer[];
-    lStr: string;
-    sh: Shape['ks'];
+    d: string;
+    data: Shape;
+    hd?: boolean;
     lvl: number;
-    _isAnimated?: boolean;
+    msElem: SVGElement | null;
+    pElem: SVGPathElement;
+    pt?: AnimatedProperty;
+    t: number;
+    ty: ShapeType;
+    type: ShapeType;
 }
 export interface AnimationEvents {
-    DOMLoaded: undefined;
     complete: BMCompleteEvent;
     config_ready: undefined;
     data_failed: undefined;
     data_ready: undefined;
     destroy: BMDestroyEvent;
+    DOMLoaded: undefined;
     drawnFrame: BMEnterFrameEvent;
     enterFrame: BMEnterFrameEvent;
     error: undefined;
@@ -160,11 +200,6 @@ export type BaseRendererConfig = {
     imagePreserveAspectRatio?: string;
     className?: string;
 };
-export interface Process {
-    [key: string]: unknown;
-    onError(): void;
-    onComplete<T>(data: T): void;
-}
 export type FilterSizeConfig = {
     width: string;
     height: string;
@@ -176,12 +211,12 @@ export interface Letter {
     an: number;
     animatorJustifyOffset: number;
     anIndexes: number[];
+    extra?: number;
+    ind?: number;
     l: number;
-    val: string;
     line: number;
     n: boolean;
-    ind?: number;
-    extra?: number;
+    val: string;
 }
 export type SVGRendererConfig = BaseRendererConfig & {
     title?: string;
@@ -199,11 +234,6 @@ export type SVGRendererConfig = BaseRendererConfig & {
     height?: number;
     id?: string;
 };
-export interface TextHandler {
-    textSpans: string[];
-    renderType: RendererType;
-    initElement: (data: LottieLayer, globalData: GlobalData, comp: ElementInterface) => void;
-}
 export type CanvasRendererConfig = BaseRendererConfig & {
     clearCanvas?: boolean;
     context?: CanvasRenderingContext2D;
@@ -234,109 +264,125 @@ export type AnimationConfiguration<T extends RendererType = RendererType.SVG> = 
     path?: string;
     prerender?: boolean;
 };
-export interface Constructor<T = unknown> {
-    prototype: T;
-}
+export type Constructor = new (...args: any[]) => object;
 type BoolInt = 0 | 1;
-export interface ShapeData {
-    i: (Vector2 | null)[];
-    o: (Vector2 | null)[];
-    v: (Vector2 | null)[];
-    c: 0 | 1 | boolean;
-    _length?: number;
-    length(): number;
-    setLength(length: number): void;
-    setPathData(data: any, length: number): void;
-    setTripleAt(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
-    setXYAt(a: number, b: number, c: string, d: number): void;
-}
 export interface GradientColor {
-    p: number;
     k: {
         a: 1 | 0;
         k: {
             s: number[];
         }[];
     };
+    p: number;
+}
+export interface PathData {
+    _length: number;
+    _maxLength: number;
+    c: boolean;
+    i: Float32Array;
+    o: Float32Array;
+    v: Float32Array;
+}
+export interface ShapeDataProperty {
+    _mdf?: boolean;
+    a: 1 | 0;
+    ix?: number;
+    k: ShapePath | ShapePath[];
+    paths: {
+        _length: number;
+        _maxLength: number;
+        shapes: PathData[];
+    };
+}
+export interface StrokeData {
+    n: 'o' | 'd' | 'g';
+    nm?: 'offset' | 'dash' | 'gap';
+    p: ItemData;
+    v?: VectorProperty;
+}
+interface ShapeColor {
+    a: 1 | 0;
+    ix?: number;
+    k: number | number[] | ShapeColorValue[];
+}
+export interface ShapeColorValue {
+    e: Vector4;
+    i: Vector4;
+    s: Vector4;
 }
 export interface Shape {
-    closed?: boolean;
-    ind?: number;
-    ix?: number;
-    ln?: string;
-    ty: ShapeType;
-    it?: Omit<Shape, 'np'>[];
+    _length: number;
+    _processed?: boolean;
+    _render?: boolean;
     a?: VectorProperty<Vector1 | Vector2 | Vector3>;
-    h?: GenericAnimatedProperty;
-    p?: VectorProperty<Vector2 | Vector3>;
-    s?: VectorProperty<Vector2 | Vector3>;
+    bm?: number;
+    c?: ShapeColor;
+    cix?: number;
+    cl?: string;
+    closed?: boolean;
+    d?: StrokeData[];
     e?: VectorProperty<Vector2>;
-    t?: number;
     g?: GradientColor;
-    sk?: VectorProperty;
-    sa?: VectorProperty;
-    c?: {
-        a: 1 | 0;
-        k: number | number[] | {
-            i: Vector4;
-            s: Vector4;
-            e: Vector4;
-        }[];
-        ix?: number;
-    };
-    o?: VectorProperty;
-    m?: 1 | 2;
-    r?: number | VectorProperty;
+    h?: GenericAnimatedProperty;
+    hd?: boolean;
+    ind?: number;
+    it?: Shape[];
+    ix?: number;
+    ks?: ShapeDataProperty;
     lc?: 1 | 2 | 3;
     lj?: 1 | 2 | 3;
-    w?: VectorProperty;
+    ln?: string;
+    m?: 1 | 2;
     ml?: number;
-    d?: {
-        n: 'o' | 'd' | 'g';
-        nm: 'offset' | 'dash' | 'gap';
-        v: VectorProperty;
-    }[];
-    bm?: number;
-    cl?: string;
-    ks?: {
-        a: 1 | 0;
-        k: ShapeData;
-        ix?: number;
-    };
-    np?: number;
-    tr?: LottieTransform;
-    nm?: string;
     mn?: string;
-    hd?: boolean;
-    _render?: boolean;
-    _processed?: boolean;
+    nm?: string;
+    np?: number;
+    o?: VectorProperty;
+    p?: {
+        s: number;
+        x: VectorProperty;
+        y: VectorProperty;
+        z: VectorProperty;
+    } | VectorProperty;
+    pt?: VectorProperty<ShapePath>;
+    r?: number | VectorProperty;
+    s?: VectorProperty<Vector2 | Vector3>;
+    sa?: VectorProperty;
+    sk?: VectorProperty;
+    t?: number;
+    tr?: LottieTransform;
+    ty: ShapeType;
+    w?: VectorProperty;
 }
 interface LottieTransform {
     a: VectorProperty<Vector2>;
-    p: VectorProperty<Vector2>;
-    s: VectorProperty<Vector2>;
-    r: VectorProperty;
-    so?: VectorProperty;
     eo?: VectorProperty;
+    p: VectorProperty<Vector2>;
+    r: VectorProperty;
+    s: VectorProperty<Vector2>;
+    so?: VectorProperty;
 }
 export interface LottieAsset {
-    sid?: string;
+    __used?: boolean;
     e?: BoolInt;
-    layers?: LottieLayer[];
     h?: number;
     id?: string;
+    layers?: LottieLayer[] & {
+        __used?: boolean;
+    };
     nm?: string;
     p?: string;
-    u?: string;
-    xt?: number;
-    w?: number;
-    t?: string;
     pr?: string;
+    sid?: string;
+    t?: string;
+    u?: string;
+    w?: number;
+    xt?: number;
 }
 export interface AnimationSettings {
     autoplay?: Autoplay;
-    loop?: Loop;
     direction?: AnimationDirection;
+    loop?: Loop;
     mode?: PlayMode;
     speed?: number;
 }
@@ -357,7 +403,7 @@ export interface LottieManifest {
 export type AnimateOnScroll = boolean | '' | null;
 export type Autoplay = boolean | '' | 'autoplay' | null;
 export type Controls = boolean | '' | 'controls' | null;
-export type Loop = boolean | '' | 'loop' | null;
+export type Loop = boolean | '' | 'loop' | null | number;
 export type Subframe = boolean | '' | null;
 export interface CEMConfig {
     catalyst: boolean;
@@ -368,14 +414,14 @@ export interface CEMConfig {
     globs: ['src/**/*.ts'];
     litelement: boolean;
     outdir: string;
-    packagejson: boolean;
-    stencil: boolean;
-    watch: boolean;
-    plugins: Array<() => Plugin>;
     overrideModuleCreation({ globs, ts, }: {
         ts: unknown;
         globs: string[];
     }): unknown[];
+    packagejson: boolean;
+    plugins: Array<() => Plugin>;
+    stencil: boolean;
+    watch: boolean;
 }
 type Vector1 = number;
 export type Vector2 = [number, number];
@@ -384,19 +430,36 @@ export type Vector4 = [number, number, number, number];
 export type VectorProperty<T = Vector1> = {
     a: 1 | 0;
     k: T;
+    v?: number;
     ix?: number;
+    sid?: number;
 };
+interface Coordinates {
+    c?: boolean;
+    x: number;
+    y: number;
+}
+export interface MaskData {
+    c?: boolean;
+    e?: Coordinates[];
+    i: Coordinates;
+    o: Coordinates;
+    s: Coordinates[];
+    t: number;
+}
 export interface Mask {
+    cl?: boolean;
     inv: boolean;
     mode: string;
-    pt: {
-        a: 0 | 1;
-        k: ShapeData;
-        ix?: number;
-    };
+    nm: string;
     o: {
         a: 0 | 1;
         k: number;
+        ix?: number;
+    };
+    pt: {
+        a: 0 | 1;
+        k: MaskData | MaskData[];
         ix?: number;
     };
     x: {
@@ -404,16 +467,33 @@ export interface Mask {
         k: number;
         ix?: number;
     };
-    nm: string;
-    cl?: boolean;
 }
 interface LayerStyle {
-    nm: string;
-    mn: string;
-    ty: number;
+    a?: {
+        a: 0 | 1;
+        k: number;
+    };
+    bm?: {
+        a: 0 | 1;
+        k: number;
+    };
     c: {
         a: 0 | 1;
         k: Vector3 | Vector4;
+    };
+    ch?: {
+        a: 0 | 1;
+        k: number;
+    };
+    d?: {
+        a: 0 | 1;
+        k: number;
+    };
+    mn: string;
+    nm: string;
+    no?: {
+        a: 0 | 1;
+        k: number;
     };
     o?: {
         a: 0 | 1;
@@ -423,40 +503,10 @@ interface LayerStyle {
         a: 0 | 1;
         k: number;
     };
-    a?: {
-        a: 0 | 1;
-        k: number;
-    };
-    d?: {
-        a: 0 | 1;
-        k: number;
-    };
-    ch?: {
-        a: 0 | 1;
-        k: number;
-    };
-    bm?: {
-        a: 0 | 1;
-        k: number;
-    };
-    no?: {
-        a: 0 | 1;
-        k: number;
-    };
+    ty: number;
 }
 export interface LetterProperties {
-    s: number;
-    f: string;
-    t: string;
-    ls: number;
-    j: number;
-    fc?: Vector3 | Vector4 | string;
-    sc?: Vector3 | Vector4 | string;
-    sw?: number;
-    of: boolean;
-    m?: number | string;
-    o?: number;
-    p?: number | number[];
+    __complete?: boolean;
     _mdf: {
         fc: boolean;
         m: boolean;
@@ -465,62 +515,59 @@ export interface LetterProperties {
         sc: boolean;
         sw: boolean;
     };
+    f: string;
+    fc?: Vector3 | Vector4 | string;
+    j: number;
+    ls: number;
+    m?: number | string;
+    o?: number;
+    of: boolean;
+    p?: number | number[];
+    s: number;
+    sc?: Vector3 | Vector4 | string;
+    sw?: number;
+    t: string;
 }
 export interface DocumentData extends FontList {
+    __complete?: boolean;
+    ascent?: number;
+    boxWidth?: Vector2 | number;
+    f: string;
+    fc?: Vector3 | string;
+    fillColorAnim?: boolean;
+    finalLineHeight?: number;
+    finalSize?: number;
+    finalText: string[];
+    j?: number;
+    justifyOffset?: number;
     k: {
         s: LetterProperties | DocumentData;
         t: number;
     }[];
-    s: number;
-    finalSize?: number;
-    finalText: string[];
-    sid?: unknown;
-    finalLineHeight?: number;
-    lh: number;
-    tr: number;
-    f: unknown;
-    sz: Vector2;
     l?: Letter[];
-    boxWidth?: number;
-    justifyOffset?: number;
+    lh: number;
     lineWidths?: number[];
+    ls?: number;
+    of?: string;
+    ps?: Vector2 | null;
+    s: number;
+    sc?: string;
+    sid?: unknown;
     strokeColorAnim?: boolean;
     strokeWidthAnim?: boolean;
-    fillColorAnim?: boolean;
-    yOffset?: number;
-    ls?: number;
-    ascent?: number;
-    t: string | number;
-    j?: number;
-    fc?: Vector3 | string;
     sw?: number;
-    sc?: string;
-    ps?: Vector2 | null;
-    of?: string;
-    __complete?: boolean;
+    sz: Vector2[];
+    t: string | number;
+    tr: number;
+    yOffset?: number;
 }
 export interface TextRangeValue {
-    t: 0 | 1;
-    o: {
-        a: 0 | 1;
-        k: number;
-    };
-    s: {
-        a: 0 | 1;
-        k: number;
-    };
-    e: {
-        a: 0 | 1;
-        k: number;
-    };
     a: {
         a: 0 | 1;
         k: number;
     };
     b: number;
-    rn: 0 | 1;
-    sh: number;
-    xe: {
+    e: {
         a: 0 | 1;
         k: number;
     };
@@ -528,44 +575,126 @@ export interface TextRangeValue {
         a: 0 | 1;
         k: number;
     };
-    sm: {
+    o: {
         a: 0 | 1;
         k: number;
     };
     r: number;
+    rn: 0 | 1;
+    s: {
+        a: 0 | 1;
+        k: number;
+    };
+    sh: number;
+    sm: {
+        a: 0 | 1;
+        k: number;
+    };
+    t: 0 | 1;
+    totalChars: number;
+    xe: {
+        a: 0 | 1;
+        k: number;
+    };
 }
 export interface StyleObject {
-    type: ShapeType;
+    _mdf?: boolean;
+    closed?: boolean;
     d: string;
-    lvl: number;
     data: Shape;
+    lvl: number;
     msElem?: SVGElement;
+    pElem?: SVGPathElement;
+    reset(): void;
+    type: ShapeType;
 }
 export interface ShapeDataInterface {
     _isAnimated: boolean;
     caches: string[];
+    container: any;
+    elements: CompInterface[];
     lStr: string;
     lvl: number;
+    setAsAnimated: () => void;
     sh: {
         propType: string;
         k: boolean;
         kf: boolean;
         _mdf: boolean;
-        comp: ElementInterface;
+        comp: CompInterface;
+        paths: ShapePath[];
     };
-    container: any;
-    styles: StyleObject[];
+    styles: SVGStyleData[];
+    transform: Transformer;
     transformers: Transformer[];
-    setAsAnimated: () => void;
+}
+export interface TextAnimatorAnimatables {
+    a: {
+        p: {
+            a: 0 | 1;
+            k: Vector2 | Vector3;
+        };
+        r: {
+            a: 0 | 1;
+            k: number;
+        };
+        o: {
+            a: 0 | 1;
+            k: number;
+        };
+        fc: {
+            a: 0 | 1;
+            k: Vector3 | Vector4;
+        };
+        fh: {
+            a: 0 | 1;
+            k: number;
+        };
+        fs: {
+            a: 0 | 1;
+            k: number;
+        };
+        fb: {
+            a: 0 | 1;
+            k: number;
+        };
+        sc?: {
+            a: 0 | 1;
+            k: Vector3 | Vector4;
+        };
+        sw?: {
+            a: 0 | 1;
+            k: number;
+        };
+        t: {
+            a: 0 | 1;
+            k: number;
+        };
+        propType: boolean;
+    };
+    nm: string;
+    s: TextRangeValue;
 }
 export interface TextData {
-    d: DocumentData;
-    p: {
-        a: unknown;
-        p: unknown;
-        r: unknown;
-    };
-    m: {
+    __complete: boolean;
+    a?: TextAnimatorDataProperty[];
+    ascent: number;
+    boxWidth: Vector2;
+    d?: DocumentData;
+    f: string;
+    fc: string;
+    fillColorAnim: boolean;
+    finalLineHeight: number;
+    finalSize: number;
+    finalText: string[];
+    fStyle: string;
+    fWeight: string;
+    justifyOffset: number;
+    l: Letter[];
+    lh: number;
+    lineWidths: number[];
+    ls: number;
+    m?: {
         g: number;
         a: {
             a: 0 | 1;
@@ -573,137 +702,86 @@ export interface TextData {
             ix?: number;
         };
     };
-    a: {
-        nm: string;
-        s: TextRangeValue;
-        a: {
-            p: {
-                a: 0 | 1;
-                k: Vector2 | Vector3;
-            };
-            r: {
-                a: 0 | 1;
-                k: number;
-            };
-            o: {
-                a: 0 | 1;
-                k: number;
-            };
-            fc: {
-                a: 0 | 1;
-                k: Vector3 | Vector4;
-            };
-            fh: {
-                a: 0 | 1;
-                k: number;
-            };
-            fs: {
-                a: 0 | 1;
-                k: number;
-            };
-            fb: {
-                a: 0 | 1;
-                k: number;
-            };
-            sc?: {
-                a: 0 | 1;
-                k: Vector3 | Vector4;
-            };
-            sw?: {
-                a: 0 | 1;
-                k: number;
-            };
-            t: {
-                a: 0 | 1;
-                k: number;
-            };
-        };
-    }[];
-    __complete?: boolean;
+    of: string;
+    p?: {
+        a: unknown;
+        p: unknown;
+        r: unknown;
+    };
+    ps: null | Vector2;
+    s: number;
+    sc: string;
+    strokeColorAnim: boolean;
+    strokeWidthAnim: boolean;
+    sw: number;
+    t: string;
+    tr: number;
+    yOffset: number;
+}
+export interface EffectValue {
+    ty: number;
+    v: {
+        a: 1 | 0;
+        k: number | Vector3 | Vector4;
+    };
 }
 export interface Effect {
+    ef: EffectValue[];
+    en: 1 | 0;
+    ix?: number;
     nm?: string;
     np: number;
     ty: number;
-    ix?: number;
-    en: 1 | 0;
-    ef: {
-        ty: number;
-        v: {
-            a: 1 | 0;
-            k: number | Vector3 | Vector4;
-        };
-    }[];
 }
 export interface FontList {
-    fOrigin: string;
-    origin: number;
-    fPath: string;
+    cache?: Record<string, unknown>;
     fClass: string;
     fFamily: string;
-    fWeight: string;
-    fStyle: string;
     fName: string;
+    fOrigin: string;
+    fPath: string;
+    fStyle: string;
+    fWeight: string;
     helper?: {
         measureText: (str: string, fontName?: string, size?: number) => number;
     };
-    cache?: Record<string, unknown>;
+    loaded?: boolean;
     monoCase?: {
         node: HTMLElement;
         parent: HTMLElement;
         w: number;
     };
+    origin: number;
     sansCase?: {
         node: HTMLElement;
         parent: HTMLElement;
         w: number;
     };
-    loaded?: boolean;
-}
-export interface FontHandler {
-    chars: Characacter[] | null;
-    isLoaded: boolean;
-    fonts: FontList[];
-    getFontByName: (name?: string) => FontList;
-    checkLoadedFonts: (args: unknown) => void;
-    checkLoadedFontsBinded: (args: unknown) => void;
-    typekitLoaded: number;
-    initTime: number;
-    setIsLoadedBinded: (val: boolean) => void;
-    setIsLoaded: (val: boolean) => void;
-    _warned?: boolean;
 }
 export interface Characacter {
+    ch?: Characacter;
     data: LottieLayer;
-    t: number;
+    fFamily?: string;
     shapes: Shape[];
     size: number;
-    w: number;
     style?: string;
-    fFamily?: string;
-    ch?: Characacter;
+    t: number;
+    w: number;
 }
 export interface AnimationData {
+    __complete?: boolean;
     $schema?: string;
-    v: string;
-    fr: number;
-    ip: number;
-    op: number;
-    w: number;
-    h: number;
-    mn?: string;
-    nm: string;
     ao?: 0 | 1;
-    ddd: 0 | 1;
-    chars?: Characacter[];
     assets: LottieAsset[];
+    chars?: Characacter[];
+    ddd: 0 | 1;
     fonts: {
         list: FontList[];
     };
+    fr: number;
+    h: number;
+    ip: number;
     layers: LottieLayer[];
-    segments: {
-        time: number;
-    }[];
     markers?: MarkerData[];
     meta?: {
         a: string;
@@ -712,78 +790,107 @@ export interface AnimationData {
         tc: string;
         g: string;
     };
-    __complete?: boolean;
-}
-export interface LottieLayer {
-    id?: string;
-    ddd?: 0 | 1;
-    ind?: number;
-    ty: number;
-    refId?: string;
+    mn?: string;
     nm: string;
-    sr?: number;
-    ks: {
-        o: VectorProperty;
-        r: VectorProperty;
-        p: {
-            a: 0 | 1;
-            k: number[];
-            ix?: number;
-            l?: number;
-        };
-        a: {
-            a: 0 | 1;
-            k: number[];
-            ix?: number;
-            l?: number;
-        };
-        s: {
-            a: 0 | 1;
-            k: number[];
-            ix?: number;
-            l?: number;
-        };
-        sk: {
-            a: 0 | 1;
-            k: number;
-            ix?: number;
-        };
-        sa: {
-            a: 0 | 1;
-            k: number;
-            ix?: number;
+    op: number;
+    segments: {
+        time: number;
+    }[];
+    slots?: {
+        [key: string]: {
+            p: any;
         };
     };
-    ef?: Readonly<Effect[]>;
-    sy?: LayerStyle[];
+    v: string;
+    w: number;
+}
+export interface LottieLayerData {
+    a: {
+        a: 0 | 1;
+        k: number[];
+        ix?: number;
+        l?: number;
+    };
+    autoOriented?: boolean;
+    nm: string;
+    o: VectorProperty;
+    p: {
+        a: 0 | 1;
+        k: number[];
+        ix?: number;
+        l?: number;
+    };
+    r: VectorProperty;
+    s: {
+        a: 0 | 1;
+        k: number[];
+        ix?: number;
+        l?: number;
+    };
+    sa: {
+        a: 0 | 1;
+        k: number;
+        ix?: number;
+    };
+    sk: {
+        a: 0 | 1;
+        k: number;
+        ix?: number;
+    };
+}
+export interface LottieLayer {
+    __used?: boolean;
     ao?: number;
-    hasMask?: boolean;
-    masksProperties?: Readonly<Mask[]>;
-    sw?: number;
-    sh?: number;
-    sc?: string;
-    ip: number;
-    op: number;
-    st: number;
     bm?: number;
-    parent?: number;
-    shapes?: Shape[];
-    t?: TextData;
-    td?: 0 | 1;
-    tt?: number;
-    tp?: number;
+    cl?: string;
+    completed?: boolean;
     ct?: 0 | 1;
+    ddd?: 0 | 1;
+    ef?: Readonly<Effect[]>;
+    h?: number;
+    hasMask?: boolean;
+    hd?: boolean;
+    height?: number;
+    id?: string;
+    ind?: number;
+    ip: number;
+    ks: LottieLayerData;
     layers?: LottieLayer[] & {
         __used?: boolean;
     };
+    ln?: string;
+    masksProperties?: Mask[];
+    nm: string;
+    op: number;
+    parent?: number;
+    refId?: string;
+    sc?: string;
+    sh?: number;
+    shapes?: Shape[];
+    singleShape?: boolean;
+    sr?: number;
+    st: number;
+    sw?: number;
+    sy?: LayerStyle[];
+    t?: TextData;
+    td?: 0 | 1;
+    textData?: {
+        height: number;
+        width: number;
+    };
     tm?: AnimatedProperty;
+    tp?: number;
+    tt?: number;
+    ty: number;
+    w?: number;
+    width?: number;
     xt?: number;
-    completed?: boolean;
-    __used?: boolean;
 }
-interface AnimatedProperty {
+export interface AnimatedProperty<T = number> {
+    _placeholder?: boolean;
     a: 0 | 1;
     ix?: number;
+    v?: T;
 }
 export interface UniDimensionalAnimatedProperty extends AnimatedProperty {
     k: number;
@@ -796,30 +903,29 @@ export interface GenericAnimatedProperty extends AnimatedProperty {
 }
 export interface Marker {
     cm: string;
-    tm: number;
     dr: number;
+    tm: number;
 }
 export interface MarkerData {
     duration: number;
-    time: number;
     payload?: Record<string, unknown>;
+    time: number;
 }
 export interface DataFunctionManager {
-    completeData?: (animationData: AnimationData | AnimationItem) => void;
-    checkColors?: (animationData: AnimationData) => void;
     checkChars?: (animationData: AnimationData) => void;
+    checkColors?: (animationData: AnimationData) => void;
     checkPathProperties?: (animationData: AnimationData) => void;
     checkShapes?: (animationData: AnimationData) => void;
+    completeData?: (animationData: AnimationData) => void;
     completeLayers?: (layers: LottieLayer[], comps: LottieComp[]) => void;
 }
-export type AssetLoader = (path: string, fullPath: string, onComplete: (data: AnimationData) => void, onError?: (x?: unknown) => unknown) => void;
 export interface WorkerEvent {
     data: {
         id: string;
         type: string;
         path: string;
         fullPath: string;
-        animation: AnimationItem;
+        animation: AnimationData;
     };
 }
 declare global {
@@ -829,8 +935,8 @@ declare global {
     function dotLottiePlayer(): DotLottiePlayer;
 }
 export interface ExpressionsPlugin {
-    resetFrame(): void;
     initExpressions(animItem: AnimationItem): void;
+    resetFrame(): void;
 }
 type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
     class?: string;
@@ -839,11 +945,14 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
     src: string;
 };
 export interface Audio {
-    volume(x: number): void;
-    resume(): void;
     pause(): void;
     play(): void;
-    setRate(x: number): void;
+    playing(): boolean;
+    rate(val: number): void;
+    resume(): void;
+    seek(val?: number): number;
+    setRate(val: number): void;
+    volume(val: number): void;
 }
 export type AudioFactory = (path: string) => Audio;
 export type LottieComp = LottieLayer | LottieAsset;
@@ -851,13 +960,31 @@ export interface ImageData {
     assetData: LottieAsset;
     img: null | SVGElement | HTMLCanvasElement | HTMLMediaElement;
 }
+export interface Keyframe {
+    e: Vector2;
+    h?: number;
+    i: {
+        x: number | number[];
+        y: number | number[];
+    };
+    keyframeMetadata: any;
+    n: string;
+    o: {
+        x: number | number[];
+        y: number | number[];
+    };
+    s: Vector3;
+    t: number;
+    ti: Vector2;
+    to: Vector2;
+}
 export interface Caching {
+    _lastAddedLength: number;
+    _lastKeyframeIndex: number;
+    _lastPoint: number;
     lastFrame: number;
     lastIndex: number;
-    value: number;
-    _lastKeyframeIndex: number;
-    _lastAddedLength: number;
-    _lastPoint: number;
+    value: any;
 }
 export interface PropertyElement {
     comp: unknown;
@@ -872,68 +999,43 @@ export interface SegmentPool {
 export interface GlobalData {
     _mdf?: boolean;
     audioController?: unknown;
-    defs?: SVGDefsElement;
-    projectInterface?: ReturnType<typeof ProjectInterface>;
-    progressiveLoad?: boolean;
-    fontManager?: typeof FontManager;
-    slotManager?: typeof PropertyFactory;
-    getAssetData?: AnimationItem['getAssetData'];
-    compSize?: unknown;
+    compSize?: {
+        w: number;
+        h: number;
+    };
+    defs: SVGDefsElement;
+    fontManager?: FontManager;
     frameId?: number;
-    frameRate?: number;
     frameNum?: number;
+    frameRate: number;
+    getAssetData?: AnimationItem['getAssetData'];
+    getAssetsPath?: AnimationItem['getAssetsPath'];
     imageLoader?: any;
     nm?: string;
-    getAssetsPath?: AnimationItem['getAssetsPath'];
+    progressiveLoad?: boolean;
+    projectInterface?: any;
     renderConfig?: SVGRendererConfig | CanvasRendererConfig | HTMLRendererConfig;
+    slotManager?: SlotManager;
 }
 interface SequenceValue<T = number> {
     effectsSequence: unknown[];
     v: T;
 }
 export interface TransformHandler {
-    pre: Matrix;
-    appliedTransformations: number;
     a: SequenceValue<number[]>;
-    s: SequenceValue<number[]>;
-    sk: SequenceValue<number[]>;
-    sa: SequenceValue;
-    r?: SequenceValue;
-    rz: SequenceValue;
-    ry: SequenceValue;
-    rx: SequenceValue;
+    appliedTransformations: number;
     or: SequenceValue<number[]>;
-}
-export interface AssetHandler {
-    loadedAssets: number;
-    totalImages: number;
-    loadedFootagesCount: number;
-    totalFootages: number;
-    imagesLoadedCb: null | ((images: ImageData[] | null) => void);
-    createImageData: (assetData: LottieAsset) => ImageData;
-    createFootageData: (assetData: LottieAsset) => ImageData;
-    _createImageData: (assetData: LottieAsset) => ImageData;
-    createImgData: (assetData: LottieAsset) => ImageData;
-    destroy: () => void;
-    footageLoaded: () => void;
-    getAsset: (assetData: LottieAsset) => LottieAsset;
-    imageLoaded: (this: AssetHandler) => void;
-    loadAssets: (assets: LottieAsset[], cb?: (arg: unknown) => void) => void;
-    loadedFootages: () => boolean;
-    loadedImages: () => boolean;
-    setAssetsPath: (path: string) => void;
-    setCacheType: (type: string, elementHelper: SVGElement) => void;
-    setPath: (path?: string) => void;
-    assetsPath: string;
-    path: string;
-    _imageLoaded: () => void;
-    _footageLoaded: () => void;
-    testImageLoaded: (image: SVGImageElement) => void;
-    _elementHelper: SVGElement;
-    images: ImageData[];
+    pre: Matrix;
+    r?: SequenceValue;
+    rx: SequenceValue;
+    ry: SequenceValue;
+    rz: SequenceValue;
+    s: SequenceValue<number[]>;
+    sa: SequenceValue;
+    sk: SequenceValue<number[]>;
 }
 export interface IntersectData {
-    bez: typeof PolynomialBezier;
+    bez: PolynomialBezier;
     cx: number;
     cy: number;
     height: number;
@@ -941,18 +1043,6 @@ export interface IntersectData {
     t1: number;
     t2: number;
     width: number;
-}
-export interface BMEvent {
-    type: string;
-    direction: AnimationDirection;
-    totalTime: number;
-    currentTime: number;
-    currentLoop: number;
-    nativeError: unknown;
-    totalLoops: number;
-    firstFrame: number;
-    totalFrames: number;
-    target: BMEvent;
 }
 declare module 'react' {
     namespace JSX {

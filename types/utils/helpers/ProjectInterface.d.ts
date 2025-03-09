@@ -1,12 +1,8 @@
-import type { LottieComp } from '@/types';
-interface Project {
-    compositions: any[];
+import type { CompInterface } from '@/types';
+export default class ProjectInterface {
+    compInterface: CompInterface | null;
+    compositions: CompInterface[];
     currentFrame: number;
+    constructor(name?: string);
+    registerComposition(comp: CompInterface): void;
 }
-declare const ProjectInterface: () => {
-    (this: Project, name: string): any;
-    compositions: any[];
-    currentFrame: number;
-    registerComposition: (this: Project, comp: LottieComp) => void;
-};
-export default ProjectInterface;

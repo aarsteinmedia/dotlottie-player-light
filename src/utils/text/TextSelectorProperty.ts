@@ -1,4 +1,4 @@
-import type { ElementInterface, TextRangeValue } from '@/types'
+import type { CompInterface, TextRangeValue } from '@/types'
 
 import BezierFactory from '@/utils/BezierFactory'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -8,10 +8,10 @@ import PropertyFactory from '@/utils/PropertyFactory'
 export default class TextSelectorProperty extends DynamicPropertyContainer {
   _currentTextLength: number
   a: ValueProperty
-  comp: ElementInterface
+  comp: CompInterface
   data: TextRangeValue
   e: ValueProperty | { v: number }
-  elem: ElementInterface
+  elem: CompInterface
   finalE: number
   finalS: number
   k: boolean
@@ -20,7 +20,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
   s: ValueProperty
   sm: any
   xe: any
-  constructor(elem: ElementInterface, data: TextRangeValue) {
+  constructor(elem: CompInterface, data: TextRangeValue) {
     super()
     this._currentTextLength = -1
     this.k = false

@@ -1,10 +1,17 @@
-import type { GlobalData } from '@/types'
+import type { CompInterface, GlobalData, LottieLayer } from '@/types'
 
 import ImageElement from '@/elements/ImageElement'
 import { createNS } from '@/utils'
 
 class ISolidElement extends ImageElement {
-  constructor(data: any, globalData: GlobalData, comp: any) {
+  data!: LottieLayer
+  initElement!: (
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: CompInterface
+  ) => void
+  layerElement?: SVGGElement
+  constructor(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
     super(data, globalData, comp)
     this.initElement(data, globalData, comp)
   }

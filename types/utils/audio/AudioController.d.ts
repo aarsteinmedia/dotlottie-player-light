@@ -1,11 +1,10 @@
 import type { Audio, AudioFactory } from '@/types';
 export default class AudioController {
-    constructor(audioFactory?: AudioFactory);
-    audios: Audio[];
     audioFactory?: AudioFactory;
-    private _volume;
+    audios: Audio[];
     private _isMuted;
-    private _updateVolume;
+    private _volume;
+    constructor(audioFactory?: AudioFactory);
     addAudio(audio: Audio): void;
     createAudio(assetPath: string): any;
     getVolume(): number;
@@ -16,4 +15,5 @@ export default class AudioController {
     setRate(rateValue: number): void;
     setVolume(value: number): void;
     unmute(): void;
+    private _updateVolume;
 }

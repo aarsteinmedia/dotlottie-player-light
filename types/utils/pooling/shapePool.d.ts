@@ -1,7 +1,9 @@
-import type { ShapeData } from '@/types';
-declare const shapePool: {
-    clone: (shape: ShapeData) => ShapeData;
-    newElement: <T = unknown>() => T;
-    release: <T extends ShapeData>(element: T) => void;
-};
-export default shapePool;
+import ShapePath from '@/utils/shapes/ShapePath';
+export default class ShapePool {
+    private static _factory;
+    static newElement: <T = unknown>() => T;
+    static release: <T = unknown>(element: T) => void;
+    static clone(shape: ShapePath): ShapePath;
+    private static _create;
+    private static _release;
+}

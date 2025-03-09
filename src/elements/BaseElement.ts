@@ -5,7 +5,7 @@ import { getBlendMode } from '@/utils'
 import { createElementID, getExpressionInterfaces } from '@/utils/getterSetter'
 
 export default class BaseElement {
-  comp!: any // ElementInterface
+  comp!: any // CompInterface
   data!: LottieLayer
   effectsManager!: EffectsManager
   globalData!: GlobalData

@@ -1,5 +1,4 @@
-import type { Constructor } from '@/types';
-declare function extendPrototype<T>(sources: (() => void)[], destination: Constructor<T>): void;
+declare function extendPrototype(sources: any[], destination: any): void;
 declare function getDescriptor(object: object, prop: string): PropertyDescriptor | undefined;
 declare function createProxyFunction<T = unknown>(prototype: T): {
     (): void;

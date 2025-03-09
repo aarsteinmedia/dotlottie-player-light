@@ -1,11 +1,10 @@
-import type { ElementInterface, LottieLayer, Shape } from '@/types'
+import type { CompInterface, LottieLayer, Shape } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import TransformProperty from '@/utils/TransformProperty'
-
-import ShapePath from './ShapePath'
 
 export default class RepeaterModifier extends ShapeModifier {
   matrix!: Matrix
@@ -55,7 +54,7 @@ export default class RepeaterModifier extends ShapeModifier {
     return newElements
   }
   override init(
-    elem: ElementInterface,
+    elem: CompInterface,
     arr: LottieLayer[],
     posFromProps: number,
     elemsData: ShapePath
@@ -82,7 +81,7 @@ export default class RepeaterModifier extends ShapeModifier {
       this.getValue(true)
     }
   }
-  initModifierProperties(elem: ElementInterface, data: Shape) {
+  initModifierProperties(elem: CompInterface, data: Shape) {
     this.getValue = this.processKeys
     this.c = PropertyFactory.getProp(elem, data.c, 0, null, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, null, this)

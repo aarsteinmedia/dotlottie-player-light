@@ -1,16 +1,6 @@
-import type { ElementInterface, GlobalData, LottieAsset, LottieLayer } from '@/types';
-interface ImageElement {
-    assetData: LottieAsset | null;
-    sourceRect: {
-        height: number;
-        left: number;
-        top: number;
-        width: number;
-    };
-    initElement: (data: LottieLayer, globalData: GlobalData, comp: any) => void;
-    innerElem: SVGImageElement;
-    globalData: GlobalData;
-    layerElement: SVGElement;
+import type { CompInterface, GlobalData, LottieLayer } from '@/types';
+export default class ImageElement {
+    constructor(data: LottieLayer, globalData: GlobalData, comp: CompInterface);
+    createContent(): void;
+    sourceRectAtTime(): any;
 }
-export default function IImageElement(this: ImageElement, data: LottieLayer, globalData: GlobalData, comp: ElementInterface): void;
-export {};

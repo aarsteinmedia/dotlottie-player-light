@@ -1,4 +1,5 @@
-import type { GlobalData, LottieLayer, Mask, ShapeData } from '@/types'
+import type { GlobalData, LottieLayer, Mask } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { createNS } from '@/utils'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
@@ -223,7 +224,7 @@ export default class MaskElement {
     this.masksProperties = null
   }
 
-  drawPath(pathData: null | Mask, pathNodes: ShapeData, viewData: any) {
+  drawPath(pathData: null | Mask, pathNodes: ShapePath, viewData: any) {
     let i
     let pathString = ` M${pathNodes.v[0]?.[0]},${pathNodes.v[0]?.[1]}`
     const len = pathNodes._length || 0

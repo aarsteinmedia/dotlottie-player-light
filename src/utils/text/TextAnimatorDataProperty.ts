@@ -1,8 +1,6 @@
-// import type { TextAnimatorAnimatables } from '@/types'
-
 import type { NoProperty, ValueProperty } from '@/utils/Properties'
 
-import { ElementInterface } from '@/types'
+import { CompInterface } from '@/types'
 import { degToRads } from '@/utils'
 import PropertyFactory from '@/utils/PropertyFactory'
 import TextSelectorProperty from '@/utils/text/TextSelectorProperty'
@@ -28,9 +26,9 @@ export default class TextAnimatorDataProperty {
   }
   s?: TextSelectorProperty
   constructor(
-    elem: ElementInterface,
+    elem: CompInterface,
     animatorProps?: TextAnimatorDataProperty,
-    container?: ElementInterface
+    container?: CompInterface
   ) {
     const defaultData = { propType: false } as NoProperty,
       { getProp } = PropertyFactory,

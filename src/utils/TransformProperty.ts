@@ -1,4 +1,4 @@
-import type { ElementInterface, Shape, Vector2 } from '@/types'
+import type { CompInterface, Shape, Vector2 } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
 import { degToRads } from '@/utils'
@@ -13,7 +13,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
   appliedTransformations: number
   autoOriented?: boolean
   data: Shape
-  elem: ElementInterface
+  elem: CompInterface
   frameId: number
   o?: ValueProperty
   or?: ValueProperty
@@ -28,11 +28,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
   rz?: ValueProperty
   v: Matrix
   private defaultVector: Vector2 = [0, 0]
-  constructor(
-    elem: ElementInterface,
-    data: Shape,
-    container: ElementInterface
-  ) {
+  constructor(elem: CompInterface, data: Shape, container: CompInterface) {
     super()
     this.elem = elem
     this.frameId = -1
