@@ -1,4 +1,4 @@
-import { filtersFactory } from '@/utils/filters'
+import FiltersFactory from '@/utils/FiltersFactory'
 import {
   createElementID,
   getLocationHref,
@@ -12,7 +12,7 @@ class SVGEffects {
     let source = 'SourceGraphic'
     const len = elem.data.ef ? elem.data.ef.length : 0
     const filId = createElementID()
-    const fil = filtersFactory.createFilter(filId, true)
+    const fil = FiltersFactory.createFilter(filId, true)
     let count = 0
     this.filters = []
     let filterManager

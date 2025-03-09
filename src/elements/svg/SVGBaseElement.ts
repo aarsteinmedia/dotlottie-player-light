@@ -1,8 +1,8 @@
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
-import { GlobalData, LottieLayer } from '@/types'
+import { ElementInterface, GlobalData, LottieLayer } from '@/types'
 import { createNS } from '@/utils'
-import { featureSupport, filtersFactory } from '@/utils/filters'
+import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
 export default class SVGBaseElement {
@@ -10,14 +10,18 @@ export default class SVGBaseElement {
 
   baseElement?: SVGGElement
   checkMasks!: () => boolean
+  comp?: ElementInterface
   data!: LottieLayer
+  finalTransform?: any
   globalData!: GlobalData
   layerElement!: SVGGElement
   layerId!: string
   maskedElement?: SVGGElement
   maskManager!: MaskElement
   matteElement?: SVGGElement
-  matteMasks?: unknown
+  matteMasks?: {
+    [key: number]: unknown
+  }
   renderableEffectsManager?: SVGEffects
   searchEffectTransforms!: () => void
   setBlendMode!: () => void
@@ -108,6 +112,7 @@ export default class SVGBaseElement {
     if (!this.matteMasks) {
       this.matteMasks = {}
     }
+    const featureSupport = new FeatureSupport()
     if (!this.matteMasks[matteType]) {
       const id = `${this.layerId}_${matteType}`
       let filId
@@ -132,9 +137,9 @@ export default class SVGBaseElement {
         if (!featureSupport.maskType && matteType === 1) {
           masker.setAttribute('mask-type', 'luminance')
           filId = createElementID()
-          fil = filtersFactory.createFilter(filId)
+          fil = FiltersFactory.createFilter(filId)
           this.globalData.defs.appendChild(fil)
-          fil.appendChild(filtersFactory.createAlphaToLuminanceFilter())
+          fil.appendChild(FiltersFactory.createAlphaToLuminanceFilter())
           gg = createNS('g')
           gg?.appendChild(useElement)
           masker.appendChild(gg)
@@ -147,7 +152,7 @@ export default class SVGBaseElement {
         const maskGrouper = createNS('g')
         maskGroup.appendChild(maskGrouper)
         filId = createElementID()
-        fil = filtersFactory.createFilter(filId)
+        fil = FiltersFactory.createFilter(filId)
         // / /
         const feCTr = createNS('feComponentTransfer')
         feCTr.setAttribute('in', 'SourceGraphic')
@@ -162,8 +167,8 @@ export default class SVGBaseElement {
         if (!alphaRect) {
           throw new Error('Could not create RECT element')
         }
-        alphaRect.setAttribute('width', this.comp.data.w)
-        alphaRect.setAttribute('height', this.comp.data.h)
+        alphaRect.setAttribute('width', `${Number(this.comp?.data.w)}`)
+        alphaRect.setAttribute('height', `${Number(this.comp?.data.h)}`)
         alphaRect.setAttribute('x', '0')
         alphaRect.setAttribute('y', '0')
         alphaRect.setAttribute('fill', '#ffffff')
@@ -179,7 +184,7 @@ export default class SVGBaseElement {
         maskGrouper.appendChild(useElement)
         if (!featureSupport.maskType) {
           maskGroup.setAttribute('mask-type', 'luminance')
-          fil.appendChild(filtersFactory.createAlphaToLuminanceFilter())
+          fil.appendChild(FiltersFactory.createAlphaToLuminanceFilter())
           gg = createNS('g')
           maskGrouper.appendChild(alphaRect)
           gg.appendChild(this.layerElement)
@@ -195,14 +200,14 @@ export default class SVGBaseElement {
     this.layerElement = createNS('g')
   }
   renderElement() {
-    if (this.finalTransform._localMatMdf) {
-      this.transformedElement.setAttribute(
+    if (this.finalTransform?._localMatMdf) {
+      this.transformedElement?.setAttribute(
         'transform',
         this.finalTransform.localMat.to2dCSS()
       )
     }
-    if (this.finalTransform._opMdf) {
-      this.transformedElement.setAttribute(
+    if (this.finalTransform?._opMdf) {
+      this.transformedElement?.setAttribute(
         'opacity',
         this.finalTransform.localOpacity
       )

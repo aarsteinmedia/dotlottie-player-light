@@ -1,11 +1,11 @@
-import type { AnimationData, VectorProperty } from '@/types'
+import type { AnimationData } from '@/types'
 
 export default class SlotManager {
   animationData: AnimationData
   constructor(animationData: AnimationData) {
     this.animationData = animationData
   }
-  getProp(data: VectorProperty) {
+  getProp(data: any) {
     if (
       data.sid &&
       this.animationData.slots &&

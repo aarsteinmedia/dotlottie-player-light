@@ -1,4 +1,4 @@
-import type { ElementInterface, VectorProperty } from '@/types'
+import type { ElementInterface, Keyframe, VectorProperty } from '@/types'
 
 import {
   KeyframedMultidimensionalProperty,
@@ -35,7 +35,7 @@ export default class PropertyFactory {
         case 0:
           p = new KeyframedValueProperty(
             elem,
-            data as VectorProperty<number[]>,
+            data as unknown as VectorProperty<Keyframe[]>,
             mult,
             container
           )

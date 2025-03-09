@@ -1,9 +1,15 @@
 /* eslint-disable max-depth */
-import type { DocumentData, TextData, Vector2, Vector3 } from '@/types'
+import type {
+  DocumentData,
+  TextAnimatorAnimatables,
+  TextData,
+  Vector2,
+  Vector3,
+} from '@/types'
 
 import { RendererType } from '@/enums'
 import { addBrightnessToRGB, addHueToRGB, addSaturationToRGB } from '@/utils'
-import Bezier from '@/utils/Bezier'
+import Bezier, { type BezierData } from '@/utils/Bezier'
 import { createSizedArray } from '@/utils/helpers/arrays'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import Matrix from '@/utils/Matrix'
@@ -74,12 +80,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
     let len
     const letters = documentData.l
     let pathInfo: {
-      segments: {
-        points: {
-          partialLength: number
-          point: Vector2
-        }[]
-      }[]
+      segments: BezierData[]
       tLength: number
     }
     let currentLength = 0
@@ -89,12 +90,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
     let pointInd = 0
     let segmentInd = 0
     let prevPoint
-    let points:
-      | null
-      | {
-          partialLength: number
-          point: Vector2
-        }[] = null
+    let points: null | BezierData['points'] = null
     let segments
     let partialLength = 0
     let totalLength = 0
@@ -321,7 +317,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
               animatorSelector = animators[j].s
               mult = animatorSelector.getMult(
                 letters?.[i].anIndexes[j],
-                textData.a[j].s.totalChars
+                textData.a?.[j].s.totalChars
               )
               if (mult.length) {
                 animatorOffset += animatorProps.p.v[0] * mult[0]
@@ -758,12 +754,12 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
 
       if (renderedLettersCount <= i) {
         letterValue = new LetterProps(
-          letterO,
-          letterSw,
+          Number(letterO),
+          Number(letterSw),
           letterSc,
           letterFc,
           letterM,
-          letterP
+          letterP as any
         )
         this.renderedLetters.push(letterValue)
         renderedLettersCount += 1
@@ -772,11 +768,11 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
         letterValue = this.renderedLetters[i]
         this.lettersChangedFlag =
           letterValue.update(
-            letterO,
-            letterSw,
-            letterSc,
-            letterFc,
-            letterM,
+            Number(letterO),
+            Number(letterSw),
+            letterSc as any,
+            letterFc as any,
+            letterM as any,
             letterP
           ) || this.lettersChangedFlag
       }

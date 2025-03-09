@@ -1,4 +1,4 @@
-import type { Characacter, FontList } from '@/types'
+import type { Characacter, DocumentData, FontList } from '@/types'
 
 import { RendererType } from '@/enums'
 import { createNS, createTag, isServer } from '@/utils'
@@ -37,7 +37,7 @@ export default class FontManager {
   private static readonly ZERO_WIDTH_JOINER_CODE_POINT = 8205
 
   public chars: Characacter[] | null = null
-  public fonts: FontList[] = []
+  public fonts: DocumentData[] = []
   public isLoaded = false
   public typekitLoaded = 0
   private _warned = false
@@ -193,7 +193,10 @@ export default class FontManager {
     }
   }
 
-  public addFonts(fontData: { list: FontList[] }, defs?: SVGDefsElement): void {
+  public addFonts(
+    fontData: { list: DocumentData[] },
+    defs?: SVGDefsElement
+  ): void {
     if (!fontData) {
       this.isLoaded = true
       return
@@ -343,7 +346,7 @@ export default class FontManager {
     return FontManager.emptyChar
   }
 
-  public getFontByName(name?: string): FontList {
+  public getFontByName(name?: string): DocumentData {
     let i = 0
     const len = this.fonts.length
     while (i < len) {

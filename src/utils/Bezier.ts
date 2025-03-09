@@ -6,13 +6,6 @@ import { getDefaultCurveSegments } from '@/utils/getterSetter'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
 import { bezierLengthPool, segmentsLengthPool } from '@/utils/pooling'
 
-// buildBezierData,
-// getNewSegment,
-// getPointInSegment,
-// getSegmentsLength,
-// pointOnLine2D,
-// pointOnLine3D,
-
 export default class Bezier {
   private static bezierSegmentPoints = createTypedArray(ArrayType.Float32, 8)
 

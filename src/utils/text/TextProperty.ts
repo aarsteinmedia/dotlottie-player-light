@@ -16,16 +16,18 @@ export default class TextProperty {
   _mdf: boolean
   canResize: boolean
   comp: ElementInterface['comp']
-  currentData: TextData
+  currentData: DocumentData
   data: TextData
   defaultBoxWidth: Vector2 = [0, 0]
   effectsSequence: any[]
   elem: ElementInterface
+  frameId?: number
   keysIndex: number
   kf: boolean
+  lock?: boolean
   minimumFontSize: number
-  pv: string
-  v: string
+  pv: DocumentData | string
+  v: DocumentData | string
 
   constructor(elem: ElementInterface, data: TextData) {
     this._frameId = initialDefaultFrame
@@ -73,7 +75,7 @@ export default class TextProperty {
       t: 0,
       tr: 0,
       yOffset: 0,
-    }
+    } as any
     this.copyData(this.currentData, this.data.d?.k[0].s)
 
     // console.log(this.data)
@@ -148,9 +150,12 @@ export default class TextProperty {
     this.elem.addDynamicProperty(this)
   }
 
-  completeTextData(documentData: TextData) {
+  completeTextData(documentData: DocumentData) {
     documentData.__complete = true
-    const fontManager = this.elem.globalData.fontManager
+    const { fontManager } = this.elem.globalData
+    if (!fontManager) {
+      throw new Error('FontManager not loaded')
+    }
     const data = this.data
     const letters: Letter[] = []
     let i
@@ -174,7 +179,7 @@ export default class TextProperty {
     documentData.fWeight = fontProps.weight
     documentData.fStyle = fontProps.style
     documentData.finalSize = documentData.s
-    documentData.finalText = this.buildFinalText(documentData.t)
+    documentData.finalText = this.buildFinalText(`${documentData.t}`)
     len = documentData.finalText?.length || 0
     documentData.finalLineHeight = documentData.lh
     let trackingOffset = (documentData.tr / 1000) * documentData.finalSize
@@ -186,7 +191,7 @@ export default class TextProperty {
       let currentHeight
       let finalText
       while (flag) {
-        finalText = this.buildFinalText(documentData.t)
+        finalText = this.buildFinalText(`${documentData.t}`)
         currentHeight = 0
         lineWidth = 0
         len = finalText.length
@@ -221,7 +226,7 @@ export default class TextProperty {
                 documentData.finalSize
               ) || 0
           }
-          if (lineWidth + cLength > boxWidth && finalText[i] !== ' ') {
+          if (lineWidth + cLength > Number(boxWidth) && finalText[i] !== ' ') {
             if (lastSpaceIndex === -1) {
               len += 1
             } else {
@@ -238,11 +243,12 @@ export default class TextProperty {
             lineWidth += trackingOffset
           }
         }
-        currentHeight += (fontData.ascent * documentData.finalSize) / 100
+        currentHeight +=
+          (Number(fontData.ascent) * documentData.finalSize) / 100
         if (
           this.canResize &&
           documentData.finalSize > this.minimumFontSize &&
-          boxHeight < currentHeight
+          Number(boxHeight) < currentHeight
         ) {
           documentData.finalSize -= 1
           documentData.finalLineHeight =
@@ -367,12 +373,15 @@ export default class TextProperty {
     const animators = data.a
     let animatorData
     let letterData
-    const jLen = animators.length
+    const jLen = animators?.length || 0
     let based
     let ind
     const indexes = []
     for (j = 0; j < jLen; j++) {
-      animatorData = animators[j]
+      animatorData = animators?.[j]
+      if (!animatorData) {
+        continue
+      }
       if (animatorData.a.sc) {
         documentData.strokeColorAnim = true
       }
@@ -405,7 +414,9 @@ export default class TextProperty {
           ind += 1
         }
       }
-      data.a[j].s.totalChars = ind
+      if (data.a) {
+        data.a[j].s.totalChars = ind
+      }
       let currentInd = -1
       let newInd
       if (animatorData.s.rn === 1) {
@@ -427,10 +438,11 @@ export default class TextProperty {
     documentData.yOffset =
       documentData.finalLineHeight || documentData.finalSize * 1.2
     documentData.ls = documentData.ls || 0
-    documentData.ascent = (fontData.ascent * documentData.finalSize) / 100
+    documentData.ascent =
+      (Number(fontData.ascent) * documentData.finalSize) / 100
   }
 
-  copyData(obj: TextData, data?: DocumentData | LetterProperties) {
+  copyData(obj: DocumentData, data?: DocumentData | LetterProperties) {
     for (const s in data) {
       if (Object.prototype.hasOwnProperty.call(data, s)) {
         // @ts-expect-error: ignore
@@ -439,14 +451,13 @@ export default class TextProperty {
     }
     return obj
   }
-
   getKeyframeValue() {
-    const textKeys = this.data.d.k
+    const textKeys = this.data.d?.k
     const frameNum = this.elem.comp.renderedFrame
     let i = 0
-    const len = textKeys.length
+    const len = textKeys?.length || 0
     while (i <= len - 1) {
-      if (i === len - 1 || textKeys[i + 1].t > frameNum) {
+      if (i === len - 1 || Number(textKeys?.[i + 1].t) > frameNum) {
         break
       }
       i++
@@ -454,9 +465,8 @@ export default class TextProperty {
     if (this.keysIndex !== i) {
       this.keysIndex = i
     }
-    return this.data.d.k[this.keysIndex].s
+    return this.data.d?.k[this.keysIndex].s
   }
-
   getValue(_finalValue: unknown) {
     if (
       (this.elem.globalData.frameId === this.frameId ||
@@ -465,7 +475,7 @@ export default class TextProperty {
     ) {
       return
     }
-    this.currentData.t = this.data.d.k[this.keysIndex].s.t
+    this.currentData.t = this.data.d?.k[this.keysIndex].s.t as any
     const currentValue = this.currentData
     const currentIndex = this.keysIndex
     if (this.lock) {
@@ -476,13 +486,14 @@ export default class TextProperty {
     this._mdf = false
     let i
     const len = this.effectsSequence.length
-    let finalValue = _finalValue || this.data.d.k[this.keysIndex].s
+    let finalValue =
+      (_finalValue as DocumentData) || this.data.d?.k[this.keysIndex].s
     for (i = 0; i < len; i++) {
       // Checking if index changed to prevent creating a new object every time the expression updates.
       if (currentIndex === this.keysIndex) {
-        finalValue = this.effectsSequence[i](this.currentData, finalValue.t)
+        finalValue = this.effectsSequence[i](this.currentData, finalValue?.t)
       } else {
-        finalValue = this.effectsSequence[i](finalValue, finalValue.t)
+        finalValue = this.effectsSequence[i](finalValue, finalValue?.t)
       }
     }
     if (currentValue !== finalValue) {
@@ -495,7 +506,7 @@ export default class TextProperty {
   }
 
   recalculate(index: number) {
-    const dData = this.data.d.k[index].s
+    const dData = this.data.d!.k[index].s
     dData.__complete = false
     this.keysIndex = 0
     this._isFirstFrame = true
@@ -503,7 +514,7 @@ export default class TextProperty {
   }
 
   searchKeyframes() {
-    this.kf = this.data.d.k.length > 1
+    this.kf = this.data.d!.k.length > 1
     if (this.kf) {
       this.addEffect(this.getKeyframeValue.bind(this))
     }
@@ -514,7 +525,7 @@ export default class TextProperty {
     return this.searchKeyframes()
   }
 
-  setCurrentData(data: TextData) {
+  setCurrentData(data: DocumentData) {
     if (!data.__complete) {
       this.completeTextData(data)
     }
@@ -533,9 +544,9 @@ export default class TextProperty {
   updateDocumentData(newData: DocumentData, indexFromProps: number) {
     let index = indexFromProps
     index = index === undefined ? this.keysIndex : index
-    let dData = this.copyData({}, this.data.d.k[index].s)
+    let dData = this.copyData({} as DocumentData, this.data.d?.k[index].s)
     dData = this.copyData(dData, newData)
-    this.data.d.k[index].s = dData
+    this.data.d!.k[index].s = dData
     this.recalculate(index)
     this.setCurrentData(dData)
     this.elem.addDynamicProperty(this)

@@ -1004,7 +1004,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
       outputBezier.length()
     )
   },
-  singlePoint = (p: number[]) => new PolynomialBezier(p, p, p, p, false),
+  singlePoint = (p: Vector2) => new PolynomialBezier(p, p, p, p, false),
   // based on @Toji's https://github.com/toji/gl-matrix/
   slerp = (a: Vector4, b: Vector4, t: number): Vector4 => {
     const out: Vector4 = [0, 0, 0, 0]

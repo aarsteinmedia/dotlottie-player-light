@@ -13,8 +13,11 @@ import type Matrix from '@/utils/Matrix'
 // import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 import type ShapePath from '@/utils/shapes/ShapePath'
 import type SlotManager from '@/utils/SlotManager'
+import type TextProperty from '@/utils/text/TextProperty'
 // import type PropertyFactory from '@/utils/PropertyFactory'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
+
+import TextAnimatorDataProperty from './utils/text/TextAnimatorDataProperty'
 
 export type AnimationDirection = 1 | -1
 export type AnimationEventName =
@@ -69,7 +72,7 @@ export interface LayerInterFace {
 }
 
 export interface ElementInterface extends AnimationItem {
-  addDynamicProperty: (prop: DynamicPropertyContainer) => void
+  addDynamicProperty: (prop: TextProperty | DynamicPropertyContainer) => void
   animationItem: AnimationItem
   assetData: ImageData
   baseElement: SVGElement
@@ -115,6 +118,11 @@ export interface ElementInterface extends AnimationItem {
   searchExtraCompositions: (assets: LottieAsset[]) => void
   supports3d: boolean
   svgElement?: SVGSVGElement
+  textProperty?: {
+    currentData: {
+      l: number[]
+    }
+  }
   tm: number
 }
 
@@ -669,6 +677,7 @@ interface LayerStyle {
 }
 
 export interface LetterProperties {
+  __complete?: boolean
   _mdf: {
     fc: boolean
     m: boolean
@@ -694,8 +703,8 @@ export interface LetterProperties {
 export interface DocumentData extends FontList {
   __complete?: boolean
   ascent?: number
-  boxWidth?: number
-  f: unknown
+  boxWidth?: Vector2 | number
+  f: string
   fc?: Vector3 | string
   fillColorAnim?: boolean
   finalLineHeight?: number
@@ -719,7 +728,7 @@ export interface DocumentData extends FontList {
   strokeColorAnim?: boolean
   strokeWidthAnim?: boolean
   sw?: number
-  sz: Vector2
+  sz: Vector2[]
   t: string | number
   tr: number
   yOffset?: number
@@ -869,7 +878,7 @@ export interface TextAnimatorAnimatables {
 export interface TextData {
   __complete: boolean
   /** Text range */
-  a?: TextAnimatorAnimatables
+  a?: TextAnimatorDataProperty[]
   ascent: number
   boxWidth: Vector2
   /** Text Document */
@@ -910,7 +919,7 @@ export interface TextData {
   strokeColorAnim: boolean
   strokeWidthAnim: boolean
   sw: number
-  t: number
+  t: string // number
   tr: number
   yOffset: number
 }
