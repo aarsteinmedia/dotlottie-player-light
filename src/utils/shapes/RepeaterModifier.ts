@@ -1,9 +1,11 @@
-import type { ElementInterface, LottieLayer, Shape, ShapeData } from '@/types'
+import type { ElementInterface, LottieLayer, Shape } from '@/types'
 
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import TransformProperty from '@/utils/TransformProperty'
+
+import ShapePath from './ShapePath'
 
 export default class RepeaterModifier extends ShapeModifier {
   matrix!: Matrix
@@ -53,10 +55,10 @@ export default class RepeaterModifier extends ShapeModifier {
     return newElements
   }
   override init(
-    elem: Shape,
+    elem: ElementInterface,
     arr: LottieLayer[],
     posFromProps: number,
-    elemsData: ShapeData
+    elemsData: ShapePath
   ) {
     let pos = posFromProps
     this.elem = elem

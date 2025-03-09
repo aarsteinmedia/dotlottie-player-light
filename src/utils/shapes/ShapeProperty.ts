@@ -1,4 +1,5 @@
 import type { ElementInterface, LottieComp, Shape, StrokeData } from '@/types'
+import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import { degToRads } from '@/utils'
@@ -7,7 +8,7 @@ import { initialDefaultFrame, roundCorner } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 import ShapePool from '@/utils/pooling/ShapePool'
-import PropertyFactory, { type ValueProperty } from '@/utils/PropertyFactory'
+import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePath from '@/utils/shapes/ShapePath'
 
 export default class ShapePropertyFactory {
@@ -593,7 +594,7 @@ export class ShapeProperty {
     if (!pathData) {
       throw new Error('Could now get Path Data')
     }
-    this.v = ShapePool.clone(pathData)
+    this.v = ShapePool.clone(pathData as ShapePath)
     this.pv = ShapePool.clone(this.v)
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
@@ -632,8 +633,8 @@ class KeyframedShapeProperty {
   public propType
   public pv
   public reset
-  public setVValue: (shape: ShapeData) => void
-  public v: ShapeData
+  public setVValue: (shape: ShapePath) => void
+  public v: ShapePath
   constructor(elem: any, data: any, type: number) {
     this.propType = 'shape'
     this.comp = elem.comp
@@ -708,7 +709,7 @@ function processEffectsSequence(this: any) {
 /**
  *
  */
-function setVValue(this: any, newPath: ShapeData) {
+function setVValue(this: any, newPath: ShapePath) {
   if (!shapesEqual(this.v, newPath)) {
     this.v = ShapePool.clone(newPath)
     this.localShapeCollection.releaseShapes()
@@ -832,7 +833,7 @@ function resetShape(this: {
 /**
  *
  */
-function shapesEqual(shape1: ShapeData, shape2: ShapeData) {
+function shapesEqual(shape1: ShapePath, shape2: ShapePath) {
   if (shape1._length !== shape2._length || shape1.c !== shape2.c) {
     return false
   }

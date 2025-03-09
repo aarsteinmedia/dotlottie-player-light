@@ -1,14 +1,15 @@
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
-import { ShapeData, Vector2 } from '@/types'
+import { ElementInterface, Shape, Vector2 } from '@/types'
 import Bezier from '@/utils/Bezier'
 import { segmentsLengthPool } from '@/utils/pooling'
 import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
+import ShapePath from '@/utils/shapes/ShapePath'
 
 export default class TrimModifier extends ShapeModifier {
-  addPaths(newPaths: ShapeData[], localShapeCollection: ShapeCollection) {
+  addPaths(newPaths: ShapePath[], localShapeCollection: ShapeCollection) {
     const { length } = newPaths
     for (let i = 0; i < length; i++) {
       localShapeCollection.addShape(newPaths[i])
@@ -247,7 +248,7 @@ export default class TrimModifier extends ShapeModifier {
     return shapeSegments
   }
 
-  initModifierProperties(elem: any, data: any) {
+  initModifierProperties(elem: ElementInterface, data: Shape) {
     this.s = PropertyFactory.getProp(elem, data.s, 0, 0.01, this)
     this.e = PropertyFactory.getProp(elem, data.e, 0, 0.01, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, 0, this)

@@ -1,4 +1,5 @@
-import type { Shape, ShapeData } from '@/types'
+import type { Shape } from '@/types'
+import type { ValueProperty } from '@/utils/Properties'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
 import {
@@ -8,14 +9,15 @@ import {
   pruneIntersections,
 } from '@/utils'
 import ShapePool from '@/utils/pooling/ShapePool'
-import PropertyFactory, { PropertyType } from '@/utils/PropertyFactory'
+import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
+import ShapePath from '@/utils/shapes/ShapePath'
 
 export default class OffsetPathModifier extends ShapeModifier {
-  amount?: PropertyType
+  amount?: ValueProperty
   getValue!: () => void
   lineJoin?: number
-  miterLimit?: PropertyType
+  miterLimit?: ValueProperty
   initModifierProperties(elem: any, data: Shape) {
     this.getValue = this.processKeys
     this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
@@ -25,12 +27,12 @@ export default class OffsetPathModifier extends ShapeModifier {
   }
 
   processPath(
-    inputBezier: ShapeData,
+    inputBezier: ShapePath,
     amount: number,
     lineJoin: number,
     miterLimit: number
   ) {
-    const outputBezier = ShapePool.newElement<ShapeData>()
+    const outputBezier = ShapePool.newElement<ShapePath>()
     outputBezier.c = inputBezier.c
     let count = inputBezier.length()
     if (!inputBezier.c) {

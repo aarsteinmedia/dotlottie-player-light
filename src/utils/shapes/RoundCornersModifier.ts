@@ -1,21 +1,22 @@
-import type { ShapeData } from '@/types'
+import type { ValueProperty } from '@/utils/Properties'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { roundCorner } from '@/utils/getterSetter'
 import ShapePool from '@/utils/pooling/ShapePool'
-import PropertyFactory, { PropertyType } from '@/utils/PropertyFactory'
+import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
 export default class RoundCornersModifier extends ShapeModifier {
   getValue!: () => void
-  rd?: PropertyType
+  rd?: ValueProperty
   initModifierProperties(elem: any, data: any) {
     this.getValue = this.processKeys
     this.rd = PropertyFactory.getProp(elem, data.r, 0, null, this)
     this._isAnimated = !!this.rd?.effectsSequence.length
   }
 
-  processPath(path: ShapeData, round: number) {
-    const clonedPath = ShapePool.newElement<ShapeData>()
+  processPath(path: ShapePath, round: number) {
+    const clonedPath = ShapePool.newElement<ShapePath>()
     clonedPath.c = path.c
     const len = Number(path._length)
     let currentV

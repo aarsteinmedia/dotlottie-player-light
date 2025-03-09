@@ -2,65 +2,64 @@ import { ArrayType } from '@/enums'
 import { getDefaultCurveSegments } from '@/utils/getterSetter'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
 
-export const poolFactory = <Release = unknown>(
+export default class PoolFactory {
+  private _create: () => void
+  private _length = 0
+  private _maxLength: number
+  private _release?: <Release = unknown>(el: Release) => void
+  private pool: unknown[]
+  constructor(
     initialLength: number,
     _create: () => void,
-    _release?: (el: Release) => void
-  ) => {
-    let _length = 0
-    let _maxLength = initialLength
-    let pool = createSizedArray(_maxLength)
+    _release?: <Release = unknown>(el: Release) => void
+  ) {
+    this._maxLength = initialLength
+    this._create = _create
+    this._release = _release
+    this.pool = createSizedArray(this._maxLength)
 
-    const newElement = <T = unknown>() => {
-        let element
-        if (_length) {
-          _length -= 1
-          element = pool[_length]
-        } else {
-          element = _create()
-        }
-        return element as T
-      },
-      release = <T extends Release>(element: T) => {
-        if (_length === _maxLength) {
-          pool = pooling.double(pool)
-          _maxLength *= 2
-        }
-        if (_release) {
-          _release(element)
-        }
-        pool[_length] = element
-        _length += 1
-      },
-      obj = {
-        newElement,
-        release,
-      }
-
-    return obj
-  },
-  pointPool = (() =>
-    poolFactory(8, () => createTypedArray(ArrayType.Float32, 2)))(),
-  pooling = (function () {
-    /**
-     *
-     */
-    function double(arr: unknown[]) {
-      return arr.concat(createSizedArray(arr.length))
+    this.newElement = this.newElement.bind(this)
+    this.release = this.release.bind(this)
+  }
+  newElement<T = unknown>() {
+    let element
+    if (this._length) {
+      this._length -= 1
+      element = this.pool[this._length]
+    } else {
+      element = this._create()
     }
-
-    return {
-      double: double,
+    return element as T
+  }
+  release<T = unknown>(element: T) {
+    if (this._length === this._maxLength) {
+      this.pool = pooling.double(this.pool)
+      this._maxLength *= 2
     }
-  })(),
+    if (this._release) {
+      this._release(element)
+    }
+    this.pool[this._length] = element
+    this._length += 1
+  }
+}
+
+export class Pooling {
+  static double(arr: unknown[]) {
+    return arr.concat(createSizedArray(arr.length))
+  }
+}
+
+export const pointPool = (() =>
+    new PoolFactory(8, () => createTypedArray(ArrayType.Float32, 2)))(),
   bezierLengthPool = (() =>
-    poolFactory(8, () => ({
+    new PoolFactory(8, () => ({
       addedLength: 0,
       lengths: createTypedArray(ArrayType.Float32, getDefaultCurveSegments()),
       percents: createTypedArray(ArrayType.Float32, getDefaultCurveSegments()),
     })))(),
   segmentsLengthPool = (() =>
-    poolFactory(
+    new PoolFactory(
       8,
       () => ({
         lengths: [],

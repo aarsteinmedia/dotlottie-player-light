@@ -9,22 +9,22 @@ import TextSelectorProperty from '@/utils/text/TextSelectorProperty'
 
 export default class TextAnimatorDataProperty {
   a?: {
-    a: unknown
-    fb: unknown
-    fc: unknown
-    fh: unknown
-    fs: unknown
+    a: ValueProperty
+    fb: ValueProperty
+    fc: ValueProperty
+    fh: ValueProperty
+    fs: ValueProperty
     o: ValueProperty
-    p: unknown
-    r: unknown
-    rx: unknown
-    ry: unknown
-    s: unknown
-    sa: unknown
-    sc: unknown
-    sk: unknown
-    sw: unknown
-    t: unknown
+    p: ValueProperty
+    r: ValueProperty
+    rx: ValueProperty
+    ry: ValueProperty
+    s: ValueProperty
+    sa: ValueProperty
+    sc: ValueProperty
+    sk: ValueProperty
+    sw: ValueProperty
+    t: ValueProperty
   }
   s?: TextSelectorProperty
   constructor(

@@ -397,7 +397,7 @@ export default class TextProperty {
         documentData.fillColorAnim = true
       }
       ind = 0
-      based = Number(animatorData.s.b)
+      based = Number(animatorData.s?.b)
       for (i = 0; i < len; i++) {
         letterData = letters[i]
         letterData.anIndexes[j] = ind
@@ -408,7 +408,7 @@ export default class TextProperty {
             (letterData.n || letterData.val === ' ' || i === len - 1)) ||
           (based === 4 && (letterData.n || i === len - 1))
         ) {
-          if (animatorData.s.rn === 1) {
+          if (animatorData.s?.rn === 1) {
             indexes.push(ind)
           }
           ind += 1
