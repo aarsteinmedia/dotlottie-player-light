@@ -1,4 +1,4 @@
-import type { CompInterface, TextRangeValue } from '@/types'
+import type { ElementInterface, TextRangeValue } from '@/types'
 
 import BezierFactory from '@/utils/BezierFactory'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -8,19 +8,21 @@ import PropertyFactory from '@/utils/PropertyFactory'
 export default class TextSelectorProperty extends DynamicPropertyContainer {
   _currentTextLength: number
   a: ValueProperty
-  comp: CompInterface
+  b?: any
+  comp: ElementInterface
   data: TextRangeValue
   e: ValueProperty | { v: number }
-  elem: CompInterface
+  elem: ElementInterface
   finalE: number
   finalS: number
   k: boolean
   ne: any
   o: any
+  rn?: number
   s: ValueProperty
   sm: any
   xe: any
-  constructor(elem: CompInterface, data: TextRangeValue) {
+  constructor(elem: ElementInterface, data: TextRangeValue) {
     super()
     this._currentTextLength = -1
     this.k = false
@@ -30,17 +32,47 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
     this.finalS = 0
     this.finalE = 0
     this.initDynamicPropertyContainer(elem)
-    this.s = PropertyFactory.getProp(elem, data.s || { k: 0 }, 0, 0, this)
+    this.s = PropertyFactory.getProp(
+      elem,
+      data.s || { k: 0 },
+      0,
+      0,
+      this as any
+    )
     if ('e' in data) {
-      this.e = PropertyFactory.getProp(elem, data.e, 0, 0, this)
+      this.e = PropertyFactory.getProp(elem, data.e, 0, 0, this as any)
     } else {
       this.e = { v: 100 }
     }
-    this.o = PropertyFactory.getProp(elem, data.o || { k: 0 }, 0, 0, this)
-    this.xe = PropertyFactory.getProp(elem, data.xe || { k: 0 }, 0, 0, this)
-    this.ne = PropertyFactory.getProp(elem, data.ne || { k: 0 }, 0, 0, this)
-    this.sm = PropertyFactory.getProp(elem, data.sm || { k: 100 }, 0, 0, this)
-    this.a = PropertyFactory.getProp(elem, data.a, 0, 0.01, this)
+    this.o = PropertyFactory.getProp(
+      elem,
+      data.o || { k: 0 },
+      0,
+      0,
+      this as any
+    )
+    this.xe = PropertyFactory.getProp(
+      elem,
+      data.xe || { k: 0 },
+      0,
+      0,
+      this as any
+    )
+    this.ne = PropertyFactory.getProp(
+      elem,
+      data.ne || { k: 0 },
+      0,
+      0,
+      this as any
+    )
+    this.sm = PropertyFactory.getProp(
+      elem,
+      data.sm || { k: 100 },
+      0,
+      0,
+      this as any
+    )
+    this.a = PropertyFactory.getProp(elem, data.a, 0, 0.01, this as any)
     if (!this.dynamicProperties.length) {
       this.getValue()
     }
@@ -158,7 +190,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
     }
     return mult * Number(this.a.v)
   }
-  getValue(newCharsFlag?: boolean) {
+  override getValue(newCharsFlag?: boolean) {
     this.iterateDynamicProperties()
     this._mdf = newCharsFlag || this._mdf
     this._currentTextLength = this.elem.textProperty?.currentData.l.length || 0

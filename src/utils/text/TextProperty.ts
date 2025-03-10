@@ -382,17 +382,17 @@ export default class TextProperty {
       if (!animatorData) {
         continue
       }
-      if (animatorData.a.sc) {
+      if (animatorData.a?.sc) {
         documentData.strokeColorAnim = true
       }
-      if (animatorData.a.sw) {
+      if (animatorData.a?.sw) {
         documentData.strokeWidthAnim = true
       }
       if (
-        animatorData.a.fc ||
-        animatorData.a.fh ||
-        animatorData.a.fs ||
-        animatorData.a.fb
+        animatorData.a?.fc ||
+        animatorData.a?.fh ||
+        animatorData.a?.fs ||
+        animatorData.a?.fb
       ) {
         documentData.fillColorAnim = true
       }
@@ -408,7 +408,7 @@ export default class TextProperty {
             (letterData.n || letterData.val === ' ' || i === len - 1)) ||
           (based === 4 && (letterData.n || i === len - 1))
         ) {
-          if (animatorData.s.rn === 1) {
+          if (Number(animatorData.s?.rn) === 1) {
             indexes.push(ind)
           }
           ind += 1

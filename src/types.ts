@@ -14,6 +14,7 @@ import type {
 } from '@/effects'
 import type AudioElement from '@/elements/AudioElement'
 import type BaseElement from '@/elements/BaseElement'
+import type CompElement from '@/elements/CompElement'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type HierarchyElement from '@/elements/helpers/HierarchyElement'
 import type {
@@ -24,6 +25,7 @@ import type MaskElement from '@/elements/MaskElement'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
 import type ShapeElement from '@/elements/ShapeElement'
 import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
+import type TextElement from '@/elements/TextElement'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
 import type BaseRenderer from '@/renderers/BaseRenderer'
 import type AudioController from '@/utils/audio/AudioController'
@@ -82,10 +84,12 @@ export interface Transformer {
 export type ElementInterface = BaseElement &
   HierarchyElement &
   AudioElement &
+  CompElement &
   SVGShapeElement &
   SVGTextElement &
   SVGStopElement &
   SVGStrokeStyleData &
+  TextElement &
   BaseRenderer &
   AnimationItem
 
