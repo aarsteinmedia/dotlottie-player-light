@@ -10,12 +10,13 @@ import {
 } from '@/utils/Properties'
 
 export default class PropertyFactory {
-  static getProp = <T = number>(
+  static getProp = (
+    // <T = number>
     elem: ElementInterface,
-    dataFromProps?: VectorProperty<T>,
+    dataFromProps?: any, // VectorProperty<T>,
     type?: number,
     mult?: null | number,
-    container?: ElementInterface | GroupEffect
+    container?: any // ElementInterface | GroupEffect
   ) => {
     let data = dataFromProps
     if (data && 'sid' in data && data.sid) {

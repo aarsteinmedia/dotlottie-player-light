@@ -21,6 +21,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
   rn?: number
   s: ValueProperty
   sm: any
+  totalChars?: number
   xe: any
   constructor(elem: ElementInterface, data: TextRangeValue) {
     super()

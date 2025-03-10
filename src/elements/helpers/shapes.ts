@@ -3,15 +3,10 @@ import type {
   MultiDimensionalProperty,
   ValueProperty,
 } from '@/utils/Properties'
+import type { ShapeProperty } from '@/utils/shapes/ShapeProperty'
 
 import { lineCapEnum, lineJoinEnum, RendererType, ShapeType } from '@/enums'
-import {
-  AnimatedProperty,
-  ElementInterface,
-  Shape,
-  ShapeDataProperty,
-  Transformer,
-} from '@/types'
+import { AnimatedProperty, ElementInterface, Shape, Transformer } from '@/types'
 import { createNS, degToRads } from '@/utils'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -38,14 +33,14 @@ export class SVGShapeData {
   hd?: boolean
   lStr: string
   lvl: number
-  sh: ShapeDataProperty
+  sh: ShapeProperty
   styles: any[]
   transformers: Transformer[]
   ty?: ShapeType
   constructor(
     transformers: Transformer[],
     level: number,
-    shape: ShapeDataProperty
+    shape: ShapeProperty
   ) {
     this.caches = []
     this.styles = []
@@ -294,7 +289,7 @@ export class SVGStrokeStyleData extends DynamicPropertyContainer {
       elem,
       (data.d || []) as any,
       RendererType.SVG,
-      this
+      this as any
     )
     this.c = PropertyFactory.getProp(elem, data.c as any, 1, 255, this as any)
     this.style = styleObj

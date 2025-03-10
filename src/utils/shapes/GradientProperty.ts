@@ -66,7 +66,7 @@ export default class GradientProperty extends DynamicPropertyContainer {
     return true
   }
 
-  getValue(forceRender?: boolean) {
+  override getValue(forceRender?: boolean) {
     this.prop.getValue()
     this._mdf = false
     this._cmdf = false

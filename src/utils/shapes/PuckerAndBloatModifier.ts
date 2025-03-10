@@ -1,19 +1,21 @@
-import type { ShapeData } from '@/types'
+import type { ElementInterface } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import ShapePool from '@/utils/pooling/ShapePool'
-import PropertyFactory, { type PropertyType } from '@/utils/PropertyFactory'
+import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
+import type { ValueProperty } from '../Properties'
+
 export default class PuckerAndBloatModifier extends ShapeModifier {
-  amount?: PropertyType
-  getValue!: () => void
-  initModifierProperties(elem: any, data: any) {
+  amount?: ValueProperty
+  initModifierProperties(elem: ElementInterface, data: any) {
     this.getValue = this.processKeys
     this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
     this._isAnimated = !!this.amount?.effectsSequence.length
   }
 
-  processPath(path: ShapeData, amount: number) {
+  processPath(path: ShapePath, amount: number) {
     const percent = amount / 100
     const centerPoint = [0, 0]
     const pathLength = Number(path._length)
@@ -24,7 +26,7 @@ export default class PuckerAndBloatModifier extends ShapeModifier {
     }
     centerPoint[0] /= pathLength
     centerPoint[1] /= pathLength
-    const clonedPath = ShapePool.newElement<ShapeData>()
+    const clonedPath = ShapePool.newElement<ShapePath>()
     clonedPath.c = path.c
     let vX
     let vY

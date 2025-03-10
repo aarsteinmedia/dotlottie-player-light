@@ -1,4 +1,9 @@
-import type { CompInterface, LottieLayer, Shape } from '@/types'
+import type {
+  CompInterface,
+  ElementInterface,
+  LottieLayer,
+  Shape,
+} from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import Matrix from '@/utils/Matrix'
@@ -7,6 +12,8 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import TransformProperty from '@/utils/TransformProperty'
 
 export default class RepeaterModifier extends ShapeModifier {
+  _currentCopies?: number
+
   matrix!: Matrix
 
   pMatrix!: Matrix
@@ -14,7 +21,6 @@ export default class RepeaterModifier extends ShapeModifier {
   rMatrix!: Matrix
 
   sMatrix!: Matrix
-
   tMatrix!: Matrix
   applyTransforms(
     pMatrix: Matrix,
@@ -54,7 +60,7 @@ export default class RepeaterModifier extends ShapeModifier {
     return newElements
   }
   override init(
-    elem: CompInterface,
+    elem: ElementInterface,
     arr: LottieLayer[],
     posFromProps: number,
     elemsData: ShapePath
@@ -99,12 +105,13 @@ export default class RepeaterModifier extends ShapeModifier {
     this.tMatrix = new Matrix()
     this.matrix = new Matrix()
   }
+
   processShapes(_isFirstFrame: boolean) {
     let items
     let itemsTransform
     let i
     let dir
-    let cont
+    let cont: number
     let hasReloaded = false
     if (this._mdf || _isFirstFrame) {
       const copies = Math.ceil(this.c.v)

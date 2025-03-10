@@ -1,6 +1,7 @@
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
+import { SVGShapeData } from '@/elements/helpers/shapes'
 import { CompInterface, Shape, Vector2 } from '@/types'
 import Bezier from '@/utils/Bezier'
 import { segmentsLengthPool } from '@/utils/pooling'
@@ -193,7 +194,7 @@ export default class TrimModifier extends ShapeModifier {
     }
     return shapes
   }
-  addShapeToModifier(shapeData: any) {
+  addShapeToModifier(shapeData: SVGShapeData) {
     shapeData.pathsData = []
   }
   calculateShapeEdges(

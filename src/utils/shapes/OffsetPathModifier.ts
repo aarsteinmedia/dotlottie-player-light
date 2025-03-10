@@ -1,4 +1,4 @@
-import type { Shape } from '@/types'
+import type { ElementInterface, Shape } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
@@ -15,10 +15,9 @@ import ShapePath from '@/utils/shapes/ShapePath'
 
 export default class OffsetPathModifier extends ShapeModifier {
   amount?: ValueProperty
-  getValue!: () => void
   lineJoin?: number
   miterLimit?: ValueProperty
-  initModifierProperties(elem: any, data: Shape) {
+  initModifierProperties(elem: ElementInterface, data: Shape) {
     this.getValue = this.processKeys
     this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
     this.miterLimit = PropertyFactory.getProp(elem, data.ml, 0, null, this)

@@ -1,6 +1,6 @@
 import { ArrayType } from '@/enums'
 
-const createTypedArray = (function () {
+const createTypedArray = (() => {
   /**
    *
    */

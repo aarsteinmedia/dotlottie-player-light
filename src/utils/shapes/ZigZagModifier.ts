@@ -14,7 +14,6 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 class ZigZagModifier extends ShapeModifier {
   amplitude?: ValueProperty
   frequency?: ValueProperty
-  getValue!: () => void
   pointsType?: MultiDimensionalProperty
   static zigZagCorner(
     outputBezier: ShapePath,
@@ -60,7 +59,7 @@ class ZigZagModifier extends ShapeModifier {
    */
   static zigZagSegment(
     outputBezier: ShapePath,
-    segment: Vector2,
+    segment: PolynomialBezier,
     amplitude: number,
     frequency: number,
     pointType: number,
@@ -77,7 +76,7 @@ class ZigZagModifier extends ShapeModifier {
               )
             : 0,
         angle = segment.normalAngle(t),
-        point = segment.point(t)
+        point = segment.point(t) as Vector2
       setPoint(
         outputBezier,
         point,
@@ -107,13 +106,13 @@ class ZigZagModifier extends ShapeModifier {
   }
 
   processPath(
-    path: any,
+    path: ShapePath,
     amplitude: number,
     frequency: number,
     pointType: number
   ) {
     let count = path._length
-    const clonedPath = ShapePool.newElement<ShapeData>()
+    const clonedPath = ShapePool.newElement<ShapePath>()
     clonedPath.c = path.c
 
     if (!path.c) {
@@ -137,7 +136,7 @@ class ZigZagModifier extends ShapeModifier {
     )
 
     for (let i = 0; i < count; i++) {
-      direction = zigZagSegment(
+      direction = ZigZagModifier.zigZagSegment(
         clonedPath,
         segment,
         amplitude,
@@ -147,7 +146,7 @@ class ZigZagModifier extends ShapeModifier {
       )
 
       if (i === count - 1 && !path.c) {
-        segment = null
+        segment = null as any
       } else {
         segment = PolynomialBezier.shapeSegment(path, (i + 1) % count)
       }

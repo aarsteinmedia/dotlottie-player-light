@@ -2,7 +2,6 @@ import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type {
   Caching,
   ElementInterface,
-  LottieComp,
   Mask,
   Shape,
   StrokeData,

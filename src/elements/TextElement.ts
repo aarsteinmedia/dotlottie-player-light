@@ -100,7 +100,7 @@ class TextElement {
     this.lettersChangedFlag = true
     this.initFrame()
     this.initBaseData(data, globalData, comp)
-    this.textProperty = new TextProperty(this, data.t, this.dynamicProperties)
+    this.textProperty = new TextProperty(this as any, data.t) // this.dynamicProperties
     this.textAnimator = new TextAnimatorProperty(data.t!, this.renderType, this)
     this.initTransform()
     this.initHierarchy()

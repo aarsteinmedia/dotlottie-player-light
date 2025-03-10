@@ -1,4 +1,3 @@
-import type { SVGStrokeStyleData } from '@/elements/helpers/shapes'
 import type { ElementInterface, StrokeData } from '@/types'
 
 import { ArrayType, RendererType } from '@/enums'
@@ -19,7 +18,7 @@ export default class DashProperty extends DynamicPropertyContainer {
     elem: ElementInterface,
     data: StrokeData[],
     renderer: RendererType,
-    container: SVGStrokeStyleData
+    container: ElementInterface
   ) {
     super()
     this.elem = elem

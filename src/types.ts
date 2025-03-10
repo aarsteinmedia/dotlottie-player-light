@@ -938,9 +938,11 @@ export interface TextData {
   of: string
   /** Text Follow Path TODO: */
   p?: {
-    a: unknown
-    p: unknown
-    r: unknown
+    a: any
+    p: any
+    r: any
+    f: any
+    l: any
   }
   ps: null | Vector2
   s: number

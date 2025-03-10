@@ -1,11 +1,5 @@
 /* eslint-disable max-depth */
-import type {
-  DocumentData,
-  TextAnimatorAnimatables,
-  TextData,
-  Vector2,
-  Vector3,
-} from '@/types'
+import type { DocumentData, TextData, Vector3 } from '@/types'
 
 import { RendererType } from '@/enums'
 import { addBrightnessToRGB, addHueToRGB, addSaturationToRGB } from '@/utils'
@@ -234,7 +228,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
           animatorSelector = animators[j].s
           mult = animatorSelector.getMult(
             letters?.[i].anIndexes[j],
-            textData.a?.[j].s.totalChars
+            textData.a?.[j].s?.totalChars
           )
           if (mult.length) {
             animatorJustifyOffset +=
@@ -317,7 +311,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
               animatorSelector = animators[j].s
               mult = animatorSelector.getMult(
                 letters?.[i].anIndexes[j],
-                textData.a?.[j].s.totalChars
+                textData.a?.[j].s?.totalChars
               )
               if (mult.length) {
                 animatorOffset += animatorProps.p.v[0] * mult[0]
@@ -329,7 +323,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
               animatorSelector = animators[j].s
               mult = animatorSelector.getMult(
                 letters?.[i].anIndexes[j],
-                textData.a?.[j].s.totalChars
+                textData.a?.[j].s?.totalChars
               )
               if (mult.length) {
                 animatorOffset += animatorProps.a.v[0] * mult[0]
@@ -416,7 +410,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
             animatorSelector = animators[j].s
             mult = animatorSelector.getMult(
               letters?.[i].anIndexes[j],
-              textData.a?.[j].s.totalChars
+              textData.a?.[j].s?.totalChars
             )
             // This condition is to prevent applying tracking to first character in each line. Might be better to use a boolean "isNewLine"
             if (xPos !== 0 || documentData.j !== 0) {
@@ -461,7 +455,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
             animatorSelector = animators[j].s
             mult = animatorSelector.getMult(
               letters?.[i].anIndexes[j],
-              textData.a?.[j].s.totalChars
+              textData.a?.[j].s?.totalChars
             )
 
             if (mult.length) {
@@ -485,7 +479,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
             animatorSelector = animators[j].s
             mult = animatorSelector.getMult(
               letters?.[i].anIndexes[j],
-              textData.a?.[j].s.totalChars
+              textData.a?.[j].s?.totalChars
             )
             if (mult.length) {
               matrixHelper.scale(
@@ -507,7 +501,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
           animatorSelector = animators[j].s
           mult = animatorSelector.getMult(
             letters?.[i].anIndexes[j],
-            textData.a?.[j].s.totalChars
+            textData.a?.[j].s?.totalChars
           )
           if (animatorProps.sk.propType) {
             if (mult.length) {
@@ -608,7 +602,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
             animatorSelector = animators[j].s
             mult = animatorSelector.getMult(
               letters?.[i].anIndexes[j],
-              textData.a?.[j].s.totalChars
+              textData.a?.[j].s?.totalChars
             )
             if (this._hasMaskedPath) {
               if (mult.length) {
@@ -779,7 +773,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
     }
   }
 
-  getValue() {
+  override getValue() {
     if (this._elem.globalData.frameId === this._frameId) {
       return
     }
@@ -793,17 +787,17 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
       this._animatorsData[i] = new TextAnimatorDataProperty(
         this._elem,
         this._textData.a?.[i],
-        this
+        this as any
       )
     }
     if (this._textData.p && 'm' in this._textData.p) {
       this._pathData = {
-        a: getProp(this._elem, this._textData.p.a, 0, 0, this),
-        f: getProp(this._elem, this._textData.p.f, 0, 0, this),
-        l: getProp(this._elem, this._textData.p.l, 0, 0, this),
+        a: getProp(this._elem, this._textData.p.a, 0, 0, this as any),
+        f: getProp(this._elem, this._textData.p.f, 0, 0, this as any),
+        l: getProp(this._elem, this._textData.p.l, 0, 0, this as any),
         m: this._elem.maskManager.getMaskProperty(this._textData.p.m),
-        p: getProp(this._elem, this._textData.p.p, 0, 0, this),
-        r: getProp(this._elem, this._textData.p.r, 0, 0, this),
+        p: getProp(this._elem, this._textData.p.p, 0, 0, this as any),
+        r: getProp(this._elem, this._textData.p.r, 0, 0, this as any),
       }
       this._hasMaskedPath = true
     } else {
@@ -814,7 +808,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
       this._textData.m?.a,
       1,
       0,
-      this
+      this as any
     )
   }
 }

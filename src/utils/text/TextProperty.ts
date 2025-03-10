@@ -17,7 +17,7 @@ export default class TextProperty {
   canResize: boolean
   comp: CompInterface['comp']
   currentData: DocumentData
-  data: TextData
+  data?: TextData
   defaultBoxWidth: Vector2 = [0, 0]
   effectsSequence: any[]
   elem: CompInterface
@@ -29,14 +29,14 @@ export default class TextProperty {
   pv: DocumentData | string
   v: DocumentData | string
 
-  constructor(elem: CompInterface, data: TextData) {
+  constructor(elem: CompInterface, data?: TextData) {
     this._frameId = initialDefaultFrame
     this.pv = ''
     this.v = ''
     this.kf = false
     this._isFirstFrame = true
     this._mdf = false
-    if (data.d && data.d.sid) {
+    if (data?.d && data.d.sid) {
       data.d = elem.globalData.slotManager?.getProp(data.d)
     }
     this.data = data
@@ -76,7 +76,7 @@ export default class TextProperty {
       tr: 0,
       yOffset: 0,
     } as any
-    this.copyData(this.currentData, this.data.d?.k[0].s)
+    this.copyData(this.currentData, this.data?.d?.k[0].s)
 
     // console.log(this.data)
     if (!this.searchProperty()) {
@@ -163,7 +163,7 @@ export default class TextProperty {
     let newLineFlag
     let index = 0
     let val
-    const anchorGrouping = data.m?.g
+    const anchorGrouping = data?.m?.g
     let currentSize = 0
     let currentPos = 0
     let currentLine = 0
@@ -370,7 +370,7 @@ export default class TextProperty {
     }
     documentData.lineWidths = lineWidths
 
-    const animators = data.a
+    const animators = data?.a
     let animatorData
     let letterData
     const jLen = animators?.length || 0
@@ -414,12 +414,12 @@ export default class TextProperty {
           ind += 1
         }
       }
-      if (data.a) {
-        data.a[j].s.totalChars = ind
+      if (data?.a && data.a[j].s) {
+        data.a[j].s!.totalChars = ind
       }
       let currentInd = -1
       let newInd
-      if (animatorData.s.rn === 1) {
+      if (animatorData.s?.rn === 1) {
         for (i = 0; i < len; i++) {
           letterData = letters[i]
           if (currentInd !== Number(letterData.anIndexes[j])) {
@@ -452,7 +452,7 @@ export default class TextProperty {
     return obj
   }
   getKeyframeValue() {
-    const textKeys = this.data.d?.k
+    const textKeys = this.data?.d?.k
     const frameNum = this.elem.comp.renderedFrame
     let i = 0
     const len = textKeys?.length || 0
@@ -465,7 +465,7 @@ export default class TextProperty {
     if (this.keysIndex !== i) {
       this.keysIndex = i
     }
-    return this.data.d?.k[this.keysIndex].s
+    return this.data?.d?.k[this.keysIndex].s
   }
   getValue(_finalValue: unknown) {
     if (
@@ -475,7 +475,7 @@ export default class TextProperty {
     ) {
       return
     }
-    this.currentData.t = this.data.d?.k[this.keysIndex].s.t as any
+    this.currentData.t = this.data?.d?.k[this.keysIndex].s.t as any
     const currentValue = this.currentData
     const currentIndex = this.keysIndex
     if (this.lock) {
@@ -487,7 +487,7 @@ export default class TextProperty {
     let i
     const len = this.effectsSequence.length
     let finalValue =
-      (_finalValue as DocumentData) || this.data.d?.k[this.keysIndex].s
+      (_finalValue as DocumentData) || this.data?.d?.k[this.keysIndex].s
     for (i = 0; i < len; i++) {
       // Checking if index changed to prevent creating a new object every time the expression updates.
       if (currentIndex === this.keysIndex) {
@@ -506,15 +506,18 @@ export default class TextProperty {
   }
 
   recalculate(index: number) {
-    const dData = this.data.d!.k[index].s
-    dData.__complete = false
+    const dData = this.data?.d!.k[index].s
+    if (dData) {
+      dData.__complete = false
+    }
+
     this.keysIndex = 0
     this._isFirstFrame = true
     this.getValue(dData)
   }
 
   searchKeyframes() {
-    this.kf = this.data.d!.k.length > 1
+    this.kf = Number(this.data?.d!.k.length) > 1
     if (this.kf) {
       this.addEffect(this.getKeyframeValue.bind(this))
     }
@@ -544,9 +547,12 @@ export default class TextProperty {
   updateDocumentData(newData: DocumentData, indexFromProps: number) {
     let index = indexFromProps
     index = index === undefined ? this.keysIndex : index
-    let dData = this.copyData({} as DocumentData, this.data.d?.k[index].s)
+    let dData = this.copyData({} as DocumentData, this.data?.d?.k[index].s)
     dData = this.copyData(dData, newData)
-    this.data.d!.k[index].s = dData
+    if (this.data?.d?.k[index].s) {
+      this.data.d.k[index].s = dData
+    }
+
     this.recalculate(index)
     this.setCurrentData(dData)
     this.elem.addDynamicProperty(this)
