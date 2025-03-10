@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
 // import type SVGCompElement from '@/elements/svg/SVGCompElement'
 // import type SVGRendererBase from '@/renderers/SVGRendererBase'
@@ -12,12 +13,29 @@ import FontManager from '@/utils/FontManager'
 import SlotManager from '@/utils/SlotManager'
 
 class BaseRenderer {
+  animationItem!: AnimationItem
+  buildItem!: (val: number) => void
+  checkPendingElements!: () => void
+
   completeLayers?: boolean
   createComp!: (data: LottieLayer) => CompInterface
-  layers!: LottieLayer[]
 
+  createImage!: (data: LottieLayer) => void
+
+  createNull!: (data: LottieLayer) => void
+
+  createShape!: (data: LottieLayer) => void
+
+  createSolid!: (data: LottieLayer) => void
+
+  createText!: (data: LottieLayer) => void
+
+  elements!: CompInterface[]
+
+  layers!: LottieLayer[]
   pendingElements!: CompInterface[]
-  addPendingElement(element: unknown) {
+
+  addPendingElement(element: CompInterface) {
     this.pendingElements.push(element)
   }
 
@@ -28,7 +46,6 @@ class BaseRenderer {
     }
     this.checkPendingElements()
   }
-
   buildElementParenting(
     element: any,
     parentName?: number,
@@ -40,7 +57,7 @@ class BaseRenderer {
     const len = layers?.length || 0
     while (i < len) {
       if (layers?.[i].ind === Number(parentName)) {
-        if (!elements[i] || elements[i] === true) {
+        if (!elements[i] || (elements as any)[i] === true) {
           this.buildItem(i)
           this.addPendingElement(element)
         } else {
@@ -56,7 +73,6 @@ class BaseRenderer {
       i++
     }
   }
-
   checkLayers(num: number) {
     this.completeLayers = true
     const { length } = this.layers || []
@@ -73,7 +89,6 @@ class BaseRenderer {
     }
     this.checkPendingElements()
   }
-
   createAudio(data: LottieLayer) {
     return new AudioElement(data, this.globalData!, this)
   }
@@ -81,10 +96,9 @@ class BaseRenderer {
     throw new Error("You're using a 3d camera. Try the html renderer.")
   }
 
-  createFootage(data: any) {
+  createFootage(data: LottieLayer) {
     return new FootageElement(data, this.globalData, this)
   }
-
   createItem(layer: LottieLayer) {
     switch (layer.ty) {
       case 2:
@@ -119,15 +133,15 @@ class BaseRenderer {
     }
     return null
   }
+
   getElementByPath(path: unknown[]) {
     const pathValue = path.shift()
     let element
     if (typeof pathValue === 'number') {
       element = this.elements[pathValue]
     } else {
-      let i
-      const len = this.elements.length
-      for (i = 0; i < len; i++) {
+      const { length } = this.elements
+      for (let i = 0; i < length; i++) {
         if (this.elements[i].data.nm === pathValue) {
           element = this.elements[i]
           break
@@ -137,7 +151,7 @@ class BaseRenderer {
     if (path.length === 0) {
       return element
     }
-    return element.getElementByPath(path)
+    return element?.getElementByPath(path)
   }
 
   includeLayers(newLayers: LottieLayer[]) {
@@ -208,10 +222,6 @@ class BaseRenderer {
   }
 }
 
-interface BaseRenderer extends BaseElement {
-  // SVGCompElement,
-  // SVGRendererBase,
-  // SVGRenderer
-}
+interface BaseRenderer extends BaseElement {}
 
 export default BaseRenderer

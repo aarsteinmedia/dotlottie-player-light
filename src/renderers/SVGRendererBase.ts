@@ -23,7 +23,19 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default class SVGRendererBase {
+  addPendingElement!: (comp: CompInterface) => void
+
   animationItem!: AnimationItem
+
+  checkLayers!: (val: number) => void
+
+  completeLayers?: boolean
+
+  createItem!: (data: LottieLayer) => CompInterface
+
+  data?: AnimationData
+
+  destroyed?: boolean
 
   elements!: CompInterface[]
 
@@ -34,8 +46,9 @@ export default class SVGRendererBase {
   layers!: LottieLayer[]
 
   pendingElements!: CompInterface[]
-
   renderConfig!: SVGRendererConfig
+
+  renderedFrame!: number
 
   setupGlobalData!: (animData: AnimationData, defs: SVGDefsElement) => void
 
@@ -51,7 +64,7 @@ export default class SVGRendererBase {
     while (i < pos) {
       if (
         this.elements[i] &&
-        this.elements[i] !== true &&
+        this.elements[i] !== (true as any) &&
         this.elements[i].getBaseElement()
       ) {
         nextElement = this.elements[i].getBaseElement()
@@ -70,7 +83,7 @@ export default class SVGRendererBase {
     if (elements[pos] || this.layers[pos].ty === 99) {
       return
     }
-    elements[pos] = true
+    elements[pos] = true as any
     const element = this.createItem(this.layers[pos])
 
     elements[pos] = element
@@ -91,7 +104,7 @@ export default class SVGRendererBase {
       }
       if (
         !this.elements[elementIndex] ||
-        this.elements[elementIndex] === true
+        this.elements[elementIndex] === (true as any)
       ) {
         this.buildItem(elementIndex)
         this.addPendingElement(element)
@@ -127,6 +140,7 @@ export default class SVGRendererBase {
       }
     }
   }
+
   configAnimation(animData: AnimationData) {
     this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
     this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
@@ -137,8 +151,8 @@ export default class SVGRendererBase {
     }
 
     if (!this.renderConfig.viewBoxOnly) {
-      this.svgElement.setAttribute('width', animData.w)
-      this.svgElement.setAttribute('height', animData.h)
+      this.svgElement.setAttribute('width', `${animData.w}`)
+      this.svgElement.setAttribute('height', `${animData.h}`)
       this.svgElement.style.width = '100%'
       this.svgElement.style.height = '100%'
       this.svgElement.style.transform = 'translate3d(0,0,0)'
@@ -174,7 +188,7 @@ export default class SVGRendererBase {
 
     // this.layerElement.style.transform = 'translate3d(0,0,0)';
     // this.layerElement.style.transformOrigin = this.layerElement.style.mozTransformOrigin = this.layerElement.style.webkitTransformOrigin = this.layerElement.style['-webkit-transform'] = "0px 0px 0px";
-    this.animationItem.wrapper.appendChild(this.svgElement)
+    this.animationItem.wrapper?.appendChild(this.svgElement)
     // Mask animation
     const defs = this.globalData.defs
 
@@ -201,23 +215,23 @@ export default class SVGRendererBase {
     this.elements = createSizedArray(animData.layers.length)
   }
 
-  createImage(data: any) {
+  createImage(data: LottieLayer) {
     return new ImageElement(data, this.globalData, this)
   }
 
-  createNull(data: any) {
+  createNull(data: LottieLayer) {
     return new NullElement(data, this.globalData, this)
   }
 
-  createShape(data: any) {
+  createShape(data: LottieLayer) {
     return new SVGShapeElement(data, this.globalData, this)
   }
 
-  createSolid(data: any) {
+  createSolid(data: LottieLayer) {
     return new ISolidElement(data, this.globalData, this)
   }
 
-  createText(data: any) {
+  createText(data: LottieLayer) {
     return new SVGTextLottieElement(data, this.globalData, this)
   }
 
@@ -225,17 +239,17 @@ export default class SVGRendererBase {
     if (this.animationItem.wrapper) {
       this.animationItem.wrapper.innerText = ''
     }
-    this.layerElement = null
-    this.globalData.defs = null
+    this.layerElement = null as any
+    this.globalData.defs = null as any
     const len = this.layers ? this.layers.length : 0
     for (let i = 0; i < len; i++) {
       if (this.elements[i] && this.elements[i].destroy) {
-        this.elements[i].destroy()
+        this.elements[i].destroy?.()
       }
     }
     this.elements.length = 0
     this.destroyed = true
-    this.animationItem = null
+    this.animationItem = null as any
   }
 
   findIndexByInd(ind?: number) {
@@ -275,7 +289,7 @@ export default class SVGRendererBase {
     }
     for (i = length - 1; i >= 0; i--) {
       if (this.completeLayers || this.elements[i]) {
-        this.elements[i].prepareFrame(num - this.layers[i].st)
+        this.elements[i].prepareFrame?.(num - this.layers[i].st)
       }
     }
     if (this.globalData._mdf) {

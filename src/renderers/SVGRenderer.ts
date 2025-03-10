@@ -1,27 +1,18 @@
 import type AnimationItem from '@/animation/AnimationItem'
-import type { GlobalData, LottieLayer, SVGRendererConfig } from '@/types'
+import type { LottieLayer, SVGRendererConfig } from '@/types'
 
 import SVGCompElement from '@/elements/svg/SVGCompElement'
 import { RendererType } from '@/enums'
 import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { createNS } from '@/utils'
-// import { applyMixins } from '@/utils/functionExtensions'
 import { createElementID } from '@/utils/getterSetter'
 
 export default class SVGRenderer extends SVGRendererBase {
-  animationItem: AnimationItem
   destroyed: boolean
-  elements: any[]
-  globalData: GlobalData
   initItems!: () => void
-  layerElement: SVGGElement
-  layers: LottieLayer[]
-  pendingElements: any[]
-  renderConfig: SVGRendererConfig
   renderedFrame: number
   rendererType: RendererType
   searchExtraCompositions!: (layers: LottieLayer[]) => void
-  svgElement: SVGSVGElement
   constructor(animationItem: AnimationItem, config?: SVGRendererConfig) {
     super()
     this.animationItem = animationItem
@@ -94,9 +85,3 @@ export default class SVGRenderer extends SVGRendererBase {
     return new SVGCompElement(data, this.globalData, this as any)
   }
 }
-
-// applyMixins(SVGRenderer, [SVGRendererBase])
-
-// interface SVGRenderer extends SVGRendererBase {}
-
-// export default SVGRenderer

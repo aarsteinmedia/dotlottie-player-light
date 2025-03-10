@@ -82,10 +82,12 @@ export interface CompInterface extends AnimationItem {
   completeLayers: boolean
   configAnimation: (animData: AnimationData) => void
   data: LottieLayer
-  destroy: () => void
+  destroy?: () => void
   dynamicProperties: unknown[]
   effectsManager: unknown
   elements: CompInterface[]
+  getBaseElement: () => SVGElement
+  getElementByPath: (val: unknown[]) => CompInterface
   getMatte: (id?: number) => string
   globalData: GlobalData
   hierarchy: boolean
@@ -99,6 +101,7 @@ export interface CompInterface extends AnimationItem {
     globalData: GlobalData,
     comp: CompInterface
   ) => void
+  initExpressions: () => void
   initFrame: () => void
   initHierarchy: (hierarchy?: unknown[]) => void
   initItems: () => void
@@ -118,6 +121,7 @@ export interface CompInterface extends AnimationItem {
   renderedFrame: number
   rendererType: RendererType
   searchExtraCompositions: (assets: LottieAsset[]) => void
+  setAsParent: () => void
   setMatte: (id: string) => void
   supports3d: boolean
   svgElement?: SVGSVGElement
@@ -801,7 +805,7 @@ export interface ShapeDataInterface {
   _isAnimated: boolean
   /** SVG Path Data */
   caches: string[]
-  container: any
+  container: CompInterface
   elements: CompInterface[]
   lStr: string
   lvl: number
@@ -1005,7 +1009,7 @@ export interface AnimationData {
   /** Is three dimensional */
   ddd: 0 | 1
   fonts: {
-    list: FontList[]
+    list: DocumentData[]
   }
   /** Framerate */
   fr: number
@@ -1279,7 +1283,7 @@ export interface GlobalData {
   }
   defs: SVGDefsElement
   fontManager?: FontManager
-  frameId?: number
+  frameId: number
   frameNum?: number
   frameRate: number
   getAssetData?: AnimationItem['getAssetData']
