@@ -76,6 +76,7 @@ export interface CompInterface extends AnimationItem {
   animationItem: AnimationItem
   assetData: ImageData
   baseElement: SVGElement
+  checkParenting: () => void
   comp: CompInterface
   compInterface: CompInterface
   completeLayers: boolean
@@ -85,6 +86,7 @@ export interface CompInterface extends AnimationItem {
   dynamicProperties: unknown[]
   effectsManager: unknown
   elements: CompInterface[]
+  getMatte: (id?: number) => string
   globalData: GlobalData
   hierarchy: boolean
   initBaseData: (
@@ -116,6 +118,7 @@ export interface CompInterface extends AnimationItem {
   renderedFrame: number
   rendererType: RendererType
   searchExtraCompositions: (assets: LottieAsset[]) => void
+  setMatte: (id: string) => void
   supports3d: boolean
   svgElement?: SVGSVGElement
   textProperty?: {
@@ -295,7 +298,7 @@ export type SVGRendererConfig = BaseRendererConfig & {
   progressiveLoad?: boolean
   hideOnTransparent?: boolean
   viewBoxOnly?: boolean
-  viewBoxSize?: string | boolean
+  viewBoxSize?: string | false
   focusable?: boolean
   filterSize?: FilterSizeConfig
   contentVisibility?: string

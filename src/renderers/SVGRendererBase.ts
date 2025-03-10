@@ -1,5 +1,12 @@
-import type { AnimationData } from '@/types'
+import type {
+  AnimationData,
+  CompInterface,
+  GlobalData,
+  LottieLayer,
+  SVGRendererConfig,
+} from '@/types'
 
+import AnimationItem from '@/animation/AnimationItem'
 import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
 import ISolidElement from '@/elements/SolidElement'
@@ -16,6 +23,24 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default class SVGRendererBase {
+  animationItem!: AnimationItem
+
+  elements!: CompInterface[]
+
+  globalData!: GlobalData
+
+  layerElement!: SVGGElement
+
+  layers!: LottieLayer[]
+
+  pendingElements!: CompInterface[]
+
+  renderConfig!: SVGRendererConfig
+
+  setupGlobalData!: (animData: AnimationData, defs: SVGDefsElement) => void
+
+  svgElement!: SVGSVGElement
+
   appendElementInPos(element: any, pos: number) {
     const newElement = element.getBaseElement()
     if (!newElement) {
@@ -81,8 +106,8 @@ export default class SVGRendererBase {
   checkPendingElements() {
     while (this.pendingElements.length) {
       const element = this.pendingElements.pop()
-      element.checkParenting()
-      if (element.data.tt) {
+      element?.checkParenting()
+      if (element?.data.tt) {
         let i = 0
         const len = this.elements.length
         while (i < len) {
@@ -93,6 +118,7 @@ export default class SVGRendererBase {
                 : i - 1
             const matteElement = this.elements[elementIndex]
             const matteMask = matteElement.getMatte(this.layers[i].tt)
+
             element.setMatte(matteMask)
             break
           }
@@ -101,7 +127,6 @@ export default class SVGRendererBase {
       }
     }
   }
-
   configAnimation(animData: AnimationData) {
     this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
     this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
@@ -117,14 +142,16 @@ export default class SVGRendererBase {
       this.svgElement.style.width = '100%'
       this.svgElement.style.height = '100%'
       this.svgElement.style.transform = 'translate3d(0,0,0)'
-      this.svgElement.style.contentVisibility =
-        this.renderConfig.contentVisibility
+      if (this.renderConfig.contentVisibility) {
+        this.svgElement.style.contentVisibility =
+          this.renderConfig.contentVisibility
+      }
     }
     if (this.renderConfig.width) {
-      this.svgElement.setAttribute('width', this.renderConfig.width)
+      this.svgElement.setAttribute('width', `${this.renderConfig.width}`)
     }
     if (this.renderConfig.height) {
-      this.svgElement.setAttribute('height', this.renderConfig.height)
+      this.svgElement.setAttribute('height', `${this.renderConfig.height}`)
     }
     if (this.renderConfig.className) {
       this.svgElement.setAttribute('class', this.renderConfig.className)
@@ -133,12 +160,18 @@ export default class SVGRendererBase {
       this.svgElement.setAttribute('id', this.renderConfig.id)
     }
     if (this.renderConfig.focusable !== undefined) {
-      this.svgElement.setAttribute('focusable', this.renderConfig.focusable)
+      this.svgElement.setAttribute(
+        'focusable',
+        `${this.renderConfig.focusable}`
+      )
     }
-    this.svgElement.setAttribute(
-      'preserveAspectRatio',
-      this.renderConfig.preserveAspectRatio
-    )
+    if (this.renderConfig.preserveAspectRatio) {
+      this.svgElement.setAttribute(
+        'preserveAspectRatio',
+        this.renderConfig.preserveAspectRatio
+      )
+    }
+
     // this.layerElement.style.transform = 'translate3d(0,0,0)';
     // this.layerElement.style.transformOrigin = this.layerElement.style.mozTransformOrigin = this.layerElement.style.webkitTransformOrigin = this.layerElement.style['-webkit-transform'] = "0px 0px 0px";
     this.animationItem.wrapper.appendChild(this.svgElement)
@@ -169,15 +202,15 @@ export default class SVGRendererBase {
   }
 
   createImage(data: any) {
-    return new (ImageElement as any)(data, this.globalData, this)
+    return new ImageElement(data, this.globalData, this)
   }
 
   createNull(data: any) {
-    return new (NullElement as any)(data, this.globalData, this)
+    return new NullElement(data, this.globalData, this)
   }
 
   createShape(data: any) {
-    return new (SVGShapeElement as any)(data, this.globalData, this)
+    return new SVGShapeElement(data, this.globalData, this)
   }
 
   createSolid(data: any) {
@@ -185,7 +218,7 @@ export default class SVGRendererBase {
   }
 
   createText(data: any) {
-    return new (SVGTextLottieElement as any)(data, this.globalData, this)
+    return new SVGTextLottieElement(data, this.globalData, this)
   }
 
   destroy() {
@@ -205,9 +238,9 @@ export default class SVGRendererBase {
     this.animationItem = null
   }
 
-  findIndexByInd(ind: number) {
-    const len = this.layers.length
-    for (let i = 0; i < len; i++) {
+  findIndexByInd(ind?: number) {
+    const { length } = this.layers
+    for (let i = 0; i < length; i++) {
       if (this.layers[i].ind === ind) {
         return i
       }

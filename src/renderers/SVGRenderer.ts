@@ -13,17 +13,19 @@ export default class SVGRenderer extends SVGRendererBase {
   destroyed: boolean
   elements: any[]
   globalData: GlobalData
+  initItems!: () => void
   layerElement: SVGGElement
   layers: LottieLayer[]
   pendingElements: any[]
   renderConfig: SVGRendererConfig
   renderedFrame: number
   rendererType: RendererType
+  searchExtraCompositions!: (layers: LottieLayer[]) => void
   svgElement: SVGSVGElement
   constructor(animationItem: AnimationItem, config?: SVGRendererConfig) {
     super()
     this.animationItem = animationItem
-    this.layers = null
+    this.layers = []
     this.renderedFrame = -1
     this.svgElement = createNS('svg')
     let ariaLabel = ''

@@ -2,7 +2,7 @@
 import type BaseElement from '@/elements/BaseElement'
 // import type SVGCompElement from '@/elements/svg/SVGCompElement'
 // import type SVGRendererBase from '@/renderers/SVGRendererBase'
-import type { AnimationData, LottieLayer } from '@/types'
+import type { AnimationData, CompInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
@@ -13,9 +13,14 @@ import SlotManager from '@/utils/SlotManager'
 
 class BaseRenderer {
   completeLayers?: boolean
+  createComp!: (data: LottieLayer) => CompInterface
+  layers!: LottieLayer[]
+
+  pendingElements!: CompInterface[]
   addPendingElement(element: unknown) {
     this.pendingElements.push(element)
   }
+
   buildAllItems() {
     const len = this.layers?.length || 0
     for (let i = 0; i < len; i++) {
@@ -51,6 +56,7 @@ class BaseRenderer {
       i++
     }
   }
+
   checkLayers(num: number) {
     this.completeLayers = true
     const { length } = this.layers || []
@@ -71,7 +77,6 @@ class BaseRenderer {
   createAudio(data: LottieLayer) {
     return new AudioElement(data, this.globalData!, this)
   }
-
   createCamera(_data: LottieLayer) {
     throw new Error("You're using a 3d camera. Try the html renderer.")
   }
@@ -114,7 +119,6 @@ class BaseRenderer {
     }
     return null
   }
-
   getElementByPath(path: unknown[]) {
     const pathValue = path.shift()
     let element
@@ -135,6 +139,7 @@ class BaseRenderer {
     }
     return element.getElementByPath(path)
   }
+
   includeLayers(newLayers: LottieLayer[]) {
     this.completeLayers = false
     const len = newLayers.length
@@ -151,6 +156,7 @@ class BaseRenderer {
       }
     }
   }
+
   initItems() {
     if (!this.globalData?.progressiveLoad) {
       this.buildAllItems()

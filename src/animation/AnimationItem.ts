@@ -72,17 +72,17 @@ export default class AnimationItem extends BaseEvent {
   public segments: Vector2[]
   public timeCompleted: number
   public totalFrames: number
+  public wrapper: HTMLElement | null = null
   protected animType?: RendererType
   protected autoloadSegments: boolean = false
   protected fileName?: string
-  protected initialSegment?: Vector2
 
+  protected initialSegment?: Vector2
   protected onComplete: null | ((arg: unknown) => void) = null
   protected onDestroy: null | ((arg: unknown) => void) = null
   protected onEnterFrame: null | ((arg: unknown) => void) = null
   protected onLoopComplete: null | ((arg: unknown) => void) = null
   protected onSegmentStart: null | ((arg: unknown) => void) = null
-  protected wrapper: HTMLElement | null = null
   // private _cbs: null | any
   private _completedLoop: boolean
   private _idle: boolean
