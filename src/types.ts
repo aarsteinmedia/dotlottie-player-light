@@ -82,7 +82,7 @@ export interface CompInterface extends AnimationItem {
   completeLayers: boolean
   configAnimation: (animData: AnimationData) => void
   data: LottieLayer
-  destroy?: () => void
+  destroy: () => void
   dynamicProperties: unknown[]
   effectsManager: unknown
   elements: CompInterface[]

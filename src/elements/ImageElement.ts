@@ -1,7 +1,7 @@
 import type {
   CompInterface,
   GlobalData,
-  // LottieAsset,
+  LottieAsset,
   LottieLayer,
 } from '@/types'
 
@@ -14,6 +14,27 @@ import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 export default class ImageElement {
+  assetData?: LottieAsset | null
+
+  globalData!: GlobalData
+
+  initElement!: (
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: CompInterface
+  ) => void
+
+  innerElem?: SVGImageElement
+
+  layerElement!: SVGGElement
+
+  sourceRect: {
+    height: number
+    left: number
+    top: number
+    width: number
+  }
+
   constructor(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
     if (data.refId && globalData.getAssetData) {
       this.assetData = globalData.getAssetData(data.refId)
