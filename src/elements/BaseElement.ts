@@ -1,6 +1,5 @@
 import type MaskElement from '@/elements/MaskElement'
 import type {
-  AnimationData,
   ElementInterface,
   GlobalData,
   ItemsData,
@@ -17,7 +16,7 @@ export default class BaseElement {
   baseElement?: SVGGElement
   comp!: ElementInterface
   compInterface?: ProjectInterface
-  data!: Partial<LottieLayer & AnimationData>
+  data!: LottieLayer
   effectsManager!: EffectsManager
 
   globalData!: GlobalData

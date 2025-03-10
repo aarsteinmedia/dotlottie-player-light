@@ -1,6 +1,6 @@
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
-import { CompInterface, GlobalData, LottieLayer } from '@/types'
+import { ElementInterface, GlobalData, LottieLayer } from '@/types'
 import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
@@ -10,7 +10,7 @@ export default class SVGBaseElement {
 
   baseElement?: SVGGElement
   checkMasks!: () => boolean
-  comp!: CompInterface
+  comp!: ElementInterface
   data!: LottieLayer
   finalTransform?: any
   globalData!: GlobalData
