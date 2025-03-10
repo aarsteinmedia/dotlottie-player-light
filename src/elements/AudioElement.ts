@@ -97,7 +97,7 @@ class AudioElement {
     }
   }
 
-  renderFrame(_isFirstFrame?: boolean) {
+  renderFrame(_frame?: number) {
     if (this.isInRange && this._canPlay) {
       if (!this._isPlaying) {
         this.audio.play()

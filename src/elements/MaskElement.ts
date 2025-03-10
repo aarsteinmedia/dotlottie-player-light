@@ -264,18 +264,18 @@ export default class MaskElement {
     return this.viewData[pos].prop
   }
 
-  renderFrame(isFirstFrame?: boolean) {
+  renderFrame(frame?: number) {
     const finalMat = this.element.finalTransform.mat
     const len = this.masksProperties?.length || 0
     for (let i = 0; i < len; i++) {
-      if (this.viewData[i].prop._mdf || isFirstFrame) {
+      if (this.viewData[i].prop._mdf || frame) {
         this.drawPath(
           this.masksProperties?.[i] || null,
           this.viewData[i].prop.v,
           this.viewData[i]
         )
       }
-      if (this.viewData[i].op._mdf || isFirstFrame) {
+      if (this.viewData[i].op._mdf || frame) {
         this.viewData[i].elem.setAttribute(
           'fill-opacity',
           this.viewData[i].op.v
@@ -286,14 +286,14 @@ export default class MaskElement {
       }
       if (
         this.viewData[i].invRect &&
-        (this.element.finalTransform.mProp._mdf || isFirstFrame)
+        (this.element.finalTransform.mProp._mdf || frame)
       ) {
         this.viewData[i].invRect.setAttribute(
           'transform',
           finalMat.getInverseMatrix().to2dCSS()
         )
       }
-      if (this.storedData[i].x && (this.storedData[i].x._mdf || isFirstFrame)) {
+      if (this.storedData[i].x && (this.storedData[i].x._mdf || frame)) {
         const feMorph = this.storedData[i].expan
         if (this.storedData[i].x.v < 0) {
           if (this.storedData[i].lastOperator !== 'erode') {

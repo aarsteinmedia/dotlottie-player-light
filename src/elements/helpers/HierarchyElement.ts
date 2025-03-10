@@ -15,7 +15,7 @@ class HierarchyElement {
    */
   checkParenting() {
     if ('parent' in this.data) {
-      this.comp.buildElementParenting(this, this.data.parent, [])
+      this.comp.buildElementParenting(this as any, this.data.parent, [])
     }
   }
   /**

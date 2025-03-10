@@ -71,14 +71,16 @@ class BaseRenderer {
       i++
     }
   }
-  checkLayers(num: number) {
+  checkLayers(val?: number) {
     this.completeLayers = true
     const { length } = this.layers || []
     for (let i = length - 1; i >= 0; i--) {
       if (!this.elements[i]) {
         if (
-          this.layers![i].ip - this.layers![i].st <= num - this.layers![i].st &&
-          this.layers![i].op - this.layers![i].st > num - this.layers![i].st
+          this.layers![i].ip - this.layers![i].st <=
+            Number(val) - this.layers![i].st &&
+          this.layers![i].op - this.layers![i].st >
+            Number(val) - this.layers![i].st
         ) {
           this.buildItem(i)
         }
@@ -88,7 +90,7 @@ class BaseRenderer {
     this.checkPendingElements()
   }
   createAudio(data: LottieLayer) {
-    return new AudioElement(data, this.globalData!, this)
+    return new AudioElement(data, this.globalData!, this as any)
   }
   createCamera(_data: LottieLayer) {
     throw new Error("You're using a 3d camera. Try the html renderer.")

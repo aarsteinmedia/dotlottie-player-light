@@ -34,7 +34,7 @@ class SVGRendererBase {
 
   createItem!: (data: LottieLayer) => CompInterface
 
-  data!: LottieLayer & AnimationData
+  data!: LottieLayer
 
   destroyed?: boolean
 
@@ -51,10 +51,7 @@ class SVGRendererBase {
 
   renderedFrame!: number
 
-  setupGlobalData!: (
-    animData: AnimationData & LottieLayer,
-    defs: SVGDefsElement
-  ) => void
+  setupGlobalData!: (animData: AnimationData, defs: SVGDefsElement) => void
 
   svgElement!: SVGSVGElement
 
@@ -145,7 +142,7 @@ class SVGRendererBase {
     }
   }
 
-  configAnimation(animData: Partial<AnimationData & LottieLayer>) {
+  configAnimation(animData: AnimationData) {
     this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
     this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
     if (this.renderConfig.viewBoxSize) {
@@ -198,7 +195,7 @@ class SVGRendererBase {
 
     this.setupGlobalData(animData, defs)
     this.globalData.progressiveLoad = this.renderConfig.progressiveLoad
-    this.data = animData
+    this.data = animData as any
 
     const maskElement = createNS('clipPath')
     const rect = createNS('rect')
@@ -228,7 +225,7 @@ class SVGRendererBase {
   }
 
   createShape(data: LottieLayer) {
-    return new SVGShapeElement(data, this.globalData, this)
+    return new SVGShapeElement(data, this.globalData, this as any)
   }
 
   createSolid(data: LottieLayer) {

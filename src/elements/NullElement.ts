@@ -29,7 +29,7 @@ class NullElement {
     this.prepareProperties(num, true)
   }
 
-  renderFrame() {}
+  renderFrame(_frame?: number) {}
 
   sourceRectAtTime() {}
 }

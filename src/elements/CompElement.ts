@@ -11,7 +11,7 @@ import { ValueProperty } from '@/utils/Properties'
 
 class CompElement {
   buildAllItems!: () => void
-  checkLayers!: (val: number) => void
+  checkLayers!: (val?: number) => void
   completeLayers?: boolean
   destroyElements!: () => void
   elements!: ElementInterface[]
