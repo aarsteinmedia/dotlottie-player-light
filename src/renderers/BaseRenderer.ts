@@ -3,7 +3,7 @@ import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
 // import type SVGCompElement from '@/elements/svg/SVGCompElement'
 // import type SVGRendererBase from '@/renderers/SVGRendererBase'
-import type { AnimationData, CompInterface, LottieLayer } from '@/types'
+import type { CompInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
@@ -196,7 +196,7 @@ class BaseRenderer {
     this.globalData.projectInterface = pInterface
   }
 
-  setupGlobalData(animData: AnimationData, fontsContainer: SVGDefsElement) {
+  setupGlobalData(animData: LottieLayer, fontsContainer: SVGDefsElement) {
     if (!this.globalData) {
       return
     }
@@ -213,11 +213,11 @@ class BaseRenderer {
     this.globalData.imageLoader = this.animationItem.imagePreloader
     this.globalData.audioController = this.animationItem.audioController
     this.globalData.frameId = 0
-    this.globalData.frameRate = animData.fr
+    this.globalData.frameRate = animData.fr || 60
     this.globalData.nm = animData.nm
     this.globalData.compSize = {
-      h: animData.h,
-      w: animData.w,
+      h: Number(animData.h),
+      w: Number(animData.w),
     }
   }
 }

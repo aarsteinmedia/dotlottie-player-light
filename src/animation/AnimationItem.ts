@@ -301,7 +301,7 @@ export default class AnimationItem extends BaseEvent {
     this.imagePreloader = null
     this.projectInterface = null
   }
-  public getAssetData(id: string) {
+  public getAssetData(id?: string) {
     let i = 0
     const len = this.assets.length
     while (i < len) {

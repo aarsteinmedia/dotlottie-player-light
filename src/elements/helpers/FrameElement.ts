@@ -35,7 +35,7 @@ class FrameElement {
    * if layers is currently in range
    *
    */
-  prepareProperties(_: number, isVisible: boolean) {
+  prepareProperties(_: number, isVisible?: boolean) {
     let i
     const len = this.dynamicProperties.length
     for (i = 0; i < len; i++) {

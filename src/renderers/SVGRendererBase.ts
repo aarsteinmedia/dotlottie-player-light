@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
-  AnimationData,
   CompInterface,
   GlobalData,
   LottieLayer,
@@ -22,7 +22,7 @@ import {
 } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
 
-export default class SVGRendererBase {
+class SVGRendererBase {
   addPendingElement!: (comp: CompInterface) => void
 
   animationItem!: AnimationItem
@@ -33,7 +33,7 @@ export default class SVGRendererBase {
 
   createItem!: (data: LottieLayer) => CompInterface
 
-  data?: AnimationData
+  data!: LottieLayer
 
   destroyed?: boolean
 
@@ -50,7 +50,7 @@ export default class SVGRendererBase {
 
   renderedFrame!: number
 
-  setupGlobalData!: (animData: AnimationData, defs: SVGDefsElement) => void
+  setupGlobalData!: (animData: LottieLayer, defs: SVGDefsElement) => void
 
   svgElement!: SVGSVGElement
 
@@ -141,7 +141,7 @@ export default class SVGRendererBase {
     }
   }
 
-  configAnimation(animData: AnimationData) {
+  configAnimation(animData: LottieLayer) {
     this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
     this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
     if (this.renderConfig.viewBoxSize) {
@@ -211,8 +211,8 @@ export default class SVGRendererBase {
     )
 
     defs.appendChild(maskElement)
-    this.layers = animData.layers
-    this.elements = createSizedArray(animData.layers.length)
+    this.layers = animData.layers || []
+    this.elements = createSizedArray(animData.layers?.length || 0)
   }
 
   createImage(data: LottieLayer) {
@@ -309,3 +309,7 @@ export default class SVGRendererBase {
 }
 
 extendPrototype([BaseRenderer], SVGRendererBase)
+
+interface SVGRendererBase extends BaseRenderer {}
+
+export default SVGRendererBase

@@ -14,7 +14,7 @@ import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
 export default class EffectsManager {
   effectElements: EffectInterface[]
-  constructor(data: any, element: CompInterface) {
+  constructor(data: any, element: any) {
     const effects = data.ef || []
     this.effectElements = []
     const { length } = effects

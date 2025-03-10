@@ -1,8 +1,8 @@
-import type { AnimationData } from '@/types'
+import type { LottieLayer } from '@/types'
 
 export default class SlotManager {
-  animationData: AnimationData
-  constructor(animationData: AnimationData) {
+  animationData: LottieLayer
+  constructor(animationData: LottieLayer) {
     this.animationData = animationData
   }
   getProp(data: any) {

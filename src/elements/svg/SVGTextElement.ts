@@ -36,7 +36,7 @@ class SVGTextLottieElement {
   textContainer?: SVGTextElement
   textSpans: {
     childSpan?: null | SVGTextElement | SVGGElement
-    glyph: null | CompInterface
+    glyph: null | SVGCompElement | SVGShapeElement
     span: null | SVGTextElement | SVGGElement
   }[]
   validateText!: () => void
@@ -206,11 +206,7 @@ class SVGTextLottieElement {
             if (charData?.data && charData.data.shapes) {
               data = this.buildShapeData(charData.data, documentData.finalSize)
             }
-            glyphElement = new (SVGShapeElement as any)(
-              data,
-              this.globalData,
-              this
-            )
+            glyphElement = new SVGShapeElement(data, this.globalData, this)
           }
           if (this.textSpans[i].glyph) {
             const glyph = this.textSpans[i].glyph

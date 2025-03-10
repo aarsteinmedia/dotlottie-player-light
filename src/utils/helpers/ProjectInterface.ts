@@ -1,68 +1,42 @@
 import type { CompInterface } from '@/types'
 
 export default class ProjectInterface {
-  compInterface: CompInterface | null = null
-  compositions: CompInterface[] = []
-  currentFrame = 0
+  static compositions: CompInterface[] = []
+  static currentFrame = 0
+  content?: ProjectInterface
+  createEffectsInterface?: (val: any, _interface?: ProjectInterface) => any
+  registerEffectsInterface?: (val: any, _interface?: ProjectInterface) => any
+  registerMaskInterface?: (val: any, _interface?: ProjectInterface) => any
+  shapeInterface?: ProjectInterface
+  text?: ProjectInterface
+  textInterface?: ProjectInterface
   constructor(name?: string) {
     let i = 0
-    const len = this.compositions.length
+    const len = ProjectInterface.compositions.length
     while (i < len) {
-      if (this.compositions[i].data && this.compositions[i].data.nm === name) {
-        if (this.compositions[i].prepareFrame && this.compositions[i].data.xt) {
-          this.compositions[i].prepareFrame?.(this.currentFrame)
+      if (
+        ProjectInterface.compositions[i].data &&
+        ProjectInterface.compositions[i].data.nm === name
+      ) {
+        if (
+          ProjectInterface.compositions[i].prepareFrame &&
+          ProjectInterface.compositions[i].data.xt
+        ) {
+          ProjectInterface.compositions[i].prepareFrame?.(
+            ProjectInterface.currentFrame
+          )
         }
-        this.compInterface = this.compositions[i].compInterface
+        for (const [key, value] of Object.entries(
+          ProjectInterface.compositions[i].compInterface
+        )) {
+          ProjectInterface[key as keyof typeof ProjectInterface] = value
+        }
         break
       }
       i++
     }
   }
-  registerComposition(comp: CompInterface) {
+  static registerComposition(comp: CompInterface) {
     this.compositions.push(comp)
   }
 }
-
-// const ProjectInterface = (() => {
-//   /**
-//    *
-//    */
-//   function registerComposition(this: any, comp: CompInterface) {
-//     this.compositions.push(comp)
-//   }
-
-//   return () => {
-//     /**
-//      *
-//      */
-//     function _thisProjectFunction(this: any, name: string) {
-//       let i = 0
-//       const len = this.compositions.length
-//       while (i < len) {
-//         if (
-//           this.compositions[i].data &&
-//           this.compositions[i].data.nm === name
-//         ) {
-//           if (
-//             this.compositions[i].prepareFrame &&
-//             this.compositions[i].data.xt
-//           ) {
-//             this.compositions[i].prepareFrame(this.currentFrame)
-//           }
-//           return this.compositions[i].compInterface
-//         }
-//         i++
-//       }
-//       return null
-//     }
-
-//     _thisProjectFunction.compositions = [] as any[]
-//     _thisProjectFunction.currentFrame = 0
-
-//     _thisProjectFunction.registerComposition = registerComposition
-
-//     return _thisProjectFunction
-//   }
-// })()
-
-// export default ProjectInterface

@@ -10,14 +10,14 @@ export default class SVGBaseElement {
 
   baseElement?: SVGGElement
   checkMasks!: () => boolean
-  comp?: CompInterface
+  comp!: CompInterface
   data!: LottieLayer
   finalTransform?: any
   globalData!: GlobalData
   layerElement!: SVGGElement
   layerId!: string
   maskedElement?: SVGGElement
-  maskManager!: MaskElement
+  maskManager?: MaskElement
   matteElement?: SVGGElement
   matteMasks?: {
     [key: number]: unknown
@@ -97,7 +97,7 @@ export default class SVGBaseElement {
   destroyBaseElement() {
     this.layerElement = null as any
     this.matteElement = null as any
-    this.maskManager.destroy()
+    this.maskManager?.destroy()
   }
   getBaseElement() {
     if (this.data.hd) {

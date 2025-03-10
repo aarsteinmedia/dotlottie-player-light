@@ -1,4 +1,5 @@
-import type { GlobalData, LayerInterFace, LottieLayer } from '@/types'
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+import type { CompInterface, GlobalData, LottieLayer } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -7,25 +8,15 @@ import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
-export default class CompElement {
-  createContainerElements!: () => void
-  createRenderableComponents!: () => void
-  data!: LottieLayer
-  initBaseData!: (
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: LayerInterFace
-  ) => void
-  initElement!: (
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: LayerInterFace
-  ) => void
-  initFrame!: () => void
-  initHierarchy!: () => void
-  initRenderable!: () => void
-  initRendererElement!: () => void
-  initTransform!: () => void
+class CompElement {
+  buildAllItems!: () => void
+  completeLayers?: boolean
+  elements!: CompInterface[]
+  getElements!: () => CompInterface[]
+  isInRange?: boolean
+  layers!: LottieLayer[]
+  renderedFrame!: number
+  setElements!: (elems: CompInterface[]) => void
 }
 
 extendPrototype(
@@ -42,7 +33,7 @@ extendPrototype(
 CompElement.prototype.initElement = function (
   data: LottieLayer,
   globalData: GlobalData,
-  comp: LayerInterFace
+  comp: CompInterface
 ) {
   this.initFrame()
   this.initBaseData(data, globalData, comp)
@@ -79,7 +70,7 @@ CompElement.prototype.prepareFrame = function (num: number) {
   }
 
   if (this.tm._placeholder) {
-    this.renderedFrame = num / this.data.sr
+    this.renderedFrame = num / Number(this.data?.sr)
   } else {
     let timeRemapped = this.tm.v
     if (timeRemapped === this.data.op) {
@@ -94,7 +85,7 @@ CompElement.prototype.prepareFrame = function (num: number) {
   // This iteration needs to be backwards because of how expressions connect between each other
   for (let i = len - 1; i >= 0; i--) {
     if (this.completeLayers || this.elements[i]) {
-      this.elements[i].prepareFrame(this.renderedFrame - this.layers[i].st)
+      this.elements[i].prepareFrame?.(this.renderedFrame - this.layers[i].st)
       if (this.elements[i]._mdf) {
         this._mdf = true
       }
@@ -103,16 +94,15 @@ CompElement.prototype.prepareFrame = function (num: number) {
 }
 
 CompElement.prototype.renderInnerContent = function () {
-  let i
-  const len = this.layers.length
-  for (i = 0; i < len; i++) {
+  const { length } = this.layers
+  for (let i = 0; i < length; i++) {
     if (this.completeLayers || this.elements[i]) {
       this.elements[i].renderFrame()
     }
   }
 }
 
-CompElement.prototype.setElements = function (elems: any) {
+CompElement.prototype.setElements = function (elems: CompInterface[]) {
   this.elements = elems
 }
 
@@ -133,3 +123,11 @@ CompElement.prototype.destroy = function () {
   this.destroyElements()
   this.destroyBaseElement()
 }
+
+interface CompElement
+  extends BaseElement,
+    HierarchyElement,
+    FrameElement,
+    RenderableDOMElement {}
+
+export default CompElement

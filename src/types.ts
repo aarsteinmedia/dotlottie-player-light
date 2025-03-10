@@ -14,6 +14,7 @@ import type {
 } from '@/effects'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type { SVGStyleData } from '@/elements/helpers/shapes'
+import type MaskElement from '@/elements/MaskElement'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
 import type AudioController from '@/utils/audio/AudioController'
@@ -124,7 +125,7 @@ export interface CompInterface extends AnimationItem {
   layerElement: SVGGElement
   layers: LottieLayer[]
   maskedElement: SVGGElement
-  maskManager: unknown
+  maskManager: MaskElement
   matteElement: SVGGElement
   pendingElements: unknown[]
   prepareFrame?: (val: number) => void
@@ -1104,14 +1105,24 @@ export interface LottieLayerData {
 export interface LottieLayer {
   __used?: boolean
   ao?: number
+  au?: {
+    lv?: {
+      k: number[]
+    }
+  }
   /** Blend Mode */
   bm?: number
+  chars?: Characacter[]
   cl?: string
   completed?: boolean
   /** Whether transforms should be applied before or after masks */
   ct?: 0 | 1
   ddd?: 0 | 1
   ef?: Readonly<Effect[]>
+  fonts?: {
+    list: DocumentData[]
+  }
+  fr?: number
   h?: number
   hasMask?: boolean
   hd?: boolean
@@ -1134,6 +1145,11 @@ export interface LottieLayer {
   sh?: number
   shapes?: Shape[] // Readonly<Shape[]>
   singleShape?: boolean
+  slots?: {
+    [key: string]: {
+      p: any
+    }
+  }
   /** Time stretch */
   sr?: number
   /** Start time */
@@ -1244,7 +1260,7 @@ export interface Audio {
   volume(val: number): void
 }
 
-export type AudioFactory = (path: string) => Audio
+export type AudioFactory = (path?: string) => Audio
 
 export type LottieComp = LottieLayer | LottieAsset
 

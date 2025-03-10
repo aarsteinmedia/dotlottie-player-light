@@ -1,16 +1,29 @@
-import type { GlobalData, LottieLayer } from '@/types'
+import type MaskElement from '@/elements/MaskElement'
+import type { CompInterface, GlobalData, ItemsData, LottieLayer } from '@/types'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import EffectsManager from '@/effects/EffectsManager'
 import { getBlendMode } from '@/utils'
 import { createElementID, getExpressionInterfaces } from '@/utils/getterSetter'
+import ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 export default class BaseElement {
-  comp!: any // CompInterface
+  baseElement?: SVGGElement
+  comp!: CompInterface
+  compInterface?: ProjectInterface
   data!: LottieLayer
   effectsManager!: EffectsManager
+
   globalData!: GlobalData
+  itemsData?: ItemsData
+  layerElement?: SVGGElement
   layerId!: string
 
+  layerInterface?: ProjectInterface
+
+  maskManager?: MaskElement
+  shapesData?: ShapePath
+  type?: unknown
   checkMasks() {
     if (!this.data?.hasMask) {
       return false
@@ -31,11 +44,7 @@ export default class BaseElement {
   getType() {
     return this.type
   }
-  initBaseData(
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: any // CompElement TODO:
-  ) {
+  initBaseData(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
     this.globalData = globalData
     this.comp = comp
     this.data = data
@@ -56,33 +65,36 @@ export default class BaseElement {
     if (!expressionsInterfaces) {
       return
     }
-    const LayerExpressionInterface = expressionsInterfaces('layer')
-    const EffectsExpressionInterface = expressionsInterfaces('effects')
-    const ShapeExpressionInterface = expressionsInterfaces('shape')
-    const TextExpressionInterface = expressionsInterfaces('text')
-    const CompExpressionInterface = expressionsInterfaces('comp')
-    this.layerInterface = LayerExpressionInterface(this)
+    const LayerExpressionInterface = new expressionsInterfaces('layer')
+    const EffectsExpressionInterface = new expressionsInterfaces('effects')
+    const ShapeExpressionInterface = new expressionsInterfaces('shape')
+    const TextExpressionInterface = new expressionsInterfaces('text')
+    const CompExpressionInterface = new expressionsInterfaces('comp')
+    this.layerInterface = (LayerExpressionInterface as any)(this) // TODO:
     if (this.data.hasMask && this.maskManager) {
-      this.layerInterface.registerMaskInterface(this.maskManager)
+      this.layerInterface?.registerMaskInterface?.(this.maskManager)
     }
-    const effectsInterface = EffectsExpressionInterface.createEffectsInterface(
-      this,
-      this.layerInterface
-    )
-    this.layerInterface.registerEffectsInterface(effectsInterface)
+    const effectsInterface =
+      EffectsExpressionInterface.createEffectsInterface?.(
+        this,
+        this.layerInterface
+      )
+    this.layerInterface?.registerEffectsInterface?.(effectsInterface)
 
     if (this.data.ty === 0 || this.data.xt) {
-      this.compInterface = CompExpressionInterface(this)
+      this.compInterface = (CompExpressionInterface as any)(this)
     } else if (this.data.ty === 4) {
-      this.layerInterface.shapeInterface = ShapeExpressionInterface(
+      this.layerInterface!.shapeInterface = (ShapeExpressionInterface as any)(
         this.shapesData,
         this.itemsData,
         this.layerInterface
       )
-      this.layerInterface.content = this.layerInterface.shapeInterface
+      this.layerInterface!.content = this.layerInterface?.shapeInterface
     } else if (this.data.ty === 5) {
-      this.layerInterface.textInterface = TextExpressionInterface(this)
-      this.layerInterface.text = this.layerInterface.textInterface
+      this.layerInterface!.textInterface = (TextExpressionInterface as any)(
+        this
+      )
+      this.layerInterface!.text = this.layerInterface?.textInterface
     }
   }
   setBlendMode() {

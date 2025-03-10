@@ -33,7 +33,7 @@ class AudioElement {
     this._isPlaying = false
     this._canPlay = false
     const assetPath = this.globalData?.getAssetsPath?.(this.assetData)
-    this.audio = this.globalData?.audioController.createAudio(assetPath)
+    this.audio = this.globalData?.audioController?.createAudio(assetPath)
     this._currentTime = 0
     this.globalData.audioController?.addAudio(this)
     this._volumeMultiplier = 1
@@ -52,7 +52,7 @@ class AudioElement {
     ) as any
     this.lv = PropertyFactory.getProp(
       this,
-      data.au && data.au.lv ? data.au.lv : { k: [100] },
+      (data.au && data.au.lv ? data.au.lv : { k: [100] }) as any,
       1,
       0.01,
       this

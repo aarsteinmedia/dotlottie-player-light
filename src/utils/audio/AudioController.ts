@@ -19,7 +19,7 @@ export default class AudioController {
   public addAudio(audio: AudioElement) {
     this.audios.push(audio)
   }
-  public createAudio(assetPath: string) {
+  public createAudio(assetPath?: string) {
     if (this.audioFactory) {
       return this.audioFactory(assetPath)
     }

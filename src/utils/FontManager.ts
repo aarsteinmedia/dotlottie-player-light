@@ -194,7 +194,7 @@ export default class FontManager {
   }
 
   public addFonts(
-    fontData: { list: DocumentData[] },
+    fontData?: { list: DocumentData[] },
     defs?: SVGDefsElement
   ): void {
     if (!fontData) {
