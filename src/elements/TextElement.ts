@@ -3,7 +3,7 @@ import type FrameElement from '@/elements/helpers/FrameElement'
 import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import type RenderableElement from '@/elements/helpers/RenderableElement'
 // import type TransformElement from '@/elements/helpers/TransformElement'
-import type ISolidElement from '@/elements/SolidElement'
+import type SolidElement from '@/elements/SolidElement'
 import type {
   DocumentData,
   GlobalData,
@@ -141,7 +141,7 @@ interface TextElement
     // TransformElement,
     RenderableElement,
     RenderableDOMElement,
-    ISolidElement,
+    SolidElement,
     SVGTextElement {}
 
 export default TextElement

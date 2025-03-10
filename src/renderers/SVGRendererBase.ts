@@ -9,7 +9,7 @@ import type {
 import AnimationItem from '@/animation/AnimationItem'
 import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
-import ISolidElement from '@/elements/SolidElement'
+import SolidElement from '@/elements/SolidElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import SVGTextLottieElement from '@/elements/svg/SVGTextElement'
 import BaseRenderer from '@/renderers/BaseRenderer'
@@ -228,7 +228,7 @@ export default class SVGRendererBase {
   }
 
   createSolid(data: LottieLayer) {
-    return new ISolidElement(data, this.globalData, this)
+    return new SolidElement(data, this.globalData, this)
   }
 
   createText(data: LottieLayer) {
@@ -243,8 +243,8 @@ export default class SVGRendererBase {
     this.globalData.defs = null as any
     const len = this.layers ? this.layers.length : 0
     for (let i = 0; i < len; i++) {
-      if (this.elements[i] && this.elements[i].destroy) {
-        this.elements[i].destroy?.()
+      if (this.elements[i] && (this.elements[i].destroy as any)) {
+        this.elements[i].destroy()
       }
     }
     this.elements.length = 0

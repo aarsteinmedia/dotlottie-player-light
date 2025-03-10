@@ -1,15 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type BaseElement from '@/elements/BaseElement'
 import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+import type Matrix from '@/utils/Matrix'
+import type TransformProperty from '@/utils/TransformProperty'
 
-import { SVGRendererConfig } from '@/types'
+import { CompInterface, SVGRendererConfig } from '@/types'
 
 class RenderableElement {
+  finalTransform?: {
+    _localMatMdf: boolean
+    _matMdf: boolean
+    _opMdf: boolean
+    localMat: Matrix
+    localOpacity: number
+    mat: Matrix
+    mProp: TransformProperty
+  }
   hidden!: boolean
   isInRange!: boolean
   isTransparent!: boolean
-  renderableComponents!: any[]
-  addRenderableComponent(component: any) {
+  renderableComponents!: CompInterface[]
+  addRenderableComponent(component: CompInterface) {
     if (this.renderableComponents.indexOf(component) === -1) {
       this.renderableComponents.push(component)
     }
@@ -43,7 +54,7 @@ class RenderableElement {
     }
   }
   checkTransparency() {
-    if (Number(this.finalTransform.mProp.o.v) <= 0) {
+    if (Number(this.finalTransform?.mProp.o?.v) <= 0) {
       if (
         !this.isTransparent &&
         (this.globalData?.renderConfig as SVGRendererConfig)?.hideOnTransparent
@@ -89,7 +100,7 @@ class RenderableElement {
   renderRenderable() {
     const len = this.renderableComponents.length
     for (let i = 0; i < len; i++) {
-      this.renderableComponents[i].renderFrame(this._isFirstFrame)
+      this.renderableComponents[i].renderFrame(Number(this._isFirstFrame))
     }
     /* this.maskManager.renderFrame(this.finalTransform.mat);
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */

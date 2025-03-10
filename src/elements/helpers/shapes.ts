@@ -156,10 +156,16 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
     this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, this)
     this.s = PropertyFactory.getProp(elem, data.s, 1, null, this)
     this.e = PropertyFactory.getProp(elem, data.e, 1, null, this)
-    this.h = PropertyFactory.getProp(elem, data.h || { k: 0 }, 0, 0.01, this)
+    this.h = PropertyFactory.getProp(
+      elem,
+      data.h || ({ k: 0 } as any),
+      0,
+      0.01,
+      this
+    )
     this.a = PropertyFactory.getProp(
       elem,
-      data.a || { k: 0 },
+      data.a || ({ k: 0 } as any),
       0,
       degToRads,
       this
@@ -272,7 +278,7 @@ export class SVGStrokeStyleData extends DynamicPropertyContainer {
     this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, this)
     this.w = PropertyFactory.getProp(elem, data.w, 0, null, this)
     this.d = new DashProperty(elem, data.d || [], RendererType.SVG, this)
-    this.c = PropertyFactory.getProp(elem, data.c, 1, 255, this)
+    this.c = PropertyFactory.getProp(elem, data.c as any, 1, 255, this)
     this.style = styleObj
     this._isAnimated = !!this._isAnimated
   }
@@ -288,7 +294,7 @@ export class SVGFillStyleData extends DynamicPropertyContainer {
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
     this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, this)
-    this.c = PropertyFactory.getProp(elem, data.c, 1, 255, this)
+    this.c = PropertyFactory.getProp(elem, data.c as any, 1, 255, this)
     this.style = styleObj
   }
 }

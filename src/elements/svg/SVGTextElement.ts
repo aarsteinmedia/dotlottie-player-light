@@ -21,19 +21,29 @@ import { createSizedArray } from '@/utils/helpers/arrays'
  *
  */
 class SVGTextLottieElement {
+  bbox?: {
+    height: number
+    left: number
+    top: number
+    width: number
+  }
   data!: LottieLayer
   layerElement!: SVGGElement
   mHelper!: Matrix
+  renderedFrame?: number
+  renderedLetters?: string[]
   renderType: RendererType
+  textContainer?: SVGTextElement
   textSpans: {
-    childSpan?: null | SVGTSpanElement
-    glyph: null | string
-    span: null | SVGTSpanElement
+    childSpan?: null | SVGTextElement | SVGGElement
+    glyph: null | CompInterface
+    span: null | SVGTextElement | SVGGElement
   }[]
+  validateText!: () => void
   private emptyShapeData = {
     shapes: [],
-  }
-  constructor(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
+  } as unknown as LottieLayer
+  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
     this.textSpans = []
     this.renderType = RendererType.SVG
     this.initElement(data, globalData, comp)
@@ -75,7 +85,7 @@ class SVGTextLottieElement {
     const usesGlyphs = !!this.globalData.fontManager?.chars
     len = letters.length
 
-    let tSpan: SVGTSpanElement
+    let tSpan: SVGTextElement | SVGGElement | null = null
     const matrixHelper = this.mHelper
     const shapeStr = ''
     const singleShape = this.data.singleShape
@@ -97,8 +107,8 @@ class SVGTextLottieElement {
           justify = 'start'
           break
       }
-      tElement.setAttribute('text-anchor', justify)
-      tElement.setAttribute('letter-spacing', trackingOffset)
+      tElement?.setAttribute('text-anchor', justify)
+      tElement?.setAttribute('letter-spacing', `${trackingOffset}`)
       const textContent = this.buildTextContents(documentData.finalText)
       len = textContent.length
       yPos = documentData.ps ? documentData.ps[1] + documentData.ascent : 0
@@ -108,7 +118,7 @@ class SVGTextLottieElement {
         tSpan.setAttribute('x', '0')
         tSpan.setAttribute('y', `${yPos}`)
         tSpan.style.display = 'inherit'
-        tElement.appendChild(tSpan)
+        tElement?.appendChild(tSpan)
         if (!this.textSpans[i]) {
           this.textSpans[i] = {
             glyph: null,
@@ -119,7 +129,9 @@ class SVGTextLottieElement {
         yPos += documentData.finalLineHeight
       }
 
-      this.layerElement.appendChild(tElement)
+      if (tElement) {
+        this.layerElement.appendChild(tElement)
+      }
     } else {
       const cachedSpansLength = this.textSpans.length
       let charData
@@ -135,21 +147,25 @@ class SVGTextLottieElement {
           tSpan =
             cachedSpansLength > i
               ? this.textSpans[i].span
-              : createNS(usesGlyphs ? 'g' : 'text')
+              : (createNS(usesGlyphs ? 'g' : 'text') as SVGTextElement)
           if (cachedSpansLength <= i) {
-            tSpan.setAttribute('stroke-linecap', 'butt')
-            tSpan.setAttribute('stroke-linejoin', 'round')
-            tSpan.setAttribute('stroke-miterlimit', '4')
+            tSpan?.setAttribute('stroke-linecap', 'butt')
+            tSpan?.setAttribute('stroke-linejoin', 'round')
+            tSpan?.setAttribute('stroke-miterlimit', '4')
             this.textSpans[i].span = tSpan
             if (usesGlyphs) {
-              const childSpan = createNS('g')
-              tSpan.appendChild(childSpan)
+              const childSpan = createNS<SVGGElement>('g')
+              tSpan?.appendChild(childSpan)
               this.textSpans[i].childSpan = childSpan
             }
             this.textSpans[i].span = tSpan
-            this.layerElement.appendChild(tSpan)
+            if (tSpan) {
+              this.layerElement.appendChild(tSpan)
+            }
           }
-          tSpan.style.display = 'inherit'
+          if (tSpan) {
+            tSpan.style.display = 'inherit'
+          }
         }
 
         matrixHelper.reset()
@@ -172,22 +188,22 @@ class SVGTextLottieElement {
           xPos += trackingOffset
         }
         if (usesGlyphs) {
-          charData = this.globalData.fontManager.getCharData(
+          charData = this.globalData.fontManager?.getCharData(
             documentData.finalText[i],
-            fontData.fStyle,
+            fontData?.fStyle,
             this.globalData.fontManager.getFontByName(documentData.f).fFamily
           )
           let glyphElement
           // t === 1 means the character has been replaced with an animated shaped
-          if (charData.t === 1) {
-            glyphElement = new (SVGCompElement as any)(
+          if (charData?.t === 1) {
+            glyphElement = new SVGCompElement(
               charData.data,
               this.globalData,
               this
             )
           } else {
             let data = this.emptyShapeData
-            if (charData.data && charData.data.shapes) {
+            if (charData?.data && charData.data.shapes) {
               data = this.buildShapeData(charData.data, documentData.finalSize)
             }
             glyphElement = new (SVGShapeElement as any)(
@@ -198,18 +214,20 @@ class SVGTextLottieElement {
           }
           if (this.textSpans[i].glyph) {
             const glyph = this.textSpans[i].glyph
-            this.textSpans[i].childSpan.removeChild(glyph.layerElement)
-            glyph.destroy()
+            if (glyph) {
+              this.textSpans[i].childSpan?.removeChild(glyph.layerElement)
+              glyph.destroy()
+            }
           }
           this.textSpans[i].glyph = glyphElement
           glyphElement._debug = true
           glyphElement.prepareFrame(0)
           glyphElement.renderFrame()
-          this.textSpans[i].childSpan.appendChild(glyphElement.layerElement)
+          this.textSpans[i].childSpan?.appendChild(glyphElement.layerElement)
           // when using animated shapes, the layer will be scaled instead of replacing the internal scale
           // this might have issues with strokes and might need a different solution
-          if (charData.t === 1) {
-            this.textSpans[i].childSpan.setAttribute(
+          if (charData?.t === 1) {
+            this.textSpans[i].childSpan?.setAttribute(
               'transform',
               `scale(${documentData.finalSize / 100},${
                 documentData.finalSize / 100
@@ -218,13 +236,16 @@ class SVGTextLottieElement {
           }
         } else {
           if (singleShape) {
-            tSpan.setAttribute(
+            tSpan?.setAttribute(
               'transform',
               `translate(${matrixHelper.props[12]},${matrixHelper.props[13]})`
             )
           }
-          tSpan.textContent = letters[i].val
-          tSpan.setAttributeNS(
+          if (tSpan) {
+            tSpan.textContent = letters[i].val
+          }
+
+          tSpan?.setAttributeNS(
             'http://www.w3.org/XML/1998/namespace',
             'xml:space',
             'preserve'
@@ -235,13 +256,14 @@ class SVGTextLottieElement {
         tSpan.setAttribute('d', shapeStr)
       }
     }
-    while (i < this.textSpans.length) {
-      this.textSpans[i].span.style.display = 'none'
+    while (i < this.textSpans.length && this.textSpans[i].span) {
+      this.textSpans[i].span!.style.display = 'none'
       i++
     }
 
     this._sizeChanged = true
   }
+
   buildShapeData(data: LottieLayer, scale: number) {
     // data should probably be cloned to apply scale separately to each instance of a text on different layers
     // but since text internal content gets only rendered once and then it's never rerendered,
@@ -279,9 +301,8 @@ class SVGTextLottieElement {
     textContents.push(currentTextContent)
     return textContents
   }
-
   createContent() {
-    if (this.data.singleShape && !this.globalData.fontManager.chars) {
+    if (this.data.singleShape && !this.globalData.fontManager?.chars) {
       this.textContainer = createNS<SVGTextElement>('text')
     }
   }
@@ -293,14 +314,16 @@ class SVGTextLottieElement {
     for (i = 0; i < len; i++) {
       glyphElement = this.textSpans[i].glyph
       if (glyphElement) {
-        glyphElement.prepareFrame(this.comp.renderedFrame - this.data.st)
+        glyphElement.prepareFrame?.(this.comp.renderedFrame - this.data.st)
         if (glyphElement._mdf) {
           this._mdf = true
         }
       }
     }
   }
-  renderInnerContent = function () {
+
+  // TODO: Find out why this doesn't work as a normal prototype
+  renderInnerContent = function (this: SVGTextLottieElement) {
     this.validateText()
     if (!this.data.singleShape || this._mdf) {
       this.textAnimator.getMeasures(
@@ -329,19 +352,19 @@ class SVGTextLottieElement {
             glyphElement.renderFrame()
           }
           if (renderedLetter._mdf.m) {
-            textSpan.setAttribute('transform', renderedLetter.m)
+            textSpan?.setAttribute('transform', renderedLetter.m as string)
           }
           if (renderedLetter._mdf.o) {
-            textSpan.setAttribute('opacity', renderedLetter.o)
+            textSpan?.setAttribute('opacity', `${renderedLetter.o ?? 1}`)
           }
           if (renderedLetter._mdf.sw) {
-            textSpan.setAttribute('stroke-width', renderedLetter.sw)
+            textSpan?.setAttribute('stroke-width', `${renderedLetter.sw || 0}`)
           }
           if (renderedLetter._mdf.sc) {
-            textSpan.setAttribute('stroke', renderedLetter.sc)
+            textSpan?.setAttribute('stroke', renderedLetter.sc as string)
           }
           if (renderedLetter._mdf.fc) {
-            textSpan.setAttribute('fill', renderedLetter.fc)
+            textSpan?.setAttribute('fill', renderedLetter.fc as string)
           }
         }
       }

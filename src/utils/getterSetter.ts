@@ -1,5 +1,5 @@
 import type SVGRenderer from '@/renderers/SVGRenderer'
-import type { Effect, ExpressionsPlugin } from '@/types'
+import type { EffectElement, ExpressionsPlugin } from '@/types'
 
 import { RendererType } from '@/enums'
 
@@ -105,10 +105,14 @@ export const setLocationHref = (value: string) => {
 export const registeredEffects: {
     [id: string]: {
       countsAsEffect: boolean
-      effect: Effect
+      effect: EffectElement
     }
   } = {},
-  registerEffect = (id: string, effect: Effect, countsAsEffect: boolean) => {
+  registerEffect = (
+    id: string,
+    effect: EffectElement,
+    countsAsEffect: boolean
+  ) => {
     registeredEffects[id] = {
       countsAsEffect,
       effect,

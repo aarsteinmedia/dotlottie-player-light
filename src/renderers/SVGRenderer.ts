@@ -1,5 +1,11 @@
 import type AnimationItem from '@/animation/AnimationItem'
-import type { LottieLayer, SVGRendererConfig } from '@/types'
+import type {
+  CompInterface,
+  GlobalData,
+  LottieAsset,
+  LottieLayer,
+  SVGRendererConfig,
+} from '@/types'
 
 import SVGCompElement from '@/elements/svg/SVGCompElement'
 import { RendererType } from '@/enums'
@@ -8,11 +14,11 @@ import { createNS } from '@/utils'
 import { createElementID } from '@/utils/getterSetter'
 
 export default class SVGRenderer extends SVGRendererBase {
-  destroyed: boolean
+  getElementByPath!: (path: unknown[]) => CompInterface
   initItems!: () => void
-  renderedFrame: number
   rendererType: RendererType
-  searchExtraCompositions!: (layers: LottieLayer[]) => void
+  searchExtraCompositions!: (layers: (LottieLayer | LottieAsset)[]) => void
+
   constructor(animationItem: AnimationItem, config?: SVGRendererConfig) {
     super()
     this.animationItem = animationItem
@@ -74,7 +80,7 @@ export default class SVGRenderer extends SVGRendererBase {
       frameNum: -1,
       frameRate: 60,
       renderConfig: this.renderConfig,
-    }
+    } as GlobalData
     this.elements = []
     this.pendingElements = []
     this.destroyed = false

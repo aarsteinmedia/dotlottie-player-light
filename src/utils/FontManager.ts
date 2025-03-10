@@ -314,8 +314,8 @@ export default class FontManager {
 
   public getCharData(
     char: Characacter | string,
-    style: string,
-    font: string
+    style?: string,
+    font?: string
   ): Characacter {
     let i = 0
     const len = this.chars?.length || 0

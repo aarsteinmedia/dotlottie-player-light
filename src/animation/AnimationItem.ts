@@ -889,7 +889,7 @@ export default class AnimationItem extends BaseEvent {
   }
 
   public updateDocumentData(
-    path: string,
+    path: unknown[],
     documentData: DocumentData,
     index: number
   ) {

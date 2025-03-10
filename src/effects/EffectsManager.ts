@@ -1,4 +1,4 @@
-import type { Effect, CompInterface, LottieLayer } from '@/types'
+import type { Effect, CompInterface } from '@/types'
 
 import {
   AngleEffect,
@@ -13,8 +13,8 @@ import {
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
 export default class EffectsManager {
-  effectElements: EffectElement[]
-  constructor(data: LottieLayer, element: CompInterface) {
+  effectElements: EffectInterface[]
+  constructor(data: any, element: CompInterface) {
     const effects = data.ef || []
     this.effectElements = []
     const { length } = effects
@@ -27,7 +27,7 @@ export default class EffectsManager {
 
 export class GroupEffect extends DynamicPropertyContainer {
   data?: Effect
-  effectElements?: EffectElement[]
+  effectElements?: EffectInterface[]
   getValue = this.iterateDynamicProperties
   constructor(data: Effect, element: CompInterface) {
     super()
@@ -36,7 +36,7 @@ export class GroupEffect extends DynamicPropertyContainer {
   init(data: Effect, element: CompInterface) {
     this.data = data
     this.effectElements = []
-    this.initDynamicPropertyContainer(element as any) // TODO:
+    this.initDynamicPropertyContainer(element as CompInterface)
     let i
     const len = this.data.ef.length
     let eff
@@ -67,7 +67,7 @@ export class GroupEffect extends DynamicPropertyContainer {
           eff = new MaskIndexEffect(effects[i], element, this)
           break
         case 5:
-          eff = new EffectsManager(effects[i] as any, element)
+          eff = new EffectsManager(effects[i], element)
           break
         // case 6:
         default:
@@ -81,7 +81,7 @@ export class GroupEffect extends DynamicPropertyContainer {
   }
 }
 
-type EffectElement =
+type EffectInterface =
   | GroupEffect
   | EffectsManager
   | SliderEffect

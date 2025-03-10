@@ -2,6 +2,16 @@ import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
 
 import type AnimationItem from '@/animation/AnimationItem'
+import type {
+  AngleEffect,
+  CheckboxEffect,
+  ColorEffect,
+  LayerIndexEffect,
+  MaskIndexEffect,
+  NoValueEffect,
+  PointEffect,
+  SliderEffect,
+} from '@/effects'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type { SVGStyleData } from '@/elements/helpers/shapes'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
@@ -72,6 +82,7 @@ export interface LayerInterFace {
 }
 
 export interface CompInterface extends AnimationItem {
+  _mdf?: boolean
   addDynamicProperty: (prop: TextProperty | DynamicPropertyContainer) => void
   animationItem: AnimationItem
   assetData: ImageData
@@ -120,7 +131,7 @@ export interface CompInterface extends AnimationItem {
   renderConfig: SVGRendererConfig
   renderedFrame: number
   rendererType: RendererType
-  searchExtraCompositions: (assets: LottieAsset[]) => void
+  searchExtraCompositions: (assets: (LottieAsset | LottieLayer)[]) => void
   setAsParent: () => void
   setMatte: (id: string) => void
   supports3d: boolean
@@ -931,6 +942,15 @@ export interface TextData {
   yOffset: number
 }
 
+export type EffectElement =
+  | typeof SliderEffect
+  | typeof AngleEffect
+  | typeof ColorEffect
+  | typeof PointEffect
+  | typeof CheckboxEffect
+  | typeof NoValueEffect
+  | typeof LayerIndexEffect
+  | typeof MaskIndexEffect
 export interface EffectValue {
   ty: number
   v: {
