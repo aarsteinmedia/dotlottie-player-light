@@ -10,7 +10,6 @@ import {
   PointEffect,
   SliderEffect,
 } from '@/effects'
-import { SVGStrokeStyleData } from '@/elements/helpers/shapes'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
 export default class EffectsManager {
@@ -30,11 +29,11 @@ export class GroupEffect extends DynamicPropertyContainer {
   data?: Effect
   effectElements?: EffectInterface[]
   override getValue = this.iterateDynamicProperties
-  constructor(data: Effect, element: SVGStrokeStyleData, layer: LottieLayer) {
+  constructor(data: Effect, element: ElementInterface, layer: LottieLayer) {
     super()
     this.init(data, element, layer)
   }
-  init(data: Effect, element: SVGStrokeStyleData, layer: LottieLayer) {
+  init(data: Effect, element: ElementInterface, layer: LottieLayer) {
     this.data = data
     this.effectElements = []
     this.initDynamicPropertyContainer(element)

@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
-// import type SVGCompElement from '@/elements/svg/SVGCompElement'
-// import type SVGRendererBase from '@/renderers/SVGRendererBase'
 import type { CompInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
 import FootageElement from '@/elements/FootageElement'
-// import SVGRenderer from '@/renderers/SVGRenderer'
 import FontManager from '@/utils/FontManager'
 import SlotManager from '@/utils/SlotManager'
 

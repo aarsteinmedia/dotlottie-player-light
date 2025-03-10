@@ -12,6 +12,7 @@ import type {
   PointEffect,
   SliderEffect,
 } from '@/effects'
+import type BaseElement from '@/elements/BaseElement'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type {
   SVGStrokeStyleData,
@@ -23,14 +24,11 @@ import type { RendererType, PlayMode, ShapeType } from '@/enums'
 import type AudioController from '@/utils/audio/AudioController'
 import type FontManager from '@/utils/FontManager'
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-// import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 import type Matrix from '@/utils/Matrix'
-// import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 import type ShapePath from '@/utils/shapes/ShapePath'
 import type SlotManager from '@/utils/SlotManager'
 import type TextAnimatorDataProperty from '@/utils/text/TextAnimatorDataProperty'
 import type TextProperty from '@/utils/text/TextProperty'
-// import type PropertyFactory from '@/utils/PropertyFactory'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 export type AnimationDirection = 1 | -1
@@ -80,7 +78,7 @@ export interface Transformer {
   }
 }
 
-export interface ElementInterface extends SVGStrokeStyleData {}
+export type ElementInterface = BaseElement | SVGStrokeStyleData
 
 export interface LayerInterFace {
   registerEffectsInterface: (effect: unknown) => void
