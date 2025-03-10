@@ -84,9 +84,27 @@ export default class TransformProperty extends DynamicPropertyContainer {
       )
     }
     if ('rx' in data) {
-      this.rx = PropertyFactory.getProp(elem, data.rx, 0, degToRads, this)
-      this.ry = PropertyFactory.getProp(elem, data.ry, 0, degToRads, this)
-      this.rz = PropertyFactory.getProp(elem, data.rz, 0, degToRads, this)
+      this.rx = PropertyFactory.getProp(
+        elem,
+        data.rx,
+        0,
+        degToRads,
+        this as any
+      )
+      this.ry = PropertyFactory.getProp(
+        elem,
+        data.ry,
+        0,
+        degToRads,
+        this as any
+      )
+      this.rz = PropertyFactory.getProp(
+        elem,
+        data.rz,
+        0,
+        degToRads,
+        this as any
+      )
       if (data.or?.k[0].ti) {
         const { length } = data.or.k
         for (let i = 0; i < length; i++) {
@@ -113,28 +131,40 @@ export default class TransformProperty extends DynamicPropertyContainer {
       )
     }
     if (data.sk) {
-      this.sk = PropertyFactory.getProp(elem, data.sk, 0, degToRads, this)
-      this.sa = PropertyFactory.getProp(elem, data.sa, 0, degToRads, this)
+      this.sk = PropertyFactory.getProp(
+        elem,
+        data.sk,
+        0,
+        degToRads,
+        this as any
+      )
+      this.sa = PropertyFactory.getProp(
+        elem,
+        data.sa,
+        0,
+        degToRads,
+        this as any
+      )
     }
     this.a = PropertyFactory.getProp(
       elem,
-      data.a || { k: [0, 0, 0] },
+      data.a || ({ k: [0, 0, 0] } as any),
       1,
       0,
-      this
+      this as any
     )
     this.s = PropertyFactory.getProp(
       elem,
-      data.s || { k: [100, 100, 100] },
+      data.s || ({ k: [100, 100, 100] } as any),
       1,
       0.01,
-      this
+      this as any
     )
     // Opacity is not part of the transform properties, that's why it won't use this.dynamicProperties. That way transforms won't get updated if opacity changes.
     if (data.o) {
       this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, elem)
     } else {
-      this.o = { _mdf: false, v: 1 }
+      this.o = { _mdf: false, v: 1 } as any
     }
     this._isDirty = true
     if (!this.dynamicProperties.length) {
@@ -237,11 +267,11 @@ export default class TransformProperty extends DynamicPropertyContainer {
       } else if (!this.r && this.appliedTransformations < 4) {
         this.v
           .rotateZ(-Number(this.rz?.v))
-          .rotateY(this.ry.v)
-          .rotateX(this.rx.v)
-          .rotateZ(-this.or.v[2])
-          .rotateY(this.or.v[1])
-          .rotateX(this.or.v[0])
+          .rotateY(Number(this.ry?.v))
+          .rotateX(Number(this.rx?.v))
+          .rotateZ(-(this.or?.v as number[])[2])
+          .rotateY((this.or?.v as number[])[1])
+          .rotateX((this.or?.v as number[])[0])
       }
       if (this.autoOriented) {
         let v1
@@ -383,54 +413,54 @@ export default class TransformProperty extends DynamicPropertyContainer {
     this.appliedTransformations = 0
     this.pre.reset()
 
-    if (this.a.effectsSequence.length) {
+    if (this.a?.effectsSequence.length) {
       return
     }
     this.pre.translate(
-      -(this.a.v as number[])[0],
-      -(this.a.v as number[])[1],
-      (this.a.v as number[])[2]
+      -(this.a?.v as number[])[0],
+      -(this.a?.v as number[])[1],
+      (this.a?.v as number[])[2]
     )
     this.appliedTransformations = 1
 
-    if (this.s.effectsSequence.length) {
+    if (this.s?.effectsSequence.length) {
       return
     }
     this.pre.scale(
-      (this.s.v as number[])[0],
-      (this.s.v as number[])[1],
-      (this.s.v as number[])[2]
+      (this.s?.v as number[])[0],
+      (this.s?.v as number[])[1],
+      (this.s?.v as number[])[2]
     )
     this.appliedTransformations = 2
 
     if (this.sk) {
-      if (this.sk.effectsSequence.length || this.sa.effectsSequence.length) {
+      if (this.sk.effectsSequence.length || this.sa?.effectsSequence.length) {
         return
       }
-      this.pre.skewFromAxis(-(this.sk.v as number[]), this.sa.v)
+      this.pre.skewFromAxis(-(this.sk.v as number[]), Number(this.sa?.v))
       this.appliedTransformations = 3
     }
     if (this.r) {
       if (!this.r.effectsSequence.length) {
-        this.pre.rotate(-this.r.v)
+        this.pre.rotate(-Number(this.r.v))
         this.appliedTransformations = 4
       }
       return
     }
 
     if (
-      !this.rz.effectsSequence.length &&
-      !this.ry.effectsSequence.length &&
-      !this.rx.effectsSequence.length &&
-      !this.or.effectsSequence.length
+      !this.rz?.effectsSequence.length &&
+      !this.ry?.effectsSequence.length &&
+      !this.rx?.effectsSequence.length &&
+      !this.or?.effectsSequence.length
     ) {
       this.pre
-        .rotateZ(-this.rz.v)
-        .rotateY(this.ry.v)
-        .rotateX(this.rx.v)
-        .rotateZ(-this.or.v[2])
-        .rotateY(this.or.v[1])
-        .rotateX(this.or.v[0])
+        .rotateZ(-Number(this.rz?.v))
+        .rotateY(Number(this.ry?.v))
+        .rotateX(Number(this.rx?.v))
+        .rotateZ(-(this.or?.v as number[])[2])
+        .rotateY((this.or?.v as number[])[1])
+        .rotateX((this.or?.v as number[])[0])
       this.appliedTransformations = 4
     }
   }
