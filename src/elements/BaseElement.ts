@@ -5,8 +5,8 @@ import type {
   GlobalData,
   ItemsData,
   LottieLayer,
+  Shape,
 } from '@/types'
-import type ShapePath from '@/utils/shapes/ShapePath'
 
 import EffectsManager from '@/effects/EffectsManager'
 import { getBlendMode } from '@/utils'
@@ -21,14 +21,14 @@ export default class BaseElement {
   effectsManager!: EffectsManager
 
   globalData!: GlobalData
-  itemsData?: ItemsData
+  itemsData?: ItemsData[]
   layerElement!: SVGGElement
   layerId!: string
 
   layerInterface?: ProjectInterface
 
   maskManager?: MaskElement
-  shapesData?: ShapePath
+  shapesData?: Shape[]
   type?: unknown
   checkMasks() {
     if (!this.data?.hasMask) {

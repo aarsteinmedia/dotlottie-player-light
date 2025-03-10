@@ -1,11 +1,5 @@
 import type AnimationItem from '@/animation/AnimationItem'
-import type {
-  CompInterface,
-  GlobalData,
-  LottieAsset,
-  LottieLayer,
-  SVGRendererConfig,
-} from '@/types'
+import type { GlobalData, LottieLayer, SVGRendererConfig } from '@/types'
 
 import SVGCompElement from '@/elements/svg/SVGCompElement'
 import { RendererType } from '@/enums'
@@ -14,10 +8,7 @@ import { createNS } from '@/utils'
 import { createElementID } from '@/utils/getterSetter'
 
 export default class SVGRenderer extends SVGRendererBase {
-  getElementByPath!: (path: unknown[]) => CompInterface
-  initItems!: () => void
   rendererType: RendererType
-  searchExtraCompositions!: (layers: (LottieLayer | LottieAsset)[]) => void
 
   constructor(animationItem: AnimationItem, config?: SVGRendererConfig) {
     super()
@@ -87,7 +78,7 @@ export default class SVGRenderer extends SVGRendererBase {
     this.rendererType = RendererType.SVG
   }
 
-  createComp(data: LottieLayer) {
-    return new SVGCompElement(data, this.globalData, this as any)
+  override createComp(data: LottieLayer) {
+    return new SVGCompElement(data, this.globalData, this)
   }
 }

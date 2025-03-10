@@ -30,7 +30,7 @@ export default class ShapePropertyFactory {
 
   static getShapeProp(
     elem: SVGShapeElement,
-    data: Shape & Mask,
+    data: Partial<Shape & Mask>,
     type: number,
     _?: unknown
   ) {
@@ -575,7 +575,7 @@ export class ShapeProperty {
   public addEffect: (func: any) => void
   public comp: ElementInterface
   public container: SVGShapeElement
-  public data: Shape & Mask
+  public data: Partial<Shape & Mask>
   public effectsSequence: unknown[]
   public elem: SVGShapeElement
   public getValue: () => void
@@ -593,7 +593,11 @@ export class ShapeProperty {
   public reset
   public setVValue: (shape: ShapePath) => void
   public v: ShapePath
-  constructor(elem: SVGShapeElement, data: Shape & Mask, type: number) {
+  constructor(
+    elem: SVGShapeElement,
+    data: Partial<Shape & Mask>,
+    type: number
+  ) {
     this.propType = 'shape'
     this.comp = elem.comp
     this.container = elem

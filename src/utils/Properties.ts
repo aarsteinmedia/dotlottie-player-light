@@ -1,7 +1,6 @@
 /* eslint-disable max-depth */
 import type {
   Caching,
-  CompInterface,
   ElementInterface,
   Keyframe,
   Shape,
@@ -381,10 +380,10 @@ export class MultiDimensionalProperty<
   T extends Array<any> = Vector2,
 > extends BaseProperty {
   constructor(
-    elem: CompInterface,
+    elem: ElementInterface,
     data: VectorProperty<T>,
     mult: null | number = null,
-    container: CompInterface | null = null
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'multidimensional'
@@ -412,16 +411,16 @@ export class MultiDimensionalProperty<
 }
 export class KeyframedValueProperty extends BaseProperty {
   constructor(
-    elem: CompInterface,
+    elem: ElementInterface,
     data: VectorProperty<Keyframe[]>,
     mult: null | number = null,
-    container: CompInterface | null = null
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'unidimensional'
     this.keyframes = data.k
     this.keyframesMetadata = []
-    this.offsetTime = elem.data.st
+    this.offsetTime = elem.data?.st
     this.frameId = -1
     this._caching = {
       _lastKeyframeIndex: -1,

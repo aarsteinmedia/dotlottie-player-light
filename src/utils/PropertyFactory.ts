@@ -1,3 +1,4 @@
+import type { GroupEffect } from '@/effects/EffectsManager'
 import type { ElementInterface, Keyframe, VectorProperty } from '@/types'
 
 import {
@@ -14,7 +15,7 @@ export default class PropertyFactory {
     dataFromProps?: VectorProperty<T>,
     type?: number,
     mult?: null | number,
-    container?: ElementInterface
+    container?: ElementInterface | GroupEffect
   ) => {
     let data = dataFromProps
     if (data && 'sid' in data && data.sid) {
@@ -22,22 +23,27 @@ export default class PropertyFactory {
     }
     let p
     if (!(data?.k as number[]).length) {
-      p = new ValueProperty(elem, data as VectorProperty, mult, container)
+      p = new ValueProperty(
+        elem,
+        data as VectorProperty,
+        mult,
+        container as any
+      )
     } else if (typeof (data?.k as number[])[0] === 'number') {
       p = new MultiDimensionalProperty(
-        elem,
+        elem as any,
         data as VectorProperty<number[]>,
         mult,
-        container
+        container as any
       )
     } else {
       switch (type) {
         case 0:
           p = new KeyframedValueProperty(
-            elem,
+            elem as any,
             data as unknown as VectorProperty<Keyframe[]>,
             mult,
-            container
+            container as any
           )
           break
         case 1:
@@ -45,7 +51,7 @@ export default class PropertyFactory {
             elem,
             data as VectorProperty<number[]>,
             mult,
-            container
+            container as any
           )
           break
         default:
@@ -56,7 +62,7 @@ export default class PropertyFactory {
       p = new NoProperty()
     }
     if (p?.effectsSequence.length) {
-      container.addDynamicProperty(p)
+      container?.addDynamicProperty?.(p)
     }
     return p
   }

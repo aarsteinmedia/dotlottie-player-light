@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
-  AnimatedProperty,
   Audio,
+  ElementInterface,
   GlobalData,
   LottieAsset,
   LottieLayer,
@@ -25,7 +25,11 @@ class AudioElement {
   audio: Audio
   lv: ValueProperty
   tm: ValueProperty
-  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
     this.initFrame()
     this.initRenderable()
     this.assetData = globalData.getAssetData?.(data.refId) || null

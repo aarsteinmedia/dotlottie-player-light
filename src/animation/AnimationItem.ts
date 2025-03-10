@@ -269,7 +269,7 @@ export default class AnimationItem extends BaseEvent {
       if (typeof this.animationData.fr !== 'undefined') {
         this.frameMult = this.animationData.fr / 1000
       }
-      this.renderer.searchExtraCompositions(animData.assets)
+      this.renderer.searchExtraCompositions(animData.assets as any)
       this.markers = markerParser(animData.markers || []) as MarkerData[]
       this.trigger('config_ready')
       this.preloadImages()

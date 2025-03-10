@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   AnimatedContent,
+  ElementInterface,
   GlobalData,
   ItemsData,
   LottieLayer,
   Shape,
   ShapeDataInterface,
+  Transformer,
 } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
@@ -33,21 +35,27 @@ import { getBlendMode } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { getLocationHref } from '@/utils/getterSetter'
 // import Matrix from '@/utils/Matrix'
-import ShapeModifiers from '@/utils/shapes/ShapeModifiers'
+import ShapeModifiers, {
+  type ShapeModifierInterface,
+} from '@/utils/shapes/ShapeModifiers'
 import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
 import TransformProperty from '@/utils/TransformProperty'
 class SVGShapeElement {
   // identityMatrix = new Matrix()
 
   animatedContents: AnimatedContent[]
-  itemsData: ItemsData[]
+  itemsData?: ItemsData[]
   prevViewData: ItemsData['prevViewData']
   processedElements: ProcessedElement[]
-  shapeModifiers: any[]
+  shapeModifiers: ShapeModifierInterface[]
   shapes: SVGShapeData[]
   shapesData: Shape[]
   stylesList: SVGStyleData[]
-  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
     // List of drawable elements
     this.shapes = []
     // Full shape data
@@ -97,7 +105,7 @@ class SVGShapeElement {
     this.filterUniqueShapes()
   }
   createGroupElement(data: Shape) {
-    const elementData = new (ShapeGroupData as any)()
+    const elementData = new ShapeGroupData()
     if (data.ln) {
       elementData.gr.setAttribute('id', data.ln)
     }
@@ -105,11 +113,15 @@ class SVGShapeElement {
       elementData.gr.setAttribute('class', data.cl)
     }
     if (data.bm) {
-      elementData.gr.style['mix-blend-mode'] = getBlendMode(data.bm)
+      elementData.gr.style.mixBlendMode = getBlendMode(data.bm)
     }
     return elementData
   }
-  createShapeElement(data: Shape, ownTransformers: any, level: number) {
+  createShapeElement(
+    data: Shape,
+    ownTransformers: Transformer[],
+    level: number
+  ) {
     let ty = 4
     if (data.ty === 'rc') {
       ty = 5

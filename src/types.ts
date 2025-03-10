@@ -12,6 +12,7 @@ import type {
   PointEffect,
   SliderEffect,
 } from '@/effects'
+import type AudioElement from '@/elements/AudioElement'
 import type BaseElement from '@/elements/BaseElement'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type HierarchyElement from '@/elements/helpers/HierarchyElement'
@@ -78,13 +79,15 @@ export interface Transformer {
   op: ValueProperty
 }
 
-export type ElementInterface = Partial<
-  BaseElement &
-    HierarchyElement &
-    SVGStrokeStyleData &
-    BaseRenderer &
-    SVGShapeElement
->
+export type ElementInterface = BaseElement &
+  HierarchyElement &
+  AudioElement &
+  SVGShapeElement &
+  SVGTextElement &
+  SVGStopElement &
+  SVGStrokeStyleData &
+  BaseRenderer &
+  AnimationItem
 
 export interface LayerInterFace {
   registerEffectsInterface: (effect: unknown) => void
@@ -223,25 +226,10 @@ export interface ItemData {
   s: any
   searchProperty: () => boolean
   setVValue: (val: any) => void
-  style: StyleData
+  style: SVGStyleData
   v: string | number[] | number
   vel: number | number[]
   w: ItemData
-}
-
-export interface StyleData {
-  _mdf: boolean
-  closed: boolean
-  d: string
-  data: Shape
-  hd?: boolean
-  lvl: number
-  msElem: SVGElement | null
-  pElem: SVGPathElement
-  pt?: AnimatedProperty
-  t: number
-  ty: ShapeType
-  type: ShapeType
 }
 
 export interface AnimationEvents {
@@ -462,7 +450,7 @@ export interface Shape {
   /** CSS Class */
   cl?: string
   closed?: boolean
-  d?: number // StrokeData[]
+  d?: number | StrokeData[]
   /** Endpoint for gradient */
   e?: VectorProperty<Vector2>
   /** Gradient colors */
@@ -829,8 +817,8 @@ export interface ShapeDataInterface {
   _isAnimated: boolean
   /** SVG Path Data */
   caches: string[]
-  container: CompInterface
-  elements: CompInterface[]
+  container: ElementInterface
+  elements: ElementInterface[]
   lStr: string
   lvl: number
   setAsAnimated: () => void
@@ -839,7 +827,7 @@ export interface ShapeDataInterface {
     k: boolean
     kf: boolean
     _mdf: boolean
-    comp: CompInterface
+    comp: ElementInterface
     paths: ShapeElement
   }
   styles: SVGStyleData[]
@@ -1249,6 +1237,24 @@ declare global {
   function dotLottiePlayer(): DotLottiePlayer
 }
 
+// export type Merge<T extends any[]> = {
+//   [K in keyof T[number] as K extends keyof T[number] ? K : never]: T[number][K]
+// } & {
+//   [K in keyof T[number] as K extends keyof T[number] ? never : K]?: T[number][K]
+// }
+
+export type Merge<A, B> = Partial<A | B> & {
+  [K in keyof (A | B)]: (A & B)[K]
+} & (Partial<Omit<A & B, keyof (A | B)>> extends infer O
+    ? { [K in keyof O]: O[K] }
+    : never)
+
+// export type Merge<T extends any[]> = Partial<T[number]> & {
+//   [K in keyof T[number]]: T[number][K]
+// } & (Partial<Omit<T[number], keyof T[number]>> extends infer O
+//     ? { [K in keyof O]: O[K] }
+//     : never)
+
 export interface ExpressionsPlugin {
   initExpressions(animItem: AnimationItem): void
   resetFrame(): void
@@ -1310,7 +1316,7 @@ export interface Caching {
 }
 
 export interface PropertyElement {
-  comp: unknown
+  comp: ElementInterface
   data: {
     st: number
   }

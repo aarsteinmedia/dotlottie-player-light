@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type { CompInterface, GlobalData, LottieLayer } from '@/types'
+import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -14,12 +14,12 @@ class CompElement {
   checkLayers!: (val: number) => void
   completeLayers?: boolean
   destroyElements!: () => void
-  elements!: CompInterface[]
-  getElements!: () => CompInterface[]
+  elements!: ElementInterface[]
+  getElements!: () => ElementInterface[]
   isInRange?: boolean
   layers!: LottieLayer[]
   renderedFrame!: number
-  setElements!: (elems: CompInterface[]) => void
+  setElements!: (elems: ElementInterface[]) => void
   tm?: ValueProperty
 }
 
@@ -37,7 +37,7 @@ extendPrototype(
 CompElement.prototype.initElement = function (
   data: LottieLayer,
   globalData: GlobalData,
-  comp: CompInterface
+  comp: ElementInterface
 ) {
   this.initFrame()
   this.initBaseData(data, globalData, comp)
@@ -106,7 +106,7 @@ CompElement.prototype.renderInnerContent = function () {
   }
 }
 
-CompElement.prototype.setElements = function (elems: CompInterface[]) {
+CompElement.prototype.setElements = function (elems: ElementInterface[]) {
   this.elements = elems
 }
 

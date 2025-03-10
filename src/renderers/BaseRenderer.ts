@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
-import type { CompInterface, ElementInterface, LottieLayer } from '@/types'
+import type { ElementInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
@@ -16,7 +16,7 @@ class BaseRenderer {
   checkPendingElements!: () => void
 
   completeLayers?: boolean
-  createComp!: (data: LottieLayer) => CompInterface
+  createComp!: (data: LottieLayer) => ElementInterface
 
   createImage!: (data: LottieLayer) => void
 
