@@ -38,7 +38,7 @@ import ImagePreloader from '@/utils/ImagePreloader'
 
 export default class AnimationItem extends BaseEvent {
   public __complete?: boolean
-  public animationData: Partial<AnimationData>
+  public animationData: AnimationData
   public animationID: string
   public assets: LottieAsset[]
 
@@ -102,7 +102,7 @@ export default class AnimationItem extends BaseEvent {
     this.playDirection = 1
     this.frameModifier = 1
     this.playCount = 0
-    this.animationData = {}
+    this.animationData = {} as AnimationData
     this.assets = []
     this.isPaused = true
     this.autoplay = false
@@ -895,7 +895,7 @@ export default class AnimationItem extends BaseEvent {
   ) {
     try {
       const element = this.renderer?.getElementByPath(path)
-      element.updateDocumentData(documentData, index)
+      element?.updateDocumentData([], documentData, index)
     } catch (_error) {
       // TODO: decide how to handle catch case
     }

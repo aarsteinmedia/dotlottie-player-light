@@ -1,4 +1,4 @@
-import type { Effect, CompInterface } from '@/types'
+import type { Effect, ElementInterface, LottieLayer } from '@/types'
 
 import {
   AngleEffect,
@@ -10,16 +10,17 @@ import {
   PointEffect,
   SliderEffect,
 } from '@/effects'
+import { SVGStrokeStyleData } from '@/elements/helpers/shapes'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
 export default class EffectsManager {
   effectElements: EffectInterface[]
-  constructor(data: any, element: any) {
+  constructor(data: LottieLayer, element: ElementInterface) {
     const effects = data.ef || []
     this.effectElements = []
     const { length } = effects
     for (let i = 0; i < length; i++) {
-      const effectItem = new GroupEffect(effects[i], element)
+      const effectItem = new GroupEffect(effects[i], element, data)
       this.effectElements.push(effectItem)
     }
   }
@@ -28,15 +29,15 @@ export default class EffectsManager {
 export class GroupEffect extends DynamicPropertyContainer {
   data?: Effect
   effectElements?: EffectInterface[]
-  getValue = this.iterateDynamicProperties
-  constructor(data: Effect, element: CompInterface) {
+  override getValue = this.iterateDynamicProperties
+  constructor(data: Effect, element: SVGStrokeStyleData, layer: LottieLayer) {
     super()
-    this.init(data, element)
+    this.init(data, element, layer)
   }
-  init(data: Effect, element: CompInterface) {
+  init(data: Effect, element: SVGStrokeStyleData, layer: LottieLayer) {
     this.data = data
     this.effectElements = []
-    this.initDynamicPropertyContainer(element as CompInterface)
+    this.initDynamicPropertyContainer(element)
     let i
     const len = this.data.ef.length
     let eff
@@ -67,7 +68,7 @@ export class GroupEffect extends DynamicPropertyContainer {
           eff = new MaskIndexEffect(effects[i], element, this)
           break
         case 5:
-          eff = new EffectsManager(effects[i], element)
+          eff = new EffectsManager(layer, element)
           break
         // case 6:
         default:

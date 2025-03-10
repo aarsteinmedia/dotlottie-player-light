@@ -1,11 +1,5 @@
 import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
-import type {
-  CompInterface,
-  LottieComp,
-  Mask,
-  Shape,
-  StrokeData,
-} from '@/types'
+import type { LottieComp, Mask, Shape, StrokeData } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
@@ -499,7 +493,7 @@ class EllShapeProperty extends DynamicPropertyContainer {
   v: ShapePath
   private _cPoint = roundCorner
 
-  constructor(elem: any, data: Shape) {
+  constructor(elem: any, data: Shape | Mask) {
     super()
     this.v = ShapePool.newElement()
     this.v.setPathData(true, 4)
@@ -570,9 +564,9 @@ export class ShapeProperty {
   public addEffect: (func: any) => void
   public comp: LottieComp
   public container: unknown
-  public data: Shape
+  public data: Shape | Mask
   public effectsSequence: unknown[]
-  public elem: CompInterface
+  public elem: SVGShapeElement
   public getValue: () => void
   public interpolateShape: (
     frame: number,
@@ -588,7 +582,7 @@ export class ShapeProperty {
   public reset
   public setVValue: (shape: ShapePath) => void
   public v: ShapePath
-  constructor(elem: CompInterface, data: Shape, type: number) {
+  constructor(elem: SVGShapeElement, data: Shape | Mask, type: number) {
     this.propType = 'shape'
     this.comp = elem.comp
     this.container = elem

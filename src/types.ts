@@ -13,7 +13,10 @@ import type {
   SliderEffect,
 } from '@/effects'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
-import type { SVGStyleData } from '@/elements/helpers/shapes'
+import type {
+  SVGStrokeStyleData,
+  SVGStyleData,
+} from '@/elements/helpers/shapes'
 import type MaskElement from '@/elements/MaskElement'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
@@ -76,6 +79,8 @@ export interface Transformer {
     effectsSequence: unknown[]
   }
 }
+
+export interface ElementInterface extends SVGStrokeStyleData {}
 
 export interface LayerInterFace {
   registerEffectsInterface: (effect: unknown) => void
@@ -419,7 +424,7 @@ export interface ShapeDataProperty {
 export interface StrokeData {
   n: 'o' | 'd' | 'g'
   nm?: 'offset' | 'dash' | 'gap'
-  p: ItemData
+  p: any
   v?: VectorProperty
 }
 
@@ -637,6 +642,7 @@ export interface MaskData {
 
 export interface Mask {
   cl?: boolean
+  d?: StrokeData
   inv: boolean
   mode: string
   nm: string
@@ -952,16 +958,16 @@ export type EffectElement =
   | typeof NoValueEffect
   | typeof LayerIndexEffect
   | typeof MaskIndexEffect
-// export interface EffectValue {
-//   ty: number
-//   v: {
-//     a: 1 | 0
-//     k: number | Vector3 | Vector4
-//   }
-// }
+export interface EffectValue {
+  ty: number
+  v: {
+    a: 1 | 0
+    k: number | Vector3 | Vector4
+  }
+}
 
 export interface Effect {
-  ef: SVGFilterElement[]
+  ef: EffectValue[]
   en: 1 | 0
   ix?: number
   nm?: string

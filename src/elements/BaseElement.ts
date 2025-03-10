@@ -1,5 +1,11 @@
 import type MaskElement from '@/elements/MaskElement'
-import type { CompInterface, GlobalData, ItemsData, LottieLayer } from '@/types'
+import type {
+  AnimationData,
+  CompInterface,
+  GlobalData,
+  ItemsData,
+  LottieLayer,
+} from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import EffectsManager from '@/effects/EffectsManager'
@@ -11,7 +17,7 @@ export default class BaseElement {
   baseElement?: SVGGElement
   comp!: CompInterface
   compInterface?: ProjectInterface
-  data!: LottieLayer
+  data!: LottieLayer | AnimationData
   effectsManager!: EffectsManager
 
   globalData!: GlobalData
@@ -25,15 +31,15 @@ export default class BaseElement {
   shapesData?: ShapePath
   type?: unknown
   checkMasks() {
-    if (!this.data?.hasMask) {
+    if (!(this.data as LottieLayer)?.hasMask) {
       return false
     }
     let i = 0
-    const len = this.data?.masksProperties?.length || 0
-    while (i < len) {
+    const { length } = (this.data as LottieLayer)?.masksProperties || []
+    while (i < length) {
       if (
-        this.data?.masksProperties?.[i].mode !== 'n' &&
-        this.data?.masksProperties?.[i].cl !== false
+        (this.data as LottieLayer)?.masksProperties?.[i].mode !== 'n' &&
+        (this.data as LottieLayer)?.masksProperties?.[i].cl !== false
       ) {
         return true
       }
@@ -71,7 +77,7 @@ export default class BaseElement {
     const TextExpressionInterface = new expressionsInterfaces('text')
     const CompExpressionInterface = new expressionsInterfaces('comp')
     this.layerInterface = (LayerExpressionInterface as any)(this) // TODO:
-    if (this.data.hasMask && this.maskManager) {
+    if ((this.data as LottieLayer).hasMask && this.maskManager) {
       this.layerInterface?.registerMaskInterface?.(this.maskManager)
     }
     const effectsInterface =
@@ -81,16 +87,16 @@ export default class BaseElement {
       )
     this.layerInterface?.registerEffectsInterface?.(effectsInterface)
 
-    if (this.data.ty === 0 || this.data.xt) {
+    if ((this.data as LottieLayer).ty === 0 || (this.data as LottieLayer).xt) {
       this.compInterface = (CompExpressionInterface as any)(this)
-    } else if (this.data.ty === 4) {
+    } else if ((this.data as LottieLayer).ty === 4) {
       this.layerInterface!.shapeInterface = (ShapeExpressionInterface as any)(
         this.shapesData,
         this.itemsData,
         this.layerInterface
       )
       this.layerInterface!.content = this.layerInterface?.shapeInterface
-    } else if (this.data.ty === 5) {
+    } else if ((this.data as LottieLayer).ty === 5) {
       this.layerInterface!.textInterface = (TextExpressionInterface as any)(
         this
       )
@@ -98,7 +104,7 @@ export default class BaseElement {
     }
   }
   setBlendMode() {
-    const blendModeValue = getBlendMode(this.data.bm)
+    const blendModeValue = getBlendMode((this.data as LottieLayer).bm)
     const elem = this.baseElement || this.layerElement
 
     if (elem) {

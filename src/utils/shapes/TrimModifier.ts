@@ -1,3 +1,4 @@
+import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import { CompInterface, Shape, Vector2 } from '@/types'
@@ -9,13 +10,25 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import ShapePath from '@/utils/shapes/ShapePath'
 
 export default class TrimModifier extends ShapeModifier {
+  e!: ValueProperty
+
+  eValue!: number
+
+  getValue!: () => void
+
+  m!: Shape['m']
+  o!: ValueProperty
+
+  s!: ValueProperty
+
+  sValue!: number
+
   addPaths(newPaths: ShapePath[], localShapeCollection: ShapeCollection) {
     const { length } = newPaths
     for (let i = 0; i < length; i++) {
       localShapeCollection.addShape(newPaths[i])
     }
   }
-
   addSegment(
     pt1: Vector2,
     pt2: Vector2,
@@ -32,7 +45,6 @@ export default class TrimModifier extends ShapeModifier {
     }
     shapePath.setXYAt(pt4[0], pt4[1], 'v', pos + 1)
   }
-
   addSegmentFromArray(
     points: number[],
     shapePath: any,
@@ -46,7 +58,6 @@ export default class TrimModifier extends ShapeModifier {
     }
     shapePath.setXYAt(points[3], points[7], 'v', pos + 1)
   }
-
   addShapes(shapeData: any, shapeSegment: any, shapePathFromProps: any) {
     let shapePath = shapePathFromProps
     const pathsData = shapeData.pathsData
@@ -187,7 +198,6 @@ export default class TrimModifier extends ShapeModifier {
   addShapeToModifier(shapeData: any) {
     shapeData.pathsData = []
   }
-
   calculateShapeEdges(
     s: any,
     e: any,
@@ -266,23 +276,23 @@ export default class TrimModifier extends ShapeModifier {
     let s
     let e
     if (this._mdf || _isFirstFrame) {
-      let o = (this.o.v % 360) / 360
+      let o = (Number(this.o.v) % 360) / 360
       if (o < 0) {
         o += 1
       }
-      if (this.s.v > 1) {
+      if (Number(this.s.v) > 1) {
         s = 1 + o
-      } else if (this.s.v < 0) {
+      } else if (Number(this.s.v) < 0) {
         s = 0 + o
       } else {
-        s = this.s.v + o
+        s = Number(this.s.v) + o
       }
-      if (this.e.v > 1) {
+      if (Number(this.e.v) > 1) {
         e = 1 + o
-      } else if (this.e.v < 0) {
+      } else if (Number(this.e.v) < 0) {
         e = 0 + o
       } else {
-        e = this.e.v + o
+        e = Number(this.e.v) + o
       }
 
       if (s > e) {

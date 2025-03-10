@@ -1,3 +1,14 @@
+import type {
+  AngleEffect,
+  CheckboxEffect,
+  ColorEffect,
+  LayerIndexEffect,
+  MaskIndexEffect,
+  NoValueEffect,
+  PointEffect,
+  SliderEffect,
+} from '@/effects'
+
 import FiltersFactory from '@/utils/FiltersFactory'
 import {
   createElementID,
@@ -5,9 +16,19 @@ import {
   registeredEffects,
 } from '@/utils/getterSetter'
 
+type Filter =
+  | AngleEffect
+  | CheckboxEffect
+  | ColorEffect
+  | LayerIndexEffect
+  | MaskIndexEffect
+  | NoValueEffect
+  | PointEffect
+  | SliderEffect
+
 class SVGEffects {
   static idPrefix = 'filter_result_'
-  filters: any[]
+  filters: Filter[]
   constructor(elem: any) {
     // let source = 'SourceGraphic' TODO: Perhaps for main version
     const len = elem.data.ef ? elem.data.ef.length : 0
@@ -49,9 +70,9 @@ class SVGEffects {
   }
 
   getEffects(type: string) {
-    const len = this.filters.length
-    const effects = []
-    for (let i = 0; i < len; i++) {
+    const { length } = this.filters,
+      effects = []
+    for (let i = 0; i < length; i++) {
       if (this.filters[i].type === type) {
         effects.push(this.filters[i])
       }

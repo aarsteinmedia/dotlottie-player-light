@@ -189,7 +189,7 @@ class BaseRenderer {
     }
   }
 
-  setProjectInterface(pInterface: typeof ProjectInterface) {
+  setProjectInterface(pInterface: typeof ProjectInterface | null) {
     if (!this.globalData) {
       return
     }
