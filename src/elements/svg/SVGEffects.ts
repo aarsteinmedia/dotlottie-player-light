@@ -9,7 +9,7 @@ class SVGEffects {
   static idPrefix = 'filter_result_'
   filters: any[]
   constructor(elem: any) {
-    let source = 'SourceGraphic'
+    // let source = 'SourceGraphic' TODO: Perhaps for main version
     const len = elem.data.ef ? elem.data.ef.length : 0
     const filId = createElementID()
     const fil = FiltersFactory.createFilter(filId, true)
@@ -23,11 +23,11 @@ class SVGEffects {
         filterManager = new Effect(
           fil,
           elem.effectsManager.effectElements[i],
-          elem,
-          SVGEffects.idPrefix + count,
-          source
+          elem
+          // SVGEffects.idPrefix + count, TODO: Perhaps for main version
+          // source TODO: Perhaps for main version
         )
-        source = SVGEffects.idPrefix + count
+        // source = SVGEffects.idPrefix + count TODO: Perhaps for main version
         if (registeredEffects[elem.data.ef[i].ty].countsAsEffect) {
           count += 1
         }

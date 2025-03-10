@@ -81,7 +81,7 @@ export class GroupEffect extends DynamicPropertyContainer {
   }
 }
 
-type EffectInterface =
+export type EffectInterface =
   | GroupEffect
   | EffectsManager
   | SliderEffect

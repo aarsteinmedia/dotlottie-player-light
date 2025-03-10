@@ -1,10 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type { AnimatedProperty, Audio, GlobalData, LottieAsset } from '@/types'
+import type {
+  AnimatedProperty,
+  Audio,
+  GlobalData,
+  LottieAsset,
+  LottieLayer,
+} from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
+import { ValueProperty } from '@/utils/Properties'
 import PropertyFactory from '@/utils/PropertyFactory'
 
 class AudioElement {
@@ -16,9 +23,9 @@ class AudioElement {
   _volumeMultiplier?: number
   assetData: null | LottieAsset
   audio: Audio
-  lv: AnimatedProperty
-  tm: AnimatedProperty
-  constructor(data: any, globalData: GlobalData, comp: any) {
+  lv: ValueProperty
+  tm: ValueProperty
+  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
     this.initFrame()
     this.initRenderable()
     this.assetData = globalData.getAssetData?.(data.refId) || null
@@ -28,13 +35,21 @@ class AudioElement {
     const assetPath = this.globalData?.getAssetsPath?.(this.assetData)
     this.audio = this.globalData?.audioController.createAudio(assetPath)
     this._currentTime = 0
-    this.globalData.audioController.addAudio(this)
+    this.globalData.audioController?.addAudio(this)
     this._volumeMultiplier = 1
     this._volume = 1
     this._previousVolume = null
-    this.tm = data.tm
-      ? PropertyFactory.getProp(this, data.tm, 0, globalData.frameRate, this)
-      : { _placeholder: true }
+    this.tm = (
+      data.tm
+        ? PropertyFactory.getProp(
+            this,
+            data.tm as any,
+            0,
+            globalData.frameRate,
+            this
+          )
+        : { _placeholder: true }
+    ) as any
     this.lv = PropertyFactory.getProp(
       this,
       data.au && data.au.lv ? data.au.lv : { k: [100] },

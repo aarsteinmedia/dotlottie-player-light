@@ -16,6 +16,7 @@ import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type { SVGStyleData } from '@/elements/helpers/shapes'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
+import type AudioController from '@/utils/audio/AudioController'
 import type FontManager from '@/utils/FontManager'
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 // import type ProjectInterface from '@/utils/helpers/ProjectInterface'
@@ -23,11 +24,10 @@ import type Matrix from '@/utils/Matrix'
 // import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 import type ShapePath from '@/utils/shapes/ShapePath'
 import type SlotManager from '@/utils/SlotManager'
+import type TextAnimatorDataProperty from '@/utils/text/TextAnimatorDataProperty'
 import type TextProperty from '@/utils/text/TextProperty'
 // import type PropertyFactory from '@/utils/PropertyFactory'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
-
-import TextAnimatorDataProperty from './utils/text/TextAnimatorDataProperty'
 
 export type AnimationDirection = 1 | -1
 export type AnimationEventName =
@@ -951,16 +951,16 @@ export type EffectElement =
   | typeof NoValueEffect
   | typeof LayerIndexEffect
   | typeof MaskIndexEffect
-export interface EffectValue {
-  ty: number
-  v: {
-    a: 1 | 0
-    k: number | Vector3 | Vector4
-  }
-}
+// export interface EffectValue {
+//   ty: number
+//   v: {
+//     a: 1 | 0
+//     k: number | Vector3 | Vector4
+//   }
+// }
 
 export interface Effect {
-  ef: EffectValue[]
+  ef: SVGFilterElement[]
   en: 1 | 0
   ix?: number
   nm?: string
@@ -1296,7 +1296,7 @@ export interface SegmentPool {
 // TODO:!!!
 export interface GlobalData {
   _mdf?: boolean
-  audioController?: unknown
+  audioController?: AudioController
   compSize?: {
     w: number
     h: number

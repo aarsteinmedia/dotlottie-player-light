@@ -1,9 +1,12 @@
-import type { Audio, AudioFactory } from '@/types'
+import type AudioElement from '@/elements/AudioElement'
+import type { AudioFactory } from '@/types'
+
+import { isServer } from '@/utils'
 
 export default class AudioController {
   public audioFactory?: AudioFactory
 
-  public audios: Audio[]
+  public audios: AudioElement[]
   private _isMuted: boolean
   private _volume: number
   constructor(audioFactory?: AudioFactory) {
@@ -13,17 +16,15 @@ export default class AudioController {
     this._isMuted = false
   }
 
-  public addAudio(audio: Audio) {
+  public addAudio(audio: AudioElement) {
     this.audios.push(audio)
   }
   public createAudio(assetPath: string) {
     if (this.audioFactory) {
       return this.audioFactory(assetPath)
     }
-    // @ts-expect-error - Howl does not exist in window
-    if (!isServer() && window.Howl) {
-      // @ts-expect-error - Howl does not exist in window
-      return new window.Howl({
+    if (!isServer() && 'Howl' in window) {
+      return new (window.Howl as any)({
         src: [assetPath],
       })
     }
