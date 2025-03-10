@@ -68,7 +68,7 @@ class RenderableDOMElement {
     this.prepareProperties(num, this.isInRange)
     this.checkTransparency()
   }
-  renderFrame(_frame?: number) {
+  renderFrame(_frame?: number | null) {
     // If it is exported as hidden (data.hd === true) no need to render
     // If it is not visible no need to render
     if (this.data.hd || this.hidden) {

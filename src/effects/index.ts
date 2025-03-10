@@ -1,4 +1,4 @@
-import type { GroupEffect } from '@/effects/EffectsManager'
+import type { EffectInterface, GroupEffect } from '@/effects/EffectsManager'
 import type { EffectValue, ElementInterface } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
@@ -10,10 +10,10 @@ export class SliderEffect {
 
   constructor(
     data: EffectValue,
-    elem: ElementInterface,
+    elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+    this.p = PropertyFactory.getProp(elem as any, data.v, 0, 0, container)
   }
 }
 
@@ -23,10 +23,10 @@ export class AngleEffect {
 
   constructor(
     data: EffectValue,
-    elem: ElementInterface,
+    elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+    this.p = PropertyFactory.getProp(elem as any, data.v, 0, 0, container)
   }
 }
 
@@ -36,10 +36,10 @@ export class ColorEffect {
 
   constructor(
     data: EffectValue,
-    elem: ElementInterface,
+    elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem, data.v, 1, 0, container)
+    this.p = PropertyFactory.getProp(elem as any, data.v, 1, 0, container)
   }
 }
 
@@ -49,10 +49,10 @@ export class PointEffect {
 
   constructor(
     data: EffectValue,
-    elem: ElementInterface,
+    elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem, data.v, 1, 0, container)
+    this.p = PropertyFactory.getProp(elem as any, data.v, 1, 0, container)
   }
 }
 

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
-import type { ElementInterface, LottieLayer } from '@/types'
+import type SVGCompElement from '@/elements/svg/SVGCompElement'
+import type { AnimationData, ElementInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
@@ -16,7 +17,7 @@ class BaseRenderer {
   checkPendingElements!: () => void
 
   completeLayers?: boolean
-  createComp!: (data: LottieLayer) => ElementInterface
+  createComp!: (data: LottieLayer) => SVGCompElement
 
   createImage!: (data: LottieLayer) => void
 
@@ -178,9 +179,8 @@ class BaseRenderer {
   }
 
   searchExtraCompositions(assets: LottieLayer[]) {
-    let i
-    const len = assets.length
-    for (i = 0; i < len; i++) {
+    const { length } = assets
+    for (let i = 0; i < length; i++) {
       if (assets[i].xt) {
         const comp = this.createComp(assets[i])
         comp.initExpressions()
@@ -196,12 +196,12 @@ class BaseRenderer {
     this.globalData.projectInterface = pInterface
   }
 
-  setupGlobalData(animData: LottieLayer, fontsContainer: SVGDefsElement) {
+  setupGlobalData(animData: AnimationData, fontsContainer: SVGDefsElement) {
     if (!this.globalData) {
       return
     }
     this.globalData.fontManager = new FontManager()
-    this.globalData.slotManager = new SlotManager(animData)
+    this.globalData.slotManager = new SlotManager(animData as any)
     this.globalData.fontManager.addChars(animData.chars)
     this.globalData.fontManager.addFonts(animData.fonts, fontsContainer)
     this.globalData.getAssetData = this.animationItem.getAssetData.bind(

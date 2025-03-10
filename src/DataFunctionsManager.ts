@@ -1,10 +1,8 @@
 /* eslint-disable max-depth */
-// import type AnimationItem from '@/animation/AnimationItem'
 import type {
   AnimationData,
   Characacter,
   DocumentData,
-  // CompInterface,
   LottieAsset,
   LottieLayer,
   LottieLayerData,

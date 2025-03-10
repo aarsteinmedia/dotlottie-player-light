@@ -473,11 +473,17 @@ export interface Shape {
   /** Number of properties */
   np?: number
   o?: VectorProperty
+  or?: {
+    k: any[]
+  }
   /** Position */
   p?: VectorProperty<Vector2> // { s: number; x: VectorProperty; y: VectorProperty; z: VectorProperty }
   pt?: VectorProperty<ShapePath>
   /** Rotation (for transforms) | Fill-rule (for fills) */
   r?: VectorProperty
+  rx?: VectorProperty
+  ry?: VectorProperty
+  rz?: VectorProperty
   /** Scale / StartPoint for gradient */
   s?: VectorProperty<Vector2 | Vector3>
   /** Skew Axis */
@@ -635,7 +641,7 @@ export interface MaskData {
 }
 
 export interface Mask {
-  cl?: boolean
+  cl?: string
   d?: number // StrokeData
   inv: boolean
   mode: string

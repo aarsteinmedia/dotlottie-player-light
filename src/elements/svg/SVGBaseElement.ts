@@ -20,7 +20,7 @@ export default class SVGBaseElement {
   maskManager?: MaskElement
   matteElement?: SVGGElement
   matteMasks?: {
-    [key: number]: unknown
+    [key: number]: string
   }
   renderableEffectsManager?: SVGEffects
   searchEffectTransforms!: () => void
@@ -91,7 +91,7 @@ export default class SVGBaseElement {
   }
   createRenderableComponents() {
     this.maskManager = new MaskElement(this.data, this, this.globalData)
-    this.renderableEffectsManager = new SVGEffects(this)
+    this.renderableEffectsManager = new SVGEffects(this as any)
     this.searchEffectTransforms()
   }
   destroyBaseElement() {
@@ -105,7 +105,7 @@ export default class SVGBaseElement {
     }
     return this.baseElement
   }
-  getMatte(matteType: number) {
+  getMatte(matteType = 1): string {
     // This should not be a common case. But for backward compatibility, we'll create the matte object.
     // It solves animations that have two consecutive layers marked as matte masks.
     // Which is an undefined behavior in AE.

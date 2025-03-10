@@ -1,4 +1,4 @@
-import type { CompInterface, Shape, Vector2 } from '@/types'
+import type { ElementInterface, Shape, Vector2 } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
 import { degToRads } from '@/utils'
@@ -13,7 +13,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
   appliedTransformations: number
   autoOriented?: boolean
   data: Shape
-  elem: CompInterface
+  elem: ElementInterface
   frameId: number
   o?: ValueProperty
   or?: ValueProperty
@@ -23,12 +23,19 @@ export default class TransformProperty extends DynamicPropertyContainer {
   px?: ValueProperty
   py?: ValueProperty
   pz?: ValueProperty
+  r?: ValueProperty
   rx?: ValueProperty
   ry?: ValueProperty
   rz?: ValueProperty
+  sa?: ValueProperty
+  sk?: ValueProperty
   v: Matrix
   private defaultVector: Vector2 = [0, 0]
-  constructor(elem: CompInterface, data: Shape, container: CompInterface) {
+  constructor(
+    elem: ElementInterface,
+    data: Shape,
+    container: ElementInterface
+  ) {
     super()
     this.elem = elem
     this.frameId = -1
@@ -39,43 +46,66 @@ export default class TransformProperty extends DynamicPropertyContainer {
     this.pre = new Matrix()
     this.appliedTransformations = 0
     this.initDynamicPropertyContainer(container || elem)
-    if (data.p && data.p.s) {
-      this.px = PropertyFactory.getProp(elem, data.p.x, 0, 0, this)
-      this.py = PropertyFactory.getProp(elem, data.p.y, 0, 0, this)
-      if (data.p.z) {
-        this.pz = PropertyFactory.getProp(elem, data.p.z, 0, 0, this)
+    if (data.p && 's' in data.p) {
+      this.px = PropertyFactory.getProp(
+        elem,
+        (data.p as any).x,
+        0,
+        0,
+        this as any
+      )
+      this.py = PropertyFactory.getProp(
+        elem,
+        (data.p as any).y,
+        0,
+        0,
+        this as any
+      )
+      if ('z' in data.p) {
+        this.pz = PropertyFactory.getProp(
+          elem,
+          data.p.z as any,
+          0,
+          0,
+          this as any
+        )
       }
     } else {
       this.p = PropertyFactory.getProp(
         elem,
-        data.p || { k: [0, 0, 0] },
+        data.p || ({ k: [0, 0, 0] } as any),
         1,
         0,
-        this
+        this as any
       )
     }
-    if (data.rx) {
+    if ('rx' in data) {
       this.rx = PropertyFactory.getProp(elem, data.rx, 0, degToRads, this)
       this.ry = PropertyFactory.getProp(elem, data.ry, 0, degToRads, this)
       this.rz = PropertyFactory.getProp(elem, data.rz, 0, degToRads, this)
-      if (data.or.k[0].ti) {
-        let i
-        const len = data.or.k.length
-        for (i = 0; i < len; i += 1) {
+      if (data.or?.k[0].ti) {
+        const { length } = data.or.k
+        for (let i = 0; i < length; i++) {
           data.or.k[i].to = null
           data.or.k[i].ti = null
         }
       }
-      this.or = PropertyFactory.getProp(elem, data.or, 1, degToRads, this)
+      this.or = PropertyFactory.getProp(
+        elem,
+        (data as any).or,
+        1,
+        degToRads,
+        this as any
+      )
       // sh Indicates it needs to be capped between -180 and 180
-      this.or.sh = true
+      this.or.sh = true as any
     } else {
       this.r = PropertyFactory.getProp(
         elem,
-        data.r || { k: 0 },
+        data.r || ({ k: 0 } as any),
         0,
         degToRads,
-        this
+        this as any
       )
     }
     if (data.sk) {

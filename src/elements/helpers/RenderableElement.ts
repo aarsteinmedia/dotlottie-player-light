@@ -4,7 +4,7 @@ import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import type Matrix from '@/utils/Matrix'
 import type TransformProperty from '@/utils/TransformProperty'
 
-import { CompInterface, SVGRendererConfig } from '@/types'
+import { ElementInterface, SVGRendererConfig } from '@/types'
 
 class RenderableElement {
   finalTransform?: {
@@ -19,8 +19,8 @@ class RenderableElement {
   hidden!: boolean
   isInRange!: boolean
   isTransparent!: boolean
-  renderableComponents!: CompInterface[]
-  addRenderableComponent(component: CompInterface) {
+  renderableComponents!: ElementInterface[]
+  addRenderableComponent(component: ElementInterface) {
     if (this.renderableComponents.indexOf(component) === -1) {
       this.renderableComponents.push(component)
     }

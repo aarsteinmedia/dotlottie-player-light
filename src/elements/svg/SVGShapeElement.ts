@@ -43,6 +43,7 @@ import TransformProperty from '@/utils/TransformProperty'
 class SVGShapeElement {
   // identityMatrix = new Matrix()
 
+  _debug?: boolean
   animatedContents: AnimatedContent[]
   itemsData?: ItemsData[]
   prevViewData: ItemsData['prevViewData']

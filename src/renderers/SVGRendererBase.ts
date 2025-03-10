@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   AnimationData,
-  CompInterface,
+  ElementInterface,
   GlobalData,
   LottieLayer,
   SVGRendererConfig,
@@ -24,7 +24,7 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 class SVGRendererBase {
-  addPendingElement!: (comp: CompInterface) => void
+  addPendingElement!: (comp: ElementInterface) => void
 
   animationItem!: AnimationItem
 
@@ -32,13 +32,13 @@ class SVGRendererBase {
 
   completeLayers?: boolean
 
-  createItem!: (data: LottieLayer) => CompInterface
+  createItem!: (data: LottieLayer) => ElementInterface
 
   data!: LottieLayer
 
   destroyed?: boolean
 
-  elements!: CompInterface[]
+  elements!: ElementInterface[]
 
   globalData!: GlobalData
 
@@ -46,7 +46,7 @@ class SVGRendererBase {
 
   layers!: LottieLayer[]
 
-  pendingElements!: CompInterface[]
+  pendingElements!: ElementInterface[]
   renderConfig!: SVGRendererConfig
 
   renderedFrame!: number
@@ -55,7 +55,7 @@ class SVGRendererBase {
 
   svgElement!: SVGSVGElement
 
-  appendElementInPos(element: any, pos: number) {
+  appendElementInPos(element: ElementInterface, pos: number) {
     const newElement = element.getBaseElement()
     if (!newElement) {
       return
@@ -127,11 +127,11 @@ class SVGRendererBase {
         while (i < len) {
           if (this.elements[i] === element) {
             const elementIndex =
-              'tp' in element.data
-                ? this.findIndexByInd(element.data.tp)
-                : i - 1
-            const matteElement = this.elements[elementIndex]
-            const matteMask = matteElement.getMatte(this.layers[i].tt)
+                'tp' in element.data
+                  ? this.findIndexByInd(element.data.tp)
+                  : i - 1,
+              matteElement = this.elements[elementIndex],
+              matteMask = matteElement.getMatte(this.layers[i].tt)
 
             element.setMatte(matteMask)
             break

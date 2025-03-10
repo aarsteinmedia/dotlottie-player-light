@@ -264,7 +264,7 @@ export default class MaskElement {
     return this.viewData[pos].prop
   }
 
-  renderFrame(frame?: number) {
+  renderFrame(frame?: number | null) {
     const finalMat = this.element.finalTransform.mat
     const len = this.masksProperties?.length || 0
     for (let i = 0; i < len; i++) {

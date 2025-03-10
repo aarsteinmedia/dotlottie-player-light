@@ -1,5 +1,5 @@
 import type {
-  CompInterface,
+  ElementInterface,
   GlobalData,
   LottieAsset,
   LottieLayer,
@@ -21,7 +21,7 @@ export default class ImageElement {
   initElement!: (
     data: LottieLayer,
     globalData: GlobalData,
-    comp: CompInterface
+    comp: ElementInterface
   ) => void
 
   innerElem?: SVGImageElement

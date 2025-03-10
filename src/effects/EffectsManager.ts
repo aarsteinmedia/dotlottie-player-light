@@ -45,16 +45,16 @@ export class GroupEffect extends DynamicPropertyContainer {
       eff = null
       switch (effects[i].ty) {
         case 0:
-          eff = new SliderEffect(effects[i], element, this)
+          eff = new SliderEffect(effects[i], element as any, this)
           break
         case 1:
-          eff = new AngleEffect(effects[i], element, this)
+          eff = new AngleEffect(effects[i], element as any, this)
           break
         case 2:
-          eff = new ColorEffect(effects[i], element, this)
+          eff = new ColorEffect(effects[i], element as any, this)
           break
         case 3:
-          eff = new PointEffect(effects[i], element, this)
+          eff = new PointEffect(effects[i], element as any, this)
           break
         case 4:
         case 7:

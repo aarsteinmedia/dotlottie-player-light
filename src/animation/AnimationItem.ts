@@ -547,7 +547,7 @@ export default class AnimationItem extends BaseEvent {
       this.imagesLoaded.bind(this)
     )
   }
-  public renderFrame(_num?: number) {
+  public renderFrame(_num?: number | null) {
     if (this.isLoaded === false || !this.renderer) {
       return
     }

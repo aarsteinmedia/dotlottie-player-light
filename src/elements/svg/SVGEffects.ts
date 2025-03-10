@@ -9,6 +9,7 @@ import type {
   SliderEffect,
 } from '@/effects'
 
+import { ElementInterface } from '@/types'
 import FiltersFactory from '@/utils/FiltersFactory'
 import {
   createElementID,
@@ -29,7 +30,7 @@ type Filter =
 class SVGEffects {
   static idPrefix = 'filter_result_'
   filters: Filter[]
-  constructor(elem: any) {
+  constructor(elem: ElementInterface) {
     // let source = 'SourceGraphic' TODO: Perhaps for main version
     const len = elem.data.ef ? elem.data.ef.length : 0
     const filId = createElementID()
@@ -39,12 +40,13 @@ class SVGEffects {
     let filterManager
     for (let i = 0; i < len; i++) {
       filterManager = null
-      if (registeredEffects[elem.data.ef[i].ty]) {
+      if (elem.data.ef?.[i].ty && registeredEffects[elem.data.ef?.[i].ty]) {
         const Effect = registeredEffects[elem.data.ef[i].ty].effect
+        // TODO: This looks very wrong and should be tested
         filterManager = new Effect(
-          fil,
-          elem.effectsManager.effectElements[i],
-          elem
+          fil as any,
+          elem.effectsManager.effectElements[i] as any,
+          elem as any
           // SVGEffects.idPrefix + count, TODO: Perhaps for main version
           // source TODO: Perhaps for main version
         )
@@ -65,7 +67,7 @@ class SVGEffects {
       )
     }
     if (this.filters.length) {
-      elem.addRenderableComponent(this)
+      elem.addRenderableComponent(this as any)
     }
   }
 
@@ -80,10 +82,11 @@ class SVGEffects {
     return effects
   }
 
-  renderFrame(frame?: number) {
+  renderFrame(frame?: number | null) {
     const len = this.filters.length
     for (let i = 0; i < len; i++) {
-      this.filters[i].renderFrame(frame)
+      // TODO: This needs testing
+      ;(this.filters[i] as any).renderFrame(frame)
     }
   }
 }
