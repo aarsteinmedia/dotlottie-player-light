@@ -34,7 +34,7 @@ class SVGRendererBase {
 
   createItem!: (data: LottieLayer) => CompInterface
 
-  data!: LottieLayer | AnimationData
+  data!: LottieLayer & AnimationData
 
   destroyed?: boolean
 
@@ -52,7 +52,7 @@ class SVGRendererBase {
   renderedFrame!: number
 
   setupGlobalData!: (
-    animData: AnimationData | LottieLayer,
+    animData: AnimationData & LottieLayer,
     defs: SVGDefsElement
   ) => void
 
@@ -145,7 +145,7 @@ class SVGRendererBase {
     }
   }
 
-  configAnimation(animData: AnimationData | LottieLayer) {
+  configAnimation(animData: Partial<AnimationData & LottieLayer>) {
     this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
     this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
     if (this.renderConfig.viewBoxSize) {

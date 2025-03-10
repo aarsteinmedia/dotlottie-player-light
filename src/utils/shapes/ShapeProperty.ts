@@ -1,5 +1,12 @@
 import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
-import type { LottieComp, Mask, Shape, StrokeData } from '@/types'
+import type {
+  Caching,
+  ElementInterface,
+  LottieComp,
+  Mask,
+  Shape,
+  StrokeData,
+} from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
@@ -23,7 +30,7 @@ export default class ShapePropertyFactory {
 
   static getShapeProp(
     elem: SVGShapeElement,
-    data: Shape | Mask,
+    data: Shape & Mask,
     type: number,
     _?: unknown
   ) {
@@ -44,17 +51,17 @@ export default class ShapePropertyFactory {
       prop = new StarShapeProperty(elem, data)
     }
     if (prop?.k) {
-      elem.addDynamicProperty(prop)
+      elem.addDynamicProperty(prop as any)
     }
     return prop
   }
 }
 
-class RectShapeProperty extends DynamicPropertyContainer {
-  comp: any
+export class RectShapeProperty extends DynamicPropertyContainer {
+  comp?: ElementInterface
   d?: number
-  data: any
-  elem: any
+  data?: Shape
+  elem: ElementInterface
   frameId: number
   ir?: ValueProperty
   is?: ValueProperty
@@ -68,9 +75,9 @@ class RectShapeProperty extends DynamicPropertyContainer {
   r: ValueProperty
   reset = resetShape
   s: ValueProperty
-  v: any
+  v: ShapePath
 
-  constructor(elem: any, data: any) {
+  constructor(elem: ElementInterface, data: Shape) {
     super()
     this.v = ShapePool.newElement()
     this.v.c = true
@@ -82,9 +89,9 @@ class RectShapeProperty extends DynamicPropertyContainer {
     this.frameId = -1
     this.d = data.d
     this.initDynamicPropertyContainer(elem)
-    this.p = PropertyFactory.getProp(elem, data.p, 1, 0, this)
-    this.s = PropertyFactory.getProp(elem, data.s, 1, 0, this)
-    this.r = PropertyFactory.getProp(elem, data.r, 0, 0, this)
+    this.p = PropertyFactory.getProp(elem, data.p as any, 1, 0, this as any)
+    this.s = PropertyFactory.getProp(elem, data.s, 1, 0, this as any)
+    this.r = PropertyFactory.getProp(elem, data.r as any, 0, 0, this as any)
     if (this.dynamicProperties.length) {
       this.k = true
     } else {
@@ -93,10 +100,10 @@ class RectShapeProperty extends DynamicPropertyContainer {
     }
   }
   convertRectToPath() {
-    const p0 = this.p.v[0]
-    const p1 = this.p.v[1]
-    const v0 = this.s.v[0] / 2
-    const v1 = this.s.v[1] / 2
+    const p0 = (this.p.v as number[])[0]
+    const p1 = (this.p.v as number[])[1]
+    const v0 = (this.s.v as number[])[0] / 2
+    const v1 = (this.s.v as number[])[1] / 2
     const round = Math.min(v0, v1, Number(this.r?.v))
     const cPoint = round * (1 - roundCorner)
     this.v._length = 0
@@ -319,11 +326,14 @@ class RectShapeProperty extends DynamicPropertyContainer {
       }
     }
   }
-  getValue() {
-    if (this.elem.globalData.frameId === this.frameId) {
+  override getValue() {
+    if (this.elem.globalData?.frameId === this.frameId) {
       return
     }
-    this.frameId = this.elem.globalData.frameId
+    if (this.elem.globalData?.frameId) {
+      this.frameId = this.elem.globalData.frameId
+    }
+
     this.iterateDynamicProperties()
     if (this._mdf) {
       this.convertRectToPath()
@@ -493,7 +503,7 @@ class EllShapeProperty extends DynamicPropertyContainer {
   v: ShapePath
   private _cPoint = roundCorner
 
-  constructor(elem: any, data: Shape | Mask) {
+  constructor(elem: any, data: Shape & Mask) {
     super()
     this.v = ShapePool.newElement()
     this.v.setPathData(true, 4)
@@ -546,7 +556,7 @@ class EllShapeProperty extends DynamicPropertyContainer {
     _v.o[3][0] = _cw ? p0 - s0 : p0 + s0
     _v.o[3][1] = p1 - s1 * this._cPoint
   }
-  getValue() {
+  override getValue() {
     if (this.elem.globalData.frameId === this.frameId) {
       return
     }
@@ -560,18 +570,19 @@ class EllShapeProperty extends DynamicPropertyContainer {
 }
 
 export class ShapeProperty {
+  _caching?: Caching
   public _mdf: boolean
   public addEffect: (func: any) => void
-  public comp: LottieComp
-  public container: unknown
-  public data: Shape | Mask
+  public comp: ElementInterface
+  public container: SVGShapeElement
+  public data: Shape & Mask
   public effectsSequence: unknown[]
   public elem: SVGShapeElement
   public getValue: () => void
   public interpolateShape: (
     frame: number,
     previousValue: any,
-    caching: any
+    caching: Caching
   ) => void
   public k: boolean
   public kf: boolean
@@ -582,7 +593,7 @@ export class ShapeProperty {
   public reset
   public setVValue: (shape: ShapePath) => void
   public v: ShapePath
-  constructor(elem: SVGShapeElement, data: Shape | Mask, type: number) {
+  constructor(elem: SVGShapeElement, data: Shape & Mask, type: number) {
     this.propType = 'shape'
     this.comp = elem.comp
     this.container = elem
@@ -857,11 +868,11 @@ function shapesEqual(shape1: ShapePath, shape2: ShapePath) {
 /**
  *
  */
-function interpolateShapeCurrentTime(this: any) {
-  const frameNum = this.comp.renderedFrame - this.offsetTime
-  const initTime = this.keyframes[0].t - this.offsetTime
-  const endTime = this.keyframes[this.keyframes.length - 1].t - this.offsetTime
-  const lastFrame = this._caching.lastFrame
+function interpolateShapeCurrentTime(this: ShapeProperty) {
+  const frameNum = this.comp.renderedFrame - this.offsetTime,
+    initTime = this.keyframes[0].t - this.offsetTime,
+    endTime = this.keyframes[this.keyframes.length - 1].t - this.offsetTime,
+    lastFrame = this._caching.lastFrame
   if (
     !(
       lastFrame !== initialDefaultFrame &&

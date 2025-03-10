@@ -5,7 +5,7 @@ export default class DynamicPropertyContainer {
   _mdf: boolean
   container: ElementInterface | null
   dynamicProperties: DynamicPropertyContainer[]
-
+  propType?: false | string
   constructor() {
     this.container = null
     this.dynamicProperties = []
@@ -17,7 +17,7 @@ export default class DynamicPropertyContainer {
     if (this.dynamicProperties.indexOf(prop) === -1) {
       this.dynamicProperties.push(prop)
       if (this.container && 'addDynamicProperty' in this.container) {
-        this.container.addDynamicProperty(this)
+        this.container.addDynamicProperty?.(this)
       }
 
       this._isAnimated = true

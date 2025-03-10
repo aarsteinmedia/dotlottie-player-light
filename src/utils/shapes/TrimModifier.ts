@@ -14,8 +14,6 @@ export default class TrimModifier extends ShapeModifier {
 
   eValue!: number
 
-  getValue!: () => void
-
   m!: Shape['m']
   o!: ValueProperty
 
@@ -34,7 +32,7 @@ export default class TrimModifier extends ShapeModifier {
     pt2: Vector2,
     pt3: Vector2,
     pt4: Vector2,
-    shapePath: any,
+    shapePath: ShapePath,
     pos: number,
     newShape?: boolean
   ) {
@@ -47,7 +45,7 @@ export default class TrimModifier extends ShapeModifier {
   }
   addSegmentFromArray(
     points: number[],
-    shapePath: any,
+    shapePath: ShapePath,
     pos: number,
     newShape?: boolean
   ) {
@@ -58,7 +56,7 @@ export default class TrimModifier extends ShapeModifier {
     }
     shapePath.setXYAt(points[3], points[7], 'v', pos + 1)
   }
-  addShapes(shapeData: any, shapeSegment: any, shapePathFromProps: any) {
+  addShapes(shapeData: any, shapeSegment: any, shapePathFromProps: ShapePath) {
     let shapePath = shapePathFromProps
     const pathsData = shapeData.pathsData
     const shapePaths = shapeData.shape.paths.shapes
@@ -71,7 +69,7 @@ export default class TrimModifier extends ShapeModifier {
     let segmentCount
     let lengths
     let segment: number[]
-    const shapes = []
+    const shapes: ShapePath[] = []
     let initPos
     let newShape = true
     if (shapePath) {

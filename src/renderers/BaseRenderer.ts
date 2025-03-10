@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
-import type { CompInterface, LottieLayer } from '@/types'
+import type { CompInterface, ElementInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
 import FootageElement from '@/elements/FootageElement'
+import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import FontManager from '@/utils/FontManager'
 import SlotManager from '@/utils/SlotManager'
 
@@ -27,12 +28,12 @@ class BaseRenderer {
 
   createText!: (data: LottieLayer) => void
 
-  elements!: CompInterface[]
+  elements!: ElementInterface[]
 
   layers!: LottieLayer[]
-  pendingElements!: CompInterface[]
+  pendingElements!: ElementInterface[]
 
-  addPendingElement(element: CompInterface) {
+  addPendingElement(element: ElementInterface) {
     this.pendingElements.push(element)
   }
 
@@ -44,9 +45,9 @@ class BaseRenderer {
     this.checkPendingElements()
   }
   buildElementParenting(
-    element: any,
+    element: ElementInterface,
     parentName?: number,
-    hierarchy: unknown[] = []
+    hierarchy: ElementInterface[] = []
   ) {
     const elements = this.elements
     const layers = this.layers
@@ -59,7 +60,7 @@ class BaseRenderer {
           this.addPendingElement(element)
         } else {
           hierarchy.push(elements[i])
-          elements[i].setAsParent()
+          ;(elements[i] as HierarchyElement).setAsParent?.()
           if (layers[i].parent === undefined) {
             element.setHierarchy(hierarchy)
           } else {
@@ -131,7 +132,7 @@ class BaseRenderer {
     return null
   }
 
-  getElementByPath(path: unknown[]) {
+  getElementByPath(path: unknown[]): ElementInterface | undefined {
     const pathValue = path.shift()
     let element
     if (typeof pathValue === 'number') {
@@ -148,7 +149,7 @@ class BaseRenderer {
     if (path.length === 0) {
       return element
     }
-    return element?.getElementByPath(path)
+    return (element as BaseRenderer)?.getElementByPath?.(path)
   }
 
   includeLayers(newLayers: LottieLayer[]) {

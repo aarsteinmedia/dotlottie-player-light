@@ -19,7 +19,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
   or?: ValueProperty
   p?: ValueProperty
   pre: Matrix
-  propType: 'transform'
+  override propType: 'transform'
   px?: ValueProperty
   py?: ValueProperty
   pz?: ValueProperty

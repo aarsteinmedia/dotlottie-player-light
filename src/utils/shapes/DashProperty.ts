@@ -1,5 +1,5 @@
 import type { SVGStrokeStyleData } from '@/elements/helpers/shapes'
-import type { CompInterface, StrokeData } from '@/types'
+import type { ElementInterface, StrokeData } from '@/types'
 
 import { ArrayType, RendererType } from '@/enums'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
@@ -11,12 +11,12 @@ export default class DashProperty extends DynamicPropertyContainer {
   dashoffset: Float32Array
   dashStr: string
   dataProps: StrokeData[]
-  elem: CompInterface
+  elem: ElementInterface
   frameId: number
   k: boolean
   renderer: RendererType
   constructor(
-    elem: CompInterface,
+    elem: ElementInterface,
     data: StrokeData[],
     renderer: RendererType,
     container: SVGStrokeStyleData
@@ -48,10 +48,14 @@ export default class DashProperty extends DynamicPropertyContainer {
     this._isAnimated = this.k
   }
   override getValue(forceRender?: boolean) {
-    if (this.elem.globalData.frameId === this.frameId && !forceRender) {
+    if (
+      'globalData' in this.elem &&
+      this.elem.globalData.frameId === this.frameId &&
+      !forceRender
+    ) {
       return
     }
-    if (this.elem.globalData.frameId) {
+    if ('globalData' in this.elem && this.elem.globalData.frameId) {
       this.frameId = this.elem.globalData.frameId
     }
 

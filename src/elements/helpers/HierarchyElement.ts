@@ -14,7 +14,7 @@ class HierarchyElement {
    * Searches layer's parenting chain
    */
   checkParenting() {
-    if (this.data?.parent !== undefined) {
+    if ('parent' in this.data) {
       this.comp.buildElementParenting(this, this.data.parent, [])
     }
   }

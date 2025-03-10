@@ -14,21 +14,27 @@ import type {
 } from '@/effects'
 import type BaseElement from '@/elements/BaseElement'
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+import type HierarchyElement from '@/elements/helpers/HierarchyElement'
 import type {
   SVGStrokeStyleData,
   SVGStyleData,
 } from '@/elements/helpers/shapes'
 import type MaskElement from '@/elements/MaskElement'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
+import type ShapeElement from '@/elements/ShapeElement'
+import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
+import type BaseRenderer from '@/renderers/BaseRenderer'
 import type AudioController from '@/utils/audio/AudioController'
 import type FontManager from '@/utils/FontManager'
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import type Matrix from '@/utils/Matrix'
+import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 import type SlotManager from '@/utils/SlotManager'
 import type TextAnimatorDataProperty from '@/utils/text/TextAnimatorDataProperty'
 import type TextProperty from '@/utils/text/TextProperty'
+import type TransformProperty from '@/utils/TransformProperty'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 export type AnimationDirection = 1 | -1
@@ -67,18 +73,18 @@ export interface SVGGeometry {
 }
 
 export interface Transformer {
-  container: unknown
-  mProps: {
-    dynamicProperties: unknown[]
-    v: Matrix
-    _mdf?: boolean
-  }
-  op: {
-    effectsSequence: unknown[]
-  }
+  container: SVGGElement
+  mProps: TransformProperty
+  op: ValueProperty
 }
 
-export type ElementInterface = BaseElement | SVGStrokeStyleData
+export type ElementInterface = Partial<
+  BaseElement &
+    HierarchyElement &
+    SVGStrokeStyleData &
+    BaseRenderer &
+    SVGShapeElement
+>
 
 export interface LayerInterFace {
   registerEffectsInterface: (effect: unknown) => void
@@ -91,6 +97,11 @@ export interface CompInterface extends AnimationItem {
   animationItem: AnimationItem
   assetData: ImageData
   baseElement: SVGElement
+  buildElementParenting: (
+    element: ElementInterface,
+    parentId?: number,
+    hierarchy?: ElementInterface[]
+  ) => void
   checkParenting: () => void
   comp: CompInterface
   compInterface: CompInterface
@@ -437,7 +448,6 @@ export interface ShapeColorValue {
   i: Vector4
   s: Vector4
 }
-
 export interface Shape {
   _length: number
   _processed?: boolean
@@ -452,7 +462,7 @@ export interface Shape {
   /** CSS Class */
   cl?: string
   closed?: boolean
-  d?: StrokeData[]
+  d?: number // StrokeData[]
   /** Endpoint for gradient */
   e?: VectorProperty<Vector2>
   /** Gradient colors */
@@ -476,12 +486,10 @@ export interface Shape {
   np?: number
   o?: VectorProperty
   /** Position */
-  p?:
-    | { s: number; x: VectorProperty; y: VectorProperty; z: VectorProperty }
-    | VectorProperty
+  p?: VectorProperty<Vector2> // { s: number; x: VectorProperty; y: VectorProperty; z: VectorProperty }
   pt?: VectorProperty<ShapePath>
   /** Rotation (for transforms) | Fill-rule (for fills) */
-  r?: number | VectorProperty
+  r?: VectorProperty
   /** Scale / StartPoint for gradient */
   s?: VectorProperty<Vector2 | Vector3>
   /** Skew Axis */
@@ -640,7 +648,7 @@ export interface MaskData {
 
 export interface Mask {
   cl?: boolean
-  d?: StrokeData
+  d?: number // StrokeData
   inv: boolean
   mode: string
   nm: string
@@ -832,7 +840,7 @@ export interface ShapeDataInterface {
     kf: boolean
     _mdf: boolean
     comp: CompInterface
-    paths: ShapePath[]
+    paths: ShapeElement
   }
   styles: SVGStyleData[]
   transform: Transformer
@@ -1027,7 +1035,7 @@ export interface Characacter {
 export interface AnimationData {
   __complete?: boolean
   $schema?: string
-  ao?: 0 | 1
+  ao?: boolean | 0 | 1
   assets: LottieAsset[]
   /** Characters */
   chars?: Characacter[]
@@ -1108,7 +1116,7 @@ export interface LottieLayerData {
 
 export interface LottieLayer {
   __used?: boolean
-  ao?: number
+  ao?: 0 | 1 | boolean
   au?: {
     lv?: {
       k: number[]

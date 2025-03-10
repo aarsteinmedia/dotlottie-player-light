@@ -1,7 +1,7 @@
 import type MaskElement from '@/elements/MaskElement'
 import type {
   AnimationData,
-  CompInterface,
+  ElementInterface,
   GlobalData,
   ItemsData,
   LottieLayer,
@@ -15,9 +15,9 @@ import ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 export default class BaseElement {
   baseElement?: SVGGElement
-  comp!: CompInterface
+  comp!: ElementInterface
   compInterface?: ProjectInterface
-  data!: LottieLayer | AnimationData
+  data!: Partial<LottieLayer & AnimationData>
   effectsManager!: EffectsManager
 
   globalData!: GlobalData
@@ -31,15 +31,15 @@ export default class BaseElement {
   shapesData?: ShapePath
   type?: unknown
   checkMasks() {
-    if (!(this.data as LottieLayer)?.hasMask) {
+    if (!this.data?.hasMask) {
       return false
     }
     let i = 0
-    const { length } = (this.data as LottieLayer)?.masksProperties || []
+    const { length } = this.data?.masksProperties || []
     while (i < length) {
       if (
-        (this.data as LottieLayer)?.masksProperties?.[i].mode !== 'n' &&
-        (this.data as LottieLayer)?.masksProperties?.[i].cl !== false
+        this.data?.masksProperties?.[i].mode !== 'n' &&
+        this.data?.masksProperties?.[i].cl !== false
       ) {
         return true
       }
@@ -50,7 +50,11 @@ export default class BaseElement {
   getType() {
     return this.type
   }
-  initBaseData(data: LottieLayer, globalData: GlobalData, comp: CompInterface) {
+  initBaseData(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
     this.globalData = globalData
     this.comp = comp
     this.data = data
@@ -62,7 +66,7 @@ export default class BaseElement {
     }
     this.effectsManager = new EffectsManager(
       this.data,
-      this
+      this as any
       // this.dynamicProperties
     )
   }
@@ -77,7 +81,7 @@ export default class BaseElement {
     const TextExpressionInterface = new expressionsInterfaces('text')
     const CompExpressionInterface = new expressionsInterfaces('comp')
     this.layerInterface = (LayerExpressionInterface as any)(this) // TODO:
-    if ((this.data as LottieLayer).hasMask && this.maskManager) {
+    if (this.data.hasMask && this.maskManager) {
       this.layerInterface?.registerMaskInterface?.(this.maskManager)
     }
     const effectsInterface =
@@ -87,16 +91,16 @@ export default class BaseElement {
       )
     this.layerInterface?.registerEffectsInterface?.(effectsInterface)
 
-    if ((this.data as LottieLayer).ty === 0 || (this.data as LottieLayer).xt) {
+    if (this.data.ty === 0 || this.data.xt) {
       this.compInterface = (CompExpressionInterface as any)(this)
-    } else if ((this.data as LottieLayer).ty === 4) {
+    } else if (this.data.ty === 4) {
       this.layerInterface!.shapeInterface = (ShapeExpressionInterface as any)(
         this.shapesData,
         this.itemsData,
         this.layerInterface
       )
       this.layerInterface!.content = this.layerInterface?.shapeInterface
-    } else if ((this.data as LottieLayer).ty === 5) {
+    } else if (this.data.ty === 5) {
       this.layerInterface!.textInterface = (TextExpressionInterface as any)(
         this
       )
@@ -104,7 +108,7 @@ export default class BaseElement {
     }
   }
   setBlendMode() {
-    const blendModeValue = getBlendMode((this.data as LottieLayer).bm)
+    const blendModeValue = getBlendMode(this.data.bm)
     const elem = this.baseElement || this.layerElement
 
     if (elem) {

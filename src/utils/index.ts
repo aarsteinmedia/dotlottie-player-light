@@ -82,9 +82,9 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     if (length === 0) {
       return ''
     }
-    const _o = pathNodes.o as Vector2[]
-    const _i = pathNodes.i as Vector2[]
-    const _v = pathNodes.v as Vector2[]
+    const _o = pathNodes.o
+    const _i = pathNodes.i
+    const _v = pathNodes.v
     let i
     let shapeString = ` M${mat.applyToPointStringified(_v[0][0], _v[0][1])}`
     for (i = 1; i < length; i++) {

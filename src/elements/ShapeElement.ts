@@ -1,10 +1,12 @@
-import type { CompInterface, Shape } from '@/types'
+import type { ElementInterface, Shape } from '@/types'
 import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { ProcessedElement, type SVGShapeData } from '@/elements/helpers/shapes'
 
 class ShapeElement {
   _isFirstFrame?: boolean
+  _length?: number
   isInRange?: boolean
   prepareProperties!: (val: number, isInRange?: boolean) => void
   prepareRenderableFrame!: (val: number) => void
@@ -13,9 +15,9 @@ class ShapeElement {
 
   shapeModifiers?: ShapeModifierInterface[]
 
-  shapes?: SVGShapeData[]
+  shapes?: ShapePath[]
 
-  addProcessedElement(elem: CompInterface, pos: number) {
+  addProcessedElement(elem: ElementInterface, pos: number) {
     const elements = this.processedElements
     let i = elements.length
     while (i) {
@@ -29,17 +31,17 @@ class ShapeElement {
   }
 
   addShapeToModifiers(data: SVGShapeData) {
-    const { length } = this.shapeModifiers
+    const { length } = this.shapeModifiers || []
     for (let i = 0; i < length; i++) {
-      this.shapeModifiers[i].addShape(data)
+      this.shapeModifiers?.[i].addShape(data)
     }
   }
 
   isShapeInAnimatedModifiers(data: Shape) {
     let i = 0
-    const len: number = this.shapeModifiers.length
-    while (i < len) {
-      if (this.shapeModifiers[i].isAnimatedWithShape(data)) {
+    const { length } = this.shapeModifiers || []
+    while (i < length) {
+      if (this.shapeModifiers?.[i].isAnimatedWithShape(data)) {
         return true
       }
       i++

@@ -4,17 +4,17 @@ import type RepeaterModifier from '@/utils/shapes/RepeaterModifier'
 import type TrimModifier from '@/utils/shapes/TrimModifier'
 import type ZigZagModifier from '@/utils/shapes/ZigZagModifier'
 
-import { CompInterface } from '@/types'
+import { ElementInterface } from '@/types'
 
 export type ShapeModifierInterface =
-  | TrimModifier
-  | PuckerAndBloatModifier
-  | RepeaterModifier
-  | ZigZagModifier
-  | OffsetPathModifier
+  | typeof TrimModifier
+  | typeof PuckerAndBloatModifier
+  | typeof RepeaterModifier
+  | typeof ZigZagModifier
+  | typeof OffsetPathModifier
 
 export default class ShapeModifiers {
-  static getModifier(nm: string, elem?: CompInterface, data?: unknown) {
+  static getModifier(nm: string, elem?: ElementInterface, data?: unknown) {
     return new modifiers[nm](elem, data)
   }
 

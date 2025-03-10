@@ -1,10 +1,6 @@
-import type {
-  ItemData,
-  Shape,
-  ShapeData,
-  ShapeDataInterface,
-  StyleData,
-} from '@/types'
+import type { SVGTransformData } from '@/elements/helpers/shapes'
+import type ShapeElement from '@/elements/ShapeElement'
+import type { ItemData, Shape, ShapeDataInterface, StyleData } from '@/types'
 
 import { ShapeType } from '@/enums'
 import { buildShapeString } from '@/utils'
@@ -46,13 +42,13 @@ const SVGElementsRenderer = (function () {
    */
   function renderContentTransform(
     _: any,
-    itemData: any,
+    itemData: SVGTransformData,
     isFirstFrame: boolean
   ) {
     if (isFirstFrame || itemData.transform.op._mdf) {
-      itemData.transform.container.setAttribute(
+      itemData.transform.container?.setAttribute(
         'opacity',
-        itemData.transform.op.v
+        `${itemData.transform.op.v ?? 1}`
       )
     }
     if (isFirstFrame || itemData.transform.mProps._mdf) {
@@ -81,7 +77,7 @@ const SVGElementsRenderer = (function () {
     let l: number
     const lLen = itemData.styles.length
     const lvl = itemData.lvl
-    let paths: ShapeData
+    let paths: ShapeElement
     let mat
     let iterations
     let k
@@ -113,10 +109,10 @@ const SVGElementsRenderer = (function () {
       if (redraw) {
         pathStringTransformed = ''
         for (j = 0; j < jLen; j += 1) {
-          pathNodes = paths.shapes[j]
+          pathNodes = paths.shapes?.[j]
           if (pathNodes && pathNodes._length) {
             pathStringTransformed += buildShapeString(
-              pathNodes as unknown as ShapeData,
+              pathNodes,
               pathNodes._length,
               !!pathNodes.c,
               mat

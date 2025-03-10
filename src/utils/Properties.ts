@@ -2,6 +2,7 @@
 import type {
   Caching,
   CompInterface,
+  ElementInterface,
   Keyframe,
   Shape,
   Vector2,
@@ -20,14 +21,13 @@ class BaseProperty extends DynamicPropertyContainer {
   _caching?: Caching
   _isFirstFrame?: boolean
   _placeholder?: boolean
-  comp?: CompInterface
+  comp?: ElementInterface
   data?: any
   e?: any
   effectsSequence?: any
   elem?: any
   frameId?: number
   g?: any
-  getValue?: (val?: unknown) => unknown
   initFrame = initialDefaultFrame
   k?: boolean
   keyframes?: Keyframe[]
@@ -39,7 +39,6 @@ class BaseProperty extends DynamicPropertyContainer {
   lock?: boolean
   mult?: number
   offsetTime?: number
-  propType!: false | 'multidimensional' | 'unidimensional'
   pv?: string | number | any[]
   s?: any
   sh?: Shape
@@ -47,7 +46,7 @@ class BaseProperty extends DynamicPropertyContainer {
   vel?: number | any[]
   addEffect(effectFunction: any) {
     this.effectsSequence.push(effectFunction)
-    this.container?.addDynamicProperty(this)
+    this.container?.addDynamicProperty?.(this)
   }
   getValueAtCurrentTime() {
     const offsetTime = Number(this.offsetTime),
@@ -354,10 +353,10 @@ class BaseProperty extends DynamicPropertyContainer {
 }
 export class ValueProperty extends BaseProperty {
   constructor(
-    elem: CompInterface,
+    elem: ElementInterface,
     data: VectorProperty,
     mult: null | number = null,
-    container: CompInterface | null = null
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'unidimensional'
@@ -447,10 +446,10 @@ export class KeyframedValueProperty extends BaseProperty {
 
 export class KeyframedMultidimensionalProperty extends BaseProperty {
   constructor(
-    elem: CompInterface,
+    elem: ElementInterface,
     data: VectorProperty<any[]>,
     mult: null | number = null,
-    container: CompInterface | null = null
+    container: ElementInterface | null = null
   ) {
     super()
     this.propType = 'multidimensional'
@@ -532,7 +531,7 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
     this.data = data
     this.keyframes = data.k
     this.keyframesMetadata = []
-    this.offsetTime = elem.data.st
+    this.offsetTime = elem.data?.st
     this.k = true
     this.kf = true
     this._isFirstFrame = true
