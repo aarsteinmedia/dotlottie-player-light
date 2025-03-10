@@ -27,7 +27,7 @@ class SVGRendererBase {
 
   animationItem!: AnimationItem
 
-  checkLayers!: (val: number) => void
+  checkLayers!: (val?: number) => void
 
   completeLayers?: boolean
 
@@ -266,7 +266,7 @@ class SVGRendererBase {
     this.layerElement.style.display = 'none'
   }
 
-  renderFrame(numFromProps: number) {
+  renderFrame(numFromProps?: number | null) {
     if (this.renderedFrame === numFromProps || this.destroyed) {
       return
     }
@@ -274,7 +274,7 @@ class SVGRendererBase {
     if (num === null) {
       num = this.renderedFrame
     } else {
-      this.renderedFrame = num
+      this.renderedFrame = Number(num)
     }
     // console.log('-------');
     // console.log('FRAME ',num);
@@ -282,18 +282,17 @@ class SVGRendererBase {
     this.globalData.frameId += 1
     this.globalData.projectInterface.currentFrame = num
     this.globalData._mdf = false
-    let i
     const { length } = this.layers
     if (!this.completeLayers) {
       this.checkLayers(num)
     }
-    for (i = length - 1; i >= 0; i--) {
+    for (let i = length - 1; i >= 0; i--) {
       if (this.completeLayers || this.elements[i]) {
-        this.elements[i].prepareFrame?.(num - this.layers[i].st)
+        this.elements[i].prepareFrame?.(Number(num) - this.layers[i].st)
       }
     }
     if (this.globalData._mdf) {
-      for (i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {
         if (this.completeLayers || this.elements[i]) {
           this.elements[i].renderFrame()
         }

@@ -59,10 +59,10 @@ class SVGEffects {
     return effects
   }
 
-  renderFrame(_isFirstFrame?: boolean) {
+  renderFrame(frame: number) {
     const len = this.filters.length
     for (let i = 0; i < len; i++) {
-      this.filters[i].renderFrame(_isFirstFrame)
+      this.filters[i].renderFrame(frame)
     }
   }
 }

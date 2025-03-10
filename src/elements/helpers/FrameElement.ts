@@ -3,7 +3,7 @@ import type BaseElement from '@/elements/BaseElement'
 import type HierarchyElement from '@/elements/helpers/HierarchyElement'
 
 class FrameElement {
-  _isFirstFrame!: boolean
+  _isFirstFrame?: boolean
   _mdf?: boolean
   dynamicProperties!: any[]
 

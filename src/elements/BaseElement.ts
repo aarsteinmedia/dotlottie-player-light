@@ -16,7 +16,7 @@ export default class BaseElement {
 
   globalData!: GlobalData
   itemsData?: ItemsData
-  layerElement?: SVGGElement
+  layerElement!: SVGGElement
   layerId!: string
 
   layerInterface?: ProjectInterface

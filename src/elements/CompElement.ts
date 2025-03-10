@@ -7,16 +7,20 @@ import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import { extendPrototype } from '@/utils/functionExtensions'
+import { ValueProperty } from '@/utils/Properties'
 
 class CompElement {
   buildAllItems!: () => void
+  checkLayers!: (val: number) => void
   completeLayers?: boolean
+  destroyElements!: () => void
   elements!: CompInterface[]
   getElements!: () => CompInterface[]
   isInRange?: boolean
   layers!: LottieLayer[]
   renderedFrame!: number
   setElements!: (elems: CompInterface[]) => void
+  tm?: ValueProperty
 }
 
 extendPrototype(
@@ -69,14 +73,14 @@ CompElement.prototype.prepareFrame = function (num: number) {
     return
   }
 
-  if (this.tm._placeholder) {
+  if (this.tm?._placeholder) {
     this.renderedFrame = num / Number(this.data?.sr)
   } else {
-    let timeRemapped = this.tm.v
+    let timeRemapped = this.tm?.v
     if (timeRemapped === this.data.op) {
       timeRemapped = this.data.op - 1
     }
-    this.renderedFrame = timeRemapped
+    this.renderedFrame = Number(timeRemapped)
   }
   const len = this.elements.length
   if (!this.completeLayers) {

@@ -1,3 +1,4 @@
+import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type {
   CompInterface,
   LottieComp,
@@ -27,7 +28,7 @@ export default class ShapePropertyFactory {
   }
 
   static getShapeProp(
-    elem: CompInterface,
+    elem: SVGShapeElement,
     data: Shape | Mask,
     type: number,
     _?: unknown

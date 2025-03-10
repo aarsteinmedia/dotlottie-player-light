@@ -1,9 +1,20 @@
 import type { CompInterface, Shape } from '@/types'
+import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
 
-import { ProcessedElement } from '@/elements/helpers/shapes'
+import { ProcessedElement, type SVGShapeData } from '@/elements/helpers/shapes'
 
 class ShapeElement {
+  _isFirstFrame?: boolean
+  isInRange?: boolean
+  prepareProperties!: (val: number, isInRange?: boolean) => void
+  prepareRenderableFrame!: (val: number) => void
+
   processedElements!: ProcessedElement[]
+
+  shapeModifiers?: ShapeModifierInterface[]
+
+  shapes?: SVGShapeData[]
+
   addProcessedElement(elem: CompInterface, pos: number) {
     const elements = this.processedElements
     let i = elements.length
@@ -16,12 +27,14 @@ class ShapeElement {
     }
     elements.push(new ProcessedElement(elem, pos))
   }
-  addShapeToModifiers(data: Shape) {
+
+  addShapeToModifiers(data: SVGShapeData) {
     const { length } = this.shapeModifiers
     for (let i = 0; i < length; i++) {
       this.shapeModifiers[i].addShape(data)
     }
   }
+
   isShapeInAnimatedModifiers(data: Shape) {
     let i = 0
     const len: number = this.shapeModifiers.length
@@ -39,18 +52,18 @@ class ShapeElement {
     this.prepareProperties(num, this.isInRange)
   }
   renderModifiers() {
-    if (!this.shapeModifiers.length) {
+    if (!this.shapeModifiers?.length) {
       return
     }
-    let len = this.shapes.length
-    for (let i = 0; i < len; i++) {
-      this.shapes[i].sh.reset()
+    const { length } = this.shapes || []
+    for (let i = 0; i < length; i++) {
+      this.shapes?.[i].sh.reset()
     }
 
-    len = this.shapeModifiers.length
+    const { length: len } = this.shapeModifiers || []
     let shouldBreakProcess
     for (let i = len - 1; i >= 0; i--) {
-      shouldBreakProcess = this.shapeModifiers[i].processShapes(
+      shouldBreakProcess = this.shapeModifiers?.[i].processShapes(
         this._isFirstFrame
       )
       // workaround to fix cases where a repeater resets the shape so the following processes get called twice
