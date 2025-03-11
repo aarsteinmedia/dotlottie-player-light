@@ -4,7 +4,6 @@ import ImageElement from '@/elements/ImageElement'
 import { createNS } from '@/utils'
 
 export default class SolidElement extends ImageElement {
-  data!: LottieLayer
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
     super(data, globalData, comp)
     this.initElement(data, globalData, comp)

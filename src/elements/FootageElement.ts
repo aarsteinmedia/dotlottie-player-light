@@ -1,4 +1,9 @@
-import type { GlobalData, LottieAsset, LottieLayer } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  GlobalData,
+  LottieAsset,
+  LottieLayer,
+} from '@/types'
 
 // import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -8,7 +13,11 @@ import { getExpressionInterfaces } from '@/utils/getterSetter'
 export default class FootageElement extends FrameElement {
   assetData: null | LottieAsset = null
   footageData: SVGElement
-  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterfaceIntersect
+  ) {
     super()
     this.initFrame()
     this.initRenderable()

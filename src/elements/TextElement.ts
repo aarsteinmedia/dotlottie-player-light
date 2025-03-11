@@ -16,13 +16,21 @@ import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
 
 export default class TextElement {
+  _mdf?: boolean
   emptyProp?: LetterProps
+  isInRange?: boolean
+
   lettersChangedFlag?: boolean
+
   renderType?: RendererType
 
   textAnimator?: TextAnimatorProperty
 
   textProperty?: TextProperty
+
+  // buildNewText() {
+  //   throw new Error('TextElement: Method buildNewText is not yet implemented')
+  // }
 
   applyTextPropertiesToMatrix(
     documentData: DocumentData,
@@ -70,10 +78,6 @@ export default class TextElement {
       colorData[1] * 255
     )},${Math.round(colorData[2] * 255)})`
   }
-
-  // buildNewText() {
-  //   throw new Error('TextElement: Method buildNewText is not yet implemented')
-  // }
 
   canResizeFont(_canResize: boolean) {
     this.textProperty?.canResizeFont(_canResize)

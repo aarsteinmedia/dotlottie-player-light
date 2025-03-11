@@ -6,10 +6,11 @@ import type {
   LottieLayer,
 } from '@/types'
 
+import FrameElement from '@/elements/helpers/FrameElement'
 import { ValueProperty } from '@/utils/Properties'
 import PropertyFactory from '@/utils/PropertyFactory'
 
-export default class AudioElement {
+export default class AudioElement extends FrameElement {
   _canPlay: boolean
   _currentTime: number
   _isPlaying: boolean
@@ -18,8 +19,6 @@ export default class AudioElement {
   _volumeMultiplier?: number
   assetData: null | LottieAsset
   audio: Audio
-  globalData?: GlobalData
-  isInRange?: boolean
   lv: ValueProperty
   tm: ValueProperty
   // destroy() {}
@@ -29,6 +28,7 @@ export default class AudioElement {
     globalData: GlobalData,
     comp: ElementInterfaceIntersect
   ) {
+    super()
     this.initFrame()
     this.initRenderable()
     this.assetData = globalData.getAssetData?.(data.refId) || null
@@ -45,7 +45,7 @@ export default class AudioElement {
     this.tm = (
       data.tm
         ? PropertyFactory.getProp(
-            this,
+            this as any,
             data.tm as any,
             0,
             globalData.frameRate,
@@ -54,7 +54,7 @@ export default class AudioElement {
         : { _placeholder: true }
     ) as any
     this.lv = PropertyFactory.getProp(
-      this,
+      this as any,
       (data.au && data.au.lv ? data.au.lv : { k: [100] }) as any,
       1,
       0.01,
@@ -66,7 +66,7 @@ export default class AudioElement {
     return null
   }
 
-  hide() {
+  override hide() {
     this.audio.pause()
     this._isPlaying = false
   }
@@ -79,7 +79,7 @@ export default class AudioElement {
     this._canPlay = false
   }
 
-  prepareFrame(num: number) {
+  override prepareFrame(num: number) {
     this.prepareRenderableFrame(num, true)
     this.prepareProperties(num, true)
     if (this.tm._placeholder) {
@@ -95,7 +95,7 @@ export default class AudioElement {
     }
   }
 
-  renderFrame(_frame?: number | null) {
+  override renderFrame(_frame?: number | null) {
     if (this.isInRange && this._canPlay) {
       if (!this._isPlaying) {
         this.audio.play()

@@ -1,4 +1,4 @@
-import type { GlobalData, LottieLayer, SourceRect } from '@/types'
+import type { GlobalData, LottieLayer } from '@/types'
 
 import FrameElement from '@/elements/helpers/FrameElement'
 import TransformElement from '@/elements/helpers/TransformElement'
@@ -12,36 +12,36 @@ export default class NullElement extends FrameElement {
     this.initHierarchy()
   }
 
-  destroy() {
-    // TODO: check if this is a fallback too
-    // throw new Error('NullElement: Method destroy not yet implemented')
-  }
+  // destroy() {
+  //   // TODO: check if this is a fallback too
+  //   // throw new Error('NullElement: Method destroy not yet implemented')
+  // }
 
   getBaseElement() {
     return null
   }
 
-  hide() {
-    // TODO: check if this is a fallback too
-    // throw new Error('NullElement: Method hide not yet implemented')
-  }
+  // hide() {
+  //   // TODO: check if this is a fallback too
+  //   // throw new Error('NullElement: Method hide not yet implemented')
+  // }
 
   initTransform() {
     throw new Error('NullElement: Method initTransform not yet implemented')
   }
 
-  prepareFrame(num: number) {
+  override prepareFrame(num: number) {
     this.prepareProperties(num, true)
   }
 
   /** Fallback */
-  renderFrame(_frame?: number | null) {
+  override renderFrame(_frame?: number | null) {
     // throw new Error('NullElement: Method renderFrame not yet implemented')
   }
 
-  sourceRectAtTime(): SourceRect | null {
-    throw new Error('NullElement: Method sourceRectAtTime not yet implemented')
-  }
+  // sourceRectAtTime(): SourceRect | null {
+  //   throw new Error('NullElement: Method sourceRectAtTime not yet implemented')
+  // }
 }
 
 extendPrototype([TransformElement], NullElement)

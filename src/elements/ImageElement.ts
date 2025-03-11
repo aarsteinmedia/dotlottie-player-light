@@ -1,4 +1,10 @@
-import type { GlobalData, LottieAsset, LottieLayer, SourceRect } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  GlobalData,
+  LottieAsset,
+  LottieLayer,
+  SourceRect,
+} from '@/types'
 
 import FrameElement from '@/elements/helpers/FrameElement'
 import TransformElement from '@/elements/helpers/TransformElement'
@@ -10,7 +16,11 @@ export default class ImageElement extends FrameElement {
 
   sourceRect: SourceRect | null
 
-  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterfaceIntersect
+  ) {
     super()
     if (data.refId && globalData.getAssetData) {
       this.assetData = globalData.getAssetData(data.refId)
