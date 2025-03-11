@@ -76,7 +76,15 @@ export interface SVGGeometry {
 }
 
 export interface Transformer {
+  _localMatMdf: boolean
+  _matMdf: boolean
+  _opMdf: boolean
+
   container: SVGGElement
+  localMat: Matrix
+  localOpacity: number
+  mat: Matrix
+  mProp: TransformProperty
   mProps: TransformProperty
   op: ValueProperty
 }
@@ -654,6 +662,7 @@ export interface Mask {
     a: 0 | 1
     k: number
     ix?: number
+    x?: number
   }
   pt: {
     a: 0 | 1

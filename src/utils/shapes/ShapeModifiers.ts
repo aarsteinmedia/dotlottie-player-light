@@ -7,6 +7,13 @@ import type ZigZagModifier from '@/utils/shapes/ZigZagModifier'
 import { ElementInterface } from '@/types'
 
 export type ShapeModifierInterface =
+  | TrimModifier
+  | PuckerAndBloatModifier
+  | RepeaterModifier
+  | ZigZagModifier
+  | OffsetPathModifier
+
+type Factory =
   | typeof TrimModifier
   | typeof PuckerAndBloatModifier
   | typeof RepeaterModifier
@@ -19,11 +26,11 @@ export default class ShapeModifiers {
     return new modifiers[nm](elem, data)
   }
 
-  static registerModifier(nm: string, factory: ShapeModifierInterface) {
+  static registerModifier(nm: string, factory: Factory) {
     if (!modifiers[nm]) {
       modifiers[nm] = factory
     }
   }
 }
 
-const modifiers: { [key: string]: ShapeModifierInterface } = {}
+const modifiers: { [key: string]: Factory } = {}

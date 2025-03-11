@@ -1,6 +1,5 @@
 import type { ElementInterface, Shape } from '@/types'
 import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
-import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { ProcessedElement, type SVGShapeData } from '@/elements/helpers/shapes'
 
@@ -9,13 +8,13 @@ class ShapeElement {
   _length?: number
   isInRange?: boolean
   prepareProperties!: (val: number, isInRange?: boolean) => void
-  prepareRenderableFrame!: (val: number) => void
+  prepareRenderableFrame!: (val: number, flag?: boolean) => void
 
   processedElements!: ProcessedElement[]
 
   shapeModifiers?: ShapeModifierInterface[]
 
-  shapes?: ShapePath[]
+  shapes?: SVGShapeData[]
 
   addProcessedElement(elem: ElementInterface, pos: number) {
     const elements = this.processedElements
@@ -33,7 +32,7 @@ class ShapeElement {
   addShapeToModifiers(data: SVGShapeData) {
     const { length } = this.shapeModifiers || []
     for (let i = 0; i < length; i++) {
-      this.shapeModifiers?.[i].addShape(data)
+      this.shapeModifiers?.[i].addShape?.(data)
     }
   }
 
@@ -66,7 +65,7 @@ class ShapeElement {
     let shouldBreakProcess
     for (let i = len - 1; i >= 0; i--) {
       shouldBreakProcess = this.shapeModifiers?.[i].processShapes(
-        this._isFirstFrame
+        !!this._isFirstFrame
       )
       // workaround to fix cases where a repeater resets the shape so the following processes get called twice
       // TODO: find a better solution for this

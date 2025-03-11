@@ -1,6 +1,12 @@
+import type {
+  ElementInterface,
+  GlobalData,
+  LottieLayer,
+  Transformer,
+} from '@/types'
+
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
-import { ElementInterface, GlobalData, LottieLayer } from '@/types'
 import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
@@ -12,7 +18,7 @@ export default class SVGBaseElement {
   checkMasks!: () => boolean
   comp!: ElementInterface
   data!: LottieLayer
-  finalTransform?: any
+  finalTransform?: Transformer
   globalData!: GlobalData
   layerElement!: SVGGElement
   layerId!: string
@@ -209,7 +215,7 @@ export default class SVGBaseElement {
     if (this.finalTransform?._opMdf) {
       this.transformedElement?.setAttribute(
         'opacity',
-        this.finalTransform.localOpacity
+        `${this.finalTransform.localOpacity}`
       )
     }
   }

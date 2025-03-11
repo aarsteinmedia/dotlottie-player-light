@@ -34,8 +34,8 @@ class FootageElement extends FrameElement {
     if (!expressionsInterfaces) {
       return
     }
-    const FootageInterface = expressionsInterfaces('footage')
-    this.layerInterface = FootageInterface(this)
+    const FootageInterface = new expressionsInterfaces('footage')
+    this.layerInterface = (FootageInterface as any)(this)
   }
 }
 

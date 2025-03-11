@@ -47,7 +47,6 @@ export default class MaskElement {
         (properties[i].mode !== 'a' && properties[i].mode !== 'n') ||
         properties[i].inv ||
         properties[i].o.k !== 100 ||
-        // @ts-expect-error: TODO: Check if this is a typo
         properties[i].o.x
       ) {
         maskType = 'mask'
@@ -82,7 +81,7 @@ export default class MaskElement {
           ),
           prop: ShapePropertyFactory.getShapeProp(
             this.element,
-            properties[i],
+            properties[i] as any,
             3
           ),
         }
@@ -173,7 +172,7 @@ export default class MaskElement {
           ),
           prop: ShapePropertyFactory.getShapeProp(
             this.element,
-            properties[i],
+            properties[i] as any,
             3
           ),
         }

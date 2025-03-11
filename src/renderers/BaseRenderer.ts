@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
+import type SVGCompElement from '@/elements/svg/SVGCompElement'
 import type { AnimationData, ElementInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
@@ -94,7 +95,10 @@ class BaseRenderer {
   createCamera(_data: LottieLayer) {
     throw new Error("You're using a 3d camera. Try the html renderer.")
   }
-  createComp(_data: LottieLayer) {}
+
+  createComp(_data: LottieLayer): SVGCompElement {
+    throw new Error('Method not yet implemented')
+  }
 
   createFootage(data: LottieLayer) {
     return new FootageElement(data, this.globalData, this)

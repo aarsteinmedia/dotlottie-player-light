@@ -22,8 +22,10 @@ import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
 
 class TextElement {
+  buildNewText!: () => void
   emptyProp = new LetterProps()
   lettersChangedFlag!: boolean
+
   renderType!: RendererType
 
   textAnimator!: TextAnimatorProperty
@@ -71,13 +73,13 @@ class TextElement {
     matrixHelper.translate(xPos, yPos, 0)
   }
 
+  // buildNewText() {}
+
   buildColor(colorData: Vector3) {
     return `rgb(${Math.round(colorData[0] * 255)},${Math.round(
       colorData[1] * 255
     )},${Math.round(colorData[2] * 255)})`
   }
-
-  // buildNewText() {}
 
   canResizeFont(_canResize: boolean) {
     this.textProperty.canResizeFont(_canResize)

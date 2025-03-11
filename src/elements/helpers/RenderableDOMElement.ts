@@ -24,12 +24,12 @@ class RenderableDOMElement {
   initRenderable!: () => void
   initRendererElement!: () => void
   initTransform!: () => void
-  innerElem!: SVGElement
+  innerElem?: SVGImageElement
   isInRange?: boolean
   isTransparent?: boolean
   layerElement!: SVGGElement
   prepareProperties!: (val: number, isInRange?: boolean) => void
-  prepareRenderableFrame!: (num: number) => void
+  prepareRenderableFrame!: (num: number, flag?: boolean) => void
   renderElement!: () => void
   renderLocalTransform!: () => void
   renderRenderable!: () => void

@@ -82,7 +82,7 @@ export class SVGTransformData {
       container,
       mProps,
       op,
-    }
+    } as Transformer
     this.elements = []
     this._isAnimated = !!(
       this.transform.mProps.dynamicProperties.length ||

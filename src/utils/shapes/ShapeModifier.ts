@@ -45,6 +45,7 @@ class ShapeModifier extends DynamicPropertyContainer {
     }
   }
   initModifierProperties(_elem: ElementInterface, _data: Shape) {}
+  isAnimatedWithShape(_data: Shape) {}
 
   processKeys() {
     if (this.elem.globalData.frameId === this.frameId) {

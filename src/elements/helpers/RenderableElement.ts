@@ -1,24 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type BaseElement from '@/elements/BaseElement'
 import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import type Matrix from '@/utils/Matrix'
-import type TransformProperty from '@/utils/TransformProperty'
-
-import { ElementInterface, SVGRendererConfig } from '@/types'
+import type { ElementInterface, SVGRendererConfig, Transformer } from '@/types'
 
 class RenderableElement {
-  finalTransform?: {
-    _localMatMdf: boolean
-    _matMdf: boolean
-    _opMdf: boolean
-    localMat: Matrix
-    localOpacity: number
-    mat: Matrix
-    mProp: TransformProperty
-  }
+  finalTransform?: Transformer
   hidden?: boolean
-  isInRange!: boolean
-  isTransparent!: boolean
+  isInRange?: boolean
+  isTransparent?: boolean
   renderableComponents!: ElementInterface[]
   addRenderableComponent(component: ElementInterface) {
     if (this.renderableComponents.indexOf(component) === -1) {

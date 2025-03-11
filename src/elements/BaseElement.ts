@@ -38,7 +38,7 @@ export default class BaseElement {
     while (i < length) {
       if (
         this.data?.masksProperties?.[i].mode !== 'n' &&
-        this.data?.masksProperties?.[i].cl !== false
+        this.data?.masksProperties?.[i].cl !== (false as any)
       ) {
         return true
       }
