@@ -1,4 +1,4 @@
-import type { Transformer } from '@/types'
+import type { LottieLayer, Transformer } from '@/types'
 
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
@@ -9,7 +9,11 @@ import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
 export default class SVGBaseElement extends BaseRenderer {
   _sizeChanged?: boolean
+  baseElement?: SVGGElement
+  data?: LottieLayer
   finalTransform?: Transformer
+  layerElement?: SVGGElement
+  layerId?: string
   maskedElement?: SVGGElement
   matteElement?: SVGGElement
   matteMasks?: {
@@ -18,36 +22,44 @@ export default class SVGBaseElement extends BaseRenderer {
   renderableEffectsManager?: SVGEffects
   transformedElement?: SVGGElement
   createContainerElements() {
-    this.matteElement = createNS('g')
+    this.matteElement = createNS<SVGGElement>('g')
     this.transformedElement = this.layerElement
     this.maskedElement = this.layerElement
     this._sizeChanged = false
     let layerElementParent = null
     // If this layer acts as a mask for the following layer
-    if (this.data.td) {
+    if (this.data?.td) {
       this.matteMasks = {}
       const gg = createNS<SVGGElement>('g')
-      gg.setAttribute('id', this.layerId)
-      gg.appendChild(this.layerElement)
+      if (this.layerId) {
+        gg.setAttribute('id', this.layerId)
+      }
+      if (this.layerElement) {
+        gg.appendChild(this.layerElement)
+      }
+
       layerElementParent = gg
-      this.globalData.defs.appendChild(gg)
-    } else if (this.data.tt) {
-      this.matteElement.appendChild(this.layerElement)
+      this.globalData?.defs.appendChild(gg)
+    } else if (this.data?.tt) {
+      if (this.layerElement) {
+        this.matteElement.appendChild(this.layerElement)
+      }
+
       layerElementParent = this.matteElement
       this.baseElement = this.matteElement
     } else {
       this.baseElement = this.layerElement
     }
-    if (this.data.ln) {
-      this.layerElement.setAttribute('id', this.data.ln)
+    if (this.data?.ln) {
+      this.layerElement?.setAttribute('id', this.data.ln)
     }
-    if (this.data.cl) {
-      this.layerElement.setAttribute('class', this.data.cl)
+    if (this.data?.cl) {
+      this.layerElement?.setAttribute('class', this.data.cl)
     }
     // Clipping compositions to hide content that exceeds boundaries. If collapsed transformations is on, component should not be clipped
-    if (this.data.ty === 0 && !this.data.hd) {
-      const cp = createNS('clipPath')
-      const pt = createNS('path')
+    if (this.data?.ty === 0 && !this.data.hd) {
+      const cp = createNS<SVGClipPathElement>('clipPath'),
+        pt = createNS<SVGPathElement>('path')
       pt.setAttribute(
         'd',
         `M0,0 L${this.data.w},0 L${this.data.w},${this.data.h} L0,${
@@ -57,7 +69,7 @@ export default class SVGBaseElement extends BaseRenderer {
       const clipId = createElementID()
       cp.setAttribute('id', clipId)
       cp.appendChild(pt)
-      this.globalData.defs.appendChild(cp)
+      this.globalData?.defs.appendChild(cp)
 
       if (this.checkMasks()) {
         const cpGroup = createNS<SVGGElement>('g')
