@@ -1,14 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /**
  * @file
  * Handles AE's layer parenting property.
  *
  */
 
-import BaseElement from '@/elements/BaseElement'
+import type { ElementInterfaceIntersect, LottieLayer } from '@/types'
 
-class HierarchyElement {
+export default class HierarchyElement {
   _isParent!: boolean
+  comp!: ElementInterfaceIntersect
+  data!: LottieLayer
   hierarchy!: unknown[]
   /**
    * Searches layer's parenting chain
@@ -43,7 +44,3 @@ class HierarchyElement {
     this.hierarchy = hierarchy
   }
 }
-
-interface HierarchyElement extends BaseElement {}
-
-export default HierarchyElement
