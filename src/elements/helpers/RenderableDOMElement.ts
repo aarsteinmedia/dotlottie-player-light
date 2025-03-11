@@ -18,7 +18,10 @@ export default class RenderableDOMElement extends RenderableElement {
     // console.log('HIDE', this);
     if (!this.hidden && (!this.isInRange || this.isTransparent)) {
       const elem = this.baseElement || this.layerElement
-      elem.style.display = 'none'
+      if (elem) {
+        elem.style.display = 'none'
+      }
+
       this.hidden = true
     }
   }
