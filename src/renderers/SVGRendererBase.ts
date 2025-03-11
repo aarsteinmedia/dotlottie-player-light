@@ -205,7 +205,7 @@ export default class SVGRendererBase extends SVGBaseElement {
     }
   }
 
-  createImage(data: LottieLayer) {
+  override createImage(data: LottieLayer) {
     if (!this.globalData) {
       throw new Error('SVGRendererBase cannotaccess Global Data')
     }

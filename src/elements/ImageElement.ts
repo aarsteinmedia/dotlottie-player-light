@@ -1,25 +1,12 @@
-import type {
-  ElementInterfaceIntersect,
-  GlobalData,
-  LottieAsset,
-  LottieLayer,
-  SourceRect,
-} from '@/types'
+import type { GlobalData, LottieAsset, LottieLayer, SourceRect } from '@/types'
 
 import FrameElement from '@/elements/helpers/FrameElement'
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 export default class ImageElement extends FrameElement {
   assetData?: LottieAsset | null
-
-  // globalData!: GlobalData
-
-  innerElem?: SVGImageElement
-
-  // layerElement!: SVGGElement
 
   sourceRect: SourceRect | null
 
@@ -66,20 +53,9 @@ export default class ImageElement extends FrameElement {
     }
   }
 
-  initElement(
-    _data: LottieLayer,
-    _globalData: GlobalData,
-    _comp: ElementInterfaceIntersect
-  ) {
-    throw new Error('ImageElement: Method initElement is not yet implemented')
-  }
-
-  sourceRectAtTime() {
+  override sourceRectAtTime() {
     return this.sourceRect
   }
 }
 
-extendPrototype(
-  [TransformElement, SVGBaseElement, RenderableDOMElement],
-  ImageElement
-)
+extendPrototype([TransformElement, SVGBaseElement], ImageElement)

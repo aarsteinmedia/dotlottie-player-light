@@ -4,9 +4,9 @@
  *
  */
 
-import BaseElement from '@/elements/BaseElement'
+import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 
-export default class HierarchyElement extends BaseElement {
+export default class HierarchyElement extends RenderableDOMElement {
   _isParent!: boolean
 
   hierarchy!: unknown[]

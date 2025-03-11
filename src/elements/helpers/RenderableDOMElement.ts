@@ -8,15 +8,7 @@ import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
 export default class RenderableDOMElement extends RenderableElement {
-  // _isFirstFrame?: boolean
-  // _mdf?: boolean
-  // baseElement?: SVGGElement
-  // data!: LottieLayer
-  // hidden?: boolean
   innerElem?: SVGImageElement
-  // isInRange?: boolean
-  // isTransparent?: boolean
-  // layerElement!: SVGGElement
   destroy() {
     this.innerElem = null as any
     this.destroyBaseElement()
