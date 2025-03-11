@@ -23,7 +23,6 @@ import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default class SVGTextLottieElement extends TextElement {
-  _mdf?: boolean
   _sizeChanged?: boolean
   bbox?: {
     height: number
@@ -80,7 +79,10 @@ export default class SVGTextLottieElement extends TextElement {
       this.layerElement.setAttribute('stroke', this.buildColor(documentData.sc))
       this.layerElement.setAttribute('stroke-width', documentData.sw)
     }
-    this.layerElement.setAttribute('font-size', documentData.finalSize)
+    this.layerElement.setAttribute(
+      'font-size',
+      `${documentData.finalSize || 0}`
+    )
     const fontData = this.globalData.fontManager?.getFontByName(documentData.f)
     if (fontData?.fClass) {
       this.layerElement.setAttribute('class', fontData.fClass)
@@ -93,7 +95,7 @@ export default class SVGTextLottieElement extends TextElement {
       this.layerElement.setAttribute('font-style', fStyle)
       this.layerElement.setAttribute('font-weight', fWeight)
     }
-    this.layerElement.setAttribute('aria-label', documentData.t)
+    this.layerElement.setAttribute('aria-label', `${documentData.t}`)
 
     const letters = documentData.l || []
     const usesGlyphs = !!this.globalData.fontManager?.chars

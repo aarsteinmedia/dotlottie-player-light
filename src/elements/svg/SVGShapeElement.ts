@@ -33,24 +33,22 @@ import SVGElementsRenderer from '@/renderers/SVGElementsRenderer'
 import { getBlendMode } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { getLocationHref } from '@/utils/getterSetter'
-import ShapeModifiers, {
-  type ShapeModifierInterface,
-} from '@/utils/shapes/ShapeModifiers'
+import ShapeModifiers from '@/utils/shapes/ShapeModifiers' // type ShapeModifierInterface,
 import ShapePropertyFactory, {
   type ShapeProperty,
 } from '@/utils/shapes/ShapeProperty'
 import TransformProperty from '@/utils/TransformProperty'
-class SVGShapeElement {
+export default class SVGShapeElement extends ShapeElement {
   _debug?: boolean
-  _isFirstFrame?: boolean
+  // _isFirstFrame?: boolean
   animatedContents: AnimatedContent[]
   globalData?: GlobalData
   itemsData?: ItemsData[]
   layerElement?: SVGGElement
   prevViewData: ItemsData['prevViewData']
-  processedElements: ProcessedElement[]
-  shapeModifiers: ShapeModifierInterface[]
-  shapes: SVGShapeData[]
+  // processedElements: ProcessedElement[]
+  // shapeModifiers: ShapeModifierInterface[]
+  // shapes: SVGShapeData[]
   shapesData: Shape[]
   stylesList: SVGStyleData[]
   constructor(
@@ -58,6 +56,7 @@ class SVGShapeElement {
     globalData: GlobalData,
     comp: ElementInterfaceIntersect
   ) {
+    super()
     // List of drawable elements
     this.shapes = []
     // Full shape data
@@ -148,7 +147,7 @@ class SVGShapeElement {
       level,
       shapeProperty as ShapeProperty
     )
-    this.shapes.push(elementData)
+    this.shapes?.push(elementData)
     this.addShapeToModifiers(elementData)
     this.addToAnimatedContents(data, elementData)
     return elementData
@@ -410,7 +409,7 @@ class SVGShapeElement {
           modifier = ShapeModifiers.getModifier(arr[i].ty)
           modifier.init(this, (arr as any[])[i])
           itemsData[i] = modifier
-          this.shapeModifiers.push(modifier)
+          this.shapeModifiers?.push(modifier)
         }
         ownModifiers.push(modifier)
       } else if (arr[i].ty === 'rp') {
@@ -421,7 +420,7 @@ class SVGShapeElement {
           modifier = ShapeModifiers.getModifier(arr[i].ty)
           itemsData[i] = modifier
           modifier.init(this, arr as unknown as ShapeGroupData[], i, itemsData)
-          this.shapeModifiers.push(modifier)
+          this.shapeModifiers?.push(modifier)
           render = false
         }
         ownModifiers.push(modifier)
@@ -465,5 +464,3 @@ extendPrototype(
   ],
   SVGShapeElement
 )
-
-export default SVGShapeElement
