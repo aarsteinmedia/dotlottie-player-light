@@ -15,6 +15,7 @@ export type ShapeModifierInterface =
 
 export default class ShapeModifiers {
   static getModifier(nm: string, elem?: ElementInterface, data?: unknown) {
+    // @ts-expect-error: cant pass args - TODO: Find cases and test real behaviour
     return new modifiers[nm](elem, data)
   }
 

@@ -1,8 +1,12 @@
 import PoolFactory, { pointPool } from '@/utils/pooling'
 import ShapePath from '@/utils/shapes/ShapePath'
 
-export default class ShapePool {
-  private static _factory = new PoolFactory(4, this._create, this._release)
+export default abstract class ShapePool {
+  private static _factory = new PoolFactory(
+    4,
+    this._create,
+    this._release as any
+  )
 
   static newElement = this._factory.newElement
 

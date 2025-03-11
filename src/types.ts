@@ -484,7 +484,7 @@ export interface Shape {
   p?: VectorProperty<Vector2> // { s: number; x: VectorProperty; y: VectorProperty; z: VectorProperty }
   pt?: VectorProperty<ShapePath>
   /** Rotation (for transforms) | Fill-rule (for fills) */
-  r?: VectorProperty
+  r?: VectorProperty<{ e: number; s: number; t: number }[]>
   rx?: VectorProperty
   ry?: VectorProperty
   rz?: VectorProperty

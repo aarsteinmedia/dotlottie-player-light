@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
-import type SVGCompElement from '@/elements/svg/SVGCompElement'
 import type { AnimationData, ElementInterface, LottieLayer } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
@@ -17,8 +16,6 @@ class BaseRenderer {
   checkPendingElements!: () => void
 
   completeLayers?: boolean
-  createComp!: (data: LottieLayer) => SVGCompElement
-
   createImage!: (data: LottieLayer) => void
 
   createNull!: (data: LottieLayer) => void
@@ -32,8 +29,8 @@ class BaseRenderer {
   elements!: ElementInterface[]
 
   layers!: LottieLayer[]
-  pendingElements!: ElementInterface[]
 
+  pendingElements!: ElementInterface[]
   addPendingElement(element: ElementInterface) {
     this.pendingElements.push(element)
   }
@@ -45,6 +42,7 @@ class BaseRenderer {
     }
     this.checkPendingElements()
   }
+
   buildElementParenting(
     element: ElementInterface,
     parentName?: number,
@@ -96,6 +94,7 @@ class BaseRenderer {
   createCamera(_data: LottieLayer) {
     throw new Error("You're using a 3d camera. Try the html renderer.")
   }
+  createComp(_data: LottieLayer) {}
 
   createFootage(data: LottieLayer) {
     return new FootageElement(data, this.globalData, this)

@@ -57,7 +57,7 @@ export default class TrimModifier extends ShapeModifier {
     }
     shapePath.setXYAt(points[3], points[7], 'v', pos + 1)
   }
-  addShapes(shapeData: any, shapeSegment: any, shapePathFromProps: ShapePath) {
+  addShapes(shapeData: any, shapeSegment: any, shapePathFromProps?: ShapePath) {
     let shapePath = shapePathFromProps
     const pathsData = shapeData.pathsData
     const shapePaths = shapeData.shape.paths.shapes
@@ -81,8 +81,14 @@ export default class TrimModifier extends ShapeModifier {
       segmentCount = 0
       initPos = 0
     }
-    shapes.push(shapePath)
+    if (shapePath) {
+      shapes.push(shapePath)
+    }
+
     for (i = 0; i < len; i++) {
+      if (!shapePath) {
+        continue
+      }
       lengths = pathsData[i].lengths
       shapePath.c = shapePaths[i].c
       jLen = shapePaths[i].c ? lengths.length : lengths.length + 1
@@ -188,13 +194,16 @@ export default class TrimModifier extends ShapeModifier {
       if (i < len - 1) {
         shapePath = ShapePool.newElement()
         newShape = true
-        shapes.push(shapePath)
+        if (shapePath) {
+          shapes.push(shapePath)
+        }
+
         segmentCount = 0
       }
     }
     return shapes
   }
-  addShapeToModifier(shapeData: SVGShapeData) {
+  override addShapeToModifier(shapeData: SVGShapeData) {
     ;(shapeData as any).pathsData = [] // TODO: Find cases and drill for types
   }
   calculateShapeEdges(
@@ -257,7 +266,7 @@ export default class TrimModifier extends ShapeModifier {
     return shapeSegments
   }
 
-  initModifierProperties(elem: ElementInterface, data: Shape) {
+  override initModifierProperties(elem: ElementInterface, data: Shape) {
     this.s = PropertyFactory.getProp(elem, data.s, 0, 0.01, this)
     this.e = PropertyFactory.getProp(elem, data.e, 0, 0.01, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, 0, this)

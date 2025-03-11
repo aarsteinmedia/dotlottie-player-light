@@ -44,7 +44,7 @@ export default class PoolFactory {
   }
 }
 
-export class Pooling {
+export abstract class Pooling {
   static double(arr: unknown[]) {
     return arr.concat(createSizedArray(arr.length))
   }

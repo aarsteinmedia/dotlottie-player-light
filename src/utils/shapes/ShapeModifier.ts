@@ -6,7 +6,6 @@ import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 
 class ShapeModifier extends DynamicPropertyContainer {
-  addShapeToModifier!: (shapeData: SVGShapeData) => void
   // addShapeToModifier!: (data: SVGShapeData) => void
   closed!: boolean
   elem!: ElementInterface
@@ -30,6 +29,7 @@ class ShapeModifier extends DynamicPropertyContainer {
       }
     }
   }
+  addShapeToModifier(_shapeData: SVGShapeData) {}
   init(elem: ElementInterface, data: any, _a: any, _b: any) {
     this.shapes = []
     this.elem = elem

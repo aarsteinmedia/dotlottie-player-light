@@ -17,7 +17,7 @@ export default class OffsetPathModifier extends ShapeModifier {
   amount?: ValueProperty
   lineJoin?: number
   miterLimit?: ValueProperty
-  initModifierProperties(elem: ElementInterface, data: Shape) {
+  override initModifierProperties(elem: ElementInterface, data: Shape) {
     this.getValue = this.processKeys
     this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
     this.miterLimit = PropertyFactory.getProp(elem, data.ml, 0, null, this)
@@ -130,9 +130,9 @@ export default class OffsetPathModifier extends ShapeModifier {
     const len = this.shapes.length
     let j
     let jLen
-    const amount = this.amount?.v
-    const miterLimit = this.miterLimit?.v
-    const lineJoin = this.lineJoin
+    const amount = Number(this.amount?.v)
+    const miterLimit = Number(this.miterLimit?.v)
+    const lineJoin = Number(this.lineJoin)
 
     if (amount !== 0) {
       let shapeData

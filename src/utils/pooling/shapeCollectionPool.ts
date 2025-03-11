@@ -3,7 +3,7 @@ import { Pooling } from '@/utils/pooling'
 import ShapePool from '@/utils/pooling/ShapePool'
 import ShapeCollection from '@/utils/shapes/ShapeCollection'
 
-export default class ShapeCollectionPool {
+export default abstract class ShapeCollectionPool {
   private static _length = 0
   private static _maxLength = 4
   private static pool = createSizedArray(this._maxLength)

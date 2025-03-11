@@ -2,6 +2,7 @@ import type { ShapeGroupData } from '@/elements/helpers/shapes'
 import type { ElementInterface, Shape } from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
+import { ShapeType } from '@/enums'
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
@@ -96,7 +97,7 @@ export default class RepeaterModifier extends ShapeModifier {
     }
   }
 
-  initModifierProperties(elem: ElementInterface, data: any) {
+  override initModifierProperties(elem: ElementInterface, data: any) {
     this.getValue = this.processKeys
     this.c = PropertyFactory.getProp(elem, data.c, 0, null, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, null, this)
@@ -146,8 +147,8 @@ export default class RepeaterModifier extends ShapeModifier {
             s: { a: 0, ix: 3, k: [100, 100] },
             sa: { a: 0, ix: 5, k: 0 },
             sk: { a: 0, ix: 4, k: 0 },
-            ty: 'tr',
-          })
+            ty: ShapeType.Transform,
+          } as Shape)
 
           this.arr.splice(0, 0, group)
           this._groups.splice(0, 0, group)
