@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type BaseElement from '@/elements/BaseElement'
-import type HierarchyElement from '@/elements/helpers/HierarchyElement'
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
-class FrameElement {
-  _isFirstFrame?: boolean
-  _mdf?: boolean
-  dynamicProperties!: DynamicPropertyContainer[]
+import { GlobalData } from '@/types'
 
+export default class FrameElement {
+  _isFirstFrame?: boolean
+  _isParent?: boolean
+  _mdf?: boolean
+
+  dynamicProperties!: DynamicPropertyContainer[]
+  globalData?: GlobalData
   addDynamicProperty(prop: DynamicPropertyContainer) {
     if (this.dynamicProperties.indexOf(prop) === -1) {
       this.dynamicProperties.push(prop)
@@ -53,7 +54,3 @@ class FrameElement {
     }
   }
 }
-
-interface FrameElement extends BaseElement, HierarchyElement {}
-
-export default FrameElement
