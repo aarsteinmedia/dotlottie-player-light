@@ -23,15 +23,8 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default class SVGRendererBase extends SVGBaseElement {
-  addPendingElement!: (comp: ElementInterfaceIntersect) => void
-
   animationItem?: AnimationItem
-
-  checkLayers!: (val?: number) => void
-
   completeLayers?: boolean
-
-  createItem!: (data?: LottieLayer) => ElementInterfaceIntersect
 
   destroyed?: boolean
 
@@ -40,13 +33,15 @@ export default class SVGRendererBase extends SVGBaseElement {
   layers?: LottieLayer[]
 
   pendingElements?: ElementInterfaceIntersect[]
+
   renderConfig?: SVGRendererConfig
 
   renderedFrame!: number
 
-  setupGlobalData!: (animData: AnimationData, defs: SVGDefsElement) => void
-
   svgElement!: SVGSVGElement
+  addPendingElement(_comp: ElementInterfaceIntersect) {
+    throw new Error('Method not yet implemented')
+  }
 
   appendElementInPos(element: ElementInterfaceIntersect, pos: number) {
     const newElement = element.getBaseElement()
@@ -110,6 +105,10 @@ export default class SVGRendererBase extends SVGBaseElement {
         element.setMatte(matteMask)
       }
     }
+  }
+
+  checkLayers(_val?: number) {
+    throw new Error('Method not yet implemented')
   }
 
   checkPendingElements() {
@@ -215,6 +214,10 @@ export default class SVGRendererBase extends SVGBaseElement {
     return new ImageElement(data, this.globalData, this)
   }
 
+  createItem(_data?: LottieLayer): ElementInterfaceIntersect {
+    throw new Error('Method not yet implemented')
+  }
+
   createNull(data: LottieLayer) {
     return new NullElement(data, this.globalData, this)
   }
@@ -296,6 +299,10 @@ export default class SVGRendererBase extends SVGBaseElement {
         }
       }
     }
+  }
+
+  setupGlobalData(_animData: AnimationData, _defs: SVGDefsElement) {
+    throw new Error('Method not yet implemented')
   }
 
   show() {
