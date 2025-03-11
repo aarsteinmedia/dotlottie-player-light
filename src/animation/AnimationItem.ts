@@ -223,12 +223,9 @@ export default class AnimationItem extends BaseEvent {
         expressionsPlugin.initExpressions(this)
       }
       this.renderer?.initItems()
-      setTimeout(
-        function (this: AnimationItem) {
-          this.trigger('DOMLoaded')
-        }.bind(this),
-        0
-      )
+      setTimeout(() => {
+        this.trigger('DOMLoaded')
+      }, 0)
       this.gotoFrame()
       if (this.autoplay) {
         this.play()
@@ -458,13 +455,9 @@ export default class AnimationItem extends BaseEvent {
     this.timeCompleted = Number(segment?.time) * this.frameRate
     const segmentPath = `${this.path + this.fileName}_${this.segmentPos}.json`
     this.segmentPos++
-    DataManager.loadData(
-      segmentPath,
-      this.includeLayers.bind(this),
-      function (this: AnimationItem) {
-        this.trigger('data_failed')
-      }.bind(this)
-    )
+    DataManager.loadData(segmentPath, this.includeLayers.bind(this), () => {
+      this.trigger('data_failed')
+    })
   }
   public loadSegments() {
     const segments = this.animationData.segments
@@ -579,75 +572,80 @@ export default class AnimationItem extends BaseEvent {
   }
 
   public setData(wrapper: HTMLElement, animationDatFromProps?: AnimationData) {
-    let animationData = animationDatFromProps
-    if (animationData) {
-      if (typeof animationData !== 'object') {
-        animationData = JSON.parse(animationData)
+    try {
+      let animationData = animationDatFromProps
+      if (animationData) {
+        if (typeof animationData !== 'object') {
+          animationData = JSON.parse(animationData)
+        }
       }
-    }
 
-    const params: AnimationConfiguration = {
-      animationData,
-      wrapper,
-    }
-    const wrapperAttributes = wrapper.attributes
+      const params: AnimationConfiguration = {
+        animationData,
+        wrapper,
+      }
+      const wrapperAttributes = wrapper.attributes
 
-    params.path =
-      wrapperAttributes.getNamedItem('data-animation-path')?.value ??
-      wrapperAttributes.getNamedItem('data-bm-path')?.value ??
-      wrapperAttributes.getNamedItem('bm-path')?.value ??
-      ''
-    const animType =
-      wrapperAttributes.getNamedItem('data-anim-type')?.value ??
-      wrapperAttributes.getNamedItem('data-bm-type')?.value ??
-      wrapperAttributes.getNamedItem('bm-type')?.value ??
-      wrapperAttributes.getNamedItem('data-bm-renderer')?.value ??
-      wrapperAttributes.getNamedItem('bm-renderer')?.value ??
-      (getRegisteredRenderer() || RendererType.Canvas)
+      params.path =
+        wrapperAttributes.getNamedItem('data-animation-path')?.value ??
+        wrapperAttributes.getNamedItem('data-bm-path')?.value ??
+        wrapperAttributes.getNamedItem('bm-path')?.value ??
+        ''
+      const animType =
+        wrapperAttributes.getNamedItem('data-anim-type')?.value ??
+        wrapperAttributes.getNamedItem('data-bm-type')?.value ??
+        wrapperAttributes.getNamedItem('bm-type')?.value ??
+        wrapperAttributes.getNamedItem('data-bm-renderer')?.value ??
+        wrapperAttributes.getNamedItem('bm-renderer')?.value ??
+        (getRegisteredRenderer() || RendererType.Canvas)
 
-    if (Object.values(RendererType).includes(animType as RendererType)) {
-      params.animType = animType as RendererType
-    } else {
-      params.animType = RendererType.Canvas
-    }
+      if (Object.values(RendererType).includes(animType as RendererType)) {
+        params.animType = animType as RendererType
+      } else {
+        params.animType = RendererType.Canvas
+      }
 
-    const loop =
-      wrapperAttributes.getNamedItem('data-anim-loop')?.value ??
-      wrapperAttributes.getNamedItem('data-bm-loop')?.value ??
-      wrapperAttributes.getNamedItem('bm-loop')?.value ??
-      ''
-    if (loop === 'false') {
-      params.loop = false
-    } else if (loop === 'true') {
-      params.loop = true
-    } else if (loop !== '') {
-      params.loop = parseInt(loop, 10)
-    }
-    const autoplay =
-      wrapperAttributes.getNamedItem('data-anim-autoplay')?.value ??
-      wrapperAttributes.getNamedItem('data-bm-autoplay')?.value ??
-      wrapperAttributes.getNamedItem('bm-autoplay')?.value ??
-      true
-    params.autoplay = autoplay !== 'false'
+      const loop =
+        wrapperAttributes.getNamedItem('data-anim-loop')?.value ??
+        wrapperAttributes.getNamedItem('data-bm-loop')?.value ??
+        wrapperAttributes.getNamedItem('bm-loop')?.value ??
+        ''
+      if (loop === 'false') {
+        params.loop = false
+      } else if (loop === 'true') {
+        params.loop = true
+      } else if (loop !== '') {
+        params.loop = parseInt(loop, 10)
+      }
+      const autoplay =
+        wrapperAttributes.getNamedItem('data-anim-autoplay')?.value ??
+        wrapperAttributes.getNamedItem('data-bm-autoplay')?.value ??
+        wrapperAttributes.getNamedItem('bm-autoplay')?.value ??
+        true
+      params.autoplay = autoplay !== 'false'
 
-    params.name =
-      wrapperAttributes.getNamedItem('data-name')?.value ??
-      wrapperAttributes.getNamedItem('data-bm-name')?.value ??
-      wrapperAttributes.getNamedItem('bm-name')?.value ??
-      ''
-    const prerender =
-      wrapperAttributes.getNamedItem('data-anim-prerender')?.value ??
-      wrapperAttributes.getNamedItem('data-bm-prerender')?.value ??
-      wrapperAttributes.getNamedItem('bm-prerender')?.value ??
-      ''
+      params.name =
+        wrapperAttributes.getNamedItem('data-name')?.value ??
+        wrapperAttributes.getNamedItem('data-bm-name')?.value ??
+        wrapperAttributes.getNamedItem('bm-name')?.value ??
+        ''
+      const prerender =
+        wrapperAttributes.getNamedItem('data-anim-prerender')?.value ??
+        wrapperAttributes.getNamedItem('data-bm-prerender')?.value ??
+        wrapperAttributes.getNamedItem('bm-prerender')?.value ??
+        ''
 
-    if (prerender === 'false') {
-      params.prerender = false
-    }
-    if (params.path) {
-      this.setParams(params)
-    } else {
-      this.trigger('destroy')
+      if (prerender === 'false') {
+        params.prerender = false
+      }
+      if (params.path) {
+        this.setParams(params)
+      } else {
+        this.trigger('destroy')
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error('Could not set data')
     }
   }
   public setDirection(val: AnimationDirection, name?: string) {
@@ -661,63 +659,77 @@ export default class AnimationItem extends BaseEvent {
     this.loop = isLooping
   }
   public setParams(params: AnimationConfiguration) {
-    if (params.wrapper || params.container) {
-      this.wrapper = params.wrapper || params.container || null
-    }
-    let animType = RendererType.SVG
-    if (params.animType) {
-      animType = params.animType
-    } else if (params.renderer) {
-      animType = params.renderer
-    }
-    const RendererClass = getRenderer(animType)
-    this.renderer = new RendererClass(this, params.rendererSettings)
-    this.imagePreloader?.setCacheType(animType, this.renderer?.globalData.defs)
-    this.renderer?.setProjectInterface(this.projectInterface)
-    this.animType = animType
-    if (
-      params.loop === '' ||
-      params.loop === null ||
-      params.loop === undefined ||
-      params.loop === true
-    ) {
-      this.loop = true
-    } else if (params.loop === false) {
-      this.loop = false
-    } else {
-      this.loop = parseInt(`${params.loop}`, 10)
-    }
-    this.autoplay = !!('autoplay' in params ? params.autoplay : true)
-    this.name = params.name ? params.name : ''
-    this.autoloadSegments = !!(Object.prototype.hasOwnProperty.call(
-      params,
-      'autoloadSegments'
-    )
-      ? params.autoloadSegments
-      : true)
-    this.assetsPath = params.assetsPath ?? this.assetsPath
-    this.initialSegment = params.initialSegment
-    if (params.audioFactory) {
-      this.audioController.setAudioFactory(params.audioFactory)
-    }
-    if (params.animationData) {
-      this.setupAnimation(params.animationData)
-    } else if (params.path) {
-      if (params.path.lastIndexOf('\\') === -1) {
-        this.path = params.path.substring(0, params.path.lastIndexOf('/') + 1)
-      } else {
-        this.path = params.path.substring(0, params.path.lastIndexOf('\\') + 1)
+    try {
+      if (params.wrapper || params.container) {
+        this.wrapper = params.wrapper || params.container || null
       }
-      this.fileName = params.path.substring(params.path.lastIndexOf('/') + 1)
-      this.fileName = this.fileName.substring(
-        0,
-        this.fileName.lastIndexOf('.json')
+      let animType = RendererType.SVG
+      if (params.animType) {
+        animType = params.animType
+      } else if (params.renderer) {
+        animType = params.renderer
+      }
+      const RendererClass = getRenderer(animType)
+      this.renderer = new RendererClass(this, params.rendererSettings)
+      if (this.renderer?.globalData?.defs) {
+        this.imagePreloader?.setCacheType(
+          animType,
+          this.renderer.globalData.defs
+        )
+      }
+
+      this.renderer?.setProjectInterface(this.projectInterface)
+      this.animType = animType
+      if (
+        params.loop === '' ||
+        params.loop === null ||
+        params.loop === undefined ||
+        params.loop === true
+      ) {
+        this.loop = true
+      } else if (params.loop === false) {
+        this.loop = false
+      } else {
+        this.loop = parseInt(`${params.loop}`, 10)
+      }
+      this.autoplay = !!('autoplay' in params ? params.autoplay : true)
+      this.name = params.name ? params.name : ''
+      this.autoloadSegments = !!(Object.prototype.hasOwnProperty.call(
+        params,
+        'autoloadSegments'
       )
-      DataManager.loadAnimation(
-        params.path,
-        this.configAnimation,
-        this.onSetupError
-      )
+        ? params.autoloadSegments
+        : true)
+      this.assetsPath = params.assetsPath ?? this.assetsPath
+      this.initialSegment = params.initialSegment
+      if (params.audioFactory) {
+        this.audioController.setAudioFactory(params.audioFactory)
+      }
+      if (params.animationData) {
+        this.setupAnimation(params.animationData)
+      } else if (params.path) {
+        if (params.path.lastIndexOf('\\') === -1) {
+          this.path = params.path.substring(0, params.path.lastIndexOf('/') + 1)
+        } else {
+          this.path = params.path.substring(
+            0,
+            params.path.lastIndexOf('\\') + 1
+          )
+        }
+        this.fileName = params.path.substring(params.path.lastIndexOf('/') + 1)
+        this.fileName = this.fileName.substring(
+          0,
+          this.fileName.lastIndexOf('.json')
+        )
+        DataManager.loadAnimation(
+          params.path,
+          this.configAnimation,
+          this.onSetupError
+        )
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error('Could not set params')
     }
   }
   public setSegment(init: number, end: number) {
@@ -779,7 +791,10 @@ export default class AnimationItem extends BaseEvent {
     }
   }
   public trigger(name: AnimationEventName) {
-    if (this._cbs?.[name]) {
+    try {
+      if (!this._cbs?.[name]) {
+        return
+      }
       switch (name) {
         case 'enterFrame': {
           this.triggerEvent(
@@ -858,6 +873,8 @@ export default class AnimationItem extends BaseEvent {
         default:
           this.triggerEvent(name)
       }
+    } catch (err) {
+      console.error(err)
     }
   }
   public triggerConfigError(nativeError: unknown) {

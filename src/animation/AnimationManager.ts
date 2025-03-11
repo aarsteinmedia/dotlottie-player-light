@@ -45,11 +45,16 @@ export default class AnimationManager {
     }
   }
   static loadAnimation(params: AnimationConfiguration) {
-    const animItem = new AnimationItem()
-    this.setupAnimation = this.setupAnimation.bind(this)
-    this.setupAnimation(animItem, null)
-    animItem.setParams(params)
-    return animItem
+    try {
+      const animItem = new AnimationItem()
+      this.setupAnimation = this.setupAnimation.bind(this)
+      this.setupAnimation(animItem, null)
+      animItem.setParams(params)
+      return animItem
+    } catch (err) {
+      console.error(err)
+      throw new Error('Could not load animation')
+    }
   }
   static mute(animation?: string) {
     for (let i = 0; i < this.len; i++) {
@@ -70,23 +75,28 @@ export default class AnimationManager {
     element: HTMLElement | null,
     animationData?: AnimationData
   ) {
-    if (!element) {
-      return null
-    }
-    let i = 0
-    while (i < this.len) {
-      if (
-        this.registeredAnimations[i].elem === element &&
-        this.registeredAnimations[i].elem !== null
-      ) {
-        return this.registeredAnimations[i].animation
+    try {
+      if (!element) {
+        return null
       }
-      i++
+      let i = 0
+      while (i < this.len) {
+        if (
+          this.registeredAnimations[i].elem === element &&
+          this.registeredAnimations[i].elem !== null
+        ) {
+          return this.registeredAnimations[i].animation
+        }
+        i++
+      }
+      const animItem = new AnimationItem()
+      this.setupAnimation(animItem, element)
+      animItem.setData(element, animationData)
+      return animItem
+    } catch (err) {
+      console.error(err)
+      throw new Error('Could not register animation')
     }
-    const animItem = new AnimationItem()
-    this.setupAnimation(animItem, element)
-    animItem.setData(element, animationData)
-    return animItem
   }
   static resize() {
     for (let i = 0; i < this.len; i++) {

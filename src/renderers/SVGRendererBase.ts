@@ -1,11 +1,11 @@
 import type {
   AnimationData,
   ElementInterfaceIntersect,
+  GlobalData,
   LottieLayer,
   SVGRendererConfig,
 } from '@/types'
 
-import AnimationItem from '@/animation/AnimationItem'
 import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
 import SolidElement from '@/elements/SolidElement'
@@ -23,25 +23,12 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default class SVGRendererBase extends SVGBaseElement {
-  animationItem?: AnimationItem
-  completeLayers?: boolean
-
   destroyed?: boolean
-
-  elements?: ElementInterfaceIntersect[]
-
-  layers?: LottieLayer[]
-
-  pendingElements?: ElementInterfaceIntersect[]
-
+  globalData?: GlobalData
+  layerElement?: SVGGElement
   renderConfig?: SVGRendererConfig
-
   renderedFrame!: number
-
-  svgElement!: SVGSVGElement
-  addPendingElement(_comp: ElementInterfaceIntersect) {
-    throw new Error('Method not yet implemented')
-  }
+  svgElement?: SVGSVGElement
 
   appendElementInPos(element: ElementInterfaceIntersect, pos: number) {
     const newElement = element.getBaseElement()
@@ -61,9 +48,9 @@ export default class SVGRendererBase extends SVGBaseElement {
       i++
     }
     if (nextElement) {
-      this.layerElement.insertBefore(newElement, nextElement)
+      this.layerElement?.insertBefore(newElement, nextElement)
     } else {
-      this.layerElement.appendChild(newElement)
+      this.layerElement?.appendChild(newElement)
     }
   }
 
@@ -80,7 +67,7 @@ export default class SVGRendererBase extends SVGBaseElement {
     elements![pos] = element
     if (getExpressionsPlugin()) {
       if (this.layers?.[pos].ty === 0) {
-        this.globalData.projectInterface.registerComposition(element)
+        this.globalData?.projectInterface.registerComposition(element)
       }
       element.initExpressions()
     }
@@ -105,10 +92,6 @@ export default class SVGRendererBase extends SVGBaseElement {
         element.setMatte(matteMask)
       }
     }
-  }
-
-  checkLayers(_val?: number) {
-    throw new Error('Method not yet implemented')
   }
 
   checkPendingElements() {
@@ -137,6 +120,9 @@ export default class SVGRendererBase extends SVGBaseElement {
   }
 
   configAnimation(animData: AnimationData) {
+    if (!this.svgElement || !this.globalData) {
+      throw new Error('Missing SVG element and Global Data')
+    }
     this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
     this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
     if (this.renderConfig?.viewBoxSize) {
@@ -299,10 +285,6 @@ export default class SVGRendererBase extends SVGBaseElement {
         }
       }
     }
-  }
-
-  setupGlobalData(_animData: AnimationData, _defs: SVGDefsElement) {
-    throw new Error('Method not yet implemented')
   }
 
   show() {

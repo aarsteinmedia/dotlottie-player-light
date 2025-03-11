@@ -1,36 +1,21 @@
-import type {
-  ElementInterfaceIntersect,
-  GlobalData,
-  LottieLayer,
-  Transformer,
-} from '@/types'
+import type { Transformer } from '@/types'
 
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
+import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
-export default class SVGBaseElement {
+export default class SVGBaseElement extends BaseRenderer {
   _sizeChanged?: boolean
-
-  baseElement?: SVGGElement
-  checkMasks!: () => boolean
-  comp!: ElementInterfaceIntersect
-  data!: LottieLayer
   finalTransform?: Transformer
-  globalData!: GlobalData
-  layerElement!: SVGGElement
-  layerId!: string
   maskedElement?: SVGGElement
-  maskManager?: MaskElement
   matteElement?: SVGGElement
   matteMasks?: {
     [key: number]: string
   }
   renderableEffectsManager?: SVGEffects
-  searchEffectTransforms!: () => void
-  setBlendMode!: () => void
   transformedElement?: SVGGElement
   createContainerElements() {
     this.matteElement = createNS('g')
@@ -98,7 +83,7 @@ export default class SVGBaseElement {
   createRenderableComponents() {
     this.maskManager = new MaskElement(this.data, this, this.globalData)
     this.renderableEffectsManager = new SVGEffects(this as any)
-    this.searchEffectTransforms()
+    this.searchEffectTransforms() // TODO: Must be inherited
   }
   destroyBaseElement() {
     this.layerElement = null as any
@@ -219,6 +204,9 @@ export default class SVGBaseElement {
       )
     }
   }
+  // searchEffectTransforms() {
+  //   throw new Error('Method not yet implemented') TODO: Must be inherited
+  // }
   setMatte(id: string) {
     if (!this.matteElement) {
       return

@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type AnimationItem from '@/animation/AnimationItem'
-import type BaseElement from '@/elements/BaseElement'
 import type SVGCompElement from '@/elements/svg/SVGCompElement'
 import type {
   AnimationData,
@@ -15,14 +13,14 @@ import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import FontManager from '@/utils/FontManager'
 import SlotManager from '@/utils/SlotManager'
 
-class BaseRenderer {
+export default class BaseRenderer {
   animationItem!: AnimationItem
-  buildItem!: (val: number) => void
   checkPendingElements!: () => void
-
   completeLayers?: boolean
-  createImage!: (data: LottieLayer) => void
 
+  // createImage(_data: LottieLayer) { TODO:
+  //   throw new Error('Method not yet implemented')
+  // }
   createNull!: (data: LottieLayer) => void
 
   createShape!: (data: LottieLayer) => void
@@ -36,10 +34,10 @@ class BaseRenderer {
   layers!: LottieLayer[]
 
   pendingElements!: ElementInterfaceIntersect[]
+
   addPendingElement(element: ElementInterfaceIntersect) {
     this.pendingElements.push(element)
   }
-
   buildAllItems() {
     const len = this.layers?.length || 0
     for (let i = 0; i < len; i++) {
@@ -75,6 +73,10 @@ class BaseRenderer {
       i++
     }
   }
+
+  // buildItem(_val: number) {
+  //   throw new Error('Method not yet implemented') TODO:
+  // }
   checkLayers(val?: number) {
     this.completeLayers = true
     const { length } = this.layers || []
@@ -228,7 +230,3 @@ class BaseRenderer {
     }
   }
 }
-
-interface BaseRenderer extends BaseElement {}
-
-export default BaseRenderer
