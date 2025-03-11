@@ -1,4 +1,8 @@
-import type { LottieLayer, Transformer } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  LottieLayer,
+  Transformer,
+} from '@/types'
 
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
@@ -10,17 +14,22 @@ import { createElementID, getLocationHref } from '@/utils/getterSetter'
 export default class SVGBaseElement extends BaseRenderer {
   _sizeChanged?: boolean
   baseElement?: SVGGElement
+  comp?: ElementInterfaceIntersect
   data?: LottieLayer
   finalTransform?: Transformer
   layerElement?: SVGGElement
   layerId?: string
   maskedElement?: SVGGElement
+  maskManager?: MaskElement
   matteElement?: SVGGElement
   matteMasks?: {
     [key: number]: string
   }
   renderableEffectsManager?: SVGEffects
   transformedElement?: SVGGElement
+  checkMasks(): boolean {
+    throw new Error('Method not yet implemented')
+  }
   createContainerElements() {
     this.matteElement = createNS<SVGGElement>('g')
     this.transformedElement = this.layerElement
@@ -74,7 +83,10 @@ export default class SVGBaseElement extends BaseRenderer {
       if (this.checkMasks()) {
         const cpGroup = createNS<SVGGElement>('g')
         cpGroup.setAttribute('clip-path', `url(${getLocationHref()}#${clipId})`)
-        cpGroup.appendChild(this.layerElement)
+        if (this.layerElement) {
+          cpGroup.appendChild(this.layerElement)
+        }
+
         this.transformedElement = cpGroup
         if (layerElementParent) {
           layerElementParent.appendChild(this.transformedElement)
@@ -82,17 +94,20 @@ export default class SVGBaseElement extends BaseRenderer {
           this.baseElement = this.transformedElement
         }
       } else {
-        this.layerElement.setAttribute(
+        this.layerElement?.setAttribute(
           'clip-path',
           `url(${getLocationHref()}#${clipId})`
         )
       }
     }
-    if (this.data.bm !== 0) {
-      this.setBlendMode()
+    if (this.data?.bm !== 0) {
+      this.setBlendMode() // TODO: Must be inherited
     }
   }
   createRenderableComponents() {
+    if (!this.data || !this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
     this.maskManager = new MaskElement(this.data, this, this.globalData)
     this.renderableEffectsManager = new SVGEffects(this as any)
     this.searchEffectTransforms() // TODO: Must be inherited
@@ -103,7 +118,7 @@ export default class SVGBaseElement extends BaseRenderer {
     this.maskManager?.destroy()
   }
   getBaseElement() {
-    if (this.data.hd) {
+    if (this.data?.hd) {
       return null
     }
     return this.baseElement
@@ -136,12 +151,12 @@ export default class SVGBaseElement extends BaseRenderer {
           `#${this.layerId}`
         )
         masker.appendChild(useElement)
-        this.globalData.defs.appendChild(masker)
+        this.globalData?.defs.appendChild(masker)
         if (!featureSupport.maskType && matteType === 1) {
           masker.setAttribute('mask-type', 'luminance')
           filId = createElementID()
           fil = FiltersFactory.createFilter(filId)
-          this.globalData.defs.appendChild(fil)
+          this.globalData?.defs.appendChild(fil)
           fil.appendChild(FiltersFactory.createAlphaToLuminanceFilter())
           gg = createNS('g')
           gg?.appendChild(useElement)
@@ -157,7 +172,9 @@ export default class SVGBaseElement extends BaseRenderer {
         filId = createElementID()
         fil = FiltersFactory.createFilter(filId)
         // / /
-        const feCTr = createNS('feComponentTransfer')
+        const feCTr = createNS<SVGFEComponentTransferElement>(
+          'feComponentTransfer'
+        )
         feCTr.setAttribute('in', 'SourceGraphic')
         fil.appendChild(feCTr)
         const feFunc = createNS('feFuncA')
@@ -165,8 +182,8 @@ export default class SVGBaseElement extends BaseRenderer {
         feFunc.setAttribute('tableValues', '1.0 0.0')
         feCTr.appendChild(feFunc)
         // / /
-        this.globalData.defs.appendChild(fil)
-        const alphaRect = createNS('rect')
+        this.globalData?.defs.appendChild(fil)
+        const alphaRect = createNS<SVGRectElement>('rect')
         if (!alphaRect) {
           throw new Error('Could not create RECT element')
         }
@@ -190,10 +207,13 @@ export default class SVGBaseElement extends BaseRenderer {
           fil.appendChild(FiltersFactory.createAlphaToLuminanceFilter())
           gg = createNS('g')
           maskGrouper.appendChild(alphaRect)
-          gg.appendChild(this.layerElement)
+          if (this.layerElement) {
+            gg.appendChild(this.layerElement)
+          }
+
           maskGrouper.appendChild(gg)
         }
-        this.globalData.defs.appendChild(maskGroup)
+        this.globalData?.defs.appendChild(maskGroup)
       }
       this.matteMasks[matteType] = id
     }
@@ -216,6 +236,9 @@ export default class SVGBaseElement extends BaseRenderer {
       )
     }
   }
+  // setBlendMode() {
+  //   throw new Error('Method not yet implemented') TODO: Must be inherited
+  // }
   // searchEffectTransforms() {
   //   throw new Error('Method not yet implemented') TODO: Must be inherited
   // }
