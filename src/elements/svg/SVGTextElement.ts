@@ -1,5 +1,11 @@
 /* eslint-disable max-depth */
-import type { GlobalData, LottieLayer, SourceRect } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  GlobalData,
+  LottieLayer,
+  SourceRect,
+  Vector3,
+} from '@/types'
 import type Matrix from '@/utils/Matrix'
 
 import BaseElement from '@/elements/BaseElement'
@@ -16,18 +22,22 @@ import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
 
-/**
- *
- */
 export default class SVGTextLottieElement extends TextElement {
+  _mdf?: boolean
+  _sizeChanged?: boolean
   bbox?: {
     height: number
     left: number
     top: number
     width: number
   }
+  comp?: ElementInterfaceIntersect
+  data?: LottieLayer
+  globalData?: GlobalData
+  layerElement?: SVGGElement
   mHelper!: Matrix
   renderedFrame?: number
+
   renderedLetters?: string[]
   textContainer?: SVGTextElement
   textSpans: {
@@ -38,23 +48,31 @@ export default class SVGTextLottieElement extends TextElement {
   private emptyShapeData = {
     shapes: [],
   } as unknown as LottieLayer
+
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
     super()
     this.textSpans = []
     this.renderType = RendererType.SVG
     this.initElement(data, globalData, comp)
   }
-  override buildNewText() {
+
+  buildNewText() {
     this.addDynamicProperty(this as any)
     let i
     let len
 
-    const documentData = this.textProperty.currentData
-    this.renderedLetters = createSizedArray(
-      documentData ? documentData.l.length : 0
-    )
+    const documentData = this.textProperty?.currentData
+
+    if (!this.globalData || !this.layerElement || !documentData) {
+      throw new Error('SVGTextElement: Cannot access required data')
+    }
+
+    this.renderedLetters = createSizedArray(documentData.l?.length || 0)
     if (documentData.fc) {
-      this.layerElement.setAttribute('fill', this.buildColor(documentData.fc))
+      this.layerElement.setAttribute(
+        'fill',
+        this.buildColor(documentData.fc as Vector3)
+      )
     } else {
       this.layerElement.setAttribute('fill', 'rgba(0,0,0,0)')
     }
@@ -84,11 +102,12 @@ export default class SVGTextLottieElement extends TextElement {
     let tSpan: SVGTextElement | SVGGElement | null = null
     const matrixHelper = this.mHelper
     const shapeStr = ''
-    const singleShape = this.data.singleShape
+    const singleShape = this.data?.singleShape
     let xPos = 0
     let yPos = 0
     let firstLine = true
-    const trackingOffset = documentData.tr * 0.001 * documentData.finalSize
+    const trackingOffset =
+      documentData.tr * 0.001 * Number(documentData.finalSize)
     if (singleShape && !usesGlyphs && !documentData.sz) {
       const tElement = this.textContainer
       let justify = 'start'
@@ -107,7 +126,9 @@ export default class SVGTextLottieElement extends TextElement {
       tElement?.setAttribute('letter-spacing', `${trackingOffset}`)
       const textContent = this.buildTextContents(documentData.finalText)
       len = textContent.length
-      yPos = documentData.ps ? documentData.ps[1] + documentData.ascent : 0
+      yPos = documentData.ps
+        ? documentData.ps[1] + Number(documentData.ascent)
+        : 0
       for (i = 0; i < len; i++) {
         tSpan = this.textSpans[i].span || createNS<SVGTSpanElement>('tspan')
         tSpan.textContent = textContent[i]
@@ -122,7 +143,7 @@ export default class SVGTextLottieElement extends TextElement {
           }
         }
         this.textSpans[i].span = tSpan
-        yPos += documentData.finalLineHeight
+        yPos += Number(documentData.finalLineHeight)
       }
 
       if (tElement) {
@@ -168,7 +189,7 @@ export default class SVGTextLottieElement extends TextElement {
         if (singleShape) {
           if (letters[i].n) {
             xPos = -trackingOffset
-            yPos += documentData.yOffset
+            yPos += Number(documentData.yOffset)
             yPos += firstLine ? 1 : 0
             firstLine = false
           }
@@ -200,7 +221,10 @@ export default class SVGTextLottieElement extends TextElement {
           } else {
             let data = this.emptyShapeData
             if (charData?.data && charData.data.shapes) {
-              data = this.buildShapeData(charData.data, documentData.finalSize)
+              data = this.buildShapeData(
+                charData.data,
+                Number(documentData.finalSize)
+              )
             }
             glyphElement = new SVGShapeElement(
               data,
@@ -211,22 +235,28 @@ export default class SVGTextLottieElement extends TextElement {
           if (this.textSpans[i].glyph) {
             const glyph = this.textSpans[i].glyph
             if (glyph) {
-              this.textSpans[i].childSpan?.removeChild(glyph.layerElement)
+              if (glyph.layerElement) {
+                this.textSpans[i].childSpan?.removeChild(glyph.layerElement)
+              }
+
               glyph.destroy()
             }
           }
           this.textSpans[i].glyph = glyphElement
           glyphElement._debug = true
-          glyphElement.prepareFrame(0)
-          glyphElement.renderFrame()
-          this.textSpans[i].childSpan?.appendChild(glyphElement.layerElement)
+          glyphElement.prepareFrame?.(0)
+          glyphElement.renderFrame?.()
+          if (glyphElement.layerElement) {
+            this.textSpans[i].childSpan?.appendChild(glyphElement.layerElement)
+          }
+
           // when using animated shapes, the layer will be scaled instead of replacing the internal scale
           // this might have issues with strokes and might need a different solution
           if (charData?.t === 1) {
             this.textSpans[i].childSpan?.setAttribute(
               'transform',
-              `scale(${documentData.finalSize / 100},${
-                documentData.finalSize / 100
+              `scale(${Number(documentData.finalSize) / 100},${
+                Number(documentData.finalSize) / 100
               })`
             )
           }
@@ -259,7 +289,6 @@ export default class SVGTextLottieElement extends TextElement {
 
     this._sizeChanged = true
   }
-
   buildShapeData(data: LottieLayer, scale: number) {
     // data should probably be cloned to apply scale separately to each instance of a text on different layers
     // but since text internal content gets only rendered once and then it's never rerendered,
@@ -298,88 +327,95 @@ export default class SVGTextLottieElement extends TextElement {
     return textContents
   }
   createContent() {
-    if (this.data.singleShape && !this.globalData.fontManager?.chars) {
+    if (this.data?.singleShape && !this.globalData?.fontManager?.chars) {
       this.textContainer = createNS<SVGTextElement>('text')
     }
   }
   getValue() {
     let i
-    const len = this.textSpans.length
+    const { length } = this.textSpans
     let glyphElement
-    this.renderedFrame = this.comp.renderedFrame
-    for (i = 0; i < len; i++) {
+    this.renderedFrame = this.comp?.renderedFrame
+    for (i = 0; i < length; i++) {
       glyphElement = this.textSpans[i].glyph
       if (glyphElement) {
-        glyphElement.prepareFrame?.(this.comp.renderedFrame - this.data.st)
+        glyphElement.prepareFrame?.(
+          Number(this.comp?.renderedFrame) - Number(this.data?.st)
+        )
         if (glyphElement._mdf) {
           this._mdf = true
         }
       }
     }
   }
-
   // TODO: Find out why this doesn't work as a normal prototype
   renderInnerContent = function (this: SVGTextLottieElement) {
     this.validateText()
-    if (!this.data.singleShape || this._mdf) {
-      this.textAnimator.getMeasures(
-        this.textProperty.currentData,
-        this.lettersChangedFlag
-      )
-      if (this.lettersChangedFlag || this.textAnimator.lettersChangedFlag) {
-        this._sizeChanged = true
-        let i
-        const renderedLetters = this.textAnimator.renderedLetters
+    if (this.data?.singleShape && !this._mdf) {
+      return
+    }
+    if (!this.textProperty) {
+      throw new Error('SVGTextElement: Cannot access textProperty')
+    }
+    this.textAnimator?.getMeasures(
+      this.textProperty.currentData,
+      this.lettersChangedFlag
+    )
+    if (this.lettersChangedFlag || this.textAnimator?.lettersChangedFlag) {
+      this._sizeChanged = true
+      let i
+      const renderedLetters = this.textAnimator?.renderedLetters
 
-        const letters = this.textProperty.currentData.l
+      const letters = this.textProperty.currentData.l
 
-        const len = letters.length
-        let renderedLetter
-        let textSpan
-        let glyphElement
-        for (i = 0; i < len; i++) {
-          if (letters[i].n) {
-            continue
-          }
-          renderedLetter = renderedLetters[i]
-          textSpan = this.textSpans[i].span
-          glyphElement = this.textSpans[i].glyph
-          if (glyphElement) {
-            glyphElement.renderFrame()
-          }
-          if (renderedLetter._mdf.m) {
-            textSpan?.setAttribute('transform', renderedLetter.m as string)
-          }
-          if (renderedLetter._mdf.o) {
-            textSpan?.setAttribute('opacity', `${renderedLetter.o ?? 1}`)
-          }
-          if (renderedLetter._mdf.sw) {
-            textSpan?.setAttribute('stroke-width', `${renderedLetter.sw || 0}`)
-          }
-          if (renderedLetter._mdf.sc) {
-            textSpan?.setAttribute('stroke', renderedLetter.sc as string)
-          }
-          if (renderedLetter._mdf.fc) {
-            textSpan?.setAttribute('fill', renderedLetter.fc as string)
-          }
+      const { length } = letters || []
+      let renderedLetter
+      let textSpan
+      let glyphElement
+      for (i = 0; i < length; i++) {
+        if (letters?.[i].n) {
+          continue
+        }
+        renderedLetter = renderedLetters?.[i]
+        textSpan = this.textSpans[i].span
+        glyphElement = this.textSpans[i].glyph
+        if (glyphElement) {
+          glyphElement.renderFrame()
+        }
+        if (renderedLetter?._mdf.m) {
+          textSpan?.setAttribute('transform', renderedLetter.m as string)
+        }
+        if (renderedLetter?._mdf.o) {
+          textSpan?.setAttribute('opacity', `${renderedLetter.o ?? 1}`)
+        }
+        if (renderedLetter?._mdf.sw) {
+          textSpan?.setAttribute('stroke-width', `${renderedLetter.sw || 0}`)
+        }
+        if (renderedLetter?._mdf.sc) {
+          textSpan?.setAttribute('stroke', renderedLetter.sc as string)
+        }
+        if (renderedLetter?._mdf.fc) {
+          textSpan?.setAttribute('fill', renderedLetter.fc as string)
         }
       }
     }
   }
 
   sourceRectAtTime(): SourceRect | null {
-    this.prepareFrame(this.comp.renderedFrame - this.data.st)
+    this.prepareFrame(Number(this.comp?.renderedFrame) - Number(this.data?.st))
     this.renderInnerContent()
     if (this._sizeChanged) {
       this._sizeChanged = false
-      const textBox = this.layerElement.getBBox()
-      this.bbox = {
-        height: textBox.height,
-        left: textBox.x,
-        top: textBox.y,
-        width: textBox.width,
+      const textBox = this.layerElement?.getBBox()
+      if (textBox) {
+        this.bbox = {
+          height: textBox.height,
+          left: textBox.x,
+          top: textBox.y,
+          width: textBox.width,
+        }
+        return this.bbox
       }
-      return this.bbox
     }
     return null
   }
