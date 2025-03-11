@@ -113,6 +113,9 @@ export default class BaseRenderer extends BaseElement {
     }
     return new FootageElement(data, this.globalData, this)
   }
+  createImage(_layer: LottieLayer) {
+    throw new Error('BaseRenderer: Method createImage not yet implemented')
+  }
   createItem(layer: LottieLayer) {
     switch (layer.ty) {
       case 2:
@@ -139,6 +142,15 @@ export default class BaseRenderer extends BaseElement {
   }
   createNull(_layer: LottieLayer) {
     throw new Error('BaseRenderer: Method createNull not yet implemented')
+  }
+  createShape(_layer: LottieLayer) {
+    throw new Error('BaseRenderer: Method createShape not yet implemented')
+  }
+  createSolid(_layer: LottieLayer) {
+    throw new Error('BaseRenderer: Method createSolid not yet implemented')
+  }
+  createText(_layer: LottieLayer) {
+    throw new Error('BaseRenderer: Method createText not yet implemented')
   }
   getElementById(ind: number) {
     const { length } = this.elements || []

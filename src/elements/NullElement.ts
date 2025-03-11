@@ -13,7 +13,8 @@ export default class NullElement extends FrameElement {
   }
 
   destroy() {
-    throw new Error('NullElement: Method destroy not yet implemented')
+    // TODO: check if this is a fallback too
+    // throw new Error('NullElement: Method destroy not yet implemented')
   }
 
   getBaseElement() {
@@ -21,7 +22,8 @@ export default class NullElement extends FrameElement {
   }
 
   hide() {
-    throw new Error('NullElement: Method hide not yet implemented')
+    // TODO: check if this is a fallback too
+    // throw new Error('NullElement: Method hide not yet implemented')
   }
 
   initTransform() {
@@ -32,6 +34,7 @@ export default class NullElement extends FrameElement {
     this.prepareProperties(num, true)
   }
 
+  /** Fallback */
   renderFrame(_frame?: number | null) {
     // throw new Error('NullElement: Method renderFrame not yet implemented')
   }
