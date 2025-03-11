@@ -1,5 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  GlobalData,
+  LottieLayer,
+} from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -9,18 +12,49 @@ import TransformElement from '@/elements/helpers/TransformElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { ValueProperty } from '@/utils/Properties'
 
-class CompElement {
-  buildAllItems!: () => void
+export default class CompElement {
+  _mdf?: boolean
   checkLayers!: (val?: number) => void
   completeLayers?: boolean
-  destroyElements!: () => void
-  elements!: ElementInterfaceIntersect[]
-  getElements!: () => ElementInterfaceIntersect[]
+  data?: LottieLayer
+  elements?: ElementInterfaceIntersect[]
   isInRange?: boolean
-  layers!: LottieLayer[]
+  layers?: LottieLayer[]
   renderedFrame!: number
-  setElements!: (elems: ElementInterfaceIntersect[]) => void
   tm?: ValueProperty
+  buildAllItems() {
+    throw new Error('Method not implemented')
+  }
+  // checkLayers(_val?: number) {
+  //   console.error('hello')
+  //   throw new Error('Method not implemented')
+  // }
+  destroyBaseElement() {
+    throw new Error('Method not implemented')
+  }
+  destroyElements() {
+    throw new Error('Method not implemented')
+  }
+  getElements(): ElementInterfaceIntersect[] {
+    throw new Error('Method not implemented')
+  }
+
+  initElement(
+    _data: LottieLayer,
+    _globalData: GlobalData,
+    _comp: ElementInterfaceIntersect
+  ) {
+    throw new Error('Method not implemented')
+  }
+  prepareFrame(_val: number) {
+    throw new Error('Method not implemented')
+  }
+  renderInnerContent() {
+    throw new Error('Method not implemented')
+  }
+  setElements(_elems: ElementInterfaceIntersect[]) {
+    throw new Error('Method not implemented')
+  }
 }
 
 extendPrototype(
@@ -82,15 +116,15 @@ CompElement.prototype.prepareFrame = function (num: number) {
     }
     this.renderedFrame = Number(timeRemapped)
   }
-  const len = this.elements.length
+  const { length } = this.elements || []
   if (!this.completeLayers) {
     this.checkLayers(this.renderedFrame)
   }
   // This iteration needs to be backwards because of how expressions connect between each other
-  for (let i = len - 1; i >= 0; i--) {
-    if (this.completeLayers || this.elements[i]) {
-      this.elements[i].prepareFrame?.(this.renderedFrame - this.layers[i].st)
-      if (this.elements[i]._mdf) {
+  for (let i = length - 1; i >= 0; i--) {
+    if (this.completeLayers || this.elements?.[i]) {
+      this.elements?.[i].prepareFrame?.(this.renderedFrame - this.layers[i].st)
+      if (this.elements?.[i]._mdf) {
         this._mdf = true
       }
     }
@@ -98,15 +132,17 @@ CompElement.prototype.prepareFrame = function (num: number) {
 }
 
 CompElement.prototype.renderInnerContent = function () {
-  const { length } = this.layers
+  const { length } = this.layers || []
   for (let i = 0; i < length; i++) {
-    if (this.completeLayers || this.elements[i]) {
-      this.elements[i].renderFrame()
+    if (this.completeLayers || this.elements?.[i]) {
+      this.elements?.[i].renderFrame()
     }
   }
 }
 
-CompElement.prototype.setElements = function (elems: ElementInterfaceIntersect[]) {
+CompElement.prototype.setElements = function (
+  elems: ElementInterfaceIntersect[]
+) {
   this.elements = elems
 }
 
@@ -127,11 +163,3 @@ CompElement.prototype.destroy = function () {
   this.destroyElements()
   this.destroyBaseElement()
 }
-
-interface CompElement
-  extends BaseElement,
-    HierarchyElement,
-    FrameElement,
-    RenderableDOMElement {}
-
-export default CompElement
