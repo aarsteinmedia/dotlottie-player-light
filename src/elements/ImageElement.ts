@@ -6,9 +6,7 @@ import type {
   SourceRect,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
@@ -72,7 +70,9 @@ export default class ImageElement extends FrameElement {
     _data: LottieLayer,
     _globalData: GlobalData,
     _comp: ElementInterfaceIntersect
-  ) {}
+  ) {
+    throw new Error('ImageElement: Method initElement is not yet implemented')
+  }
 
   sourceRectAtTime() {
     return this.sourceRect

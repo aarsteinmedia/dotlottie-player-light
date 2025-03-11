@@ -1,17 +1,15 @@
 import type {
   ElementInterfaceIntersect,
-  GlobalData,
-  LottieLayer,
   SourceRect,
   SVGRendererConfig,
   Transformer,
 } from '@/types'
-export default class RenderableElement {
+
+import BaseElement from '@/elements/BaseElement'
+export default class RenderableElement extends BaseElement {
   _isFirstFrame?: boolean
   _mdf?: boolean
-  data?: LottieLayer
   finalTransform?: Transformer
-  globalData?: GlobalData
   hidden!: boolean
   isInRange!: boolean
   isTransparent!: boolean
@@ -72,6 +70,9 @@ export default class RenderableElement {
     }
     return { h: Number(this.data?.height), w: Number(this.data?.width) }
   }
+  // hide() {
+  //   throw new Error('RenderableElement: Method hide not implemented yet')
+  // }
   initRenderable() {
     // layer's visibility related to inpoint and outpoint. Rename isVisible to isInRange
     this.isInRange = false
@@ -102,10 +103,7 @@ export default class RenderableElement {
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */
   }
   // show() {
-  //   throw new Error('Method not implemented yet')
-  // }
-  // hide() {
-  //   throw new Error('Method not implemented yet')
+  //   throw new Error('RenderableElement: Method show not implemented yet')
   // }
   sourceRectAtTime(): SourceRect | null {
     return {
