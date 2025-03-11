@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   AnimationData,
   ElementInterfaceIntersect,
@@ -23,7 +22,7 @@ import {
 } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
 
-class SVGRendererBase {
+export default class SVGRendererBase {
   addPendingElement!: (comp: ElementInterfaceIntersect) => void
 
   animationItem!: AnimationItem
@@ -309,7 +308,3 @@ class SVGRendererBase {
 }
 
 extendPrototype([BaseRenderer], SVGRendererBase)
-
-interface SVGRendererBase extends BaseRenderer {}
-
-export default SVGRendererBase

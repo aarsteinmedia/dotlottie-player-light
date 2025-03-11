@@ -17,6 +17,9 @@ export default class CompElement extends SVGRendererBase {
   _mdf?: boolean
   isInRange?: boolean
   tm?: ValueProperty
+  buildAllItems() {
+    throw new Error('Method not implemented')
+  }
   // createRenderableComponents() {
   //   throw new Error('Method not implemented') TODO:
   // }
@@ -27,10 +30,10 @@ export default class CompElement extends SVGRendererBase {
     this.destroyElements()
     this.destroyBaseElement()
   }
+
   destroyBaseElement() {
     throw new Error('Method not implemented')
   }
-
   destroyElements() {
     const { length } = this.layers
     for (let i = 0; i < length; i++) {
@@ -42,6 +45,13 @@ export default class CompElement extends SVGRendererBase {
   getElements(): ElementInterfaceIntersect[] {
     return this.elements
   }
+  initBaseData(
+    _data: LottieLayer,
+    _globalData: GlobalData,
+    _comp: ElementInterfaceIntersect
+  ) {
+    throw new Error('Method not implemented')
+  }
   initElement(
     _data: LottieLayer,
     _globalData: GlobalData,
@@ -49,6 +59,7 @@ export default class CompElement extends SVGRendererBase {
   ) {
     throw new Error('Method not implemented')
   }
+
   initFrame() {
     throw new Error('Method not implemented')
   }
