@@ -5,10 +5,9 @@ import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import { extendPrototype } from '@/utils/functionExtensions'
-class NullElement {
-  initTransform!: () => void
-
+export default class NullElement extends FrameElement {
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+    super()
     this.initFrame()
     this.initBaseData(data, globalData, comp)
     // this.initFrame()
@@ -16,13 +15,17 @@ class NullElement {
     this.initHierarchy()
   }
 
-  destroy() {}
+  destroy() {
+    throw new Error('Method not yet implemented')
+  }
 
   getBaseElement() {
     return null
   }
 
-  hide() {}
+  hide() {
+    throw new Error('Method not yet implemented')
+  }
 
   prepareFrame(num: number) {
     this.prepareProperties(num, true)
@@ -35,9 +38,4 @@ class NullElement {
   }
 }
 
-extendPrototype(
-  [BaseElement, TransformElement, HierarchyElement, FrameElement],
-  NullElement
-)
-
-export default NullElement
+extendPrototype([BaseElement, TransformElement, HierarchyElement], NullElement)

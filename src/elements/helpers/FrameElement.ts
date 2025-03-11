@@ -7,11 +7,11 @@ export default class FrameElement {
   _isParent?: boolean
   _mdf?: boolean
 
-  dynamicProperties!: DynamicPropertyContainer[]
+  dynamicProperties?: DynamicPropertyContainer[]
   globalData?: GlobalData
   addDynamicProperty(prop: DynamicPropertyContainer) {
-    if (this.dynamicProperties.indexOf(prop) === -1) {
-      this.dynamicProperties.push(prop)
+    if (this.dynamicProperties?.indexOf(prop) === -1) {
+      this.dynamicProperties?.push(prop)
     }
   }
   /**
@@ -38,15 +38,14 @@ export default class FrameElement {
    *
    */
   prepareProperties(_: number, isVisible?: boolean) {
-    let i
-    const len = this.dynamicProperties.length
-    for (i = 0; i < len; i++) {
+    const { length } = this.dynamicProperties || []
+    for (let i = 0; i < length; i++) {
       if (
         isVisible ||
-        (this._isParent && this.dynamicProperties[i].propType === 'transform')
+        (this._isParent && this.dynamicProperties?.[i].propType === 'transform')
       ) {
-        this.dynamicProperties[i].getValue()
-        if (this.globalData && this.dynamicProperties[i]._mdf) {
+        this.dynamicProperties?.[i].getValue()
+        if (this.globalData && this.dynamicProperties?.[i]._mdf) {
           this.globalData._mdf = true
           this._mdf = true
         }
