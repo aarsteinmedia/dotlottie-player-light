@@ -27,7 +27,7 @@ type Filter =
   | PointEffect
   | SliderEffect
 
-class SVGEffects {
+export default class SVGEffects {
   static idPrefix = 'filter_result_'
   filters: Filter[]
   constructor(elem: ElementInterfaceIntersect) {
@@ -45,7 +45,7 @@ class SVGEffects {
         // TODO: This looks very wrong and should be tested
         filterManager = new Effect(
           fil as any,
-          elem.effectsManager.effectElements[i] as any,
+          elem.effectsManager?.effectElements[i] as any,
           elem as any
           // SVGEffects.idPrefix + count, TODO: Perhaps for main version
           // source TODO: Perhaps for main version
@@ -61,7 +61,7 @@ class SVGEffects {
     }
     if (count) {
       elem.globalData.defs.appendChild(fil)
-      elem.layerElement.setAttribute(
+      elem.layerElement?.setAttribute(
         'filter',
         `url(${getLocationHref()}#${filId})`
       )
@@ -90,5 +90,3 @@ class SVGEffects {
     }
   }
 }
-
-export default SVGEffects
