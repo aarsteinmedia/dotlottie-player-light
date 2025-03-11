@@ -94,6 +94,7 @@ export type ElementInterfaceUnion =
   | HierarchyElement
   | AudioElement
   | CompElement
+  | MaskElement
   | SVGShapeElement
   | SVGTextElement
   | SVGStopElement
@@ -106,6 +107,7 @@ export type ElementInterfaceIntersect = BaseElement &
   HierarchyElement &
   AudioElement &
   CompElement &
+  MaskElement &
   SVGShapeElement &
   SVGTextElement &
   SVGStopElement &

@@ -1,22 +1,40 @@
-import type { GlobalData, LottieLayer, Mask } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  GlobalData,
+  LottieLayer,
+  Mask,
+} from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { createNS } from '@/utils'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
+import { ValueProperty } from '@/utils/Properties'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
 
 export default class MaskElement {
   data: LottieLayer
-  element: any
+  element: ElementInterfaceIntersect
   globalData: GlobalData
   maskElement: SVGElement | null
   masksProperties: null | Mask[]
   solidPath: string
-  storedData: any[]
+  storedData: {
+    elem: SVGPathElement
+    expan: SVGFEMorphologyElement | null
+    filterId?: string
+    lastOperator: string
+    lastPath: string
+    lastRadius: number
+    x: ValueProperty | null
+  }[]
   viewData: any[]
-  constructor(data: LottieLayer, element: any, globalData: GlobalData) {
+  constructor(
+    data: LottieLayer,
+    element: ElementInterfaceIntersect,
+    globalData: GlobalData
+  ) {
     this.data = data
     this.element = element
     this.globalData = globalData
@@ -57,10 +75,10 @@ export default class MaskElement {
         (properties[i].mode === 's' || properties[i].mode === 'i') &&
         count === 0
       ) {
-        rect = createNS('rect')
+        rect = createNS<SVGRectElement>('rect')
         rect.setAttribute('fill', '#ffffff')
-        rect.setAttribute('width', this.element.comp.data.w || 0)
-        rect.setAttribute('height', this.element.comp.data.h || 0)
+        rect.setAttribute('width', `${Number(this.element.comp?.data?.w)}`)
+        rect.setAttribute('height', `${Number(this.element.comp?.data?.h)}`)
         currentMasks.push(rect)
       } else {
         rect = null
@@ -112,7 +130,7 @@ export default class MaskElement {
           filterID = createElementID()
           expansor = createNS('filter')
           expansor.setAttribute('id', filterID)
-          feMorph = createNS('feMorphology')
+          feMorph = createNS<SVGFEMorphologyElement>('feMorphology')
           feMorph.setAttribute('operator', 'erode')
           feMorph.setAttribute('in', 'SourceGraphic')
           feMorph.setAttribute('radius', '0')
@@ -132,17 +150,17 @@ export default class MaskElement {
           lastOperator: '',
           lastPath: '',
           lastRadius: 0,
-          x: x,
+          x,
         }
         if (properties[i].mode === 'i') {
           jLen = currentMasks.length
-          const g = createNS('g')
+          const g = createNS<SVGGElement>('g')
           for (j = 0; j < jLen; j++) {
             g.appendChild(currentMasks[j])
           }
-          const mask = createNS('mask')
+          const mask = createNS<SVGMaskElement>('mask')
           mask.setAttribute('mask-type', 'alpha')
-          mask.setAttribute('id', `${layerId}_${count}`)
+          mask.id = `${layerId}_${count}`
           mask.appendChild(path)
           defs?.appendChild(mask)
           g.setAttribute(
@@ -195,14 +213,14 @@ export default class MaskElement {
 
     if (count > 0) {
       this.maskElement.setAttribute('id', layerId)
-      this.element.maskedElement.setAttribute(
+      this.element.maskedElement?.setAttribute(
         maskRef,
         `url(${getLocationHref()}#${layerId})`
       )
       defs?.appendChild(this.maskElement)
     }
     if (this.viewData.length) {
-      this.element.addRenderableComponent(this)
+      this.element.addRenderableComponent(this as any)
     }
   }
 
@@ -216,7 +234,7 @@ export default class MaskElement {
   }
 
   destroy() {
-    this.element = null
+    this.element = null as any
     this.globalData = null as any
     this.maskElement = null
     this.data = null as any
@@ -264,9 +282,9 @@ export default class MaskElement {
   }
 
   renderFrame(frame?: number | null) {
-    const finalMat = this.element.finalTransform.mat
-    const len = this.masksProperties?.length || 0
-    for (let i = 0; i < len; i++) {
+    const finalMat = this.element.finalTransform?.mat,
+      { length } = this.masksProperties || []
+    for (let i = 0; i < length; i++) {
       if (this.viewData[i].prop._mdf || frame) {
         this.drawPath(
           this.masksProperties?.[i] || null,
@@ -285,16 +303,20 @@ export default class MaskElement {
       }
       if (
         this.viewData[i].invRect &&
-        (this.element.finalTransform.mProp._mdf || frame)
+        (this.element.finalTransform?.mProp._mdf || frame)
       ) {
         this.viewData[i].invRect.setAttribute(
           'transform',
-          finalMat.getInverseMatrix().to2dCSS()
+          finalMat?.getInverseMatrix().to2dCSS()
         )
       }
-      if (this.storedData[i].x && (this.storedData[i].x._mdf || frame)) {
+      if (
+        this.storedData[i] &&
+        this.storedData[i].x &&
+        (this.storedData[i].x?._mdf || frame)
+      ) {
         const feMorph = this.storedData[i].expan
-        if (this.storedData[i].x.v < 0) {
+        if (Number(this.storedData[i].x?.v) < 0) {
           if (this.storedData[i].lastOperator !== 'erode') {
             this.storedData[i].lastOperator = 'erode'
             this.storedData[i].elem.setAttribute(
@@ -302,15 +324,15 @@ export default class MaskElement {
               `url(${getLocationHref()}#${this.storedData[i].filterId})`
             )
           }
-          feMorph.setAttribute('radius', -this.storedData[i].x.v)
+          feMorph?.setAttribute('radius', `${-Number(this.storedData[i].x?.v)}`)
         } else {
           if (this.storedData[i].lastOperator !== 'dilate') {
             this.storedData[i].lastOperator = 'dilate'
-            this.storedData[i].elem.setAttribute('filter', null)
+            this.storedData[i].elem.removeAttribute('filter')
           }
           this.storedData[i].elem.setAttribute(
             'stroke-width',
-            this.storedData[i].x.v * 2
+            `${Number(this.storedData[i].x?.v) * 2}`
           )
         }
       }
