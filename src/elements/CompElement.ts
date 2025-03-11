@@ -4,7 +4,6 @@ import type {
   LottieLayer,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
@@ -12,6 +11,8 @@ import TransformElement from '@/elements/helpers/TransformElement'
 import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { ValueProperty } from '@/utils/Properties'
+
+import BaseElement from './BaseElement'
 
 export default class CompElement extends SVGRendererBase {
   _mdf?: boolean
@@ -37,60 +38,50 @@ export default class CompElement extends SVGRendererBase {
     _globalData: GlobalData,
     _comp: ElementInterfaceIntersect
   ) {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method initElement not implemented')
   }
 
   initFrame() {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method initFrame not implemented')
   }
 
   initHierarchy() {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method initHierarchy not implemented')
   }
 
   initRenderable() {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method initRenderable not implemented')
   }
 
   initTransform() {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method initTransform not implemented')
   }
 
   prepareFrame(_val: number) {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method prepareFrame not implemented')
   }
 
   prepareProperties(_val: number, _isInRange?: boolean) {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method prepareProperties not implemented')
   }
 
   prepareRenderableFrame(_val: number, _?: boolean) {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error(
+      'CompElement: Method prepareRenderableFrame not implemented'
+    )
   }
 
   renderInnerContent() {
-    throw new Error('CompElement: Method not implemented')
+    throw new Error('CompElement: Method renderInnerContent not implemented')
   }
   setElements(elems: ElementInterfaceIntersect[]) {
     this.elements = elems
   }
-
-  // createRenderableComponents() {
-  //   throw new Error('CompElement: Method not implemented') // TODO:
-  // }
-
-  // createContainerElements() {
-  //   throw new Error('CompElement: Method not implemented') // TODO:
-  // }
-
-  // initRendererElement() {
-  //   throw new Error('CompElement: Method not implemented') // TODO:
-  // }
 }
 
 extendPrototype(
   [
-    BaseElement,
+    // BaseElement,
     TransformElement,
     HierarchyElement,
     FrameElement,
@@ -109,9 +100,9 @@ CompElement.prototype.initElement = function (
   this.initTransform()
   this.initRenderable()
   this.initHierarchy()
-  this.initRendererElement() // TODO:
-  this.createContainerElements() // TODO:
-  this.createRenderableComponents() // TODO:
+  this.initRendererElement()
+  this.createContainerElements()
+  this.createRenderableComponents()
   if (this.data?.xt || !globalData.progressiveLoad) {
     this.buildAllItems()
   }
