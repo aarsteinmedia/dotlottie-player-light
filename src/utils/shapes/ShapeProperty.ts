@@ -3,6 +3,7 @@ import type {
   Caching,
   ElementInterface,
   Mask,
+  Merge,
   Shape,
   StrokeData,
 } from '@/types'
@@ -29,7 +30,7 @@ export default class ShapePropertyFactory {
 
   static getShapeProp(
     elem: SVGShapeElement,
-    data: Partial<Shape & Mask>,
+    data: Merge<Shape, Mask>,
     type: number,
     _?: unknown
   ) {
@@ -43,9 +44,9 @@ export default class ShapePropertyFactory {
         prop = new ShapeProperty(elem, data, type)
       }
     } else if (type === 5) {
-      prop = new RectShapeProperty(elem, data)
+      prop = new RectShapeProperty(elem as ElementInterface, data)
     } else if (type === 6) {
-      prop = new EllShapeProperty(elem, data)
+      prop = new EllShapeProperty(elem as ElementInterface, data)
     } else if (type === 7) {
       prop = new StarShapeProperty(elem, data)
     }
@@ -59,7 +60,7 @@ export default class ShapePropertyFactory {
 export class RectShapeProperty extends DynamicPropertyContainer {
   comp?: ElementInterface
   d?: number
-  data?: Shape
+  data?: Merge<Shape, Mask>
   elem: ElementInterface
   frameId: number
   ir?: ValueProperty
@@ -76,7 +77,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
   s: ValueProperty
   v: ShapePath
 
-  constructor(elem: ElementInterface, data: Shape) {
+  constructor(elem: ElementInterface, data: Merge<Shape, Mask>) {
     super()
     this.v = ShapePool.newElement()
     this.v.c = true
@@ -86,7 +87,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
     this.elem = elem
     this.comp = elem.comp
     this.frameId = -1
-    this.d = data.d
+    this.d = data.d as number
     this.initDynamicPropertyContainer(elem)
     this.p = PropertyFactory.getProp(elem, data.p as any, 1, 0, this as any)
     this.s = PropertyFactory.getProp(elem, data.s, 1, 0, this as any)
@@ -409,8 +410,8 @@ class StarShapeProperty extends DynamicPropertyContainer {
       let y = rad * Math.sin(currentAng)
       const ox = x === 0 && y === 0 ? 0 : y / Math.sqrt(x * x + y * y)
       const oy = x === 0 && y === 0 ? 0 : -x / Math.sqrt(x * x + y * y)
-      x += +this.p.v[0]
-      y += +this.p.v[1]
+      x += +(this.p.v as number[])[0]
+      y += +(this.p.v as number[])[1]
       this.v.setTripleAt(
         x,
         y,
@@ -423,8 +424,8 @@ class StarShapeProperty extends DynamicPropertyContainer {
       )
       currentAng += angle * dir
     }
-    this.paths.length = 0
-    this.paths[0] = this.v
+    ;(this.paths as any).length = 0 // TODO: Check if values are different in star shapes
+    ;(this.paths as any)[0] = this.v // TODO:
   }
   convertStarToPath() {
     const numPts = Math.floor(Number(this.pt?.v)) * 2
@@ -454,8 +455,8 @@ class StarShapeProperty extends DynamicPropertyContainer {
       let y = rad * Math.sin(currentAng)
       const ox = x === 0 && y === 0 ? 0 : y / Math.sqrt(x * x + y * y)
       const oy = x === 0 && y === 0 ? 0 : -x / Math.sqrt(x * x + y * y)
-      x += +this.p.v[0]
-      y += +this.p.v[1]
+      x += +(this.p.v as number[])[0]
+      y += +(this.p.v as number[])[1]
       this.v.setTripleAt(
         x,
         y,
@@ -475,7 +476,7 @@ class StarShapeProperty extends DynamicPropertyContainer {
       currentAng += angle * dir
     }
   }
-  getValue() {
+  override getValue() {
     if (this.elem.globalData.frameId === this.frameId) {
       return
     }
@@ -488,10 +489,10 @@ class StarShapeProperty extends DynamicPropertyContainer {
 }
 
 class EllShapeProperty extends DynamicPropertyContainer {
-  comp: any
+  comp: ElementInterface
 
-  d?: StrokeData[]
-  elem: any
+  d?: number
+  elem: ElementInterface
   frameId: number
   k: boolean
   localShapeCollection: ShapeCollection
@@ -502,14 +503,14 @@ class EllShapeProperty extends DynamicPropertyContainer {
   v: ShapePath
   private _cPoint = roundCorner
 
-  constructor(elem: any, data: Shape & Mask) {
+  constructor(elem: ElementInterface, data: Merge<Shape, Mask>) {
     super()
     this.v = ShapePool.newElement()
     this.v.setPathData(true, 4)
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.localShapeCollection.addShape(this.v)
-    this.d = data.d
+    this.d = data.d as number
     this.elem = elem
     this.comp = elem.comp
     this.frameId = -1
@@ -524,10 +525,10 @@ class EllShapeProperty extends DynamicPropertyContainer {
     }
   }
   convertEllToPath() {
-    const p0 = this.p.v[0]
-    const p1 = this.p.v[1]
-    const s0 = this.s.v[0] / 2
-    const s1 = this.s.v[1] / 2
+    const p0 = (this.p.v as number[])[0]
+    const p1 = (this.p.v as number[])[1]
+    const s0 = (this.s.v as number[])[0] / 2
+    const s1 = (this.s.v as number[])[1] / 2
     const _cw = this.d !== 3
     const _v = this.v
     _v.v[0][0] = p0
@@ -581,7 +582,7 @@ export class ShapeProperty {
   public interpolateShape: (
     frame: number,
     previousValue: any,
-    caching: Caching
+    caching?: Caching
   ) => void
   public k: boolean
   public kf: boolean
@@ -681,9 +682,9 @@ class KeyframedShapeProperty {
 /**
  *
  */
-function addEffect(this: any, effectFunction: any) {
+function addEffect(this: ShapeProperty, effectFunction: any) {
   this.effectsSequence.push(effectFunction)
-  this.container.addDynamicProperty(this)
+  this.container.addDynamicProperty(this as any)
 }
 
 /**
@@ -871,7 +872,7 @@ function shapesEqual(shape1: ShapePath, shape2: ShapePath) {
 /**
  *
  */
-function interpolateShapeCurrentTime(this: ShapeProperty) {
+function interpolateShapeCurrentTime(this: KeyframedShapeProperty) {
   const frameNum = this.comp.renderedFrame - this.offsetTime,
     initTime = this.keyframes[0].t - this.offsetTime,
     endTime = this.keyframes[this.keyframes.length - 1].t - this.offsetTime,
@@ -884,10 +885,11 @@ function interpolateShapeCurrentTime(this: ShapeProperty) {
     )
   ) {
     // / /
-    this._caching.lastIndex = lastFrame < frameNum ? this._caching.lastIndex : 0
+    this._caching!.lastIndex =
+      lastFrame < frameNum ? Number(this._caching?.lastIndex) : 0
     this.interpolateShape(frameNum, this.pv, this._caching)
     // / /
   }
-  this._caching.lastFrame = frameNum
+  this._caching!.lastFrame = frameNum
   return this.pv
 }

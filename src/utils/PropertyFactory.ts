@@ -1,4 +1,3 @@
-import type { GroupEffect } from '@/effects/EffectsManager'
 import type { ElementInterface, Keyframe, VectorProperty } from '@/types'
 
 import {
