@@ -63,7 +63,7 @@ export default class SVGRendererBase extends SVGBaseElement {
 
     const element = this.createItem(this.layers[pos])
 
-    elements![pos] = element
+    elements![pos] = element as ElementInterfaceIntersect
     if (getExpressionsPlugin()) {
       if (this.layers?.[pos].ty === 0) {
         this.globalData?.projectInterface.registerComposition(element)
@@ -219,21 +219,21 @@ export default class SVGRendererBase extends SVGBaseElement {
     return new NullElement(data, this.globalData, this)
   }
 
-  createShape(data: LottieLayer) {
+  override createShape(data: LottieLayer) {
     if (!this.globalData) {
       throw new Error('SVGRendererBase cannot access Global Data')
     }
     return new SVGShapeElement(data, this.globalData, this as any)
   }
 
-  createSolid(data: LottieLayer) {
+  override createSolid(data: LottieLayer) {
     if (!this.globalData) {
       throw new Error('SVGRendererBase cannot access Global Data')
     }
     return new SolidElement(data, this.globalData, this)
   }
 
-  createText(data: LottieLayer) {
+  override createText(data: LottieLayer) {
     if (!this.globalData) {
       throw new Error('SVGRendererBase cannot access Global Data')
     }
