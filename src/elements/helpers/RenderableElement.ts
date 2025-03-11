@@ -1,18 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type BaseElement from '@/elements/BaseElement'
-import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import type {
   ElementInterfaceIntersect,
+  GlobalData,
+  LottieLayer,
   SourceRect,
   SVGRendererConfig,
   Transformer,
 } from '@/types'
-
-class RenderableElement {
+export default class RenderableElement {
+  _isFirstFrame?: boolean
+  _mdf?: boolean
+  data?: LottieLayer
   finalTransform?: Transformer
-  hidden?: boolean
-  isInRange?: boolean
-  isTransparent?: boolean
+  globalData?: GlobalData
+  hidden!: boolean
+  isInRange!: boolean
+  isTransparent!: boolean
   renderableComponents!: ElementInterfaceIntersect[]
   addRenderableComponent(component: ElementInterfaceIntersect) {
     if (this.renderableComponents.indexOf(component) === -1) {
@@ -83,7 +85,7 @@ class RenderableElement {
   prepareRenderableFrame(num: number, _?: boolean) {
     this.checkLayerLimits(num)
   }
-  removeRenderableComponent(component: any) {
+  removeRenderableComponent(component: ElementInterfaceIntersect) {
     if (this.renderableComponents.indexOf(component) !== -1) {
       this.renderableComponents.splice(
         this.renderableComponents.indexOf(component),
@@ -99,6 +101,12 @@ class RenderableElement {
     /* this.maskManager.renderFrame(this.finalTransform.mat);
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */
   }
+  // show() {
+  //   throw new Error('Method not implemented yet')
+  // }
+  // hide() {
+  //   throw new Error('Method not implemented yet')
+  // }
   sourceRectAtTime(): SourceRect | null {
     return {
       height: 100,
@@ -108,7 +116,3 @@ class RenderableElement {
     }
   }
 }
-
-interface RenderableElement extends BaseElement, RenderableDOMElement {}
-
-export default RenderableElement

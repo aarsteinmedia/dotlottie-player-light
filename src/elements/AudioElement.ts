@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   Audio,
   ElementInterfaceIntersect,
@@ -39,7 +38,7 @@ class AudioElement {
     const assetPath = this.globalData?.getAssetsPath?.(this.assetData)
     this.audio = this.globalData?.audioController?.createAudio(assetPath)
     this._currentTime = 0
-    this.globalData.audioController?.addAudio(this)
+    this.globalData?.audioController?.addAudio(this)
     this._volumeMultiplier = 1
     this._volume = 1
     this._previousVolume = null

@@ -8,15 +8,15 @@ import type { ElementInterfaceIntersect, LottieLayer } from '@/types'
 
 export default class HierarchyElement {
   _isParent!: boolean
-  comp!: ElementInterfaceIntersect
-  data!: LottieLayer
+  comp?: ElementInterfaceIntersect
+  data?: LottieLayer
   hierarchy!: unknown[]
   /**
    * Searches layer's parenting chain
    */
   checkParenting() {
-    if ('parent' in this.data) {
-      this.comp.buildElementParenting(this as any, this.data.parent, [])
+    if ('parent' in (this.data || {})) {
+      this.comp?.buildElementParenting(this as any, this.data?.parent, [])
     }
   }
   /**
