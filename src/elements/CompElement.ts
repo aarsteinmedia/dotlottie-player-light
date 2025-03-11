@@ -9,36 +9,39 @@ import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
+import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { ValueProperty } from '@/utils/Properties'
 
-export default class CompElement {
+export default class CompElement extends SVGRendererBase {
   _mdf?: boolean
-  checkLayers!: (val?: number) => void
-  completeLayers?: boolean
-  data?: LottieLayer
-  elements?: ElementInterfaceIntersect[]
   isInRange?: boolean
-  layers?: LottieLayer[]
-  renderedFrame!: number
   tm?: ValueProperty
-  buildAllItems() {
-    throw new Error('Method not implemented')
-  }
-  // checkLayers(_val?: number) {
-  //   console.error('hello')
-  //   throw new Error('Method not implemented')
+  // createRenderableComponents() {
+  //   throw new Error('Method not implemented') TODO:
   // }
+  // createContainerElements() {
+  //   throw new Error('Method not implemented') // TODO:
+  // }
+  override destroy() {
+    this.destroyElements()
+    this.destroyBaseElement()
+  }
   destroyBaseElement() {
     throw new Error('Method not implemented')
   }
+
   destroyElements() {
-    throw new Error('Method not implemented')
+    const { length } = this.layers
+    for (let i = 0; i < length; i++) {
+      if (this.elements[i]) {
+        this.elements[i].destroy()
+      }
+    }
   }
   getElements(): ElementInterfaceIntersect[] {
-    throw new Error('Method not implemented')
+    return this.elements
   }
-
   initElement(
     _data: LottieLayer,
     _globalData: GlobalData,
@@ -46,14 +49,43 @@ export default class CompElement {
   ) {
     throw new Error('Method not implemented')
   }
+  initFrame() {
+    throw new Error('Method not implemented')
+  }
+
+  initHierarchy() {
+    throw new Error('Method not implemented')
+  }
+
+  initRenderable() {
+    throw new Error('Method not implemented')
+  }
+
+  initTransform() {
+    throw new Error('Method not implemented')
+  }
+
   prepareFrame(_val: number) {
     throw new Error('Method not implemented')
   }
+
+  prepareProperties(_val: number, _isInRange?: boolean) {
+    throw new Error('Method not implemented')
+  }
+
+  // initRendererElement() { TODO: This must be queued before
+  //   throw new Error('Method not implemented')
+  // }
+
+  prepareRenderableFrame(_val: number, _?: boolean) {
+    throw new Error('Method not implemented')
+  }
+
   renderInnerContent() {
     throw new Error('Method not implemented')
   }
-  setElements(_elems: ElementInterfaceIntersect[]) {
-    throw new Error('Method not implemented')
+  setElements(elems: ElementInterfaceIntersect[]) {
+    this.elements = elems
   }
 }
 
@@ -78,37 +110,25 @@ CompElement.prototype.initElement = function (
   this.initTransform()
   this.initRenderable()
   this.initHierarchy()
-  this.initRendererElement()
-  this.createContainerElements()
-  this.createRenderableComponents()
+  this.initRendererElement() // TODO: This must be in superclass
+  this.createContainerElements() // TODO: This must be in superclass
+  this.createRenderableComponents() // TODO: This must be in superclass
   if (this.data.xt || !globalData.progressiveLoad) {
     this.buildAllItems()
   }
   this.hide()
 }
 
-/* CompElement.prototype.hide = function(){
-    if(!this.hidden){
-        this.hideElement();
-        var i,len = this.elements.length;
-        for( i = 0; i < len; i+=1 ){
-            if(this.elements[i]){
-                this.elements[i].hide();
-            }
-        }
-    }
-}; */
-
-CompElement.prototype.prepareFrame = function (num: number) {
+CompElement.prototype.prepareFrame = function (val: number) {
   this._mdf = false
-  this.prepareRenderableFrame(num)
-  this.prepareProperties(num, this.isInRange)
+  this.prepareRenderableFrame(val)
+  this.prepareProperties(val, this.isInRange)
   if (!this.isInRange && !this.data.xt) {
     return
   }
 
   if (this.tm?._placeholder) {
-    this.renderedFrame = num / Number(this.data?.sr)
+    this.renderedFrame = val / Number(this.data?.sr)
   } else {
     let timeRemapped = this.tm?.v
     if (timeRemapped === this.data.op) {
@@ -138,28 +158,4 @@ CompElement.prototype.renderInnerContent = function () {
       this.elements?.[i].renderFrame()
     }
   }
-}
-
-CompElement.prototype.setElements = function (
-  elems: ElementInterfaceIntersect[]
-) {
-  this.elements = elems
-}
-
-CompElement.prototype.getElements = function () {
-  return this.elements
-}
-
-CompElement.prototype.destroyElements = function () {
-  const { length } = this.layers
-  for (let i = 0; i < length; i++) {
-    if (this.elements[i]) {
-      this.elements[i].destroy()
-    }
-  }
-}
-
-CompElement.prototype.destroy = function () {
-  this.destroyElements()
-  this.destroyBaseElement()
 }
