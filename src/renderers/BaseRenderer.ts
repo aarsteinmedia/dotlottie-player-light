@@ -3,6 +3,7 @@ import type SVGCompElement from '@/elements/svg/SVGCompElement'
 import type {
   AnimationData,
   ElementInterfaceIntersect,
+  GlobalData,
   LottieLayer,
 } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
@@ -17,19 +18,20 @@ export default class BaseRenderer {
   animationItem!: AnimationItem
   checkPendingElements!: () => void
   completeLayers?: boolean
+  elements!: ElementInterfaceIntersect[]
 
   // createImage(_data: LottieLayer) { TODO:
   //   throw new Error('Method not yet implemented')
   // }
-  createNull!: (data: LottieLayer) => void
+  // createNull!: (data: LottieLayer) => void
 
-  createShape!: (data: LottieLayer) => void
+  // createShape!: (data: LottieLayer) => void
 
-  createSolid!: (data: LottieLayer) => void
+  // createSolid!: (data: LottieLayer) => void
 
-  createText!: (data: LottieLayer) => void
+  // createText!: (data: LottieLayer) => void
 
-  elements!: ElementInterfaceIntersect[]
+  globalData?: GlobalData
 
   layers!: LottieLayer[]
 
@@ -75,7 +77,7 @@ export default class BaseRenderer {
   }
 
   // buildItem(_val: number) {
-  //   throw new Error('Method not yet implemented') TODO:
+  //   throw new Error('Method not yet implemented') // TODO:
   // }
   checkLayers(val?: number) {
     this.completeLayers = true
@@ -96,7 +98,10 @@ export default class BaseRenderer {
     this.checkPendingElements()
   }
   createAudio(data: LottieLayer) {
-    return new AudioElement(data, this.globalData!, this as any)
+    if (!this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
+    return new AudioElement(data, this.globalData, this as any)
   }
   createCamera(_data: LottieLayer) {
     throw new Error("You're using a 3d camera. Try the html renderer.")
@@ -107,6 +112,9 @@ export default class BaseRenderer {
   }
 
   createFootage(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
     return new FootageElement(data, this.globalData, this)
   }
   createItem(layer: LottieLayer) {
@@ -179,6 +187,10 @@ export default class BaseRenderer {
         j++
       }
     }
+  }
+
+  initExpressions() {
+    throw new Error('Method not yet implemented')
   }
 
   initItems() {

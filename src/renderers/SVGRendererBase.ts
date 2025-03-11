@@ -23,11 +23,13 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default class SVGRendererBase extends SVGBaseElement {
+  data?: AnimationData
   destroyed?: boolean
   globalData?: GlobalData
   layerElement?: SVGGElement
   renderConfig?: SVGRendererConfig
   renderedFrame!: number
+
   svgElement?: SVGSVGElement
 
   appendElementInPos(element: ElementInterfaceIntersect, pos: number) {
@@ -120,103 +122,124 @@ export default class SVGRendererBase extends SVGBaseElement {
   }
 
   configAnimation(animData: AnimationData) {
-    if (!this.svgElement || !this.globalData) {
-      throw new Error('Missing SVG element and Global Data')
-    }
-    this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-    this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-    if (this.renderConfig?.viewBoxSize) {
-      this.svgElement.setAttribute('viewBox', this.renderConfig.viewBoxSize)
-    } else {
-      this.svgElement.setAttribute('viewBox', `0 0 ${animData.w} ${animData.h}`)
-    }
-
-    if (!this.renderConfig?.viewBoxOnly) {
-      this.svgElement.setAttribute('width', `${animData.w}`)
-      this.svgElement.setAttribute('height', `${animData.h}`)
-      this.svgElement.style.width = '100%'
-      this.svgElement.style.height = '100%'
-      this.svgElement.style.transform = 'translate3d(0,0,0)'
-      if (this.renderConfig?.contentVisibility) {
-        this.svgElement.style.contentVisibility =
-          this.renderConfig.contentVisibility
+    try {
+      if (!this.svgElement || !this.globalData) {
+        throw new Error('Missing SVG element and Global Data')
       }
-    }
-    if (this.renderConfig?.width) {
-      this.svgElement.setAttribute('width', `${this.renderConfig.width}`)
-    }
-    if (this.renderConfig?.height) {
-      this.svgElement.setAttribute('height', `${this.renderConfig.height}`)
-    }
-    if (this.renderConfig?.className) {
-      this.svgElement.setAttribute('class', this.renderConfig.className)
-    }
-    if (this.renderConfig?.id) {
-      this.svgElement.setAttribute('id', this.renderConfig.id)
-    }
-    if (this.renderConfig?.focusable !== undefined) {
+      this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
       this.svgElement.setAttribute(
-        'focusable',
-        `${this.renderConfig.focusable}`
+        'xmlns:xlink',
+        'http://www.w3.org/1999/xlink'
       )
-    }
-    if (this.renderConfig?.preserveAspectRatio) {
-      this.svgElement.setAttribute(
-        'preserveAspectRatio',
-        this.renderConfig.preserveAspectRatio
+      if (this.renderConfig?.viewBoxSize) {
+        this.svgElement.setAttribute('viewBox', this.renderConfig.viewBoxSize)
+      } else {
+        this.svgElement.setAttribute(
+          'viewBox',
+          `0 0 ${animData.w} ${animData.h}`
+        )
+      }
+
+      if (!this.renderConfig?.viewBoxOnly) {
+        this.svgElement.setAttribute('width', `${animData.w}`)
+        this.svgElement.setAttribute('height', `${animData.h}`)
+        this.svgElement.style.width = '100%'
+        this.svgElement.style.height = '100%'
+        this.svgElement.style.transform = 'translate3d(0,0,0)'
+        if (this.renderConfig?.contentVisibility) {
+          this.svgElement.style.contentVisibility =
+            this.renderConfig.contentVisibility
+        }
+      }
+      if (this.renderConfig?.width) {
+        this.svgElement.setAttribute('width', `${this.renderConfig.width}`)
+      }
+      if (this.renderConfig?.height) {
+        this.svgElement.setAttribute('height', `${this.renderConfig.height}`)
+      }
+      if (this.renderConfig?.className) {
+        this.svgElement.setAttribute('class', this.renderConfig.className)
+      }
+      if (this.renderConfig?.id) {
+        this.svgElement.setAttribute('id', this.renderConfig.id)
+      }
+      if (this.renderConfig?.focusable !== undefined) {
+        this.svgElement.setAttribute(
+          'focusable',
+          `${this.renderConfig.focusable}`
+        )
+      }
+      if (this.renderConfig?.preserveAspectRatio) {
+        this.svgElement.setAttribute(
+          'preserveAspectRatio',
+          this.renderConfig.preserveAspectRatio
+        )
+      }
+
+      // this.layerElement.style.transform = 'translate3d(0,0,0)';
+      // this.layerElement.style.transformOrigin = this.layerElement.style.mozTransformOrigin = this.layerElement.style.webkitTransformOrigin = this.layerElement.style['-webkit-transform'] = "0px 0px 0px";
+      this.animationItem?.wrapper?.appendChild(this.svgElement)
+      // Mask animation
+      const defs = this.globalData.defs
+
+      this.setupGlobalData(animData, defs)
+      this.globalData.progressiveLoad = this.renderConfig?.progressiveLoad
+      this.data = animData
+
+      const maskElement = createNS('clipPath')
+      const rect = createNS('rect')
+      rect.setAttribute('width', `${animData.w}`)
+      rect.setAttribute('height', `${animData.h}`)
+      rect.setAttribute('x', '0')
+      rect.setAttribute('y', '0')
+      const maskId = createElementID()
+      maskElement.setAttribute('id', maskId)
+      maskElement.appendChild(rect)
+      this.layerElement?.setAttribute(
+        'clip-path',
+        `url(${getLocationHref()}#${maskId})`
       )
+
+      defs.appendChild(maskElement)
+      this.layers = animData.layers || []
+      this.elements = createSizedArray(animData.layers?.length || 0)
+    } catch (err) {
+      console.error(err)
     }
-
-    // this.layerElement.style.transform = 'translate3d(0,0,0)';
-    // this.layerElement.style.transformOrigin = this.layerElement.style.mozTransformOrigin = this.layerElement.style.webkitTransformOrigin = this.layerElement.style['-webkit-transform'] = "0px 0px 0px";
-    this.animationItem?.wrapper?.appendChild(this.svgElement)
-    // Mask animation
-    const defs = this.globalData.defs
-
-    this.setupGlobalData(animData, defs)
-    this.globalData.progressiveLoad = this.renderConfig?.progressiveLoad
-    this.data = animData as any
-
-    const maskElement = createNS('clipPath')
-    const rect = createNS('rect')
-    rect.setAttribute('width', `${animData.w}`)
-    rect.setAttribute('height', `${animData.h}`)
-    rect.setAttribute('x', '0')
-    rect.setAttribute('y', '0')
-    const maskId = createElementID()
-    maskElement.setAttribute('id', maskId)
-    maskElement.appendChild(rect)
-    this.layerElement.setAttribute(
-      'clip-path',
-      `url(${getLocationHref()}#${maskId})`
-    )
-
-    defs.appendChild(maskElement)
-    this.layers = animData.layers || []
-    this.elements = createSizedArray(animData.layers?.length || 0)
   }
 
   createImage(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
     return new ImageElement(data, this.globalData, this)
   }
 
-  createItem(_data?: LottieLayer): ElementInterfaceIntersect {
-    throw new Error('Method not yet implemented')
-  }
-
   createNull(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
     return new NullElement(data, this.globalData, this)
   }
 
   createShape(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
     return new SVGShapeElement(data, this.globalData, this as any)
   }
 
   createSolid(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
     return new SolidElement(data, this.globalData, this)
   }
 
   createText(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error("Can't access Global Data")
+    }
     return new SVGTextLottieElement(data, this.globalData, this)
   }
 
@@ -225,7 +248,7 @@ export default class SVGRendererBase extends SVGBaseElement {
       this.animationItem.wrapper.innerText = ''
     }
     this.layerElement = null as any
-    this.globalData.defs = null as any
+    this.globalData!.defs = null as any
     const len = this.layers ? this.layers.length : 0
     for (let i = 0; i < len; i++) {
       if (this.elements?.[i] && (this.elements[i].destroy as any)) {
@@ -248,47 +271,59 @@ export default class SVGRendererBase extends SVGBaseElement {
   }
 
   hide() {
-    this.layerElement.style.display = 'none'
+    if (this.layerElement) {
+      this.layerElement.style.display = 'none'
+    }
   }
 
   renderFrame(numFromProps?: number | null) {
-    if (this.renderedFrame === numFromProps || this.destroyed) {
-      return
-    }
-    let num = numFromProps
-    if (num === null) {
-      num = this.renderedFrame
-    } else {
-      this.renderedFrame = Number(num)
-    }
-    // console.log('-------');
-    // console.log('FRAME ',num);
-    this.globalData.frameNum = num
-    this.globalData.frameId += 1
-    this.globalData.projectInterface.currentFrame = num
-    this.globalData._mdf = false
-    const { length } = this.layers || []
-    if (!this.completeLayers) {
-      this.checkLayers(num)
-    }
-    for (let i = length - 1; i >= 0; i--) {
-      if (this.completeLayers || this.elements?.[i]) {
-        this.elements?.[i].prepareFrame?.(
-          Number(num) - Number(this.layers?.[i].st)
-        )
+    try {
+      if (
+        !this.globalData ||
+        this.renderedFrame === numFromProps ||
+        this.destroyed
+      ) {
+        return
       }
-    }
-    if (this.globalData._mdf) {
-      for (let i = 0; i < length; i++) {
+      let num = numFromProps
+      if (num === null) {
+        num = this.renderedFrame
+      } else {
+        this.renderedFrame = Number(num)
+      }
+      // console.log('-------');
+      // console.log('FRAME ',num);
+      this.globalData.frameNum = num
+      this.globalData.frameId += 1
+      this.globalData.projectInterface.currentFrame = num
+      this.globalData._mdf = false
+      const { length } = this.layers || []
+      if (!this.completeLayers) {
+        this.checkLayers(num)
+      }
+      for (let i = length - 1; i >= 0; i--) {
         if (this.completeLayers || this.elements?.[i]) {
-          this.elements?.[i].renderFrame()
+          this.elements?.[i].prepareFrame?.(
+            Number(num) - Number(this.layers?.[i].st)
+          )
         }
       }
+      if (this.globalData._mdf) {
+        for (let i = 0; i < length; i++) {
+          if (this.completeLayers || this.elements?.[i]) {
+            this.elements?.[i].renderFrame()
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err)
     }
   }
 
   show() {
-    this.layerElement.style.display = 'block'
+    if (this.layerElement) {
+      this.layerElement.style.display = 'block'
+    }
   }
 
   updateContainerSize(_width?: number, _height?: number) {}
