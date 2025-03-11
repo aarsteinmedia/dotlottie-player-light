@@ -14,18 +14,19 @@ import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
-export default class ImageElement {
+export default class ImageElement extends FrameElement {
   assetData?: LottieAsset | null
 
-  globalData!: GlobalData
+  // globalData!: GlobalData
 
   innerElem?: SVGImageElement
 
-  layerElement!: SVGGElement
+  // layerElement!: SVGGElement
 
   sourceRect: SourceRect | null
 
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+    super()
     if (data.refId && globalData.getAssetData) {
       this.assetData = globalData.getAssetData(data.refId)
     }
@@ -43,7 +44,7 @@ export default class ImageElement {
 
   createContent() {
     let assetPath = ''
-    if (this.assetData && this.globalData.getAssetsPath) {
+    if (this.assetData && this.globalData?.getAssetsPath) {
       assetPath = this.globalData.getAssetsPath(this.assetData)
     }
 
@@ -54,7 +55,7 @@ export default class ImageElement {
       this.innerElem.setAttribute(
         'preserveAspectRatio',
         this.assetData?.pr ||
-          this.globalData.renderConfig?.imagePreserveAspectRatio ||
+          this.globalData?.renderConfig?.imagePreserveAspectRatio ||
           ''
       )
       this.innerElem.setAttributeNS(
@@ -63,7 +64,7 @@ export default class ImageElement {
         assetPath
       )
 
-      this.layerElement.appendChild(this.innerElem)
+      this.layerElement?.appendChild(this.innerElem)
     }
   }
 
@@ -79,13 +80,6 @@ export default class ImageElement {
 }
 
 extendPrototype(
-  [
-    BaseElement,
-    TransformElement,
-    SVGBaseElement,
-    HierarchyElement,
-    FrameElement,
-    RenderableDOMElement,
-  ],
+  [TransformElement, SVGBaseElement, RenderableDOMElement],
   ImageElement
 )
