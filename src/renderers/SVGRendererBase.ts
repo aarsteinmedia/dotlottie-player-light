@@ -25,28 +25,22 @@ import { createSizedArray } from '@/utils/helpers/arrays'
 export default class SVGRendererBase extends SVGBaseElement {
   addPendingElement!: (comp: ElementInterfaceIntersect) => void
 
-  animationItem!: AnimationItem
+  animationItem?: AnimationItem
 
   checkLayers!: (val?: number) => void
 
   completeLayers?: boolean
 
-  createItem!: (data: LottieLayer) => ElementInterfaceIntersect
-
-  // data!: LottieLayer
+  createItem!: (data?: LottieLayer) => ElementInterfaceIntersect
 
   destroyed?: boolean
 
-  elements!: ElementInterfaceIntersect[]
+  elements?: ElementInterfaceIntersect[]
 
-  // globalData!: GlobalData
+  layers?: LottieLayer[]
 
-  // layerElement!: SVGGElement
-
-  layers!: LottieLayer[]
-
-  pendingElements!: ElementInterfaceIntersect[]
-  renderConfig!: SVGRendererConfig
+  pendingElements?: ElementInterfaceIntersect[]
+  renderConfig?: SVGRendererConfig
 
   renderedFrame!: number
 
@@ -63,9 +57,9 @@ export default class SVGRendererBase extends SVGBaseElement {
     let nextElement
     while (i < pos) {
       if (
-        this.elements[i] &&
-        this.elements[i] !== (true as any) &&
-        this.elements[i].getBaseElement()
+        this.elements?.[i] &&
+        this.elements?.[i] !== (true as any) &&
+        this.elements?.[i].getBaseElement()
       ) {
         nextElement = this.elements[i].getBaseElement()
       }
@@ -80,21 +74,23 @@ export default class SVGRendererBase extends SVGBaseElement {
 
   buildItem(pos: number) {
     const elements = this.elements
-    if (elements[pos] || this.layers[pos].ty === 99) {
+    if (elements?.[pos] || this.layers?.[pos].ty === 99) {
       return
     }
-    elements[pos] = true as any
-    const element = this.createItem(this.layers[pos])
 
-    elements[pos] = element
+    elements![pos] = true as any
+
+    const element = this.createItem(this.layers?.[pos])
+
+    elements![pos] = element
     if (getExpressionsPlugin()) {
-      if (this.layers[pos].ty === 0) {
+      if (this.layers?.[pos].ty === 0) {
         this.globalData.projectInterface.registerComposition(element)
       }
       element.initExpressions()
     }
     this.appendElementInPos(element, pos)
-    if (this.layers[pos].tt) {
+    if (this.layers?.[pos].tt) {
       const elementIndex =
         'tp' in this.layers[pos]
           ? this.findIndexByInd(this.layers[pos].tp)
@@ -103,13 +99,13 @@ export default class SVGRendererBase extends SVGBaseElement {
         return
       }
       if (
-        !this.elements[elementIndex] ||
+        !this.elements?.[elementIndex] ||
         this.elements[elementIndex] === (true as any)
       ) {
         this.buildItem(elementIndex)
         this.addPendingElement(element)
       } else {
-        const matteElement = elements[elementIndex]
+        const matteElement = elements![elementIndex]
         const matteMask = matteElement.getMatte(this.layers[pos].tt)
         element.setMatte(matteMask)
       }
@@ -117,20 +113,20 @@ export default class SVGRendererBase extends SVGBaseElement {
   }
 
   checkPendingElements() {
-    while (this.pendingElements.length) {
+    while (this.pendingElements?.length) {
       const element = this.pendingElements.pop()
       element?.checkParenting()
       if (element?.data.tt) {
         let i = 0
-        const len = this.elements.length
-        while (i < len) {
-          if (this.elements[i] === element) {
+        const { length } = this.elements || []
+        while (i < length) {
+          if (this.elements?.[i] === element) {
             const elementIndex =
                 'tp' in element.data
                   ? this.findIndexByInd(element.data.tp)
                   : i - 1,
               matteElement = this.elements[elementIndex],
-              matteMask = matteElement.getMatte(this.layers[i].tt)
+              matteMask = matteElement.getMatte(this.layers?.[i].tt)
 
             element.setMatte(matteMask)
             break
@@ -144,42 +140,42 @@ export default class SVGRendererBase extends SVGBaseElement {
   configAnimation(animData: AnimationData) {
     this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
     this.svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-    if (this.renderConfig.viewBoxSize) {
+    if (this.renderConfig?.viewBoxSize) {
       this.svgElement.setAttribute('viewBox', this.renderConfig.viewBoxSize)
     } else {
       this.svgElement.setAttribute('viewBox', `0 0 ${animData.w} ${animData.h}`)
     }
 
-    if (!this.renderConfig.viewBoxOnly) {
+    if (!this.renderConfig?.viewBoxOnly) {
       this.svgElement.setAttribute('width', `${animData.w}`)
       this.svgElement.setAttribute('height', `${animData.h}`)
       this.svgElement.style.width = '100%'
       this.svgElement.style.height = '100%'
       this.svgElement.style.transform = 'translate3d(0,0,0)'
-      if (this.renderConfig.contentVisibility) {
+      if (this.renderConfig?.contentVisibility) {
         this.svgElement.style.contentVisibility =
           this.renderConfig.contentVisibility
       }
     }
-    if (this.renderConfig.width) {
+    if (this.renderConfig?.width) {
       this.svgElement.setAttribute('width', `${this.renderConfig.width}`)
     }
-    if (this.renderConfig.height) {
+    if (this.renderConfig?.height) {
       this.svgElement.setAttribute('height', `${this.renderConfig.height}`)
     }
-    if (this.renderConfig.className) {
+    if (this.renderConfig?.className) {
       this.svgElement.setAttribute('class', this.renderConfig.className)
     }
-    if (this.renderConfig.id) {
+    if (this.renderConfig?.id) {
       this.svgElement.setAttribute('id', this.renderConfig.id)
     }
-    if (this.renderConfig.focusable !== undefined) {
+    if (this.renderConfig?.focusable !== undefined) {
       this.svgElement.setAttribute(
         'focusable',
         `${this.renderConfig.focusable}`
       )
     }
-    if (this.renderConfig.preserveAspectRatio) {
+    if (this.renderConfig?.preserveAspectRatio) {
       this.svgElement.setAttribute(
         'preserveAspectRatio',
         this.renderConfig.preserveAspectRatio
@@ -188,12 +184,12 @@ export default class SVGRendererBase extends SVGBaseElement {
 
     // this.layerElement.style.transform = 'translate3d(0,0,0)';
     // this.layerElement.style.transformOrigin = this.layerElement.style.mozTransformOrigin = this.layerElement.style.webkitTransformOrigin = this.layerElement.style['-webkit-transform'] = "0px 0px 0px";
-    this.animationItem.wrapper?.appendChild(this.svgElement)
+    this.animationItem?.wrapper?.appendChild(this.svgElement)
     // Mask animation
     const defs = this.globalData.defs
 
     this.setupGlobalData(animData, defs)
-    this.globalData.progressiveLoad = this.renderConfig.progressiveLoad
+    this.globalData.progressiveLoad = this.renderConfig?.progressiveLoad
     this.data = animData as any
 
     const maskElement = createNS('clipPath')
@@ -236,26 +232,26 @@ export default class SVGRendererBase extends SVGBaseElement {
   }
 
   destroy() {
-    if (this.animationItem.wrapper) {
+    if (this.animationItem?.wrapper) {
       this.animationItem.wrapper.innerText = ''
     }
     this.layerElement = null as any
     this.globalData.defs = null as any
     const len = this.layers ? this.layers.length : 0
     for (let i = 0; i < len; i++) {
-      if (this.elements[i] && (this.elements[i].destroy as any)) {
+      if (this.elements?.[i] && (this.elements[i].destroy as any)) {
         this.elements[i].destroy()
       }
     }
-    this.elements.length = 0
+    this.elements!.length = 0
     this.destroyed = true
     this.animationItem = null as any
   }
 
   findIndexByInd(ind?: number) {
-    const { length } = this.layers
+    const { length } = this.layers || []
     for (let i = 0; i < length; i++) {
-      if (this.layers[i].ind === ind) {
+      if (this.layers?.[i].ind === ind) {
         return i
       }
     }
@@ -282,19 +278,21 @@ export default class SVGRendererBase extends SVGBaseElement {
     this.globalData.frameId += 1
     this.globalData.projectInterface.currentFrame = num
     this.globalData._mdf = false
-    const { length } = this.layers
+    const { length } = this.layers || []
     if (!this.completeLayers) {
       this.checkLayers(num)
     }
     for (let i = length - 1; i >= 0; i--) {
-      if (this.completeLayers || this.elements[i]) {
-        this.elements[i].prepareFrame?.(Number(num) - this.layers[i].st)
+      if (this.completeLayers || this.elements?.[i]) {
+        this.elements?.[i].prepareFrame?.(
+          Number(num) - Number(this.layers?.[i].st)
+        )
       }
     }
     if (this.globalData._mdf) {
       for (let i = 0; i < length; i++) {
-        if (this.completeLayers || this.elements[i]) {
-          this.elements[i].renderFrame()
+        if (this.completeLayers || this.elements?.[i]) {
+          this.elements?.[i].renderFrame()
         }
       }
     }

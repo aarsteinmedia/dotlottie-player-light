@@ -20,12 +20,6 @@ export default class CompElement extends SVGRendererBase {
   buildAllItems() {
     throw new Error('Method not implemented')
   }
-  // createRenderableComponents() {
-  //   throw new Error('Method not implemented') TODO:
-  // }
-  // createContainerElements() {
-  //   throw new Error('Method not implemented') // TODO:
-  // }
   override destroy() {
     this.destroyElements()
     this.destroyBaseElement()
@@ -80,10 +74,6 @@ export default class CompElement extends SVGRendererBase {
     throw new Error('Method not implemented')
   }
 
-  // initRendererElement() { TODO: This must be queued before
-  //   throw new Error('Method not implemented')
-  // }
-
   prepareRenderableFrame(_val: number, _?: boolean) {
     throw new Error('Method not implemented')
   }
@@ -117,9 +107,9 @@ CompElement.prototype.initElement = function (
   this.initTransform()
   this.initRenderable()
   this.initHierarchy()
-  this.initRendererElement() // TODO: This must be in superclass
-  this.createContainerElements() // TODO: This must be in superclass
-  this.createRenderableComponents() // TODO: This must be in superclass
+  this.initRendererElement()
+  this.createContainerElements()
+  this.createRenderableComponents()
   if (this.data.xt || !globalData.progressiveLoad) {
     this.buildAllItems()
   }
