@@ -83,8 +83,8 @@ export default class SVGEffects {
   }
 
   renderFrame(frame?: number | null) {
-    const len = this.filters.length
-    for (let i = 0; i < len; i++) {
+    const { length } = this.filters
+    for (let i = 0; i < length; i++) {
       // TODO: This needs testing
       ;(this.filters[i] as any).renderFrame(frame)
     }
