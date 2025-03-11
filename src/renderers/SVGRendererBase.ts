@@ -1,7 +1,6 @@
 import type {
   AnimationData,
   ElementInterfaceIntersect,
-  GlobalData,
   LottieLayer,
   SVGRendererConfig,
 } from '@/types'
@@ -10,6 +9,7 @@ import AnimationItem from '@/animation/AnimationItem'
 import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
 import SolidElement from '@/elements/SolidElement'
+import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import SVGTextLottieElement from '@/elements/svg/SVGTextElement'
 import BaseRenderer from '@/renderers/BaseRenderer'
@@ -22,7 +22,7 @@ import {
 } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
 
-export default class SVGRendererBase {
+export default class SVGRendererBase extends SVGBaseElement {
   addPendingElement!: (comp: ElementInterfaceIntersect) => void
 
   animationItem!: AnimationItem
@@ -33,15 +33,15 @@ export default class SVGRendererBase {
 
   createItem!: (data: LottieLayer) => ElementInterfaceIntersect
 
-  data!: LottieLayer
+  // data!: LottieLayer
 
   destroyed?: boolean
 
   elements!: ElementInterfaceIntersect[]
 
-  globalData!: GlobalData
+  // globalData!: GlobalData
 
-  layerElement!: SVGGElement
+  // layerElement!: SVGGElement
 
   layers!: LottieLayer[]
 

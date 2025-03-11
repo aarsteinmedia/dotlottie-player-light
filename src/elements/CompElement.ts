@@ -30,10 +30,6 @@ export default class CompElement extends SVGRendererBase {
     this.destroyElements()
     this.destroyBaseElement()
   }
-
-  destroyBaseElement() {
-    throw new Error('Method not implemented')
-  }
   destroyElements() {
     const { length } = this.layers
     for (let i = 0; i < length; i++) {
