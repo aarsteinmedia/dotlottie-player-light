@@ -4,7 +4,7 @@ import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
 import { ProcessedElement, SVGShapeData } from '@/elements/helpers/shapes'
 import ShapePath from '@/utils/shapes/ShapePath'
 
-class ShapeElement {
+export default class ShapeElement {
   _isFirstFrame?: boolean
   _length?: number
   isInRange?: boolean
@@ -53,11 +53,15 @@ class ShapeElement {
   }
 
   prepareProperties(_val: number, _flag?: boolean) {
-    throw new Error('ShapeElement: Method not yet implemented')
+    throw new Error(
+      'ShapeElement: Method prepareProperties not yet implemented'
+    )
   }
 
   prepareRenderableFrame(_val: number) {
-    throw new Error('ShapeElement: Method not yet implemented')
+    throw new Error(
+      'ShapeElement: Method prepareRenderableFrame not yet implemented'
+    )
   }
   renderModifiers() {
     if (!this.shapeModifiers?.length) {
@@ -94,5 +98,3 @@ class ShapeElement {
     return 0
   }
 }
-
-export default ShapeElement

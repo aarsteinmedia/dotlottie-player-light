@@ -6,14 +6,10 @@ import type {
   LottieLayer,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
-import FrameElement from '@/elements/helpers/FrameElement'
-import RenderableElement from '@/elements/helpers/RenderableElement'
-import { extendPrototype } from '@/utils/functionExtensions'
 import { ValueProperty } from '@/utils/Properties'
 import PropertyFactory from '@/utils/PropertyFactory'
 
-class AudioElement {
+export default class AudioElement {
   _canPlay: boolean
   _currentTime: number
   _isPlaying: boolean
@@ -22,8 +18,12 @@ class AudioElement {
   _volumeMultiplier?: number
   assetData: null | LottieAsset
   audio: Audio
+  globalData?: GlobalData
+  isInRange?: boolean
   lv: ValueProperty
   tm: ValueProperty
+  // destroy() {}
+
   constructor(
     data: LottieLayer,
     globalData: GlobalData,
@@ -61,7 +61,6 @@ class AudioElement {
       this
     )
   }
-  // destroy() {}
 
   getBaseElement() {
     return null
@@ -131,8 +130,4 @@ class AudioElement {
   }
 }
 
-extendPrototype([RenderableElement, BaseElement, FrameElement], AudioElement)
-
-interface AudioElement extends RenderableElement, BaseElement, FrameElement {}
-
-export default AudioElement
+// extendPrototype([RenderableElement, BaseElement, FrameElement], AudioElement)

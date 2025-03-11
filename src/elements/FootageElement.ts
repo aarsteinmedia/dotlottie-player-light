@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type { GlobalData, LottieAsset, LottieLayer } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
+// import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
-import RenderableElement from '@/elements/helpers/RenderableElement'
-import { extendPrototype } from '@/utils/functionExtensions'
+// import RenderableElement from '@/elements/helpers/RenderableElement'
+// import { extendPrototype } from '@/utils/functionExtensions'
 import { getExpressionInterfaces } from '@/utils/getterSetter'
 
-class FootageElement extends FrameElement {
+export default class FootageElement extends FrameElement {
   assetData: null | LottieAsset = null
   footageData: SVGElement
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
@@ -39,8 +38,4 @@ class FootageElement extends FrameElement {
   }
 }
 
-extendPrototype([RenderableElement, BaseElement], FootageElement)
-
-interface FootageElement extends RenderableElement, BaseElement {}
-
-export default FootageElement
+// extendPrototype([RenderableElement, BaseElement], FootageElement)
