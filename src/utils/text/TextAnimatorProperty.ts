@@ -780,7 +780,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
     this._frameId = this._elem.globalData.frameId
     this.iterateDynamicProperties()
   }
-  searchProperties() {
+  searchProperties(_: DynamicPropertyContainer[]) {
     const len = this._textData.a?.length || 0
     const getProp = PropertyFactory.getProp
     for (let i = 0; i < len; i++) {

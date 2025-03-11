@@ -1,9 +1,5 @@
-import type {
-  CompInterface,
-  ElementInterface,
-  LottieLayer,
-  Shape,
-} from '@/types'
+import type { ShapeGroupData } from '@/elements/helpers/shapes'
+import type { ElementInterface, Shape } from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import Matrix from '@/utils/Matrix'
@@ -12,16 +8,28 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import TransformProperty from '@/utils/TransformProperty'
 
 export default class RepeaterModifier extends ShapeModifier {
-  _currentCopies?: number
+  _currentCopies!: number
 
+  _elements!: ShapeGroupData[]
+
+  _groups!: ShapeGroupData[]
+
+  arr!: ShapeGroupData[]
+
+  c: any
+  data: any
+  elemsData!: any
+  eo: any
   matrix!: Matrix
-
+  o: any
   pMatrix!: Matrix
-
+  pos!: number
   rMatrix!: Matrix
-
   sMatrix!: Matrix
+  so: any
   tMatrix!: Matrix
+  tr: any
+  override addShape() {} // TODO: This might be a legitimate override
   applyTransforms(
     pMatrix: Matrix,
     rMatrix: Matrix,
@@ -50,18 +58,18 @@ export default class RepeaterModifier extends ShapeModifier {
     for (let i = 0; i < length; i++) {
       elements[i]._render = renderFlag
       if (elements[i].ty === 'gr') {
-        this.changeGroupRender(elements[i].it, renderFlag)
+        this.changeGroupRender(elements[i].it as Shape[], renderFlag)
       }
     }
   }
-  cloneElements(elements: Shape[]) {
+  cloneElements(elements: any[]) {
     const newElements = JSON.parse(JSON.stringify(elements))
     this.resetElements(newElements)
     return newElements
   }
   override init(
     elem: ElementInterface,
-    arr: LottieLayer[],
+    arr: ShapeGroupData[],
     posFromProps: number,
     elemsData: ShapePath
   ) {
@@ -87,11 +95,12 @@ export default class RepeaterModifier extends ShapeModifier {
       this.getValue(true)
     }
   }
-  initModifierProperties(elem: CompInterface, data: Shape) {
+
+  initModifierProperties(elem: ElementInterface, data: any) {
     this.getValue = this.processKeys
     this.c = PropertyFactory.getProp(elem, data.c, 0, null, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, null, this)
-    this.tr = new TransformProperty(elem, data.tr, this)
+    this.tr = new TransformProperty(elem, data.tr, this as any)
     this.so = PropertyFactory.getProp(elem, data.tr?.so, 0, 0.01, this)
     this.eo = PropertyFactory.getProp(elem, data.tr?.eo, 0, 0.01, this)
     this.data = data
@@ -120,7 +129,7 @@ export default class RepeaterModifier extends ShapeModifier {
           const group = {
             it: this.cloneElements(this._elements),
             ty: 'gr',
-          }
+          } as unknown as ShapeGroupData
           group.it.push({
             a: { a: 0, ix: 1, k: [0, 0] },
             nm: 'Transform',
@@ -329,7 +338,7 @@ export default class RepeaterModifier extends ShapeModifier {
         i += dir
       }
     } else {
-      cont = this._currentCopies
+      cont = Number(this._currentCopies)
       i = 0
       dir = 1
       while (cont) {
@@ -353,6 +362,4 @@ export default class RepeaterModifier extends ShapeModifier {
       }
     }
   }
-
-  // addShape () {} // TODO: This might be a legitimate override
 }

@@ -12,13 +12,9 @@ import PropertyFactory from '@/utils/PropertyFactory'
  *
  */
 class SVGCompElement extends SVGBaseElement {
+  _debug?: boolean
   completeLayers: boolean
   elements: ElementInterface[]
-  initElement!: (
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: ElementInterface
-  ) => void
   layers: LottieLayer[]
   pendingElements: ElementInterface[]
   supports3d: boolean
@@ -43,10 +39,15 @@ class SVGCompElement extends SVGBaseElement {
         : { _placeholder: true }
     ) as any
   }
-
   createComp(data: LottieLayer) {
     return new SVGCompElement(data, this.globalData, this)
   }
+
+  initElement(
+    _data: LottieLayer,
+    _globalData: GlobalData,
+    _comp: ElementInterface
+  ) {}
 }
 
 extendPrototype([SVGRendererBase, CompElement], SVGCompElement)

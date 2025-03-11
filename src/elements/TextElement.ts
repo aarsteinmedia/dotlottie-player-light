@@ -4,8 +4,10 @@ import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import type RenderableElement from '@/elements/helpers/RenderableElement'
 // import type TransformElement from '@/elements/helpers/TransformElement'
 import type SolidElement from '@/elements/SolidElement'
+import type { RendererType } from '@/enums'
 import type {
   DocumentData,
+  ElementInterface,
   GlobalData,
   LottieLayer,
   Shape,
@@ -22,6 +24,8 @@ import TextProperty from '@/utils/text/TextProperty'
 class TextElement {
   emptyProp = new LetterProps()
   lettersChangedFlag!: boolean
+  renderType!: RendererType
+
   textAnimator!: TextAnimatorProperty
 
   textProperty!: any
@@ -73,6 +77,8 @@ class TextElement {
     )},${Math.round(colorData[2] * 255)})`
   }
 
+  // buildNewText() {}
+
   canResizeFont(_canResize: boolean) {
     this.textProperty.canResizeFont(_canResize)
   }
@@ -96,7 +102,11 @@ class TextElement {
     return shapeStr
   }
 
-  initElement(data: LottieLayer, globalData: GlobalData, comp: any) {
+  initElement(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterface
+  ) {
     this.lettersChangedFlag = true
     this.initFrame()
     this.initBaseData(data, globalData, comp)

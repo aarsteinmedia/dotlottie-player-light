@@ -1,4 +1,4 @@
-import type { ElementInterface, LottieLayer } from '@/types'
+import type { ElementInterface, Shape } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
@@ -9,7 +9,7 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
 export default class RoundCornersModifier extends ShapeModifier {
   rd?: ValueProperty
-  initModifierProperties(elem: ElementInterface, data: LottieLayer) {
+  override initModifierProperties(elem: ElementInterface, data: Shape) {
     this.getValue = this.processKeys
     this.rd = PropertyFactory.getProp(elem, data.r, 0, null, this)
     this._isAnimated = !!this.rd?.effectsSequence.length
@@ -139,7 +139,9 @@ export default class RoundCornersModifier extends ShapeModifier {
           shapePaths = shapeData.shape.paths.shapes
           jLen = shapeData.shape.paths._length
           for (j = 0; j < jLen; j++) {
-            localShapeCollection?.addShape(this.processPath(shapePaths[j], rd))
+            localShapeCollection?.addShape(
+              this.processPath(shapePaths[j], rd as number)
+            )
           }
         }
         shapeData.shape.paths = shapeData.localShapeCollection

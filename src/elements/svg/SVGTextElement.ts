@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable max-depth */
-import type { CompInterface, GlobalData, LottieLayer } from '@/types'
+import type { GlobalData, LottieLayer } from '@/types'
 import type Matrix from '@/utils/Matrix'
 
 import BaseElement from '@/elements/BaseElement'
@@ -49,7 +49,7 @@ class SVGTextLottieElement {
     this.initElement(data, globalData, comp)
   }
   buildNewText() {
-    this.addDynamicProperty(this)
+    this.addDynamicProperty(this as any)
     let i
     let len
 
@@ -206,7 +206,11 @@ class SVGTextLottieElement {
             if (charData?.data && charData.data.shapes) {
               data = this.buildShapeData(charData.data, documentData.finalSize)
             }
-            glyphElement = new SVGShapeElement(data, this.globalData, this)
+            glyphElement = new SVGShapeElement(
+              data,
+              this.globalData,
+              this as any
+            )
           }
           if (this.textSpans[i].glyph) {
             const glyph = this.textSpans[i].glyph

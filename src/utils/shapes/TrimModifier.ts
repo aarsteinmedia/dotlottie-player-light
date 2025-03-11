@@ -2,7 +2,7 @@ import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import { SVGShapeData } from '@/elements/helpers/shapes'
-import { CompInterface, Shape, Vector2 } from '@/types'
+import { ElementInterface, Shape, Vector2 } from '@/types'
 import Bezier from '@/utils/Bezier'
 import { segmentsLengthPool } from '@/utils/pooling'
 import ShapePool from '@/utils/pooling/ShapePool'
@@ -195,7 +195,7 @@ export default class TrimModifier extends ShapeModifier {
     return shapes
   }
   addShapeToModifier(shapeData: SVGShapeData) {
-    shapeData.pathsData = []
+    ;(shapeData as any).pathsData = [] // TODO: Find cases and drill for types
   }
   calculateShapeEdges(
     s: any,
@@ -257,7 +257,7 @@ export default class TrimModifier extends ShapeModifier {
     return shapeSegments
   }
 
-  initModifierProperties(elem: CompInterface, data: Shape) {
+  initModifierProperties(elem: ElementInterface, data: Shape) {
     this.s = PropertyFactory.getProp(elem, data.s, 0, 0.01, this)
     this.e = PropertyFactory.getProp(elem, data.e, 0, 0.01, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, 0, this)

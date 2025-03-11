@@ -16,8 +16,9 @@ import GradientProperty from '@/utils/shapes/GradientProperty'
 import TransformProperty from '@/utils/TransformProperty'
 
 export class ShapeGroupData {
+  _render?: boolean
   gr: SVGGElement
-  it: unknown[]
+  it: Shape[]
   prevViewData: unknown[]
   constructor() {
     this.it = []

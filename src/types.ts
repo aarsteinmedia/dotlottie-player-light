@@ -1116,6 +1116,7 @@ export interface LottieLayerData {
 
 export interface LottieLayer {
   __used?: boolean
+  _render?: boolean
   ao?: 0 | 1 | boolean
   au?: {
     lv?: {

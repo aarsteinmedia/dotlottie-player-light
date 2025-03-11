@@ -18,12 +18,6 @@ export default class ImageElement {
 
   globalData!: GlobalData
 
-  initElement!: (
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: ElementInterface
-  ) => void
-
   innerElem?: SVGImageElement
 
   layerElement!: SVGGElement
@@ -76,6 +70,12 @@ export default class ImageElement {
       this.layerElement.appendChild(this.innerElem)
     }
   }
+
+  initElement(
+    _data: LottieLayer,
+    _globalData: GlobalData,
+    _comp: ElementInterface
+  ) {}
 
   sourceRectAtTime() {
     return this.sourceRect

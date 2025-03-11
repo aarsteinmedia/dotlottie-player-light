@@ -5,7 +5,7 @@ import type {
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
-import { AnimationDirection, Shape, Vector2 } from '@/types'
+import { AnimationDirection, ElementInterface, Shape, Vector2 } from '@/types'
 import { getProjectingAngle, setPoint } from '@/utils'
 import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
@@ -94,7 +94,7 @@ class ZigZagModifier extends ShapeModifier {
     return direction
   }
 
-  initModifierProperties(elem: any, data: Shape) {
+  override initModifierProperties(elem: ElementInterface, data: Shape) {
     this.getValue = this.processKeys
     this.amplitude = PropertyFactory.getProp(elem, data.s, 0, null, this)
     this.frequency = PropertyFactory.getProp(elem, data.r, 0, null, this)
@@ -171,9 +171,9 @@ class ZigZagModifier extends ShapeModifier {
     const len = this.shapes.length
     let j
     let jLen
-    const amplitude = this.amplitude?.v
+    const amplitude = this.amplitude?.v as number
     const frequency = Math.max(0, Math.round(Number(this.frequency?.v)))
-    const pointType = this.pointsType?.v
+    const pointType = this.pointsType?.v as number
 
     if (amplitude !== 0) {
       let shapeData

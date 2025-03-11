@@ -1,6 +1,4 @@
-import type { CompInterface, ElementInterface } from '@/types'
-// import type ShapePath from '@/utils/shapes/ShapePath'
-import type { ShapeProperty } from '@/utils/shapes/ShapeProperty'
+import type { ElementInterface, Shape } from '@/types'
 
 import { type SVGShapeData } from '@/elements/helpers/shapes'
 import { initialDefaultFrame } from '@/utils/getterSetter'
@@ -8,12 +6,13 @@ import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 
 class ShapeModifier extends DynamicPropertyContainer {
+  addShapeToModifier!: (shapeData: SVGShapeData) => void
   // addShapeToModifier!: (data: SVGShapeData) => void
   closed!: boolean
   elem!: ElementInterface
   frameId?: number
   k!: boolean
-  shapes!: ShapeProperty[]
+  shapes!: any[]
   addShape(data: SVGShapeData) {
     // console.log(data)
     if (!this.closed) {
@@ -23,7 +22,7 @@ class ShapeModifier extends DynamicPropertyContainer {
         data: data,
         localShapeCollection: ShapeCollectionPool.newShapeCollection(),
         shape: data.sh,
-      }
+      } as unknown as SVGShapeData
       this.shapes.push(shapeData)
       this.addShapeToModifier(shapeData)
       if (this._isAnimated) {
@@ -35,7 +34,7 @@ class ShapeModifier extends DynamicPropertyContainer {
     this.shapes = []
     this.elem = elem
     this.initDynamicPropertyContainer(elem)
-    this.initModifierProperties(elem, data)
+    this.initModifierProperties?.(elem, data)
     this.frameId = initialDefaultFrame
     this.closed = false
     this.k = false
@@ -45,6 +44,8 @@ class ShapeModifier extends DynamicPropertyContainer {
       this.getValue(true)
     }
   }
+  initModifierProperties(_elem: ElementInterface, _data: Shape) {}
+
   processKeys() {
     if (this.elem.globalData.frameId === this.frameId) {
       return

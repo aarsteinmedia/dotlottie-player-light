@@ -16,7 +16,7 @@ class RenderableElement {
     mat: Matrix
     mProp: TransformProperty
   }
-  hidden!: boolean
+  hidden?: boolean
   isInRange!: boolean
   isTransparent!: boolean
   renderableComponents!: ElementInterface[]
