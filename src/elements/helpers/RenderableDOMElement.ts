@@ -9,6 +9,7 @@ import { extendPrototype } from '@/utils/functionExtensions'
 
 export default class RenderableDOMElement extends RenderableElement {
   innerElem?: SVGImageElement
+
   destroy() {
     this.innerElem = null as any
     this.destroyBaseElement()

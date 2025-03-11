@@ -12,9 +12,7 @@ import type {
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import {
-  ProcessedElement,
   ShapeGroupData,
   SVGFillStyleData,
   SVGGradientFillStyleData,
@@ -40,16 +38,8 @@ import ShapePropertyFactory, {
 import TransformProperty from '@/utils/TransformProperty'
 export default class SVGShapeElement extends ShapeElement {
   _debug?: boolean
-  // _isFirstFrame?: boolean
   animatedContents: AnimatedContent[]
-  globalData?: GlobalData
-  itemsData?: ItemsData[]
-  layerElement?: SVGGElement
   prevViewData: ItemsData['prevViewData']
-  // processedElements: ProcessedElement[]
-  // shapeModifiers: ShapeModifierInterface[]
-  // shapes: SVGShapeData[]
-  shapesData: Shape[]
   stylesList: SVGStyleData[]
   constructor(
     data: LottieLayer,
@@ -225,13 +215,13 @@ export default class SVGShapeElement extends ShapeElement {
     this.addToAnimatedContents(data, elementData)
     return elementData
   }
-  destroy() {
+  override destroy() {
     this.destroyBaseElement()
     this.shapesData = null as any
     this.itemsData = null as any
   }
   filterUniqueShapes() {
-    const len = this.shapes.length
+    const len = this.shapes?.length
     const jLen = this.stylesList.length
     let style
     const tempShapes = []
@@ -241,7 +231,7 @@ export default class SVGShapeElement extends ShapeElement {
       areAnimated = false
       tempShapes.length = 0
       for (let i = 0; i < len; i++) {
-        if (this.shapes[i].styles.indexOf(style) !== -1) {
+        if (this.shapes?.[i].styles.indexOf(style) !== -1) {
           tempShapes.push(this.shapes[i])
           areAnimated = this.shapes[i]._isAnimated || areAnimated
         }
@@ -457,10 +447,10 @@ extendPrototype(
     BaseElement,
     TransformElement,
     SVGBaseElement,
-    ShapeElement,
+    // ShapeElement,
     HierarchyElement,
     FrameElement,
-    RenderableDOMElement,
+    // RenderableDOMElement,
   ],
   SVGShapeElement
 )

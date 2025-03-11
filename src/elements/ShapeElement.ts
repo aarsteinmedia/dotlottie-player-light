@@ -4,10 +4,10 @@ import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
 import { ProcessedElement, SVGShapeData } from '@/elements/helpers/shapes'
 import ShapePath from '@/utils/shapes/ShapePath'
 
-export default class ShapeElement {
-  _isFirstFrame?: boolean
+import RenderableDOMElement from './helpers/RenderableDOMElement'
+
+export default class ShapeElement extends RenderableDOMElement {
   _length?: number
-  isInRange?: boolean
 
   processedElements?: ProcessedElement[]
 
@@ -15,7 +15,7 @@ export default class ShapeElement {
 
   shapes?: SVGShapeData[] | ShapePath[]
 
-  addProcessedElement(elem: any, pos: number) {
+  addProcessedElement(elem: ElementInterfaceIntersect, pos: number) {
     const elements = this.processedElements
     let i = elements?.length
     while (i) {
@@ -47,7 +47,7 @@ export default class ShapeElement {
     return false
   }
 
-  prepareFrame(num: number) {
+  override prepareFrame(num: number) {
     this.prepareRenderableFrame(num)
     this.prepareProperties(num, this.isInRange)
   }
@@ -58,11 +58,6 @@ export default class ShapeElement {
     )
   }
 
-  prepareRenderableFrame(_val: number) {
-    throw new Error(
-      'ShapeElement: Method prepareRenderableFrame not yet implemented'
-    )
-  }
   renderModifiers() {
     if (!this.shapeModifiers?.length) {
       return
