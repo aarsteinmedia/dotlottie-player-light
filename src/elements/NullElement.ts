@@ -1,8 +1,6 @@
 import type { GlobalData, LottieLayer, SourceRect } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 export default class NullElement extends FrameElement {
@@ -10,7 +8,6 @@ export default class NullElement extends FrameElement {
     super()
     this.initFrame()
     this.initBaseData(data, globalData, comp)
-    // this.initFrame()
     this.initTransform()
     this.initHierarchy()
   }
@@ -31,11 +28,13 @@ export default class NullElement extends FrameElement {
     this.prepareProperties(num, true)
   }
 
-  renderFrame(_frame?: number | null) {}
+  renderFrame(_frame?: number | null) {
+    throw new Error('🍝 Method not yet implemented')
+  }
 
   sourceRectAtTime(): SourceRect | null {
     throw new Error('Method not yet implemented')
   }
 }
 
-extendPrototype([BaseElement, TransformElement, HierarchyElement], NullElement)
+extendPrototype([TransformElement], NullElement)

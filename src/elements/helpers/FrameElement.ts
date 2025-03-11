@@ -1,14 +1,13 @@
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
-import { GlobalData } from '@/types'
+// import BaseElement from '@/elements/BaseElement'
+import HierarchyElement from '@/elements/helpers/HierarchyElement'
 
-export default class FrameElement {
+export default class FrameElement extends HierarchyElement {
   _isFirstFrame?: boolean
-  _isParent?: boolean
   _mdf?: boolean
 
   dynamicProperties?: DynamicPropertyContainer[]
-  globalData?: GlobalData
   addDynamicProperty(prop: DynamicPropertyContainer) {
     if (this.dynamicProperties?.indexOf(prop) === -1) {
       this.dynamicProperties?.push(prop)

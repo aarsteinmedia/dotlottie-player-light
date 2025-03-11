@@ -4,12 +4,11 @@
  *
  */
 
-import type { ElementInterfaceIntersect, LottieLayer } from '@/types'
+import BaseElement from '@/elements/BaseElement'
 
-export default class HierarchyElement {
+export default class HierarchyElement extends BaseElement {
   _isParent!: boolean
-  comp?: ElementInterfaceIntersect
-  data?: LottieLayer
+
   hierarchy!: unknown[]
   /**
    * Searches layer's parenting chain

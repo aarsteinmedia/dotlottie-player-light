@@ -17,73 +17,78 @@ export default class CompElement extends SVGRendererBase {
   _mdf?: boolean
   isInRange?: boolean
   tm?: ValueProperty
-  buildAllItems() {
-    throw new Error('Method not implemented')
-  }
   override destroy() {
     this.destroyElements()
     this.destroyBaseElement()
   }
+  destroyBaseElement() {
+    throw new Error('CompElement: Method not implemented')
+  }
   destroyElements() {
-    const { length } = this.layers
+    const { length } = this.layers || []
     for (let i = 0; i < length; i++) {
-      if (this.elements[i]) {
+      if (this.elements?.[i]) {
         this.elements[i].destroy()
       }
     }
   }
-  getElements(): ElementInterfaceIntersect[] {
+  getElements(): ElementInterfaceIntersect[] | undefined {
     return this.elements
-  }
-  initBaseData(
-    _data: LottieLayer,
-    _globalData: GlobalData,
-    _comp: ElementInterfaceIntersect
-  ) {
-    throw new Error('Method not implemented')
   }
   initElement(
     _data: LottieLayer,
     _globalData: GlobalData,
     _comp: ElementInterfaceIntersect
   ) {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   initFrame() {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   initHierarchy() {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   initRenderable() {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   initTransform() {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   prepareFrame(_val: number) {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   prepareProperties(_val: number, _isInRange?: boolean) {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   prepareRenderableFrame(_val: number, _?: boolean) {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
 
   renderInnerContent() {
-    throw new Error('Method not implemented')
+    throw new Error('CompElement: Method not implemented')
   }
   setElements(elems: ElementInterfaceIntersect[]) {
     this.elements = elems
   }
+
+  // createRenderableComponents() {
+  //   throw new Error('CompElement: Method not implemented') // TODO:
+  // }
+
+  // createContainerElements() {
+  //   throw new Error('CompElement: Method not implemented') // TODO:
+  // }
+
+  // initRendererElement() {
+  //   throw new Error('CompElement: Method not implemented') // TODO:
+  // }
 }
 
 extendPrototype(
@@ -107,10 +112,10 @@ CompElement.prototype.initElement = function (
   this.initTransform()
   this.initRenderable()
   this.initHierarchy()
-  this.initRendererElement()
-  this.createContainerElements()
-  this.createRenderableComponents()
-  if (this.data.xt || !globalData.progressiveLoad) {
+  this.initRendererElement() // TODO:
+  this.createContainerElements() // TODO:
+  this.createRenderableComponents() // TODO:
+  if (this.data?.xt || !globalData.progressiveLoad) {
     this.buildAllItems()
   }
   this.hide()
@@ -120,7 +125,7 @@ CompElement.prototype.prepareFrame = function (val: number) {
   this._mdf = false
   this.prepareRenderableFrame(val)
   this.prepareProperties(val, this.isInRange)
-  if (!this.isInRange && !this.data.xt) {
+  if (!this.isInRange && !this.data?.xt) {
     return
   }
 
@@ -128,8 +133,8 @@ CompElement.prototype.prepareFrame = function (val: number) {
     this.renderedFrame = val / Number(this.data?.sr)
   } else {
     let timeRemapped = this.tm?.v
-    if (timeRemapped === this.data.op) {
-      timeRemapped = this.data.op - 1
+    if (timeRemapped === this.data?.op) {
+      timeRemapped = Number(this.data?.op) - 1
     }
     this.renderedFrame = Number(timeRemapped)
   }
@@ -140,7 +145,9 @@ CompElement.prototype.prepareFrame = function (val: number) {
   // This iteration needs to be backwards because of how expressions connect between each other
   for (let i = length - 1; i >= 0; i--) {
     if (this.completeLayers || this.elements?.[i]) {
-      this.elements?.[i].prepareFrame?.(this.renderedFrame - this.layers[i].st)
+      this.elements?.[i].prepareFrame?.(
+        this.renderedFrame - Number(this.layers?.[i].st)
+      )
       if (this.elements?.[i]._mdf) {
         this._mdf = true
       }

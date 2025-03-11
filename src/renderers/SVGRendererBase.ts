@@ -52,6 +52,9 @@ export default class SVGRendererBase extends BaseRenderer {
   }
 
   buildItem(pos: number) {
+    if (!this.layers) {
+      throw new Error('SVGRendererBase cannot access layers')
+    }
     const elements = this.elements
     if (elements?.[pos] || this.layers?.[pos].ty === 99) {
       return
@@ -59,7 +62,7 @@ export default class SVGRendererBase extends BaseRenderer {
 
     elements![pos] = true as any
 
-    const element = this.createItem(this.layers?.[pos])
+    const element = this.createItem(this.layers[pos])
 
     elements![pos] = element
     if (getExpressionsPlugin()) {
@@ -179,7 +182,7 @@ export default class SVGRendererBase extends BaseRenderer {
 
       this.setupGlobalData(animData, defs)
       this.globalData.progressiveLoad = this.renderConfig?.progressiveLoad
-      this.data = animData
+      this.data = animData as any
 
       const maskElement = createNS('clipPath')
       const rect = createNS('rect')
@@ -205,35 +208,35 @@ export default class SVGRendererBase extends BaseRenderer {
 
   createImage(data: LottieLayer) {
     if (!this.globalData) {
-      throw new Error("Can't access Global Data")
+      throw new Error('SVGRendererBase cannotaccess Global Data')
     }
     return new ImageElement(data, this.globalData, this)
   }
 
   createNull(data: LottieLayer) {
     if (!this.globalData) {
-      throw new Error("Can't access Global Data")
+      throw new Error('SVGRendererBase cannot access Global Data')
     }
     return new NullElement(data, this.globalData, this)
   }
 
   createShape(data: LottieLayer) {
     if (!this.globalData) {
-      throw new Error("Can't access Global Data")
+      throw new Error('SVGRendererBase cannot access Global Data')
     }
     return new SVGShapeElement(data, this.globalData, this as any)
   }
 
   createSolid(data: LottieLayer) {
     if (!this.globalData) {
-      throw new Error("Can't access Global Data")
+      throw new Error('SVGRendererBase cannot access Global Data')
     }
     return new SolidElement(data, this.globalData, this)
   }
 
   createText(data: LottieLayer) {
     if (!this.globalData) {
-      throw new Error("Can't access Global Data")
+      throw new Error('SVGRendererBase cannot access Global Data')
     }
     return new SVGTextLottieElement(data, this.globalData, this)
   }

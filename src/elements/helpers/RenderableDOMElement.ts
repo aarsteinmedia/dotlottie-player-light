@@ -7,7 +7,7 @@ import type {
 import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
-class RenderableDOMElement {
+export default class RenderableDOMElement {
   _isFirstFrame?: boolean
   _mdf?: boolean
   baseElement?: SVGGElement
@@ -81,7 +81,3 @@ class RenderableDOMElement {
 }
 
 extendPrototype([RenderableElement], RenderableDOMElement)
-
-// interface RenderableDOMElement extends RenderableElement {}
-
-export default RenderableDOMElement

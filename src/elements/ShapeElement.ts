@@ -51,6 +51,14 @@ class ShapeElement {
     this.prepareRenderableFrame(num)
     this.prepareProperties(num, this.isInRange)
   }
+
+  prepareProperties(_val: number, _flag?: boolean) {
+    throw new Error('ShapeElement: Method not yet implemented')
+  }
+
+  prepareRenderableFrame(_val: number) {
+    throw new Error('ShapeElement: Method not yet implemented')
+  }
   renderModifiers() {
     if (!this.shapeModifiers?.length) {
       return
