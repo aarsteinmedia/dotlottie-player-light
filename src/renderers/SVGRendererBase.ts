@@ -1,7 +1,6 @@
 import type {
   AnimationData,
   ElementInterfaceIntersect,
-  GlobalData,
   LottieLayer,
   SVGRendererConfig,
 } from '@/types'
@@ -9,7 +8,6 @@ import type {
 import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
 import SolidElement from '@/elements/SolidElement'
-import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import SVGTextLottieElement from '@/elements/svg/SVGTextElement'
 import BaseRenderer from '@/renderers/BaseRenderer'
@@ -22,7 +20,7 @@ import {
 } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
 
-export default class SVGRendererBase extends SVGBaseElement {
+export default class SVGRendererBase extends BaseRenderer {
   destroyed?: boolean
   renderConfig?: SVGRendererConfig
   renderedFrame!: number

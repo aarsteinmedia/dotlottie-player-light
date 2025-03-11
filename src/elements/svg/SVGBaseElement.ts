@@ -1,35 +1,22 @@
-import type {
-  ElementInterfaceIntersect,
-  LottieLayer,
-  Transformer,
-} from '@/types'
+import type { Transformer } from '@/types'
 
+import BaseElement from '@/elements/BaseElement'
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
-import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
-export default class SVGBaseElement extends BaseRenderer {
+export default class SVGBaseElement extends BaseElement {
   _sizeChanged?: boolean
-  baseElement?: SVGGElement
-  comp?: ElementInterfaceIntersect
-  data?: LottieLayer
   finalTransform?: Transformer
-  layerElement?: SVGGElement
-  layerId?: string
   maskedElement?: SVGGElement
-  maskManager?: MaskElement
   matteElement?: SVGGElement
   matteMasks?: {
     [key: number]: string
   }
   renderableEffectsManager?: SVGEffects
   transformedElement?: SVGGElement
-  checkMasks(): boolean {
-    throw new Error('Method not yet implemented')
-  }
   createContainerElements() {
     this.matteElement = createNS<SVGGElement>('g')
     this.transformedElement = this.layerElement
@@ -187,8 +174,8 @@ export default class SVGBaseElement extends BaseRenderer {
         if (!alphaRect) {
           throw new Error('Could not create RECT element')
         }
-        alphaRect.setAttribute('width', `${Number(this.comp?.data.w)}`)
-        alphaRect.setAttribute('height', `${Number(this.comp?.data.h)}`)
+        alphaRect.setAttribute('width', `${Number(this.comp?.data?.w)}`)
+        alphaRect.setAttribute('height', `${Number(this.comp?.data?.h)}`)
         alphaRect.setAttribute('x', '0')
         alphaRect.setAttribute('y', '0')
         alphaRect.setAttribute('fill', '#ffffff')
