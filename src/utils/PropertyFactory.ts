@@ -1,4 +1,8 @@
-import type { ElementInterfaceIntersect, Keyframe, VectorProperty } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  Keyframe,
+  VectorProperty,
+} from '@/types'
 
 import {
   KeyframedMultidimensionalProperty,

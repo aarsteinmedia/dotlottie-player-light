@@ -1,4 +1,8 @@
-import type { ElementInterfaceIntersect, Shape } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  ElementInterfaceUnion,
+  Shape,
+} from '@/types'
 
 import { type SVGShapeData } from '@/elements/helpers/shapes'
 import { initialDefaultFrame } from '@/utils/getterSetter'
@@ -30,9 +34,9 @@ class ShapeModifier extends DynamicPropertyContainer {
     }
   }
   addShapeToModifier(_shapeData: SVGShapeData) {}
-  init(elem: ElementInterfaceIntersect, data: any, _a: any, _b: any) {
+  init(elem: ElementInterfaceUnion, data?: any, _a?: any, _b?: any) {
     this.shapes = []
-    this.elem = elem
+    this.elem = elem as ElementInterfaceIntersect
     this.initDynamicPropertyContainer(elem)
     this.initModifierProperties?.(elem, data)
     this.frameId = initialDefaultFrame
@@ -44,7 +48,7 @@ class ShapeModifier extends DynamicPropertyContainer {
       this.getValue(true)
     }
   }
-  initModifierProperties(_elem: ElementInterfaceIntersect, _data: Shape) {}
+  initModifierProperties(_elem: ElementInterfaceUnion, _data: Shape) {}
   isAnimatedWithShape(_data: Shape) {}
 
   processKeys() {

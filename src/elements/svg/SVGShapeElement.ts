@@ -38,7 +38,9 @@ import { getLocationHref } from '@/utils/getterSetter'
 import ShapeModifiers, {
   type ShapeModifierInterface,
 } from '@/utils/shapes/ShapeModifiers'
-import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
+import ShapePropertyFactory, {
+  type ShapeProperty,
+} from '@/utils/shapes/ShapeProperty'
 import TransformProperty from '@/utils/TransformProperty'
 class SVGShapeElement {
   // identityMatrix = new Matrix()
@@ -89,7 +91,7 @@ class SVGShapeElement {
     this.animatedContents.push({
       data,
       element,
-      fn: SVGElementsRenderer.createRenderFunction(data),
+      fn: SVGElementsRenderer.createRenderFunction(data) as any,
     })
   }
   buildExpressionInterface() {}
@@ -133,17 +135,21 @@ class SVGShapeElement {
     }
     const shapeProperty = ShapePropertyFactory.getShapeProp(
       this,
-      data,
+      data as any,
       ty,
       this
     )
-    const elementData = new SVGShapeData(ownTransformers, level, shapeProperty)
+    const elementData = new SVGShapeData(
+      ownTransformers,
+      level,
+      shapeProperty as ShapeProperty
+    )
     this.shapes.push(elementData)
     this.addShapeToModifiers(elementData)
     this.addToAnimatedContents(data, elementData)
     return elementData
   }
-  createStyleElement(data: SVGShapeData, level: number) {
+  createStyleElement(data: Shape, level: number) {
     // TODO: prevent drawing of hidden styles
     let elementData
     const styleOb = new SVGStyleData(data, level)
@@ -258,7 +264,7 @@ class SVGShapeElement {
     }
     this.renderModifiers()
   }
-  renderInnerContent = function () {
+  renderInnerContent = function (this: any) {
     this.renderModifiers()
     const { length } = this.stylesList
     for (let i = 0; i < length; i++) {
@@ -343,7 +349,7 @@ class SVGShapeElement {
           itemsData[i] = this.createGroupElement(arr[i])
         }
         this.searchShapes(
-          arr[i].it,
+          arr[i].it as Shape[],
           itemsData[i].it,
           itemsData[i].prevViewData,
           itemsData[i].gr,
@@ -385,7 +391,7 @@ class SVGShapeElement {
           modifier.closed = false
         } else {
           modifier = ShapeModifiers.getModifier(arr[i].ty)
-          modifier.init(this, arr[i])
+          modifier.init(this, (arr as any[])[i])
           itemsData[i] = modifier
           this.shapeModifiers.push(modifier)
         }
@@ -397,7 +403,7 @@ class SVGShapeElement {
         } else {
           modifier = ShapeModifiers.getModifier(arr[i].ty)
           itemsData[i] = modifier
-          modifier.init(this, arr, i, itemsData)
+          modifier.init(this, arr as unknown as ShapeGroupData[], i, itemsData)
           this.shapeModifiers.push(modifier)
           render = false
         }

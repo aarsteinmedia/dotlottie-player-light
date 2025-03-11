@@ -1,5 +1,9 @@
 import type { ShapeGroupData } from '@/elements/helpers/shapes'
-import type { ElementInterfaceIntersect, Shape } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  ElementInterfaceUnion,
+  Shape,
+} from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { ShapeType } from '@/enums'
@@ -69,13 +73,13 @@ export default class RepeaterModifier extends ShapeModifier {
     return newElements
   }
   override init(
-    elem: ElementInterfaceIntersect,
+    elem: ElementInterfaceUnion,
     arr: ShapeGroupData[],
-    posFromProps: number,
-    elemsData: ShapePath
+    posFromProps?: number,
+    elemsData?: ShapePath
   ) {
-    let pos = posFromProps
-    this.elem = elem
+    let pos = Number(posFromProps)
+    this.elem = elem as ElementInterfaceIntersect
     this.arr = arr
     this.pos = pos
     this.elemsData = elemsData
@@ -84,7 +88,7 @@ export default class RepeaterModifier extends ShapeModifier {
     this._groups = []
     this.frameId = -1
     this.initDynamicPropertyContainer(elem)
-    this.initModifierProperties(elem, arr[pos])
+    this.initModifierProperties(elem as ElementInterfaceIntersect, arr[pos])
     while (pos > 0) {
       pos -= 1
       // this._elements.unshift(arr.splice(pos,1)[0]);

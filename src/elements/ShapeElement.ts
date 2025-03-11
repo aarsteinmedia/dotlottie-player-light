@@ -17,7 +17,7 @@ class ShapeElement {
 
   shapes?: SVGShapeData[] | ShapePath[]
 
-  addProcessedElement(elem: ElementInterfaceIntersect, pos: number) {
+  addProcessedElement(elem: any, pos: number) {
     const elements = this.processedElements
     let i = elements.length
     while (i) {
