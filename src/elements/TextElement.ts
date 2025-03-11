@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type FrameElement from '@/elements/helpers/FrameElement'
-import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import type RenderableElement from '@/elements/helpers/RenderableElement'
-// import type TransformElement from '@/elements/helpers/TransformElement'
-import type SolidElement from '@/elements/SolidElement'
 import type { RendererType } from '@/enums'
 import type {
   DocumentData,
@@ -21,16 +15,14 @@ import LetterProps from '@/utils/text/LetterProps'
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
 
-class TextElement {
-  buildNewText!: () => void
-  emptyProp = new LetterProps()
-  lettersChangedFlag!: boolean
+export default class TextElement {
+  emptyProp?: LetterProps
+  lettersChangedFlag?: boolean
+  renderType?: RendererType
 
-  renderType!: RendererType
+  textAnimator?: TextAnimatorProperty
 
-  textAnimator!: TextAnimatorProperty
-
-  textProperty!: any
+  textProperty?: TextProperty
 
   applyTextPropertiesToMatrix(
     documentData: DocumentData,
@@ -73,16 +65,18 @@ class TextElement {
     matrixHelper.translate(xPos, yPos, 0)
   }
 
-  // buildNewText() {}
-
   buildColor(colorData: Vector3) {
     return `rgb(${Math.round(colorData[0] * 255)},${Math.round(
       colorData[1] * 255
     )},${Math.round(colorData[2] * 255)})`
   }
 
+  // buildNewText() {
+  //   throw new Error('TextElement: Method buildNewText is not yet implemented')
+  // }
+
   canResizeFont(_canResize: boolean) {
-    this.textProperty.canResizeFont(_canResize)
+    this.textProperty?.canResizeFont(_canResize)
   }
 
   createPathShape(matrixHelper: Matrix, shapes: Shape[]) {
@@ -109,6 +103,7 @@ class TextElement {
     globalData: GlobalData,
     comp: ElementInterfaceIntersect
   ) {
+    this.emptyProp = new LetterProps()
     this.lettersChangedFlag = true
     this.initFrame()
     this.initBaseData(data, globalData, comp)
@@ -132,28 +127,18 @@ class TextElement {
   }
 
   setMinimumFontSize(_fontSize: number) {
-    this.textProperty.setMinimumFontSize(_fontSize)
+    this.textProperty?.setMinimumFontSize(_fontSize)
   }
 
   updateDocumentData(newData: DocumentData, index: number) {
-    this.textProperty.updateDocumentData(newData, index)
+    this.textProperty?.updateDocumentData(newData, index)
   }
 
   validateText() {
-    if (this.textProperty._mdf || this.textProperty._isFirstFrame) {
+    if (this.textProperty?._mdf || this?.textProperty?._isFirstFrame) {
       this.buildNewText()
       this.textProperty._isFirstFrame = false
       this.textProperty._mdf = false
     }
   }
 }
-
-interface TextElement
-  extends FrameElement,
-    // TransformElement,
-    RenderableElement,
-    RenderableDOMElement,
-    SolidElement,
-    SVGTextElement {}
-
-export default TextElement

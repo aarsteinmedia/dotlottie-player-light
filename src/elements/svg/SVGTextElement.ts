@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable max-depth */
 import type { GlobalData, LottieLayer, SourceRect } from '@/types'
 import type Matrix from '@/utils/Matrix'
@@ -20,35 +19,32 @@ import { createSizedArray } from '@/utils/helpers/arrays'
 /**
  *
  */
-class SVGTextLottieElement {
+export default class SVGTextLottieElement extends TextElement {
   bbox?: {
     height: number
     left: number
     top: number
     width: number
   }
-  data!: LottieLayer
-  layerElement!: SVGGElement
   mHelper!: Matrix
   renderedFrame?: number
   renderedLetters?: string[]
-  renderType: RendererType
   textContainer?: SVGTextElement
   textSpans: {
     childSpan?: null | SVGTextElement | SVGGElement
     glyph: null | SVGCompElement | SVGShapeElement
     span: null | SVGTextElement | SVGGElement
   }[]
-  validateText!: () => void
   private emptyShapeData = {
     shapes: [],
   } as unknown as LottieLayer
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+    super()
     this.textSpans = []
     this.renderType = RendererType.SVG
     this.initElement(data, globalData, comp)
   }
-  buildNewText() {
+  override buildNewText() {
     this.addDynamicProperty(this as any)
     let i
     let len
@@ -401,13 +397,3 @@ extendPrototype(
   ],
   SVGTextLottieElement
 )
-
-interface SVGTextLottieElement
-  extends BaseElement,
-    SVGBaseElement,
-    HierarchyElement,
-    FrameElement,
-    RenderableDOMElement,
-    TextElement {}
-
-export default SVGTextLottieElement

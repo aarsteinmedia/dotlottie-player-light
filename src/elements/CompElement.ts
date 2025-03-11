@@ -12,7 +12,7 @@ import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { ValueProperty } from '@/utils/Properties'
 
-import BaseElement from './BaseElement'
+// import BaseElement from './BaseElement'
 
 export default class CompElement extends SVGRendererBase {
   _mdf?: boolean
@@ -40,6 +40,25 @@ export default class CompElement extends SVGRendererBase {
   ) {
     throw new Error('CompElement: Method initElement not implemented')
   }
+
+  // initElement(
+  //   data: LottieLayer,
+  //   globalData: GlobalData,
+  //   comp: ElementInterfaceIntersect
+  // ) {
+  //   this.initFrame()
+  //   this.initBaseData(data, globalData, comp)
+  //   this.initTransform()
+  //   this.initRenderable()
+  //   this.initHierarchy()
+  //   this.initRendererElement()
+  //   this.createContainerElements()
+  //   this.createRenderableComponents()
+  //   if (this.data?.xt || !globalData.progressiveLoad) {
+  //     this.buildAllItems()
+  //   }
+  //   this.hide()
+  // }
 
   initFrame() {
     throw new Error('CompElement: Method initFrame not implemented')
@@ -70,10 +89,10 @@ export default class CompElement extends SVGRendererBase {
       'CompElement: Method prepareRenderableFrame not implemented'
     )
   }
-
   renderInnerContent() {
     throw new Error('CompElement: Method renderInnerContent not implemented')
   }
+
   setElements(elems: ElementInterfaceIntersect[]) {
     this.elements = elems
   }
