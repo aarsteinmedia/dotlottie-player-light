@@ -23,10 +23,7 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 export default class SVGRendererBase extends SVGBaseElement {
-  data?: AnimationData
   destroyed?: boolean
-  globalData?: GlobalData
-  layerElement?: SVGGElement
   renderConfig?: SVGRendererConfig
   renderedFrame!: number
 
@@ -100,7 +97,7 @@ export default class SVGRendererBase extends SVGBaseElement {
     while (this.pendingElements?.length) {
       const element = this.pendingElements.pop()
       element?.checkParenting()
-      if (element?.data.tt) {
+      if (element?.data?.tt) {
         let i = 0
         const { length } = this.elements || []
         while (i < length) {

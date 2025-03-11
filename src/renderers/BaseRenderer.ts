@@ -3,37 +3,28 @@ import type SVGCompElement from '@/elements/svg/SVGCompElement'
 import type {
   AnimationData,
   ElementInterfaceIntersect,
-  GlobalData,
+  // GlobalData,
   LottieLayer,
 } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
+import BaseElement from '@/elements/BaseElement'
 import FootageElement from '@/elements/FootageElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import FontManager from '@/utils/FontManager'
 import SlotManager from '@/utils/SlotManager'
 
-export default class BaseRenderer {
-  animationItem!: AnimationItem
-  checkPendingElements!: () => void
+export default class BaseRenderer extends BaseElement {
+  animationItem?: AnimationItem
   completeLayers?: boolean
-  elements!: ElementInterfaceIntersect[]
+  elements?: ElementInterfaceIntersect[]
 
   // createImage(_data: LottieLayer) { TODO:
   //   throw new Error('Method not yet implemented')
   // }
-  // createNull!: (data: LottieLayer) => void
 
-  // createShape!: (data: LottieLayer) => void
-
-  // createSolid!: (data: LottieLayer) => void
-
-  // createText!: (data: LottieLayer) => void
-
-  globalData?: GlobalData
-
-  layers!: LottieLayer[]
+  layers?: LottieLayer[]
 
   pendingElements!: ElementInterfaceIntersect[]
 
@@ -59,7 +50,7 @@ export default class BaseRenderer {
     const len = layers?.length || 0
     while (i < len) {
       if (layers?.[i].ind === Number(parentName)) {
-        if (!elements[i] || (elements as any)[i] === true) {
+        if (!elements?.[i] || (elements as any)[i] === true) {
           this.buildItem(i)
           this.addPendingElement(element)
         } else {
@@ -83,7 +74,7 @@ export default class BaseRenderer {
     this.completeLayers = true
     const { length } = this.layers || []
     for (let i = length - 1; i >= 0; i--) {
-      if (!this.elements[i]) {
+      if (!this.elements?.[i]) {
         if (
           this.layers![i].ip - this.layers![i].st <=
             Number(val) - this.layers![i].st &&
@@ -93,7 +84,7 @@ export default class BaseRenderer {
           this.buildItem(i)
         }
       }
-      this.completeLayers = this.elements[i] ? this.completeLayers : false
+      this.completeLayers = this.elements?.[i] ? this.completeLayers : false
     }
     this.checkPendingElements()
   }
@@ -142,10 +133,9 @@ export default class BaseRenderer {
     }
   }
   getElementById(ind: number) {
-    let i
-    const len = this.elements.length
-    for (i = 0; i < len; i++) {
-      if (this.elements[i].data.ind === ind) {
+    const { length } = this.elements || []
+    for (let i = 0; i < length; i++) {
+      if (this.elements?.[i].data.ind === ind) {
         return this.elements[i]
       }
     }
@@ -156,12 +146,12 @@ export default class BaseRenderer {
     const pathValue = path.shift()
     let element
     if (typeof pathValue === 'number') {
-      element = this.elements[pathValue]
+      element = this.elements?.[pathValue]
     } else {
-      const { length } = this.elements
+      const { length } = this.elements || []
       for (let i = 0; i < length; i++) {
-        if (this.elements[i].data.nm === pathValue) {
-          element = this.elements[i]
+        if (this.elements?.[i].data.nm === pathValue) {
+          element = this.elements?.[i]
           break
         }
       }
@@ -189,9 +179,9 @@ export default class BaseRenderer {
     }
   }
 
-  initExpressions() {
-    throw new Error('Method not yet implemented')
-  }
+  // initExpressions() {
+  //   throw new Error('Method not yet implemented')
+  // }
 
   initItems() {
     if (!this.globalData?.progressiveLoad) {
@@ -225,14 +215,14 @@ export default class BaseRenderer {
     this.globalData.slotManager = new SlotManager(animData as any)
     this.globalData.fontManager.addChars(animData.chars)
     this.globalData.fontManager.addFonts(animData.fonts, fontsContainer)
-    this.globalData.getAssetData = this.animationItem.getAssetData.bind(
+    this.globalData.getAssetData = this.animationItem?.getAssetData.bind(
       this.animationItem
     )
-    this.globalData.getAssetsPath = this.animationItem.getAssetsPath.bind(
+    this.globalData.getAssetsPath = this.animationItem?.getAssetsPath.bind(
       this.animationItem
     )
-    this.globalData.imageLoader = this.animationItem.imagePreloader
-    this.globalData.audioController = this.animationItem.audioController
+    this.globalData.imageLoader = this.animationItem?.imagePreloader
+    this.globalData.audioController = this.animationItem?.audioController
     this.globalData.frameId = 0
     this.globalData.frameRate = animData.fr || 60
     this.globalData.nm = animData.nm

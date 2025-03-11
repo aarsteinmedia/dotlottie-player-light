@@ -14,15 +14,15 @@ import ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 export default class BaseElement {
   baseElement?: SVGGElement
-  comp!: ElementInterfaceIntersect
+  comp?: ElementInterfaceIntersect
   compInterface?: ProjectInterface
-  data!: LottieLayer
-  effectsManager!: EffectsManager
+  data?: LottieLayer
+  effectsManager?: EffectsManager
 
-  globalData!: GlobalData
+  globalData?: GlobalData
   itemsData?: ItemsData[]
-  layerElement!: SVGGElement
-  layerId!: string
+  layerElement?: SVGGElement
+  layerId?: string
 
   layerInterface?: ProjectInterface
 
@@ -80,7 +80,7 @@ export default class BaseElement {
     const TextExpressionInterface = new expressionsInterfaces('text')
     const CompExpressionInterface = new expressionsInterfaces('comp')
     this.layerInterface = (LayerExpressionInterface as any)(this) // TODO:
-    if (this.data.hasMask && this.maskManager) {
+    if (this.data?.hasMask && this.maskManager) {
       this.layerInterface?.registerMaskInterface?.(this.maskManager)
     }
     const effectsInterface =
@@ -90,16 +90,16 @@ export default class BaseElement {
       )
     this.layerInterface?.registerEffectsInterface?.(effectsInterface)
 
-    if (this.data.ty === 0 || this.data.xt) {
+    if (this.data?.ty === 0 || this.data?.xt) {
       this.compInterface = (CompExpressionInterface as any)(this)
-    } else if (this.data.ty === 4) {
+    } else if (this.data?.ty === 4) {
       this.layerInterface!.shapeInterface = (ShapeExpressionInterface as any)(
         this.shapesData,
         this.itemsData,
         this.layerInterface
       )
       this.layerInterface!.content = this.layerInterface?.shapeInterface
-    } else if (this.data.ty === 5) {
+    } else if (this.data?.ty === 5) {
       this.layerInterface!.textInterface = (TextExpressionInterface as any)(
         this
       )
@@ -107,12 +107,11 @@ export default class BaseElement {
     }
   }
   setBlendMode() {
-    const blendModeValue = getBlendMode(this.data.bm)
+    const blendModeValue = getBlendMode(this.data?.bm)
     const elem = this.baseElement || this.layerElement
 
     if (elem) {
       elem.style.mixBlendMode = blendModeValue
     }
   }
-  // sourceRectAtTime() {}
 }

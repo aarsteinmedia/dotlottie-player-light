@@ -200,7 +200,7 @@ export interface AnimatedContent {
     | ((
         styleData: SVGStyleData,
         itemData: ItemData | ShapeDataInterface,
-        isFirstFrame: boolean
+        isFirstFrame?: boolean
       ) => void)
 }
 
