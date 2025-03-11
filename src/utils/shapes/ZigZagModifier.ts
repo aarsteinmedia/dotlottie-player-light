@@ -5,7 +5,7 @@ import type {
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
-import { AnimationDirection, ElementInterface, Shape, Vector2 } from '@/types'
+import { AnimationDirection, ElementInterfaceIntersect, Shape, Vector2 } from '@/types'
 import { getProjectingAngle, setPoint } from '@/utils'
 import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
@@ -94,7 +94,7 @@ class ZigZagModifier extends ShapeModifier {
     return direction
   }
 
-  override initModifierProperties(elem: ElementInterface, data: Shape) {
+  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
     this.getValue = this.processKeys
     this.amplitude = PropertyFactory.getProp(elem, data.s, 0, null, this)
     this.frequency = PropertyFactory.getProp(elem, data.r, 0, null, this)

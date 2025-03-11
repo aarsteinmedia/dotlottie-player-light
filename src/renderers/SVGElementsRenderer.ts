@@ -5,6 +5,7 @@ import type { ItemData, Shape, ShapeDataInterface } from '@/types'
 import { ShapeType } from '@/enums'
 import { buildShapeString } from '@/utils'
 import Matrix from '@/utils/Matrix'
+import ShapePath from '@/utils/shapes/ShapePath'
 
 const SVGElementsRenderer = (function () {
   const _identityMatrix = new Matrix(),
@@ -73,7 +74,7 @@ const SVGElementsRenderer = (function () {
     let jLen: number
     let pathStringTransformed
     let redraw
-    let pathNodes
+    let pathNodes: ShapePath | undefined
     let l: number
     const lLen = itemData.styles.length
     const lvl = itemData.lvl
@@ -109,8 +110,9 @@ const SVGElementsRenderer = (function () {
       if (redraw) {
         pathStringTransformed = ''
         for (j = 0; j < jLen; j += 1) {
-          pathNodes = paths.shapes?.[j]
+          pathNodes = paths.shapes?.[j] as ShapePath
           if (pathNodes && pathNodes._length) {
+            // console.log(pathNodes)
             pathStringTransformed += buildShapeString(
               pathNodes,
               pathNodes._length,

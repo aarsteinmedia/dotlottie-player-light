@@ -1,7 +1,7 @@
 /* eslint-disable max-depth */
 import type {
   Caching,
-  ElementInterface,
+  ElementInterfaceIntersect,
   Keyframe,
   Shape,
   Vector2,
@@ -20,7 +20,7 @@ class BaseProperty extends DynamicPropertyContainer {
   _caching?: Caching
   _isFirstFrame?: boolean
   _placeholder?: boolean
-  comp?: ElementInterface
+  comp?: ElementInterfaceIntersect
   data?: any
   e?: any
   effectsSequence?: any
@@ -352,10 +352,10 @@ class BaseProperty extends DynamicPropertyContainer {
 }
 export class ValueProperty extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     data: VectorProperty,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: ElementInterfaceIntersect | null = null
   ) {
     super()
     this.propType = 'unidimensional'
@@ -380,10 +380,10 @@ export class MultiDimensionalProperty<
   T extends Array<any> = Vector2,
 > extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     data: VectorProperty<T>,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: ElementInterfaceIntersect | null = null
   ) {
     super()
     this.propType = 'multidimensional'
@@ -411,10 +411,10 @@ export class MultiDimensionalProperty<
 }
 export class KeyframedValueProperty extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     data: VectorProperty<Keyframe[]>,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: ElementInterfaceIntersect | null = null
   ) {
     super()
     this.propType = 'unidimensional'
@@ -445,10 +445,10 @@ export class KeyframedValueProperty extends BaseProperty {
 
 export class KeyframedMultidimensionalProperty extends BaseProperty {
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     data: VectorProperty<any[]>,
     mult: null | number = null,
-    container: ElementInterface | null = null
+    container: ElementInterfaceIntersect | null = null
   ) {
     super()
     this.propType = 'multidimensional'

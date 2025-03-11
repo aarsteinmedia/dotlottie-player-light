@@ -1,6 +1,6 @@
 import type MaskElement from '@/elements/MaskElement'
 import type {
-  ElementInterface,
+  ElementInterfaceIntersect,
   GlobalData,
   ItemsData,
   LottieLayer,
@@ -14,7 +14,7 @@ import ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 export default class BaseElement {
   baseElement?: SVGGElement
-  comp!: ElementInterface
+  comp!: ElementInterfaceIntersect
   compInterface?: ProjectInterface
   data!: LottieLayer
   effectsManager!: EffectsManager
@@ -52,7 +52,7 @@ export default class BaseElement {
   initBaseData(
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: ElementInterfaceIntersect
   ) {
     this.globalData = globalData
     this.comp = comp

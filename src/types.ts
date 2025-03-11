@@ -89,7 +89,20 @@ export interface Transformer {
   op: ValueProperty
 }
 
-export type ElementInterface = BaseElement &
+export type ElementInterfaceUnion =
+  | BaseElement
+  | HierarchyElement
+  | AudioElement
+  | CompElement
+  | SVGShapeElement
+  | SVGTextElement
+  | SVGStopElement
+  | SVGStrokeStyleData
+  | TextElement
+  | BaseRenderer
+  | AnimationItem
+
+export type ElementInterfaceIntersect = BaseElement &
   HierarchyElement &
   AudioElement &
   CompElement &
@@ -113,9 +126,9 @@ export interface CompInterface extends AnimationItem {
   assetData: ImageData
   baseElement: SVGElement
   buildElementParenting: (
-    element: ElementInterface,
+    element: ElementInterfaceIntersect,
     parentId?: number,
-    hierarchy?: ElementInterface[]
+    hierarchy?: ElementInterfaceIntersect[]
   ) => void
   checkParenting: () => void
   comp: CompInterface
@@ -836,8 +849,8 @@ export interface ShapeDataInterface {
   _isAnimated: boolean
   /** SVG Path Data */
   caches: string[]
-  container: ElementInterface
-  elements: ElementInterface[]
+  container: ElementInterfaceIntersect
+  elements: ElementInterfaceIntersect[]
   lStr: string
   lvl: number
   setAsAnimated: () => void
@@ -846,7 +859,7 @@ export interface ShapeDataInterface {
     k: boolean
     kf: boolean
     _mdf: boolean
-    comp: ElementInterface
+    comp: ElementInterfaceIntersect
     paths: ShapeElement
   }
   styles: SVGStyleData[]
@@ -1338,7 +1351,7 @@ export interface Caching {
 }
 
 export interface PropertyElement {
-  comp: ElementInterface
+  comp: ElementInterfaceIntersect
   data: {
     st: number
   }
@@ -1391,6 +1404,12 @@ export interface TransformHandler {
   sk: SequenceValue<number[]>
 }
 
+export interface SourceRect {
+  height: number
+  left: number
+  top: number
+  width: number
+}
 export interface IntersectData {
   bez: PolynomialBezier
   cx: number

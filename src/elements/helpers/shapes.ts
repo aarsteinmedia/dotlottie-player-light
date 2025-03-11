@@ -6,7 +6,12 @@ import type {
 import type { ShapeProperty } from '@/utils/shapes/ShapeProperty'
 
 import { lineCapEnum, lineJoinEnum, RendererType, ShapeType } from '@/enums'
-import { AnimatedProperty, ElementInterface, Shape, Transformer } from '@/types'
+import {
+  AnimatedProperty,
+  ElementInterfaceIntersect,
+  Shape,
+  Transformer,
+} from '@/types'
 import { createNS, degToRads } from '@/utils'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -71,7 +76,7 @@ export class SVGShapeData {
 
 export class SVGTransformData {
   _isAnimated: boolean
-  elements: ElementInterface[]
+  elements: ElementInterfaceIntersect[]
   transform: Transformer
   constructor(
     mProps: TransformProperty,
@@ -120,9 +125,9 @@ export class SVGStyleData {
   }
 }
 export class ProcessedElement {
-  elem: ElementInterface
+  elem: ElementInterfaceIntersect
   pos: number
-  constructor(element: ElementInterface, position: number) {
+  constructor(element: ElementInterfaceIntersect, position: number) {
     this.elem = element
     this.pos = position
   }
@@ -147,14 +152,18 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
   s?: MultiDimensionalProperty
   stops?: SVGStopElement[]
   style?: SVGStyleData
-  constructor(elem: ElementInterface, data: Shape, styleData: SVGStyleData) {
+  constructor(
+    elem: ElementInterfaceIntersect,
+    data: Shape,
+    styleData: SVGStyleData
+  ) {
     super()
     this.initDynamicPropertyContainer(elem)
     this.getValue = this.iterateDynamicProperties
     this.initGradientData(elem, data, styleData)
   }
   initGradientData(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     data: Shape,
     styleData: SVGStyleData
   ) {
@@ -258,7 +267,11 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
 export class SVGGradientStrokeStyleData extends SVGGradientFillStyleData {
   d: DashProperty
   w?: ValueProperty
-  constructor(elem: ElementInterface, data: Shape, styleData: SVGStyleData) {
+  constructor(
+    elem: ElementInterfaceIntersect,
+    data: Shape,
+    styleData: SVGStyleData
+  ) {
     super(elem, data, styleData)
     this.initDynamicPropertyContainer(elem as any)
     this.getValue = this.iterateDynamicProperties
@@ -280,7 +293,11 @@ export class SVGStrokeStyleData extends DynamicPropertyContainer {
   o?: ValueProperty
   style: SVGStyleData
   w?: ValueProperty
-  constructor(elem: ElementInterface, data: Shape, styleObj: SVGStyleData) {
+  constructor(
+    elem: ElementInterfaceIntersect,
+    data: Shape,
+    styleObj: SVGStyleData
+  ) {
     super()
     this.initDynamicPropertyContainer(elem)
     this.getValue = this.iterateDynamicProperties
@@ -302,7 +319,11 @@ export class SVGFillStyleData extends DynamicPropertyContainer {
   c?: MultiDimensionalProperty
   o?: ValueProperty
   style: SVGStyleData
-  constructor(elem: ElementInterface, data: Shape, styleObj: SVGStyleData) {
+  constructor(
+    elem: ElementInterfaceIntersect,
+    data: Shape,
+    styleObj: SVGStyleData
+  ) {
     super()
     this.initDynamicPropertyContainer(elem)
     this.getValue = this.iterateDynamicProperties
@@ -315,7 +336,7 @@ export class SVGFillStyleData extends DynamicPropertyContainer {
 export class SVGNoStyleData extends DynamicPropertyContainer {
   style: SVGStyleData
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     _data: SVGShapeData,
     styleObj: SVGStyleData
   ) {

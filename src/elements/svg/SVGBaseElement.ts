@@ -1,5 +1,5 @@
 import type {
-  ElementInterface,
+  ElementInterfaceIntersect,
   GlobalData,
   LottieLayer,
   Transformer,
@@ -16,7 +16,7 @@ export default class SVGBaseElement {
 
   baseElement?: SVGGElement
   checkMasks!: () => boolean
-  comp!: ElementInterface
+  comp!: ElementInterfaceIntersect
   data!: LottieLayer
   finalTransform?: Transformer
   globalData!: GlobalData

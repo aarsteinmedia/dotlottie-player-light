@@ -1,4 +1,4 @@
-import type { ElementInterface, Shape, Vector2 } from '@/types'
+import type { ElementInterfaceIntersect, Shape, Vector2 } from '@/types'
 import type {
   MultiDimensionalProperty,
   ValueProperty,
@@ -16,7 +16,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
   appliedTransformations: number
   autoOriented?: boolean
   data: Shape
-  elem: ElementInterface
+  elem: ElementInterfaceIntersect
   frameId: number
   o?: ValueProperty
   or?: ValueProperty
@@ -36,9 +36,9 @@ export default class TransformProperty extends DynamicPropertyContainer {
   v: Matrix
   private defaultVector: Vector2 = [0, 0]
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     data: Shape,
-    container: ElementInterface
+    container: ElementInterfaceIntersect
   ) {
     super()
     this.elem = elem

@@ -1,5 +1,5 @@
 import type { EffectInterface, GroupEffect } from '@/effects/EffectsManager'
-import type { EffectValue, ElementInterface } from '@/types'
+import type { EffectValue, ElementInterfaceIntersect } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
 import PropertyFactory from '@/utils/PropertyFactory'
@@ -62,7 +62,7 @@ export class LayerIndexEffect {
 
   constructor(
     data: EffectValue,
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
     this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
@@ -75,7 +75,7 @@ export class MaskIndexEffect {
 
   constructor(
     data: EffectValue,
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
     this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
@@ -88,7 +88,7 @@ export class CheckboxEffect {
 
   constructor(
     data: EffectValue,
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
     this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)

@@ -1,7 +1,7 @@
 import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type {
   Caching,
-  ElementInterface,
+  ElementInterfaceIntersect,
   Mask,
   Merge,
   Shape,
@@ -44,9 +44,9 @@ export default class ShapePropertyFactory {
         prop = new ShapeProperty(elem, data, type)
       }
     } else if (type === 5) {
-      prop = new RectShapeProperty(elem as ElementInterface, data)
+      prop = new RectShapeProperty(elem as ElementInterfaceIntersect, data)
     } else if (type === 6) {
-      prop = new EllShapeProperty(elem as ElementInterface, data)
+      prop = new EllShapeProperty(elem as ElementInterfaceIntersect, data)
     } else if (type === 7) {
       prop = new StarShapeProperty(elem, data)
     }
@@ -58,10 +58,10 @@ export default class ShapePropertyFactory {
 }
 
 export class RectShapeProperty extends DynamicPropertyContainer {
-  comp?: ElementInterface
+  comp?: ElementInterfaceIntersect
   d?: number
   data?: Merge<Shape, Mask>
-  elem: ElementInterface
+  elem: ElementInterfaceIntersect
   frameId: number
   ir?: ValueProperty
   is?: ValueProperty
@@ -77,7 +77,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
   s: ValueProperty
   v: ShapePath
 
-  constructor(elem: ElementInterface, data: Merge<Shape, Mask>) {
+  constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>) {
     super()
     this.v = ShapePool.newElement()
     this.v.c = true
@@ -489,10 +489,10 @@ class StarShapeProperty extends DynamicPropertyContainer {
 }
 
 class EllShapeProperty extends DynamicPropertyContainer {
-  comp: ElementInterface
+  comp: ElementInterfaceIntersect
 
   d?: number
-  elem: ElementInterface
+  elem: ElementInterfaceIntersect
   frameId: number
   k: boolean
   localShapeCollection: ShapeCollection
@@ -503,7 +503,7 @@ class EllShapeProperty extends DynamicPropertyContainer {
   v: ShapePath
   private _cPoint = roundCorner
 
-  constructor(elem: ElementInterface, data: Merge<Shape, Mask>) {
+  constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>) {
     super()
     this.v = ShapePool.newElement()
     this.v.setPathData(true, 4)
@@ -573,7 +573,7 @@ export class ShapeProperty {
   _caching?: Caching
   public _mdf: boolean
   public addEffect: (func: any) => void
-  public comp: ElementInterface
+  public comp: ElementInterfaceIntersect
   public container: SVGShapeElement
   public data: Partial<Shape & Mask>
   public effectsSequence: unknown[]

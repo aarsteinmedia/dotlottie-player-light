@@ -2,7 +2,7 @@ import type { ValueProperty } from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import { SVGShapeData } from '@/elements/helpers/shapes'
-import { ElementInterface, Shape, Vector2 } from '@/types'
+import { ElementInterfaceIntersect, Shape, Vector2 } from '@/types'
 import Bezier from '@/utils/Bezier'
 import { segmentsLengthPool } from '@/utils/pooling'
 import ShapePool from '@/utils/pooling/ShapePool'
@@ -266,7 +266,7 @@ export default class TrimModifier extends ShapeModifier {
     return shapeSegments
   }
 
-  override initModifierProperties(elem: ElementInterface, data: Shape) {
+  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
     this.s = PropertyFactory.getProp(elem, data.s, 0, 0.01, this)
     this.e = PropertyFactory.getProp(elem, data.e, 0, 0.01, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, 0, this)

@@ -1,4 +1,4 @@
-import type { ElementInterface, Keyframe, VectorProperty } from '@/types'
+import type { ElementInterfaceIntersect, Keyframe, VectorProperty } from '@/types'
 
 import {
   KeyframedMultidimensionalProperty,
@@ -11,11 +11,11 @@ import {
 export default class PropertyFactory {
   static getProp = (
     // <T = number>
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     dataFromProps?: any, // VectorProperty<T>,
     type?: number,
     mult?: null | number,
-    container?: any // ElementInterface | GroupEffect
+    container?: any // ElementInterfaceIntersect | GroupEffect
   ) => {
     let data = dataFromProps
     if (data && 'sid' in data && data.sid) {

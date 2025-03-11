@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type BaseElement from '@/elements/BaseElement'
 import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import type { ElementInterface, SVGRendererConfig, Transformer } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  SourceRect,
+  SVGRendererConfig,
+  Transformer,
+} from '@/types'
 
 class RenderableElement {
   finalTransform?: Transformer
   hidden?: boolean
   isInRange?: boolean
   isTransparent?: boolean
-  renderableComponents!: ElementInterface[]
-  addRenderableComponent(component: ElementInterface) {
+  renderableComponents!: ElementInterfaceIntersect[]
+  addRenderableComponent(component: ElementInterfaceIntersect) {
     if (this.renderableComponents.indexOf(component) === -1) {
       this.renderableComponents.push(component)
     }
@@ -94,7 +99,7 @@ class RenderableElement {
     /* this.maskManager.renderFrame(this.finalTransform.mat);
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */
   }
-  sourceRectAtTime() {
+  sourceRectAtTime(): SourceRect | null {
     return {
       height: 100,
       left: 0,

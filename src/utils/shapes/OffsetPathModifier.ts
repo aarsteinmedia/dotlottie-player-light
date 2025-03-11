@@ -1,4 +1,4 @@
-import type { ElementInterface, Shape } from '@/types'
+import type { ElementInterfaceIntersect, Shape } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
@@ -17,7 +17,7 @@ export default class OffsetPathModifier extends ShapeModifier {
   amount?: ValueProperty
   lineJoin?: number
   miterLimit?: ValueProperty
-  override initModifierProperties(elem: ElementInterface, data: Shape) {
+  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
     this.getValue = this.processKeys
     this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
     this.miterLimit = PropertyFactory.getProp(elem, data.ml, 0, null, this)

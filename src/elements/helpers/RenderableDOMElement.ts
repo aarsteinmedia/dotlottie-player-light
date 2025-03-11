@@ -1,4 +1,8 @@
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  GlobalData,
+  LottieLayer,
+} from '@/types'
 
 import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
@@ -17,7 +21,7 @@ class RenderableDOMElement {
   initBaseData!: (
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: ElementInterfaceIntersect
   ) => void
   initFrame!: () => void
   initHierarchy!: () => void
@@ -49,7 +53,7 @@ class RenderableDOMElement {
   initElement(
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: ElementInterfaceIntersect
   ) {
     this.initFrame()
     this.initBaseData(data, globalData, comp)

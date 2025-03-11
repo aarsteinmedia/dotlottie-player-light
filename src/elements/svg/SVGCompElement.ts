@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type { ElementInterface, GlobalData, LottieLayer } from '@/types'
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types'
 import type { KeyframedValueProperty } from '@/utils/Properties'
 
 import CompElement from '@/elements/CompElement'
@@ -14,9 +14,9 @@ import PropertyFactory from '@/utils/PropertyFactory'
 class SVGCompElement extends SVGBaseElement {
   _debug?: boolean
   completeLayers: boolean
-  elements: ElementInterface[]
+  elements: ElementInterfaceIntersect[]
   layers: LottieLayer[]
-  pendingElements: ElementInterface[]
+  pendingElements: ElementInterfaceIntersect[]
   supports3d: boolean
   tm?: KeyframedValueProperty
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
@@ -46,7 +46,7 @@ class SVGCompElement extends SVGBaseElement {
   initElement(
     _data: LottieLayer,
     _globalData: GlobalData,
-    _comp: ElementInterface
+    _comp: ElementInterfaceIntersect
   ) {}
 }
 

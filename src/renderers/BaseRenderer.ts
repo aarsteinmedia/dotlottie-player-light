@@ -2,7 +2,11 @@
 import type AnimationItem from '@/animation/AnimationItem'
 import type BaseElement from '@/elements/BaseElement'
 import type SVGCompElement from '@/elements/svg/SVGCompElement'
-import type { AnimationData, ElementInterface, LottieLayer } from '@/types'
+import type {
+  AnimationData,
+  ElementInterfaceIntersect,
+  LottieLayer,
+} from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
 
 import AudioElement from '@/elements/AudioElement'
@@ -27,12 +31,12 @@ class BaseRenderer {
 
   createText!: (data: LottieLayer) => void
 
-  elements!: ElementInterface[]
+  elements!: ElementInterfaceIntersect[]
 
   layers!: LottieLayer[]
 
-  pendingElements!: ElementInterface[]
-  addPendingElement(element: ElementInterface) {
+  pendingElements!: ElementInterfaceIntersect[]
+  addPendingElement(element: ElementInterfaceIntersect) {
     this.pendingElements.push(element)
   }
 
@@ -45,9 +49,9 @@ class BaseRenderer {
   }
 
   buildElementParenting(
-    element: ElementInterface,
+    element: ElementInterfaceIntersect,
     parentName?: number,
-    hierarchy: ElementInterface[] = []
+    hierarchy: ElementInterfaceIntersect[] = []
   ) {
     const elements = this.elements
     const layers = this.layers
@@ -138,7 +142,7 @@ class BaseRenderer {
     return null
   }
 
-  getElementByPath(path: unknown[]): ElementInterface | undefined {
+  getElementByPath(path: unknown[]): ElementInterfaceIntersect | undefined {
     const pathValue = path.shift()
     let element
     if (typeof pathValue === 'number') {

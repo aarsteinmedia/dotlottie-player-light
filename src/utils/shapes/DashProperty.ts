@@ -1,4 +1,4 @@
-import type { ElementInterface, StrokeData } from '@/types'
+import type { ElementInterfaceIntersect, StrokeData } from '@/types'
 
 import { ArrayType, RendererType } from '@/enums'
 import { createSizedArray, createTypedArray } from '@/utils/helpers/arrays'
@@ -10,15 +10,15 @@ export default class DashProperty extends DynamicPropertyContainer {
   dashoffset: Float32Array
   dashStr: string
   dataProps: StrokeData[]
-  elem: ElementInterface
+  elem: ElementInterfaceIntersect
   frameId: number
   k: boolean
   renderer: RendererType
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     data: StrokeData[],
     renderer: RendererType,
-    container: ElementInterface
+    container: ElementInterfaceIntersect
   ) {
     super()
     this.elem = elem

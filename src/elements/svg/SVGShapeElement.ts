@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   AnimatedContent,
-  ElementInterface,
+  ElementInterfaceIntersect,
   GlobalData,
   ItemsData,
   LottieLayer,
@@ -55,7 +55,7 @@ class SVGShapeElement {
   constructor(
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: ElementInterfaceIntersect
   ) {
     // List of drawable elements
     this.shapes = []
@@ -157,8 +157,11 @@ class SVGShapeElement {
       const GradientConstructor =
         data.ty === 'gf' ? SVGGradientFillStyleData : SVGGradientStrokeStyleData
       elementData = new GradientConstructor(this, data, styleOb)
-      this.globalData.defs.appendChild(elementData.gf)
-      if (elementData.maskId) {
+      if (elementData.gf) {
+        this.globalData.defs.appendChild(elementData.gf)
+      }
+
+      if (elementData.maskId && elementData.ms && elementData.of) {
         this.globalData.defs.appendChild(elementData.ms)
         this.globalData.defs.appendChild(elementData.of)
         pathElement.setAttribute(

@@ -1,4 +1,4 @@
-import type { ElementInterface, Shape } from '@/types'
+import type { ElementInterfaceIntersect, Shape } from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import ShapePool from '@/utils/pooling/ShapePool'
@@ -9,7 +9,7 @@ import type { ValueProperty } from '../Properties'
 
 export default class PuckerAndBloatModifier extends ShapeModifier {
   amount?: ValueProperty
-  override initModifierProperties(elem: ElementInterface, data: Shape) {
+  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
     this.getValue = this.processKeys
     this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
     this._isAnimated = !!this.amount?.effectsSequence.length

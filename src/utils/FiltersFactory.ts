@@ -2,9 +2,9 @@ import { createNS, inBrowser } from '@/utils'
 
 export default class FilltersFactory {
   static createAlphaToLuminanceFilter() {
-    const feColorMatrix = createNS('feColorMatrix')
-    if (!(feColorMatrix instanceof SVGFEColorMatrixElement)) {
-      throw new Error('Could not create SVG Element')
+    const feColorMatrix = createNS<SVGFEColorMatrixElement>('feColorMatrix')
+    if (!feColorMatrix) {
+      throw new Error('Could not create SVGFEColorMatrixElement Element')
     }
     feColorMatrix.setAttribute('type', 'matrix')
     feColorMatrix.setAttribute('color-interpolation-filters', 'sRGB')
@@ -16,9 +16,9 @@ export default class FilltersFactory {
   }
 
   static createFilter(filId: string, skipCoordinates?: boolean) {
-    const fil = createNS('filter')
-    if (!(fil instanceof SVGFilterElement)) {
-      throw new Error(`Could not create ${filId} Element`)
+    const fil = createNS<SVGFilterElement>('filter')
+    if (!fil) {
+      throw new Error(`Could not create ${filId} filter element`)
     }
     fil.setAttribute('id', filId)
     if (skipCoordinates !== true) {

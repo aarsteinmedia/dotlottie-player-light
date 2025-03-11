@@ -7,7 +7,7 @@ import type SolidElement from '@/elements/SolidElement'
 import type { RendererType } from '@/enums'
 import type {
   DocumentData,
-  ElementInterface,
+  ElementInterfaceIntersect,
   GlobalData,
   LottieLayer,
   Shape,
@@ -107,7 +107,7 @@ class TextElement {
   initElement(
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: ElementInterfaceIntersect
   ) {
     this.lettersChangedFlag = true
     this.initFrame()

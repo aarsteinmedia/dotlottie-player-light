@@ -1,4 +1,4 @@
-import type { ElementInterface, TextRangeValue } from '@/types'
+import type { ElementInterfaceIntersect, TextRangeValue } from '@/types'
 
 import BezierFactory from '@/utils/BezierFactory'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -9,10 +9,10 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
   _currentTextLength: number
   a: ValueProperty
   b?: any
-  comp: ElementInterface
+  comp: ElementInterfaceIntersect
   data: TextRangeValue
   e: ValueProperty | { v: number }
-  elem: ElementInterface
+  elem: ElementInterfaceIntersect
   finalE: number
   finalS: number
   k: boolean
@@ -23,7 +23,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
   sm: any
   totalChars?: number
   xe: any
-  constructor(elem: ElementInterface, data: TextRangeValue) {
+  constructor(elem: ElementInterfaceIntersect, data: TextRangeValue) {
     super()
     this._currentTextLength = -1
     this.k = false

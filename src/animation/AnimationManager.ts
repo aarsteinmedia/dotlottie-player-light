@@ -184,11 +184,11 @@ export default class AnimationManager {
   }
   private static removeElement({ target: animItem }: LottieEvent) {
     let i = 0
-    if (!(animItem instanceof AnimationItem)) {
-      return
+    if (!animItem) {
+      throw new Error('No animation to remove')
     }
     while (i < this.len) {
-      if (animItem && this.registeredAnimations[i].animation === animItem) {
+      if (this.registeredAnimations[i].animation === animItem) {
         this.registeredAnimations.splice(i, 1)
         i--
         this.len -= 1

@@ -1,7 +1,8 @@
-import type { ElementInterface, Shape } from '@/types'
+import type { ElementInterfaceIntersect, Shape } from '@/types'
 import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
 
-import { ProcessedElement, type SVGShapeData } from '@/elements/helpers/shapes'
+import { ProcessedElement, SVGShapeData } from '@/elements/helpers/shapes'
+import ShapePath from '@/utils/shapes/ShapePath'
 
 class ShapeElement {
   _isFirstFrame?: boolean
@@ -14,9 +15,9 @@ class ShapeElement {
 
   shapeModifiers?: ShapeModifierInterface[]
 
-  shapes?: SVGShapeData[]
+  shapes?: SVGShapeData[] | ShapePath[]
 
-  addProcessedElement(elem: ElementInterface, pos: number) {
+  addProcessedElement(elem: ElementInterfaceIntersect, pos: number) {
     const elements = this.processedElements
     let i = elements.length
     while (i) {
@@ -58,7 +59,7 @@ class ShapeElement {
     }
     const { length } = this.shapes || []
     for (let i = 0; i < length; i++) {
-      this.shapes?.[i].sh.reset()
+      ;(this.shapes?.[i] as SVGShapeData).sh.reset()
     }
 
     const { length: len } = this.shapeModifiers || []
@@ -74,7 +75,7 @@ class ShapeElement {
       }
     }
   }
-  searchProcessedElement(elem: any) {
+  searchProcessedElement(elem: ElementInterfaceIntersect) {
     const elements = this.processedElements
     let i = 0
     const len = elements.length

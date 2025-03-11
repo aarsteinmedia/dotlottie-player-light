@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type { GlobalData, LottieLayer } from '@/types'
+import type { GlobalData, LottieLayer, SourceRect } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -31,7 +31,9 @@ class NullElement {
 
   renderFrame(_frame?: number | null) {}
 
-  sourceRectAtTime() {}
+  sourceRectAtTime(): SourceRect | null {
+    throw new Error('Method not yet implemented')
+  }
 }
 
 extendPrototype(

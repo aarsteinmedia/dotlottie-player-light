@@ -4,7 +4,7 @@ import type RepeaterModifier from '@/utils/shapes/RepeaterModifier'
 import type TrimModifier from '@/utils/shapes/TrimModifier'
 import type ZigZagModifier from '@/utils/shapes/ZigZagModifier'
 
-import { ElementInterface } from '@/types'
+import { ElementInterfaceIntersect } from '@/types'
 
 export type ShapeModifierInterface =
   | TrimModifier
@@ -21,7 +21,7 @@ type Factory =
   | typeof OffsetPathModifier
 
 export default class ShapeModifiers {
-  static getModifier(nm: string, elem?: ElementInterface, data?: unknown) {
+  static getModifier(nm: string, elem?: ElementInterfaceIntersect, data?: unknown) {
     // @ts-expect-error: cant pass args - TODO: Find cases and test real behaviour
     return new modifiers[nm](elem, data)
   }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable max-depth */
-import type { GlobalData, LottieLayer } from '@/types'
+import type { GlobalData, LottieLayer, SourceRect } from '@/types'
 import type Matrix from '@/utils/Matrix'
 
 import BaseElement from '@/elements/BaseElement'
@@ -371,7 +371,7 @@ class SVGTextLottieElement {
     }
   }
 
-  sourceRectAtTime() {
+  sourceRectAtTime(): SourceRect | null {
     this.prepareFrame(this.comp.renderedFrame - this.data.st)
     this.renderInnerContent()
     if (this._sizeChanged) {
@@ -383,8 +383,9 @@ class SVGTextLottieElement {
         top: textBox.y,
         width: textBox.width,
       }
+      return this.bbox
     }
-    return this.bbox
+    return null
   }
 }
 

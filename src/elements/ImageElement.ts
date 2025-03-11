@@ -1,8 +1,9 @@
 import type {
-  ElementInterface,
+  ElementInterfaceIntersect,
   GlobalData,
   LottieAsset,
   LottieLayer,
+  SourceRect,
 } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
@@ -22,12 +23,7 @@ export default class ImageElement {
 
   layerElement!: SVGGElement
 
-  sourceRect: {
-    height: number
-    left: number
-    top: number
-    width: number
-  }
+  sourceRect: SourceRect | null
 
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
     if (data.refId && globalData.getAssetData) {
@@ -74,7 +70,7 @@ export default class ImageElement {
   initElement(
     _data: LottieLayer,
     _globalData: GlobalData,
-    _comp: ElementInterface
+    _comp: ElementInterfaceIntersect
   ) {}
 
   sourceRectAtTime() {

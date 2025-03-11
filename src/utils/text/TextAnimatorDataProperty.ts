@@ -1,4 +1,4 @@
-import type { ElementInterface } from '@/types'
+import type { ElementInterfaceIntersect } from '@/types'
 import type { NoProperty, ValueProperty } from '@/utils/Properties'
 
 import { degToRads } from '@/utils'
@@ -26,9 +26,9 @@ export default class TextAnimatorDataProperty {
   }
   s?: TextSelectorProperty
   constructor(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     animatorProps?: TextAnimatorDataProperty,
-    container?: ElementInterface
+    container?: ElementInterfaceIntersect
   ) {
     const defaultData = { propType: false } as NoProperty,
       { getProp } = PropertyFactory,

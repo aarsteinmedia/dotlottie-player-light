@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   Audio,
-  ElementInterface,
+  ElementInterfaceIntersect,
   GlobalData,
   LottieAsset,
   LottieLayer,
@@ -28,7 +28,7 @@ class AudioElement {
   constructor(
     data: LottieLayer,
     globalData: GlobalData,
-    comp: ElementInterface
+    comp: ElementInterfaceIntersect
   ) {
     this.initFrame()
     this.initRenderable()

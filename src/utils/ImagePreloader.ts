@@ -55,8 +55,8 @@ export default class ImagePreloader {
   }
   public createImageData(assetData: LottieAsset) {
     const path = this.getAssetsPath(assetData, this.assetsPath, this.path)
-    const img = createNS('image')
-    if (!(img instanceof SVGImageElement)) {
+    const img = createNS<SVGImageElement>('image')
+    if (!img) {
       throw new Error('Could not generate SVG')
     }
     if (isSafari()) {
@@ -169,9 +169,9 @@ export default class ImagePreloader {
     if (isServer()) {
       return null
     }
-    const canvas = createTag(RendererType.Canvas)
-    if (!(canvas instanceof HTMLCanvasElement)) {
-      return null
+    const canvas = createTag<HTMLCanvasElement>(RendererType.Canvas)
+    if (!canvas) {
+      throw new Error('Could not create canvas element')
     }
     canvas.width = 1
     canvas.height = 1
@@ -184,9 +184,9 @@ export default class ImagePreloader {
   }
   private createImgData(assetData: LottieAsset) {
     const path = this.getAssetsPath(assetData, this.assetsPath, this.path)
-    const img = createTag('img')
-    if (!(img instanceof HTMLMediaElement)) {
-      return
+    const img = createTag<HTMLMediaElement>('img')
+    if (!img) {
+      throw new Error('Could not create image element')
     }
     img.crossOrigin = 'anonymous'
     img.addEventListener('load', this._imageLoaded, false)

@@ -9,7 +9,7 @@ import type {
   SliderEffect,
 } from '@/effects'
 
-import { ElementInterface } from '@/types'
+import { ElementInterfaceIntersect } from '@/types'
 import FiltersFactory from '@/utils/FiltersFactory'
 import {
   createElementID,
@@ -30,7 +30,7 @@ type Filter =
 class SVGEffects {
   static idPrefix = 'filter_result_'
   filters: Filter[]
-  constructor(elem: ElementInterface) {
+  constructor(elem: ElementInterfaceIntersect) {
     // let source = 'SourceGraphic' TODO: Perhaps for main version
     const len = elem.data.ef ? elem.data.ef.length : 0
     const filId = createElementID()

@@ -1,5 +1,5 @@
 import type { ShapeGroupData } from '@/elements/helpers/shapes'
-import type { ElementInterface, Shape } from '@/types'
+import type { ElementInterfaceIntersect, Shape } from '@/types'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { ShapeType } from '@/enums'
@@ -69,7 +69,7 @@ export default class RepeaterModifier extends ShapeModifier {
     return newElements
   }
   override init(
-    elem: ElementInterface,
+    elem: ElementInterfaceIntersect,
     arr: ShapeGroupData[],
     posFromProps: number,
     elemsData: ShapePath
@@ -97,7 +97,7 @@ export default class RepeaterModifier extends ShapeModifier {
     }
   }
 
-  override initModifierProperties(elem: ElementInterface, data: any) {
+  override initModifierProperties(elem: ElementInterfaceIntersect, data: any) {
     this.getValue = this.processKeys
     this.c = PropertyFactory.getProp(elem, data.c, 0, null, this)
     this.o = PropertyFactory.getProp(elem, data.o, 0, null, this)

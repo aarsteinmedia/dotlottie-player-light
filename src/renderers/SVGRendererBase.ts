@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type {
   AnimationData,
-  ElementInterface,
+  ElementInterfaceIntersect,
   GlobalData,
   LottieLayer,
   SVGRendererConfig,
@@ -24,7 +24,7 @@ import {
 import { createSizedArray } from '@/utils/helpers/arrays'
 
 class SVGRendererBase {
-  addPendingElement!: (comp: ElementInterface) => void
+  addPendingElement!: (comp: ElementInterfaceIntersect) => void
 
   animationItem!: AnimationItem
 
@@ -32,13 +32,13 @@ class SVGRendererBase {
 
   completeLayers?: boolean
 
-  createItem!: (data: LottieLayer) => ElementInterface
+  createItem!: (data: LottieLayer) => ElementInterfaceIntersect
 
   data!: LottieLayer
 
   destroyed?: boolean
 
-  elements!: ElementInterface[]
+  elements!: ElementInterfaceIntersect[]
 
   globalData!: GlobalData
 
@@ -46,7 +46,7 @@ class SVGRendererBase {
 
   layers!: LottieLayer[]
 
-  pendingElements!: ElementInterface[]
+  pendingElements!: ElementInterfaceIntersect[]
   renderConfig!: SVGRendererConfig
 
   renderedFrame!: number
@@ -55,7 +55,7 @@ class SVGRendererBase {
 
   svgElement!: SVGSVGElement
 
-  appendElementInPos(element: ElementInterface, pos: number) {
+  appendElementInPos(element: ElementInterfaceIntersect, pos: number) {
     const newElement = element.getBaseElement()
     if (!newElement) {
       return
