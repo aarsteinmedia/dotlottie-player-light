@@ -11,33 +11,12 @@ class RenderableDOMElement {
   _isFirstFrame?: boolean
   _mdf?: boolean
   baseElement?: SVGGElement
-  checkTransparency!: () => void
-  createContainerElements!: () => void
-  createContent!: () => void
-  createRenderableComponents!: () => void
   data!: LottieLayer
-  destroyBaseElement!: () => void
   hidden?: boolean
-  initBaseData!: (
-    data: LottieLayer,
-    globalData: GlobalData,
-    comp: ElementInterfaceIntersect
-  ) => void
-  initFrame!: () => void
-  initHierarchy!: () => void
-  initRenderable!: () => void
-  initRendererElement!: () => void
-  initTransform!: () => void
   innerElem?: SVGImageElement
   isInRange?: boolean
   isTransparent?: boolean
   layerElement!: SVGGElement
-  prepareProperties!: (val: number, isInRange?: boolean) => void
-  prepareRenderableFrame!: (num: number, flag?: boolean) => void
-  renderElement!: () => void
-  renderLocalTransform!: () => void
-  renderRenderable!: () => void
-  renderTransform!: () => void
   destroy() {
     this.innerElem = null as any
     this.destroyBaseElement()

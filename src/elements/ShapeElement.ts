@@ -8,10 +8,8 @@ class ShapeElement {
   _isFirstFrame?: boolean
   _length?: number
   isInRange?: boolean
-  prepareProperties!: (val: number, isInRange?: boolean) => void
-  prepareRenderableFrame!: (val: number, flag?: boolean) => void
 
-  processedElements!: ProcessedElement[]
+  processedElements?: ProcessedElement[]
 
   shapeModifiers?: ShapeModifierInterface[]
 
@@ -19,15 +17,15 @@ class ShapeElement {
 
   addProcessedElement(elem: any, pos: number) {
     const elements = this.processedElements
-    let i = elements.length
+    let i = elements?.length
     while (i) {
       i--
-      if (elements[i].elem === elem) {
-        elements[i].pos = pos
+      if (elements?.[i].elem === elem) {
+        elements![i].pos = pos
         return
       }
     }
-    elements.push(new ProcessedElement(elem, pos))
+    elements?.push(new ProcessedElement(elem, pos))
   }
 
   addShapeToModifiers(data: SVGShapeData) {
@@ -78,9 +76,9 @@ class ShapeElement {
   searchProcessedElement(elem: ElementInterfaceIntersect) {
     const elements = this.processedElements
     let i = 0
-    const len = elements.length
-    while (i < len) {
-      if (elements[i].elem === elem) {
+    const { length } = elements || []
+    while (i < length) {
+      if (elements?.[i].elem === elem) {
         return elements[i].pos
       }
       i++

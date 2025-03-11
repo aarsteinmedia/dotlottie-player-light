@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import type { GlobalData, LottieLayer, SourceRect } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
@@ -40,7 +39,5 @@ extendPrototype(
   [BaseElement, TransformElement, HierarchyElement, FrameElement],
   NullElement
 )
-
-interface NullElement extends BaseElement, HierarchyElement, FrameElement {}
 
 export default NullElement

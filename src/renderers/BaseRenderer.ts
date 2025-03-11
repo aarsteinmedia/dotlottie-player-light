@@ -3,7 +3,6 @@ import type SVGCompElement from '@/elements/svg/SVGCompElement'
 import type {
   AnimationData,
   ElementInterfaceIntersect,
-  // GlobalData,
   LottieLayer,
 } from '@/types'
 import type ProjectInterface from '@/utils/helpers/ProjectInterface'
