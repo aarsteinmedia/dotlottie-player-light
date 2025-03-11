@@ -1,13 +1,13 @@
 import type { Transformer } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
+import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
-export default class SVGBaseElement extends BaseElement {
+export default class SVGBaseElement extends BaseRenderer {
   _sizeChanged?: boolean
   finalTransform?: Transformer
   maskedElement?: SVGGElement

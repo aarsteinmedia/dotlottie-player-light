@@ -30,6 +30,7 @@ export default class BaseRenderer extends BaseElement {
   addPendingElement(element: ElementInterfaceIntersect) {
     this.pendingElements.push(element)
   }
+
   buildAllItems() {
     const len = this.layers?.length || 0
     for (let i = 0; i < len; i++) {
@@ -37,7 +38,6 @@ export default class BaseRenderer extends BaseElement {
     }
     this.checkPendingElements()
   }
-
   buildElementParenting(
     element: ElementInterfaceIntersect,
     parentName?: number,
@@ -66,9 +66,10 @@ export default class BaseRenderer extends BaseElement {
     }
   }
 
-  // buildItem(_val: number) {
-  //   throw new Error('Method not yet implemented') // TODO:
-  // }
+  buildItem(_val: number) {
+    throw new Error('BaseRenderer: Method buildItem not yet implemented') // TODO:
+  }
+
   checkLayers(val?: number) {
     this.completeLayers = true
     const { length } = this.layers || []
@@ -87,6 +88,11 @@ export default class BaseRenderer extends BaseElement {
     }
     this.checkPendingElements()
   }
+  checkPendingElements() {
+    throw new Error(
+      'BaseRenderer: Method checkPendingElements not yet implemented'
+    )
+  }
   createAudio(data: LottieLayer) {
     if (!this.globalData) {
       throw new Error("Can't access Global Data")
@@ -98,7 +104,7 @@ export default class BaseRenderer extends BaseElement {
   }
 
   createComp(_data: LottieLayer): SVGCompElement {
-    throw new Error('Method not yet implemented')
+    throw new Error('BaseRenderer: Method createComp not yet implemented')
   }
 
   createFootage(data: LottieLayer) {
@@ -131,10 +137,13 @@ export default class BaseRenderer extends BaseElement {
         return this.createNull(layer)
     }
   }
+  createNull(_layer: LottieLayer) {
+    throw new Error('BaseRenderer: Method createNull not yet implemented')
+  }
   getElementById(ind: number) {
     const { length } = this.elements || []
     for (let i = 0; i < length; i++) {
-      if (this.elements?.[i].data.ind === ind) {
+      if (this.elements?.[i].data?.ind === ind) {
         return this.elements[i]
       }
     }
@@ -149,7 +158,7 @@ export default class BaseRenderer extends BaseElement {
     } else {
       const { length } = this.elements || []
       for (let i = 0; i < length; i++) {
-        if (this.elements?.[i].data.nm === pathValue) {
+        if (this.elements?.[i].data?.nm === pathValue) {
           element = this.elements?.[i]
           break
         }

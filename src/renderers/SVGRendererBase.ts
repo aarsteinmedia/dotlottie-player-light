@@ -8,11 +8,10 @@ import type {
 import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
 import SolidElement from '@/elements/SolidElement'
+import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import SVGTextLottieElement from '@/elements/svg/SVGTextElement'
-import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
 import {
   createElementID,
   getExpressionsPlugin,
@@ -20,7 +19,7 @@ import {
 } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
 
-export default class SVGRendererBase extends BaseRenderer {
+export default class SVGRendererBase extends SVGBaseElement {
   destroyed?: boolean
   renderConfig?: SVGRendererConfig
   renderedFrame!: number
@@ -51,7 +50,7 @@ export default class SVGRendererBase extends BaseRenderer {
     }
   }
 
-  buildItem(pos: number) {
+  override buildItem(pos: number) {
     if (!this.layers) {
       throw new Error('SVGRendererBase cannot access layers')
     }
@@ -94,7 +93,7 @@ export default class SVGRendererBase extends BaseRenderer {
     }
   }
 
-  checkPendingElements() {
+  override checkPendingElements() {
     while (this.pendingElements?.length) {
       const element = this.pendingElements.pop()
       element?.checkParenting()
@@ -213,7 +212,7 @@ export default class SVGRendererBase extends BaseRenderer {
     return new ImageElement(data, this.globalData, this)
   }
 
-  createNull(data: LottieLayer) {
+  override createNull(data: LottieLayer) {
     if (!this.globalData) {
       throw new Error('SVGRendererBase cannot access Global Data')
     }
@@ -326,5 +325,3 @@ export default class SVGRendererBase extends BaseRenderer {
 
   updateContainerSize(_width?: number, _height?: number) {}
 }
-
-extendPrototype([BaseRenderer], SVGRendererBase)

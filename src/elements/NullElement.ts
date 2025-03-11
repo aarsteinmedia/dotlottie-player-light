@@ -13,7 +13,7 @@ export default class NullElement extends FrameElement {
   }
 
   destroy() {
-    throw new Error('Method not yet implemented')
+    throw new Error('NullElement: Method destroy not yet implemented')
   }
 
   getBaseElement() {
@@ -21,7 +21,11 @@ export default class NullElement extends FrameElement {
   }
 
   hide() {
-    throw new Error('Method not yet implemented')
+    throw new Error('NullElement: Method hide not yet implemented')
+  }
+
+  initTransform() {
+    throw new Error('NullElement: Method initTransform not yet implemented')
   }
 
   prepareFrame(num: number) {
@@ -29,11 +33,11 @@ export default class NullElement extends FrameElement {
   }
 
   renderFrame(_frame?: number | null) {
-    throw new Error('🍝 Method not yet implemented')
+    // throw new Error('NullElement: Method renderFrame not yet implemented')
   }
 
   sourceRectAtTime(): SourceRect | null {
-    throw new Error('Method not yet implemented')
+    throw new Error('NullElement: Method sourceRectAtTime not yet implemented')
   }
 }
 
