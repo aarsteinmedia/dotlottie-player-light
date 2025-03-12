@@ -1,5 +1,5 @@
-import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types';
-import RenderableElement from '@/elements/helpers/RenderableElement';
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '../../types';
+import RenderableElement from '../../elements/helpers/RenderableElement';
 export default abstract class RenderableDOMElement extends RenderableElement {
     createContainerElements: any;
     createContent: any;

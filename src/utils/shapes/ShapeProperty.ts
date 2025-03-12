@@ -142,7 +142,12 @@ abstract class ShapeBaseProperty extends DynamicPropertyContainer {
           let fnc
           if (keyframeMetadata.__fnct) {
             fnc = keyframeMetadata.__fnct
-          } else {
+          } else if (
+            typeof keyData.o.x === 'number' &&
+            typeof keyData.o.y === 'number' &&
+            typeof keyData.i.x === 'number' &&
+            typeof keyData.i.y === 'number'
+          ) {
             fnc = BezierFactory.getBezierEasing(
               keyData.o.x,
               keyData.o.y,
@@ -151,10 +156,13 @@ abstract class ShapeBaseProperty extends DynamicPropertyContainer {
             ).get
             keyframeMetadata.__fnct = fnc
           }
-          perc = fnc(
-            (frameNum - (keyData.t - this.offsetTime)) /
-              (nextKeyData.t - this.offsetTime - (keyData.t - this.offsetTime))
-          )
+          perc =
+            fnc?.(
+              (frameNum - (keyData.t - this.offsetTime)) /
+                (nextKeyData.t -
+                  this.offsetTime -
+                  (keyData.t - this.offsetTime))
+            ) || 0
         }
         keyPropE = nextKeyData.s ? nextKeyData.s[0] : keyData.e[0]
       }
@@ -844,7 +852,7 @@ export class ShapeProperty extends ShapeBaseProperty {
     super()
     this.propType = 'shape'
     this.comp = elem.comp
-    this.container = elem
+    this.container = elem as any
     this.elem = elem
     this.data = data
     this.k = false
@@ -871,7 +879,7 @@ class KeyframedShapeProperty extends ShapeBaseProperty {
     this.propType = 'shape'
     this.comp = elem.comp
     this.elem = elem
-    this.container = elem
+    this.container = elem as any
     this.offsetTime = elem.data?.st || 0
     this.keyframes = (type === 3 ? data.pt?.k : (data.ks?.k ?? [])) as any
     this.keyframesMetadata = []

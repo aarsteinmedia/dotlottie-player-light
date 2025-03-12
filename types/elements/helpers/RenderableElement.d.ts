@@ -1,5 +1,5 @@
-import type { ElementInterfaceIntersect, SourceRect } from '@/types';
-import FrameElement from '@/elements/helpers/FrameElement';
+import type { ElementInterfaceIntersect, SourceRect } from '../../types';
+import FrameElement from '../../elements/helpers/FrameElement';
 export default class RenderableElement extends FrameElement {
     hidden?: boolean;
     isInRange?: boolean;

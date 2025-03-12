@@ -1,10 +1,10 @@
-import type { AnimationData, ElementInterfaceIntersect, LottieLayer, SVGRendererConfig } from '@/types';
-import ImageElement from '@/elements/ImageElement';
-import NullElement from '@/elements/NullElement';
-import SolidElement from '@/elements/SolidElement';
-import SVGShapeElement from '@/elements/svg/SVGShapeElement';
-import SVGTextLottieElement from '@/elements/svg/SVGTextElement';
-import BaseRenderer from '@/renderers/BaseRenderer';
+import type { AnimationData, ElementInterfaceIntersect, LottieLayer, SVGRendererConfig } from '../types';
+import ImageElement from '../elements/ImageElement';
+import NullElement from '../elements/NullElement';
+import SolidElement from '../elements/SolidElement';
+import SVGShapeElement from '../elements/svg/SVGShapeElement';
+import SVGTextLottieElement from '../elements/svg/SVGTextElement';
+import BaseRenderer from '../renderers/BaseRenderer';
 export default class SVGRendererBase extends BaseRenderer {
     destroyed?: boolean;
     renderConfig?: SVGRendererConfig;

@@ -1,6 +1,6 @@
-import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types';
-import SVGRendererBase from '@/renderers/SVGRendererBase';
-import { ValueProperty } from '@/utils/Properties';
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '../types';
+import SVGRendererBase from '../renderers/SVGRendererBase';
+import { ValueProperty } from '../utils/Properties';
 export default class CompElement extends SVGRendererBase {
     _mdf?: boolean;
     createContainerElements: any;

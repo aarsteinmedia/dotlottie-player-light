@@ -1,6 +1,6 @@
-import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types';
-import type { KeyframedValueProperty } from '@/utils/Properties';
-import SVGBaseElement from '@/elements/svg/SVGBaseElement';
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '../../types';
+import type { KeyframedValueProperty } from '../../utils/Properties';
+import SVGBaseElement from '../../elements/svg/SVGBaseElement';
 export default class SVGCompElement extends SVGBaseElement {
     _debug?: boolean;
     _mdf?: boolean;

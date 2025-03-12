@@ -1,7 +1,7 @@
-import type { GlobalData, LottieLayer, SourceRect } from '@/types';
-import SVGCompElement from '@/elements/svg/SVGCompElement';
-import SVGShapeElement from '@/elements/svg/SVGShapeElement';
-import TextElement from '@/elements/TextElement';
+import type { GlobalData, LottieLayer, SourceRect } from '../../types';
+import SVGCompElement from '../../elements/svg/SVGCompElement';
+import SVGShapeElement from '../../elements/svg/SVGShapeElement';
+import TextElement from '../../elements/TextElement';
 export default class SVGTextLottieElement extends TextElement {
     _sizeChanged?: boolean;
     bbox?: {

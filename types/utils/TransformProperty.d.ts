@@ -1,7 +1,7 @@
-import type { ElementInterfaceIntersect, Shape, Vector3 } from '@/types';
-import type { MultiDimensionalProperty, ValueProperty } from '@/utils/Properties';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
-import Matrix from '@/utils/Matrix';
+import type { ElementInterfaceIntersect, Shape, Vector3 } from '../types';
+import type { MultiDimensionalProperty, ValueProperty } from '../utils/Properties';
+import DynamicPropertyContainer from '../utils/helpers/DynamicPropertyContainer';
+import Matrix from '../utils/Matrix';
 export default class TransformProperty extends DynamicPropertyContainer {
     _addDynamicProperty: (prop: DynamicPropertyContainer) => void;
     _isDirty?: boolean;

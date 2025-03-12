@@ -1,6 +1,6 @@
-import type { Caching, ElementInterfaceIntersect, Keyframe, Shape, Vector2, VectorProperty } from '@/types';
-import { type BezierData } from '@/utils/Bezier';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+import type { Caching, ElementInterfaceIntersect, Keyframe, Shape, Vector2, VectorProperty } from '../types';
+import { type BezierData } from '../utils/Bezier';
+import DynamicPropertyContainer from '../utils/helpers/DynamicPropertyContainer';
 declare abstract class BaseProperty extends DynamicPropertyContainer {
     _caching?: Caching;
     _isFirstFrame?: boolean;

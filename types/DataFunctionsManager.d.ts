@@ -1,4 +1,4 @@
-import type { AnimationData, LottieAsset, LottieLayer, Shape, Vector3 } from '@/types';
+import type { AnimationData, LottieAsset, LottieLayer, Shape, Vector3 } from './types';
 export default class DataFunctionManager {
     static completeData(animationData: AnimationData): void;
     static completeLayers(layers: LottieLayer[], comps: (LottieLayer | LottieAsset)[]): void;

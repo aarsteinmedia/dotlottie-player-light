@@ -1,9 +1,9 @@
-import type { Caching, ElementInterfaceIntersect, Keyframe, KeyframesMetadata, Mask, Merge, Shape, StrokeData, Vector2 } from '@/types';
-import type { MultiDimensionalProperty, ValueProperty } from '@/utils/Properties';
-import type ShapeCollection from '@/utils/shapes/ShapeCollection';
-import ShapeElement from '@/elements/ShapeElement';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
-import ShapePath from '@/utils/shapes/ShapePath';
+import type { Caching, ElementInterfaceIntersect, Keyframe, KeyframesMetadata, Mask, Merge, Shape, StrokeData, Vector2 } from '../../types';
+import type { MultiDimensionalProperty, ValueProperty } from '../../utils/Properties';
+import type ShapeCollection from '../../utils/shapes/ShapeCollection';
+import ShapeElement from '../../elements/ShapeElement';
+import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
+import ShapePath from '../../utils/shapes/ShapePath';
 export default class ShapePropertyFactory {
     static getConstructorFunction(): typeof ShapeProperty;
     static getKeyframedConstructorFunction(): typeof KeyframedShapeProperty;

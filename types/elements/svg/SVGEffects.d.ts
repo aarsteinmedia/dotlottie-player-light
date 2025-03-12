@@ -1,5 +1,5 @@
-import type { AngleEffect, CheckboxEffect, ColorEffect, LayerIndexEffect, MaskIndexEffect, NoValueEffect, PointEffect, SliderEffect } from '@/effects';
-import { ElementInterfaceIntersect } from '@/types';
+import type { AngleEffect, CheckboxEffect, ColorEffect, LayerIndexEffect, MaskIndexEffect, NoValueEffect, PointEffect, SliderEffect } from '../../effects';
+import { ElementInterfaceIntersect } from '../../types';
 type Filter = AngleEffect | CheckboxEffect | ColorEffect | LayerIndexEffect | MaskIndexEffect | NoValueEffect | PointEffect | SliderEffect;
 export default class SVGEffects {
     static idPrefix: string;

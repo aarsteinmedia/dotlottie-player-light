@@ -1,11 +1,11 @@
-import type { AnimationConfiguration, AnimationData, AnimationDirection, AnimationEventName, DocumentData, LottieAsset, MarkerData, Vector2 } from '@/types';
-import { RendererType } from '@/enums';
-import { BaseEvent, LottieEvent } from '@/events';
-import SVGRenderer from '@/renderers/SVGRenderer';
-import AudioController from '@/utils/audio/AudioController';
-import { getExpressionsPlugin } from '@/utils/getterSetter';
-import ProjectInterface from '@/utils/helpers/ProjectInterface';
-import ImagePreloader from '@/utils/ImagePreloader';
+import type { AnimationConfiguration, AnimationData, AnimationDirection, AnimationEventName, DocumentData, LottieAsset, MarkerData, Vector2 } from '../types';
+import { RendererType } from '../enums';
+import { BaseEvent, LottieEvent } from '../events';
+import SVGRenderer from '../renderers/SVGRenderer';
+import AudioController from '../utils/audio/AudioController';
+import { getExpressionsPlugin } from '../utils/getterSetter';
+import ProjectInterface from '../utils/helpers/ProjectInterface';
+import ImagePreloader from '../utils/ImagePreloader';
 export default class AnimationItem extends BaseEvent {
     __complete?: boolean;
     animationData: AnimationData;

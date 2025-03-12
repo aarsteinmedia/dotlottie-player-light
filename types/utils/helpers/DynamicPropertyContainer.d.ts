@@ -1,4 +1,4 @@
-import type { ElementInterfaceIntersect } from '@/types';
+import type { ElementInterfaceIntersect } from '../../types';
 export default abstract class DynamicPropertyContainer {
     _isAnimated: boolean;
     _mdf: boolean;

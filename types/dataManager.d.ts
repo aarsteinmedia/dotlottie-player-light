@@ -1,4 +1,4 @@
-import type { AnimationData } from '@/types';
+import type { AnimationData } from './types';
 export default class DataManager {
     private static _counterId;
     private static workerFn;

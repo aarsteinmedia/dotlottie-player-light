@@ -1,4 +1,4 @@
-import type ShapePath from '@/utils/shapes/ShapePath';
+import type ShapePath from '../../utils/shapes/ShapePath';
 export default class ShapeCollection {
     _length: number;
     _maxLength: number;

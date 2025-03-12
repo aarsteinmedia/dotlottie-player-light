@@ -1,5 +1,5 @@
-import type { Vector2 } from '@/types';
-import type ShapePath from '@/utils/shapes/ShapePath';
+import type { Vector2 } from '../types';
+import type ShapePath from '../utils/shapes/ShapePath';
 export default class Bezier {
     private static bezierSegmentPoints;
     static buildBezierData(pt1: Vector2, pt2: Vector2, pt3: Vector2, pt4: Vector2): BezierData;

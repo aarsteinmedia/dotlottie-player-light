@@ -1,6 +1,6 @@
-import type { EffectInterface, GroupEffect } from '@/effects/EffectsManager';
-import type { EffectValue, ElementInterfaceIntersect } from '@/types';
-import type { ValueProperty } from '@/utils/Properties';
+import type { EffectInterface, GroupEffect } from '../effects/EffectsManager';
+import type { EffectValue, ElementInterfaceIntersect } from '../types';
+import type { ValueProperty } from '../utils/Properties';
 export declare class SliderEffect {
     p?: ValueProperty;
     type?: string;

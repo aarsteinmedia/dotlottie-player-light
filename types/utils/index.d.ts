@@ -1,9 +1,9 @@
-import type { AnimationData, AnimationDirection, IntersectData, LottieAsset, LottieManifest, Marker, MarkerData, SVGGeometry, Vector2, Vector3, Vector4 } from '@/types';
-import type ShapePath from '@/utils/shapes/ShapePath';
-import PolynomialBezier from '@/elements/PolynomialBezier';
-import Matrix from '@/utils/Matrix';
-import PropertyFactory from '@/utils/PropertyFactory';
-import ShapePropertyFactory from '@/utils/shapes/ShapeProperty';
+import type { AnimationData, AnimationDirection, IntersectData, LottieAsset, LottieManifest, Marker, MarkerData, SVGGeometry, Vector2, Vector3, Vector4 } from '../types';
+import type ShapePath from '../utils/shapes/ShapePath';
+import PolynomialBezier from '../elements/PolynomialBezier';
+import Matrix from '../utils/Matrix';
+import PropertyFactory from '../utils/PropertyFactory';
+import ShapePropertyFactory from '../utils/shapes/ShapeProperty';
 import { type Unzipped } from 'fflate';
 export declare class CustomError extends Error {
     status?: number;

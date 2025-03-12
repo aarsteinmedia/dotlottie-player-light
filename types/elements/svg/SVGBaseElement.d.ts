@@ -1,6 +1,6 @@
-import type { Transformer } from '@/types';
-import SVGEffects from '@/elements/svg/SVGEffects';
-import BaseRenderer from '@/renderers/BaseRenderer';
+import type { Transformer } from '../../types';
+import SVGEffects from '../../elements/svg/SVGEffects';
+import BaseRenderer from '../../renderers/BaseRenderer';
 export default abstract class SVGBaseElement extends BaseRenderer {
     _sizeChanged?: boolean;
     finalTransform?: Transformer;

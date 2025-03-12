@@ -1,4 +1,4 @@
-import type { ImageData, LottieAsset } from '@/types';
+import type { ImageData, LottieAsset } from '../types';
 export default class ImagePreloader {
     assetsPath: string;
     images: ImageData[];

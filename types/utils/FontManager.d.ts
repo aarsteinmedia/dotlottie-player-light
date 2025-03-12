@@ -1,4 +1,4 @@
-import type { Characacter, DocumentData, FontList } from '@/types';
+import type { Characacter, DocumentData, FontList } from '../types';
 export default class FontManager {
     private static readonly A_TAG_CODE_POINT;
     private static readonly BLACK_FLAG_CODE_POINT;

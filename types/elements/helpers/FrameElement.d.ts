@@ -1,5 +1,5 @@
-import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
-import HierarchyElement from '@/elements/helpers/HierarchyElement';
+import type DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
+import HierarchyElement from '../../elements/helpers/HierarchyElement';
 export default abstract class FrameElement extends HierarchyElement {
     _mdf?: boolean;
     dynamicProperties?: DynamicPropertyContainer[];

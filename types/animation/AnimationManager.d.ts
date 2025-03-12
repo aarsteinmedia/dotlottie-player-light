@@ -1,6 +1,6 @@
-import type { AnimationConfiguration, AnimationData, AnimationDirection } from '@/types';
-import AnimationItem from '@/animation/AnimationItem';
-import { RendererType } from '@/enums';
+import type { AnimationConfiguration, AnimationData, AnimationDirection } from '../types';
+import AnimationItem from '../animation/AnimationItem';
+import { RendererType } from '../enums';
 export default class AnimationManager {
     private static _isFrozen;
     private static _stopped;

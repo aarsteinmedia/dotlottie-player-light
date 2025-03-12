@@ -1,6 +1,6 @@
-import type { ElementInterfaceIntersect, ElementInterfaceUnion, Shape } from '@/types';
-import { type SVGShapeData } from '@/elements/helpers/shapes';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+import type { ElementInterfaceIntersect, ElementInterfaceUnion, Shape } from '../../types';
+import { type SVGShapeData } from '../../elements/helpers/shapes';
+import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
 declare class ShapeModifier extends DynamicPropertyContainer {
     closed?: boolean;
     elem?: ElementInterfaceIntersect;

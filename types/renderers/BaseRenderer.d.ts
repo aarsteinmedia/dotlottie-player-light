@@ -1,10 +1,10 @@
-import type AnimationItem from '@/animation/AnimationItem';
-import type SVGCompElement from '@/elements/svg/SVGCompElement';
-import type { AnimationData, ElementInterfaceIntersect, LottieLayer } from '@/types';
-import type ProjectInterface from '@/utils/helpers/ProjectInterface';
-import AudioElement from '@/elements/AudioElement';
-import BaseElement from '@/elements/BaseElement';
-import FootageElement from '@/elements/FootageElement';
+import type AnimationItem from '../animation/AnimationItem';
+import type SVGCompElement from '../elements/svg/SVGCompElement';
+import type { AnimationData, ElementInterfaceIntersect, LottieLayer } from '../types';
+import type ProjectInterface from '../utils/helpers/ProjectInterface';
+import AudioElement from '../elements/AudioElement';
+import BaseElement from '../elements/BaseElement';
+import FootageElement from '../elements/FootageElement';
 export default abstract class BaseRenderer extends BaseElement {
     animationItem?: AnimationItem;
     completeLayers?: boolean;

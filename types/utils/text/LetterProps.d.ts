@@ -1,4 +1,4 @@
-import type { Vector3, Vector4 } from '@/types';
+import type { Vector3, Vector4 } from '../../types';
 export default class LetterProps {
     _mdf: {
         fc: boolean;

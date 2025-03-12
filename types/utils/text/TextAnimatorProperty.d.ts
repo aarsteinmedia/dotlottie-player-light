@@ -1,7 +1,7 @@
-import type { DocumentData, ElementInterfaceIntersect, TextData } from '@/types';
-import { RendererType } from '@/enums';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
-import LetterProps from '@/utils/text/LetterProps';
+import type { DocumentData, ElementInterfaceIntersect, TextData } from '../../types';
+import { RendererType } from '../../enums';
+import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
+import LetterProps from '../../utils/text/LetterProps';
 export default class TextAnimatorProperty extends DynamicPropertyContainer {
     _frameId: number;
     _isFirstFrame: boolean;

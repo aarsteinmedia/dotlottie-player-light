@@ -1,4 +1,4 @@
-import ShapePath from '@/utils/shapes/ShapePath';
+import ShapePath from '../../utils/shapes/ShapePath';
 export default abstract class ShapePool {
     private static _factory;
     static newElement: <T = unknown>() => T;

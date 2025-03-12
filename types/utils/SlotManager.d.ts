@@ -1,4 +1,4 @@
-import type { LottieLayer } from '@/types';
+import type { LottieLayer } from '../types';
 export default class SlotManager {
     animationData: LottieLayer;
     constructor(animationData: LottieLayer);

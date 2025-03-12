@@ -1,11 +1,11 @@
-import type { DocumentData, ElementInterfaceIntersect, GlobalData, LottieLayer, Shape, Vector3 } from '@/types';
-import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
-import type Matrix from '@/utils/Matrix';
-import TransformElement from '@/elements/helpers/TransformElement';
-import { RendererType } from '@/enums';
-import LetterProps from '@/utils/text/LetterProps';
-import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty';
-import TextProperty from '@/utils/text/TextProperty';
+import type { DocumentData, ElementInterfaceIntersect, GlobalData, LottieLayer, Shape, Vector3 } from '../types';
+import type DynamicPropertyContainer from '../utils/helpers/DynamicPropertyContainer';
+import type Matrix from '../utils/Matrix';
+import TransformElement from '../elements/helpers/TransformElement';
+import { RendererType } from '../enums';
+import LetterProps from '../utils/text/LetterProps';
+import TextAnimatorProperty from '../utils/text/TextAnimatorProperty';
+import TextProperty from '../utils/text/TextProperty';
 export default class TextElement extends TransformElement {
     _mdf?: boolean;
     buildNewText: any;

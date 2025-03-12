@@ -1,9 +1,9 @@
-import type { ValueProperty } from '@/utils/Properties';
-import type ShapeCollection from '@/utils/shapes/ShapeCollection';
-import { SVGShapeData } from '@/elements/helpers/shapes';
-import { ElementInterfaceIntersect, Shape, Vector2 } from '@/types';
-import ShapeModifier from '@/utils/shapes/ShapeModifier';
-import ShapePath from '@/utils/shapes/ShapePath';
+import type { ValueProperty } from '../../utils/Properties';
+import type ShapeCollection from '../../utils/shapes/ShapeCollection';
+import { SVGShapeData } from '../../elements/helpers/shapes';
+import { ElementInterfaceIntersect, Shape, Vector2 } from '../../types';
+import ShapeModifier from '../../utils/shapes/ShapeModifier';
+import ShapePath from '../../utils/shapes/ShapePath';
 export default class TrimModifier extends ShapeModifier {
     e?: ValueProperty;
     eValue?: number;

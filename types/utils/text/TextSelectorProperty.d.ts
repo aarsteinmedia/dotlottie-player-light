@@ -1,6 +1,6 @@
-import type { ElementInterfaceIntersect, TextRangeValue } from '@/types';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
-import { ValueProperty } from '@/utils/Properties';
+import type { ElementInterfaceIntersect, TextRangeValue } from '../../types';
+import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
+import { ValueProperty } from '../../utils/Properties';
 export default class TextSelectorProperty extends DynamicPropertyContainer {
     _currentTextLength: number;
     a: ValueProperty;

@@ -1,11 +1,11 @@
-import type { KeyframedValueProperty, MultiDimensionalProperty, ValueProperty } from '@/utils/Properties';
-import type { ShapeProperty } from '@/utils/shapes/ShapeProperty';
-import { ShapeType } from '@/enums';
-import { AnimatedProperty, ElementInterfaceIntersect, ElementInterfaceUnion, Shape, Transformer, Vector3 } from '@/types';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
-import DashProperty from '@/utils/shapes/DashProperty';
-import GradientProperty from '@/utils/shapes/GradientProperty';
-import TransformProperty from '@/utils/TransformProperty';
+import type { KeyframedValueProperty, MultiDimensionalProperty, ValueProperty } from '../../utils/Properties';
+import type { ShapeProperty } from '../../utils/shapes/ShapeProperty';
+import { ShapeType } from '../../enums';
+import { AnimatedProperty, ElementInterfaceIntersect, ElementInterfaceUnion, Shape, Transformer, Vector3 } from '../../types';
+import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
+import DashProperty from '../../utils/shapes/DashProperty';
+import GradientProperty from '../../utils/shapes/GradientProperty';
+import TransformProperty from '../../utils/TransformProperty';
 export declare class ShapeGroupData {
     _render?: boolean;
     gr: SVGGElement;

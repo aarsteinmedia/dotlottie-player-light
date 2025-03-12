@@ -1,5 +1,5 @@
-import type { DocumentData, LetterProperties, TextData, Vector2, ElementInterfaceIntersect } from '@/types';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+import type { DocumentData, LetterProperties, TextData, Vector2, ElementInterfaceIntersect } from '../../types';
+import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
 export default class TextProperty extends DynamicPropertyContainer {
     _frameId: number;
     _isFirstFrame: boolean;

@@ -1,7 +1,7 @@
-import type SVGRenderer from '@/renderers/SVGRenderer';
-import type { EffectElement, ExpressionsPlugin } from '@/types';
-import type ProjectInterface from '@/utils/helpers/ProjectInterface';
-import { RendererType } from '@/enums';
+import type SVGRenderer from '../renderers/SVGRenderer';
+import type { EffectElement, ExpressionsPlugin } from '../types';
+import type ProjectInterface from '../utils/helpers/ProjectInterface';
+import { RendererType } from '../enums';
 export declare const initialDefaultFrame = -999999, roundCorner = 0.5519;
 export declare const setExpressionsPlugin: (value: ExpressionsPlugin) => void, getExpressionsPlugin: () => ExpressionsPlugin | null, setExpressionInterfaces: (value: typeof ProjectInterface) => void, getExpressionInterfaces: () => typeof ProjectInterface | null;
 export declare const setDefaultCurveSegments: (value: number) => void, getDefaultCurveSegments: () => number;

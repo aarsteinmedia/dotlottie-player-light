@@ -93,7 +93,7 @@ export default class RepeaterModifier extends ShapeModifier {
     this._elements = []
     this._groups = []
     this.frameId = -1
-    this.initDynamicPropertyContainer(elem)
+    this.initDynamicPropertyContainer(elem as any)
     this.initModifierProperties(elem as ElementInterfaceIntersect, arr[pos])
     while (pos > 0) {
       pos--

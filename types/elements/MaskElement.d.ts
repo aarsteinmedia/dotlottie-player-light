@@ -1,6 +1,6 @@
-import type { ElementInterfaceIntersect, GlobalData, LottieLayer, Mask } from '@/types';
-import type ShapePath from '@/utils/shapes/ShapePath';
-import { ValueProperty } from '@/utils/Properties';
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer, Mask } from '../types';
+import type ShapePath from '../utils/shapes/ShapePath';
+import { ValueProperty } from '../utils/Properties';
 export default class MaskElement {
     data: LottieLayer;
     element: ElementInterfaceIntersect;

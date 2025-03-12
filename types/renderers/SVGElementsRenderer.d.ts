@@ -1,4 +1,4 @@
-import type { Shape } from '@/types';
+import type { Shape } from '../types';
 export default class SVGElementsRenderer {
     static createRenderFunction(data: Shape): typeof SVGElementsRenderer.renderFill | typeof SVGElementsRenderer.renderGradient | typeof SVGElementsRenderer.renderPath | null;
     private static renderContentTransform;

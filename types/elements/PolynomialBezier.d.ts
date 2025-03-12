@@ -1,5 +1,5 @@
-import type { IntersectData, Vector2 } from '@/types';
-import type ShapePath from '@/utils/shapes/ShapePath';
+import type { IntersectData, Vector2 } from '../types';
+import type ShapePath from '../utils/shapes/ShapePath';
 export default class PolynomialBezier {
     a: Vector2;
     b: Vector2;

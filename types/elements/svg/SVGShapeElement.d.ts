@@ -1,6 +1,6 @@
-import type { AnimatedContent, ElementInterfaceIntersect, GlobalData, ItemsData, LottieLayer, Shape, ShapeDataInterface, Transformer } from '@/types';
-import { ShapeGroupData, SVGFillStyleData, SVGGradientFillStyleData, SVGNoStyleData, SVGShapeData, SVGStyleData, SVGTransformData } from '@/elements/helpers/shapes';
-import ShapeElement from '@/elements/ShapeElement';
+import type { AnimatedContent, ElementInterfaceIntersect, GlobalData, ItemsData, LottieLayer, Shape, ShapeDataInterface, Transformer } from '../../types';
+import { ShapeGroupData, SVGFillStyleData, SVGGradientFillStyleData, SVGNoStyleData, SVGShapeData, SVGStyleData, SVGTransformData } from '../../elements/helpers/shapes';
+import ShapeElement from '../../elements/ShapeElement';
 export default class SVGShapeElement extends ShapeElement {
     _debug?: boolean;
     animatedContents: AnimatedContent[];

@@ -1,4 +1,4 @@
-import type { CompInterface } from '@/types';
+import type { CompInterface } from '../../types';
 export default class ProjectInterface {
     static compositions: CompInterface[];
     static currentFrame: number;

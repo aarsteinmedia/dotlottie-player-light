@@ -1,6 +1,6 @@
-import type { Effect, ElementInterfaceIntersect, LottieLayer } from '@/types';
-import { AngleEffect, CheckboxEffect, ColorEffect, LayerIndexEffect, MaskIndexEffect, NoValueEffect, PointEffect, SliderEffect } from '@/effects';
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+import type { Effect, ElementInterfaceIntersect, LottieLayer } from '../types';
+import { AngleEffect, CheckboxEffect, ColorEffect, LayerIndexEffect, MaskIndexEffect, NoValueEffect, PointEffect, SliderEffect } from '../effects';
+import DynamicPropertyContainer from '../utils/helpers/DynamicPropertyContainer';
 export default class EffectsManager {
     effectElements: EffectInterface[];
     constructor(data: LottieLayer, element: ElementInterfaceIntersect);
