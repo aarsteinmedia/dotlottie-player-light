@@ -3,18 +3,20 @@ import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContai
 // import BaseElement from '@/elements/BaseElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 
-export default class FrameElement extends HierarchyElement {
+export default abstract class FrameElement extends HierarchyElement {
+  /**
+   * @function
+   * Initializes frame related properties.
+   *
+   */
+  _isFirstFrame?: boolean
+  _mdf?: boolean
   dynamicProperties?: DynamicPropertyContainer[]
   addDynamicProperty(prop: DynamicPropertyContainer) {
     if (this.dynamicProperties?.indexOf(prop) === -1) {
       this.dynamicProperties?.push(prop)
     }
   }
-  /**
-   * @function
-   * Initializes frame related properties.
-   *
-   */
   initFrame() {
     // set to true when inpoint is rendered
     this._isFirstFrame = false

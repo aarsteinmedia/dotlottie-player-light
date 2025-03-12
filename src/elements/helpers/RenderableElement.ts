@@ -5,25 +5,13 @@ import type {
   Transformer,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
-export default class RenderableElement extends BaseElement {
-  _isFirstFrame?: boolean
-  _mdf?: boolean
+import FrameElement from '@/elements/helpers/FrameElement'
+export default class RenderableElement extends FrameElement {
   finalTransform?: Transformer
-  hidden!: boolean
-  hide: any // TODO: is inherited
-  isInRange!: boolean
-  isTransparent!: boolean
+  hidden?: boolean
+  isInRange?: boolean
+  isTransparent?: boolean
   renderableComponents!: ElementInterfaceIntersect[]
-  /**
-   * @function
-   * Initializes frame related properties.
-   *
-   * @param {number} num
-   * current frame number in Layer's time
-   *
-   */
-  show: any // TODO: is inherited
   addRenderableComponent(component: ElementInterfaceIntersect) {
     if (this.renderableComponents.indexOf(component) === -1) {
       this.renderableComponents.push(component)
@@ -72,6 +60,17 @@ export default class RenderableElement extends BaseElement {
     }
     return { h: Number(this.data?.height), w: Number(this.data?.width) }
   }
+  hide() {
+    // console.log('HIDE', this);
+    if (!this.hidden && (!this.isInRange || this.isTransparent)) {
+      const elem = this.baseElement || this.layerElement
+      if (elem) {
+        elem.style.display = 'none'
+      }
+
+      this.hidden = true
+    }
+  }
   // hide() {
   //   throw new Error('RenderableElement: Method hide not implemented yet')
   // }
@@ -103,6 +102,27 @@ export default class RenderableElement extends BaseElement {
     }
     /* this.maskManager.renderFrame(this.finalTransform.mat);
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */
+  }
+  /**
+   * @function
+   * Initializes frame related properties.
+   *
+   * @param {number} num
+   * current frame number in Layer's time
+   *
+   */
+  show() {
+    // console.log('SHOW', this);
+    if (this.isInRange && !this.isTransparent) {
+      if (!this.data?.hd) {
+        const elem = this.baseElement || this.layerElement
+        if (elem) {
+          elem.style.display = 'block'
+        }
+      }
+      this.hidden = false
+      this._isFirstFrame = true
+    }
   }
   // show() {
   //   throw new Error('RenderableElement: Method show not implemented yet')

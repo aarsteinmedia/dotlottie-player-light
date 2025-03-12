@@ -8,22 +8,17 @@ import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
 export default class RenderableDOMElement extends RenderableElement {
-  innerElem?: SVGImageElement
+  innerElem?: SVGElement | null
 
   destroy() {
-    this.innerElem = null as any
+    this.innerElem = null
     this.destroyBaseElement()
   }
-  hide() {
-    // console.log('HIDE', this);
-    if (!this.hidden && (!this.isInRange || this.isTransparent)) {
-      const elem = this.baseElement || this.layerElement
-      if (elem) {
-        elem.style.display = 'none'
-      }
 
-      this.hidden = true
-    }
+  destroyBaseElement() {
+    throw new Error(
+      'RenderableDOMElement: Method destroyBaseElement in not implemented'
+    )
   }
   initElement(
     data: LottieLayer,
@@ -41,6 +36,9 @@ export default class RenderableDOMElement extends RenderableElement {
     this.createContent()
     this.hide()
   }
+  // initFrame() {
+  //   throw new Error('RenderableDOMElement: Method initFrame in not implemented')
+  // }
   prepareFrame(num: number) {
     this._mdf = false
     this.prepareRenderableFrame(num)
@@ -50,7 +48,7 @@ export default class RenderableDOMElement extends RenderableElement {
   renderFrame(_frame?: number | null) {
     // If it is exported as hidden (data.hd === true) no need to render
     // If it is not visible no need to render
-    if (this.data.hd || this.hidden) {
+    if (this.data?.hd || this.hidden) {
       return
     }
     this.renderTransform()
@@ -63,19 +61,6 @@ export default class RenderableDOMElement extends RenderableElement {
     }
   }
   renderInnerContent() {}
-  show() {
-    // console.log('SHOW', this);
-    if (this.isInRange && !this.isTransparent) {
-      if (!this.data?.hd) {
-        const elem = this.baseElement || this.layerElement
-        if (elem) {
-          elem.style.display = 'block'
-        }
-      }
-      this.hidden = false
-      this._isFirstFrame = true
-    }
-  }
 }
 
 extendPrototype([RenderableElement], RenderableDOMElement)
