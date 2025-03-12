@@ -1,3 +1,4 @@
+import type SVGEffects from '@/elements/svg/SVGEffects'
 import type {
   ElementInterfaceIntersect,
   LottieLayer,
@@ -13,10 +14,14 @@ const effectTypes = {
 }
 
 export default class TransformElement {
+  _isFirstFrame?: boolean
   comp?: ElementInterfaceIntersect
   data?: LottieLayer
   finalTransform?: Transformer
+  hierarchy?: ElementInterfaceIntersect[]
+  localTransforms?: Transformer[]
   mHelper = new Matrix()
+  renderableEffectsManager?: SVGEffects
   globalToLocal(point: Vector3) {
     let pt = point
     const transforms = []
@@ -53,12 +58,12 @@ export default class TransformElement {
       mat: mat,
       mProp: this.data?.ks
         ? new TransformProperty(
-            this as ElementInterfaceIntersect,
+            this as unknown as ElementInterfaceIntersect,
             this.data.ks,
-            this
+            this as unknown as ElementInterfaceIntersect
           )
-        : { o: 0 },
-    }
+        : ({ o: 0 } as unknown as TransformProperty),
+    } as Transformer
     if (this.data?.ao && this.finalTransform) {
       this.finalTransform.mProp.autoOriented = true
     }
@@ -72,29 +77,33 @@ export default class TransformElement {
     if (this.localTransforms) {
       let i = 0
       const len = this.localTransforms.length
-      this.finalTransform._localMatMdf = this.finalTransform._matMdf
-      if (!this.finalTransform._localMatMdf || !this.finalTransform._opMdf) {
+      this.finalTransform!._localMatMdf = !!this.finalTransform?._matMdf
+      if (!this.finalTransform?._localMatMdf || !this.finalTransform._opMdf) {
         while (i < len) {
           if (this.localTransforms[i]._mdf) {
-            this.finalTransform._localMatMdf = true
+            this.finalTransform!._localMatMdf = true
           }
-          if (this.localTransforms[i]._opMdf && !this.finalTransform._opMdf) {
-            this.finalTransform.localOpacity = this.finalTransform.mProp.o.v
-            this.finalTransform._opMdf = true
+          if (this.localTransforms[i]._opMdf && !this.finalTransform?._opMdf) {
+            this.finalTransform!.localOpacity = Number(
+              this.finalTransform?.mProp.o?.v
+            )
+            this.finalTransform!._opMdf = true
           }
           i++
         }
       }
-      if (this.finalTransform._localMatMdf) {
+      if (this.finalTransform?._localMatMdf) {
         const localMat = this.finalTransform.localMat
-        this.localTransforms[0].matrix.clone(localMat)
+        this.localTransforms[0].matrix?.clone(localMat)
         for (i = 1; i < len; i++) {
           const lmat = this.localTransforms[i].matrix
-          localMat.multiply(lmat)
+          if (lmat) {
+            localMat.multiply(lmat)
+          }
         }
         localMat.multiply(this.finalTransform.mat)
       }
-      if (this.finalTransform._opMdf) {
+      if (this.finalTransform?._opMdf) {
         let localOp = this.finalTransform.localOpacity
         for (i = 0; i < len; i++) {
           localOp *= this.localTransforms[i].opacity * 0.01
@@ -104,40 +113,44 @@ export default class TransformElement {
     }
   }
   renderTransform() {
-    this.finalTransform._opMdf =
-      this.finalTransform.mProp.o._mdf || this._isFirstFrame
-    this.finalTransform._matMdf =
-      this.finalTransform.mProp._mdf || this._isFirstFrame
+    this.finalTransform!._opMdf = !!(
+      this.finalTransform?.mProp.o?._mdf || this._isFirstFrame
+    )
+    this.finalTransform!._matMdf = !!(
+      this.finalTransform?.mProp._mdf || this._isFirstFrame
+    )
 
     if (this.hierarchy) {
       let mat
-      const finalMat = this.finalTransform.mat
+      const finalMat = this.finalTransform?.mat
       let i = 0
       const len = this.hierarchy.length
       // Checking if any of the transformation matrices in the hierarchy chain has changed.
-      if (!this.finalTransform._matMdf) {
+      if (!this.finalTransform?._matMdf) {
         while (i < len) {
-          if (this.hierarchy[i].finalTransform.mProp._mdf) {
-            this.finalTransform._matMdf = true
+          if (this.hierarchy[i].finalTransform?.mProp._mdf) {
+            this.finalTransform!._matMdf = true
             break
           }
           i++
         }
       }
 
-      if (this.finalTransform._matMdf) {
-        mat = this.finalTransform.mProp.v.props
-        finalMat.cloneFromProps(mat)
+      if (this.finalTransform?._matMdf) {
+        mat = this.finalTransform.mProp.v.props as unknown as number[]
+        finalMat?.cloneFromProps(mat)
         for (i = 0; i < len; i++) {
-          finalMat.multiply(this.hierarchy[i].finalTransform.mProp.v)
+          if (this.hierarchy[i].finalTransform?.mProp.v) {
+            finalMat?.multiply(this.hierarchy[i].finalTransform!.mProp.v)
+          }
         }
       }
     }
-    if (this.finalTransform._matMdf) {
+    if (this.finalTransform?._matMdf) {
       this.finalTransform._localMatMdf = this.finalTransform._matMdf
     }
-    if (this.finalTransform._opMdf) {
-      this.finalTransform.localOpacity = this.finalTransform.mProp.o.v
+    if (this.finalTransform?._opMdf) {
+      this.finalTransform.localOpacity = Number(this.finalTransform.mProp.o?.v)
     }
   }
   searchEffectTransforms() {
@@ -147,10 +160,13 @@ export default class TransformElement {
       )
       if (transformEffects.length) {
         this.localTransforms = []
-        this.finalTransform.localMat = new Matrix()
+        if (this.finalTransform) {
+          this.finalTransform.localMat = new Matrix()
+        }
+
         const len = transformEffects.length
         for (let i = 0; i < len; i++) {
-          this.localTransforms.push(transformEffects[i])
+          this.localTransforms.push(transformEffects[i] as Transformer)
         }
       }
     }

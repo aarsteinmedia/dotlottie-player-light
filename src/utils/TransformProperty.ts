@@ -157,7 +157,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
       1,
       0,
       this
-    ) as MultiDimensionalProperty<Vector2>
+    ) as MultiDimensionalProperty<Vector3>
     this.s = PropertyFactory.getProp(
       elem,
       data.s || ({ k: [100, 100, 100] } as any),

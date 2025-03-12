@@ -11,14 +11,10 @@ export default class RenderableElement extends BaseElement {
   _mdf?: boolean
   finalTransform?: Transformer
   hidden!: boolean
+  hide: any // TODO: is inherited
   isInRange!: boolean
   isTransparent!: boolean
   renderableComponents!: ElementInterfaceIntersect[]
-  addRenderableComponent(component: ElementInterfaceIntersect) {
-    if (this.renderableComponents.indexOf(component) === -1) {
-      this.renderableComponents.push(component)
-    }
-  }
   /**
    * @function
    * Initializes frame related properties.
@@ -27,6 +23,12 @@ export default class RenderableElement extends BaseElement {
    * current frame number in Layer's time
    *
    */
+  show: any // TODO: is inherited
+  addRenderableComponent(component: ElementInterfaceIntersect) {
+    if (this.renderableComponents.indexOf(component) === -1) {
+      this.renderableComponents.push(component)
+    }
+  }
   checkLayerLimits(num: number) {
     if (!this.data || !this.globalData) {
       return

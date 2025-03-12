@@ -81,15 +81,17 @@ export interface SVGGeometry {
 export interface Transformer {
   _localMatMdf: boolean
   _matMdf: boolean
+  _mdf?: boolean
   _opMdf: boolean
-
   container: SVGGElement
   localMat: Matrix
   localOpacity: number
   mat: Matrix
+  matrix?: Matrix
   mProp: TransformProperty
   mProps: TransformProperty
   op: ValueProperty
+  opacity: number
 }
 
 export type ElementInterfaceUnion =
@@ -197,12 +199,12 @@ export interface CompInterface extends AnimationItem {
 }
 
 export interface ProcessedElements {
-  elem: LottieLayerData
+  elem: Shape
   pos: number
 }
 
 export interface AnimatedContent {
-  data: LottieLayerData
+  data: Shape
   element: ShapeDataInterface
   fn: null | CreateRenderFunction
 }
@@ -1113,41 +1115,6 @@ export interface AnimationData {
   w: number
 }
 
-export interface LottieLayerData {
-  a: {
-    a: 0 | 1
-    k: number[]
-    ix?: number
-    l?: number
-  }
-  autoOriented?: boolean
-  nm: string
-  o: VectorProperty
-  p: {
-    a: 0 | 1
-    k: number[]
-    ix?: number
-    l?: number
-  }
-  r: VectorProperty
-  s: {
-    a: 0 | 1
-    k: number[]
-    ix?: number
-    l?: number
-  }
-  sa: {
-    a: 0 | 1
-    k: number
-    ix?: number
-  }
-  sk: {
-    a: 0 | 1
-    k: number
-    ix?: number
-  }
-}
-
 export interface LottieLayer {
   __used?: boolean
   _render?: boolean
@@ -1178,7 +1145,7 @@ export interface LottieLayer {
   ind?: number
   /** In point */
   ip: number
-  ks: LottieLayerData
+  ks: Shape
   layers?: LottieLayer[] & { __used?: boolean }
   ln?: string
   masksProperties?: Mask[]

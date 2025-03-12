@@ -1,17 +1,25 @@
 import type { ElementInterfaceIntersect, Shape } from '@/types'
+import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
-import type { ValueProperty } from '../Properties'
-
 export default class PuckerAndBloatModifier extends ShapeModifier {
   amount?: ValueProperty
-  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
+  override initModifierProperties(
+    elem: ElementInterfaceIntersect,
+    data: Shape
+  ) {
     this.getValue = this.processKeys
-    this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
+    this.amount = PropertyFactory.getProp(
+      elem,
+      data.a,
+      0,
+      null,
+      this
+    ) as ValueProperty
     this._isAnimated = !!this.amount?.effectsSequence.length
   }
 
@@ -61,16 +69,16 @@ export default class PuckerAndBloatModifier extends ShapeModifier {
   processShapes(_isFirstFrame: boolean) {
     let shapePaths
     let i
-    const len = this.shapes.length
+    const { length } = this.shapes || []
     let j
-    let jLen
+    let jLen: number
     const amount = this.amount?.v
 
     if (amount !== 0) {
       let shapeData
       let localShapeCollection
-      for (i = 0; i < len; i++) {
-        shapeData = this.shapes[i]
+      for (i = 0; i < length; i++) {
+        shapeData = this.shapes?.[i]
         localShapeCollection = shapeData.localShapeCollection
         if (!(!shapeData.shape._mdf && !this._mdf && !_isFirstFrame)) {
           localShapeCollection?.releaseShapes()

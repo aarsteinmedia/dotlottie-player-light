@@ -17,10 +17,25 @@ export default class OffsetPathModifier extends ShapeModifier {
   amount?: ValueProperty
   lineJoin?: number
   miterLimit?: ValueProperty
-  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
+  override initModifierProperties(
+    elem: ElementInterfaceIntersect,
+    data: Shape
+  ) {
     this.getValue = this.processKeys
-    this.amount = PropertyFactory.getProp(elem, data.a, 0, null, this)
-    this.miterLimit = PropertyFactory.getProp(elem, data.ml, 0, null, this)
+    this.amount = PropertyFactory.getProp(
+      elem,
+      data.a,
+      0,
+      null,
+      this
+    ) as ValueProperty
+    this.miterLimit = PropertyFactory.getProp(
+      elem,
+      data.ml,
+      0,
+      null,
+      this
+    ) as ValueProperty
     this.lineJoin = data.lj
     this._isAnimated = this.amount?.effectsSequence.length !== 0
   }
@@ -127,9 +142,9 @@ export default class OffsetPathModifier extends ShapeModifier {
   processShapes(_isFirstFrame: boolean) {
     let shapePaths
     let i
-    const len = this.shapes.length
+    const { length } = this.shapes || []
     let j
-    let jLen
+    let jLen: number
     const amount = Number(this.amount?.v)
     const miterLimit = Number(this.miterLimit?.v)
     const lineJoin = Number(this.lineJoin)
@@ -137,8 +152,8 @@ export default class OffsetPathModifier extends ShapeModifier {
     if (amount !== 0) {
       let shapeData
       let localShapeCollection
-      for (i = 0; i < len; i++) {
-        shapeData = this.shapes[i]
+      for (i = 0; i < length; i++) {
+        shapeData = this.shapes?.[i]
         localShapeCollection = shapeData.localShapeCollection
         if (!(!shapeData.shape._mdf && !this._mdf && !_isFirstFrame)) {
           localShapeCollection?.releaseShapes()
