@@ -19,7 +19,7 @@ class ShapeModifier extends DynamicPropertyContainer {
     // console.log(data)
     if (!this.closed) {
       // Adding shape to dynamic properties. It covers the case where a shape has no effects applied, to reset it's _mdf state on every tick.
-      data.sh.container.addDynamicProperty(data.sh as any)
+      data.sh.container?.addDynamicProperty(data.sh as any)
       const shapeData = {
         data: data,
         localShapeCollection: ShapeCollectionPool.newShapeCollection(),
@@ -33,7 +33,7 @@ class ShapeModifier extends DynamicPropertyContainer {
     }
   }
   addShapeToModifier(_shapeData: SVGShapeData) {}
-  init(elem: ElementInterfaceUnion, data?: any, _a?: any, _b?: any) {
+  init(elem: ElementInterfaceIntersect, data?: any, _a?: any, _b?: any) {
     this.shapes = []
     this.elem = elem as ElementInterfaceIntersect
     this.initDynamicPropertyContainer(elem)

@@ -20,12 +20,12 @@ export default abstract class ShapePool {
 
     for (let i = 0; i < len; i++) {
       cloned.setTripleAt(
-        Number(shape.v[i]?.[0]),
-        Number(shape.v[i]?.[1]),
-        Number(shape.o[i]?.[0]),
-        Number(shape.o[i]?.[1]),
-        Number(shape.i[i]?.[0]),
-        Number(shape.i[i]?.[1]),
+        shape.v[i][0],
+        shape.v[i][1],
+        shape.o[i][0],
+        shape.o[i][1],
+        shape.i[i][0],
+        shape.i[i][1],
         i
       )
     }

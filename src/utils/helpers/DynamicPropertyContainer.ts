@@ -1,9 +1,9 @@
-import type { ElementInterfaceUnion } from '@/types'
+import type { ElementInterfaceIntersect } from '@/types'
 
 export default class DynamicPropertyContainer {
   _isAnimated: boolean
   _mdf: boolean
-  container: ElementInterfaceUnion | null
+  container: ElementInterfaceIntersect | null
   dynamicProperties: DynamicPropertyContainer[]
   propType?: false | string
   constructor() {
@@ -26,7 +26,7 @@ export default class DynamicPropertyContainer {
 
   getValue(_flag?: boolean) {}
 
-  initDynamicPropertyContainer(container: ElementInterfaceUnion): void {
+  initDynamicPropertyContainer(container: ElementInterfaceIntersect): void {
     this.container = container
     this.dynamicProperties = []
     this._mdf = false
