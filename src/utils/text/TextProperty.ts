@@ -1,11 +1,11 @@
 import type {
   DocumentData,
   Letter,
-  LetterProperties,
   TextData,
   Vector2,
   ElementInterfaceIntersect,
 } from '@/types'
+import type LetterProps from '@/utils/text/LetterProps'
 
 import FontManager, { getFontProperties } from '@/utils/FontManager'
 import { initialDefaultFrame } from '@/utils/getterSetter'
@@ -443,7 +443,7 @@ export default class TextProperty extends DynamicPropertyContainer {
       (Number(fontData.ascent) * documentData.finalSize) / 100
   }
 
-  copyData(obj: DocumentData, data?: DocumentData | LetterProperties) {
+  copyData(obj: DocumentData, data?: DocumentData | LetterProps) {
     for (const s in data) {
       if (Object.prototype.hasOwnProperty.call(data, s)) {
         // @ts-expect-error: ignore

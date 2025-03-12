@@ -1,5 +1,6 @@
 import type { Vector3, Vector4 } from '@/types'
 export default class LetterProps {
+  __complete?: boolean
   _mdf: {
     fc: boolean
     m: boolean
@@ -14,6 +15,7 @@ export default class LetterProps {
   p?: number | number[]
   sc?: string | number[]
   sw?: number
+  t?: string
 
   constructor(
     o?: number,

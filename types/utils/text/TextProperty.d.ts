@@ -1,4 +1,5 @@
-import type { DocumentData, LetterProperties, TextData, Vector2, ElementInterfaceIntersect } from '../../types';
+import type { DocumentData, TextData, Vector2, ElementInterfaceIntersect } from '../../types';
+import type LetterProps from '../../utils/text/LetterProps';
 import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
 export default class TextProperty extends DynamicPropertyContainer {
     _frameId: number;
@@ -22,8 +23,8 @@ export default class TextProperty extends DynamicPropertyContainer {
     buildFinalText(text: string): string[];
     canResizeFont(_canResize: boolean): void;
     completeTextData(documentData: DocumentData): void;
-    copyData(obj: DocumentData, data?: DocumentData | LetterProperties): DocumentData;
-    getKeyframeValue(): DocumentData | LetterProperties | undefined;
+    copyData(obj: DocumentData, data?: DocumentData | LetterProps): DocumentData;
+    getKeyframeValue(): DocumentData | LetterProps | undefined;
     getValue(_finalValue: unknown): void;
     recalculate(index: number): void;
     searchKeyframes(): boolean;

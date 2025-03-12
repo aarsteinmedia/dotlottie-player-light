@@ -38,6 +38,7 @@ import type Matrix from '@/utils/Matrix'
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 import type SlotManager from '@/utils/SlotManager'
+import type LetterProps from '@/utils/text/LetterProps'
 import type TextAnimatorDataProperty from '@/utils/text/TextAnimatorDataProperty'
 import type TextProperty from '@/utils/text/TextProperty'
 import type TransformProperty from '@/utils/TransformProperty'
@@ -64,12 +65,6 @@ export type AnimationEventName =
   | 'configError'
   | 'renderFrameError'
 export type AnimationEventCallback<T = unknown> = (args: T) => void
-
-export interface ShapeGroupHandler {
-  gr: SVGElement
-  it: unknown[]
-  prevViewData: unknown[]
-}
 
 export interface SVGGeometry {
   cx: number
@@ -124,11 +119,6 @@ export type ElementInterfaceIntersect = BaseElement &
   BaseRenderer &
   AnimationItem &
   TransformElement
-
-export interface LayerInterFace {
-  registerEffectsInterface: (effect: unknown) => void
-  registerMaskInterface: (effect: unknown) => void
-}
 
 export interface CompInterface extends AnimationItem {
   _mdf?: boolean
@@ -196,11 +186,6 @@ export interface CompInterface extends AnimationItem {
     }
   }
   tm: number
-}
-
-export interface ProcessedElements {
-  elem: Shape
-  pos: number
 }
 
 export interface AnimatedContent {
@@ -316,12 +301,12 @@ export interface BMEnterFrameEvent {
   type: 'enterFrame'
 }
 
-export type BaseRendererConfig = {
+type BaseRendererConfig = {
   imagePreserveAspectRatio?: string
   className?: string
 }
 
-export type FilterSizeConfig = {
+type FilterSizeConfig = {
   width: string
   height: string
   x: string
@@ -393,9 +378,6 @@ export type AnimationConfiguration<T extends RendererType = RendererType.SVG> =
     prerender?: boolean
   }
 
-export type Constructor = new (...args: any[]) => object
-type BoolInt = 0 | 1
-
 export interface GradientColor {
   k: {
     a: 1 | 0
@@ -407,7 +389,9 @@ export interface GradientColor {
   p: number
 }
 
-export interface PathData {
+type BoolInt = 0 | 1
+
+interface PathData {
   _length: number
   _maxLength: number
   c: boolean
@@ -416,7 +400,7 @@ export interface PathData {
   v: Float32Array
 }
 
-export interface ShapeDataProperty {
+interface ShapeDataProperty {
   _mdf?: boolean
   a: 1 | 0
   ix?: number
@@ -564,7 +548,7 @@ export interface AnimationSettings {
   speed?: number
 }
 
-export interface Animation extends AnimationSettings {
+interface Animation extends AnimationSettings {
   id: string
 }
 
@@ -713,30 +697,6 @@ interface LayerStyle {
   ty: number
 }
 
-export interface LetterProperties {
-  __complete?: boolean
-  _mdf: {
-    fc: boolean
-    m: boolean
-    o: boolean
-    p: boolean
-    sc: boolean
-    sw: boolean
-  }
-  f: string
-  fc?: Vector3 | Vector4 | string
-  j: number
-  ls: number
-  m?: number | string
-  o?: number
-  of: boolean
-  p?: number | number[]
-  s: number
-  sc?: Vector3 | Vector4 | string
-  sw?: number
-  t: string
-}
-
 export interface DocumentData extends FontList {
   __complete?: boolean
   ascent?: number
@@ -750,7 +710,7 @@ export interface DocumentData extends FontList {
   j?: number
   justifyOffset?: number
   k: {
-    s: LetterProperties | DocumentData // TODO: This may be a workarount, idk
+    s: LetterProps | DocumentData // TODO: This may be a workarount, idk
     t: number
   }[]
   l?: Letter[]
@@ -819,18 +779,6 @@ export interface TextRangeValue {
   }
 }
 
-export interface StyleObject {
-  _mdf?: boolean
-  closed?: boolean
-  d: string
-  data: Shape
-  lvl: number
-  msElem?: SVGElement
-  pElem?: SVGPathElement
-  reset(): void
-  type: ShapeType
-}
-
 export interface ShapeDataInterface {
   _isAnimated: boolean
   /** SVG Path Data */
@@ -851,65 +799,6 @@ export interface ShapeDataInterface {
   styles: SVGStyleData[]
   transform: Transformer
   transformers: Transformer[]
-}
-
-export interface TextAnimatorAnimatables {
-  /** Text Style */
-  a: {
-    /** Position */
-    p: {
-      a: 0 | 1
-      k: Vector2 | Vector3
-    }
-    /** Rotation */
-    r: {
-      a: 0 | 1
-      k: number
-    }
-    /** Opacity */
-    o: {
-      a: 0 | 1
-      k: number
-    }
-    /** Fill Color */
-    fc: {
-      a: 0 | 1
-      k: Vector3 | Vector4
-    }
-    /** Fill hue */
-    fh: {
-      a: 0 | 1
-      k: number
-    }
-    /** Fill Saturation */
-    fs: {
-      a: 0 | 1
-      k: number
-    }
-    /** Fill Brightness */
-    fb: {
-      a: 0 | 1
-      k: number
-    }
-    /** Stroke color */
-    sc?: {
-      a: 0 | 1
-      k: Vector3 | Vector4
-    }
-    /** Stroke Width */
-    sw?: {
-      a: 0 | 1
-      k: number
-    }
-    /** Letter Spacing */
-    t: {
-      a: 0 | 1
-      k: number
-    }
-    propType: boolean
-  }
-  nm: string
-  s: TextRangeValue
 }
 
 export interface TextData {
@@ -957,7 +846,7 @@ export interface TextData {
   yOffset: number
 }
 
-export interface TextPathData {
+interface TextPathData {
   a: any
   f: any
   l: any
@@ -1159,15 +1048,7 @@ export interface AnimatedProperty<T = number> {
   v?: T
 }
 
-export interface UniDimensionalAnimatedProperty extends AnimatedProperty {
-  k: number
-}
-
-export interface MultiDimensionalAnimatedProperty extends AnimatedProperty {
-  k: number[]
-}
-
-export interface GenericAnimatedProperty extends AnimatedProperty {
+interface GenericAnimatedProperty extends AnimatedProperty {
   k: number | number[]
 }
 
@@ -1205,30 +1086,11 @@ export interface WorkerEvent {
   }
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'dotlottie-player': DotLottiePlayer
-  }
-  function dotLottiePlayer(): DotLottiePlayer
-}
-
-// export type Merge<T extends any[]> = {
-//   [K in keyof T[number] as K extends keyof T[number] ? K : never]: T[number][K]
-// } & {
-//   [K in keyof T[number] as K extends keyof T[number] ? never : K]?: T[number][K]
-// }
-
 export type Merge<A, B> = Partial<A | B> & {
   [K in keyof (A | B)]: (A & B)[K]
 } & (Partial<Omit<A & B, keyof (A | B)>> extends infer O
     ? { [K in keyof O]: O[K] }
     : never)
-
-// export type Merge<T extends any[]> = Partial<T[number]> & {
-//   [K in keyof T[number]]: T[number][K]
-// } & (Partial<Omit<T[number], keyof T[number]>> extends infer O
-//     ? { [K in keyof O]: O[K] }
-//     : never)
 
 export interface ExpressionsPlugin {
   initExpressions(animItem: AnimationItem): void
@@ -1255,7 +1117,7 @@ export interface Audio {
 
 export type AudioFactory = (path?: string) => Audio
 
-export type LottieComp = LottieLayer | LottieAsset
+type LottieComp = LottieLayer | LottieAsset
 
 export interface ImageData {
   assetData: LottieAsset
@@ -1284,19 +1146,6 @@ export interface Caching {
   value: any
 }
 
-export interface PropertyElement {
-  comp: ElementInterfaceIntersect
-  data: {
-    st: number
-  }
-}
-
-export interface SegmentPool {
-  lengths: unknown[]
-  totalLength: number
-}
-
-// TODO:!!!
 export interface GlobalData {
   _mdf?: boolean
   audioController?: AudioController
@@ -1319,25 +1168,6 @@ export interface GlobalData {
   slotManager?: SlotManager
 }
 
-interface SequenceValue<T = number> {
-  effectsSequence: unknown[]
-  v: T
-}
-
-export interface TransformHandler {
-  a: SequenceValue<number[]>
-  appliedTransformations: number
-  or: SequenceValue<number[]>
-  pre: Matrix
-  r?: SequenceValue
-  rx: SequenceValue
-  ry: SequenceValue
-  rz: SequenceValue
-  s: SequenceValue<number[]>
-  sa: SequenceValue
-  sk: SequenceValue<number[]>
-}
-
 export interface SourceRect {
   height: number
   left: number
@@ -1353,6 +1183,13 @@ export interface IntersectData {
   t1: number
   t2: number
   width: number
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'dotlottie-player': DotLottiePlayer
+  }
+  function dotLottiePlayer(): DotLottiePlayer
 }
 
 declare module 'react' {
