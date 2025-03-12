@@ -1,13 +1,9 @@
-import type BaseElement from '@/elements/BaseElement';
-import type HierarchyElement from '@/elements/helpers/HierarchyElement';
-declare class FrameElement {
-    _isFirstFrame: boolean;
+import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+import HierarchyElement from '@/elements/helpers/HierarchyElement';
+export default abstract class FrameElement extends HierarchyElement {
     _mdf?: boolean;
-    dynamicProperties: any[];
-    addDynamicProperty(prop: unknown): void;
+    dynamicProperties?: DynamicPropertyContainer[];
+    addDynamicProperty(prop: DynamicPropertyContainer): void;
     initFrame(): void;
-    prepareProperties(_: number, isVisible: boolean): void;
+    prepareProperties(_: number, isVisible?: boolean): void;
 }
-interface FrameElement extends BaseElement, HierarchyElement {
-}
-export default FrameElement;

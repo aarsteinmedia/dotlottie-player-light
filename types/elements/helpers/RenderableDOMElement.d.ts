@@ -1,20 +1,16 @@
-import type { CompInterface, GlobalData, LottieLayer } from '@/types';
-declare class RenderableDOMElement {
-    _isFirstFrame?: boolean;
-    _mdf?: boolean;
-    baseElement?: SVGGElement;
-    data: LottieLayer;
-    hidden?: boolean;
-    isInRange?: boolean;
-    isTransparent?: boolean;
-    layerElement: SVGGElement;
-    prepareRenderableFrame: (num: number) => void;
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types';
+import RenderableElement from '@/elements/helpers/RenderableElement';
+export default abstract class RenderableDOMElement extends RenderableElement {
+    createContainerElements: any;
+    createContent: any;
+    createRenderableComponents: any;
+    initRendererElement: any;
+    innerElem?: SVGElement | null;
+    renderElement: any;
     destroy(): void;
-    hide(): void;
-    initElement(data: LottieLayer, globalData: GlobalData, comp: CompInterface): void;
+    destroyBaseElement(): void;
+    initElement(data: LottieLayer, globalData: GlobalData, comp: ElementInterfaceIntersect): void;
     prepareFrame(num: number): void;
-    renderFrame(): void;
+    renderFrame(_frame?: number | null): void;
     renderInnerContent(): void;
-    show(): void;
 }
-export default RenderableDOMElement;

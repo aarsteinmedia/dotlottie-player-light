@@ -84,7 +84,8 @@ export default class SVGShapeElement extends ShapeElement {
   buildExpressionInterface() {
     throw new Error('Method not yet implemented')
   }
-  createContent() {
+  // @ts-expect-error: Mixin issue
+  override createContent() {
     if (!this.layerElement || !this.shapesData) {
       throw new Error('SVGShapeElement: Could not access Layer or ShapesData')
     }
@@ -219,12 +220,6 @@ export default class SVGShapeElement extends ShapeElement {
     this.destroyBaseElement()
     this.shapesData = null as any
     this.itemsData = null as any
-  }
-
-  destroyBaseElement() {
-    throw new Error(
-      'SVGShapeElement: Method destroyBaseElement is not implemented'
-    )
   }
 
   filterUniqueShapes() {

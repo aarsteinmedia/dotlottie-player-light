@@ -8,7 +8,7 @@ import ProjectInterface from '@/utils/helpers/ProjectInterface';
 import ImagePreloader from '@/utils/ImagePreloader';
 export default class AnimationItem extends BaseEvent {
     __complete?: boolean;
-    animationData: Partial<AnimationData>;
+    animationData: AnimationData;
     animationID: string;
     assets: LottieAsset[];
     assetsPath: string;
@@ -40,6 +40,7 @@ export default class AnimationItem extends BaseEvent {
     segments: Vector2[];
     timeCompleted: number;
     totalFrames: number;
+    wrapper: HTMLElement | null;
     protected animType?: RendererType;
     protected autoloadSegments: boolean;
     protected fileName?: string;
@@ -49,7 +50,6 @@ export default class AnimationItem extends BaseEvent {
     protected onEnterFrame: null | ((arg: unknown) => void);
     protected onLoopComplete: null | ((arg: unknown) => void);
     protected onSegmentStart: null | ((arg: unknown) => void);
-    protected wrapper: HTMLElement | null;
     private _completedLoop;
     private _idle;
     constructor();
@@ -59,7 +59,7 @@ export default class AnimationItem extends BaseEvent {
     checkSegments(offset: number): boolean;
     configAnimation(animData: AnimationData): void;
     destroy(name?: string): void;
-    getAssetData(id: string): LottieAsset | null;
+    getAssetData(id?: string): LottieAsset | null;
     getAssetsPath(assetData: null | LottieAsset): string;
     getDuration(isFrame?: boolean): number;
     getMarkerData(markerName: number): MarkerData | null;
@@ -80,7 +80,7 @@ export default class AnimationItem extends BaseEvent {
     play(name?: string): void;
     playSegments(arr: Vector2 | Vector2[], forceFlag?: boolean): void;
     preloadImages(): void;
-    renderFrame(_num?: number): void;
+    renderFrame(_num?: number | null): void;
     resetSegments(forceFlag?: boolean): void;
     resize(width?: number, height?: number): void;
     setCurrentRawFrameValue(value: number): void;
@@ -101,6 +101,6 @@ export default class AnimationItem extends BaseEvent {
     triggerRenderFrameError(nativeError: unknown): void;
     unmute(name?: string): void;
     updaFrameModifier(): void;
-    updateDocumentData(path: string, documentData: DocumentData, index: number): void;
+    updateDocumentData(path: unknown[], documentData: DocumentData, index: number): void;
     waitForFontsLoaded(): void;
 }

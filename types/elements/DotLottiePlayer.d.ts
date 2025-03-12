@@ -65,7 +65,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     private _intersectionObserver?;
     private _isBounce;
     private _lottieInstance;
-    private _manifest;
+    private _manifest?;
     private _multiAnimationSettings;
     private _segment?;
     constructor();
@@ -74,7 +74,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     destroy(): void;
     disconnectedCallback(): void;
     getLottie(): AnimationItem | null;
-    getManifest(): LottieManifest;
+    getManifest(): LottieManifest | undefined;
     getMultiAnimationSettings(): AnimationSettings[];
     getSegment(): Vector2 | undefined;
     load(src: string | null): Promise<void>;

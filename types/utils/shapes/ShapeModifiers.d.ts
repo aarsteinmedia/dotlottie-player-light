@@ -3,10 +3,11 @@ import type PuckerAndBloatModifier from '@/utils/shapes/PuckerAndBloatModifier';
 import type RepeaterModifier from '@/utils/shapes/RepeaterModifier';
 import type TrimModifier from '@/utils/shapes/TrimModifier';
 import type ZigZagModifier from '@/utils/shapes/ZigZagModifier';
-import { CompInterface } from '@/types';
+import { ElementInterfaceIntersect } from '@/types';
+export type ShapeModifierInterface = TrimModifier | PuckerAndBloatModifier | RepeaterModifier | ZigZagModifier | OffsetPathModifier;
 type Factory = typeof TrimModifier | typeof PuckerAndBloatModifier | typeof RepeaterModifier | typeof ZigZagModifier | typeof OffsetPathModifier;
 export default class ShapeModifiers {
-    static getModifier(nm: string, elem?: CompInterface, data?: unknown): OffsetPathModifier | PuckerAndBloatModifier | RepeaterModifier | TrimModifier | ZigZagModifier;
+    static getModifier(nm: string, elem?: ElementInterfaceIntersect, data?: unknown): OffsetPathModifier | PuckerAndBloatModifier | RepeaterModifier | TrimModifier | ZigZagModifier;
     static registerModifier(nm: string, factory: Factory): void;
 }
 export {};

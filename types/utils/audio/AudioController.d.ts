@@ -1,12 +1,13 @@
-import type { Audio, AudioFactory } from '@/types';
+import type AudioElement from '@/elements/AudioElement';
+import type { AudioFactory } from '@/types';
 export default class AudioController {
     audioFactory?: AudioFactory;
-    audios: Audio[];
+    audios: AudioElement[];
     private _isMuted;
     private _volume;
     constructor(audioFactory?: AudioFactory);
-    addAudio(audio: Audio): void;
-    createAudio(assetPath: string): any;
+    addAudio(audio: AudioElement): void;
+    createAudio(assetPath?: string): any;
     getVolume(): number;
     mute(): void;
     pause(): void;

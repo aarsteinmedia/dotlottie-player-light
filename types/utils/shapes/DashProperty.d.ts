@@ -1,5 +1,4 @@
-import type { SVGStrokeStyleData } from '@/elements/helpers/shapes';
-import type { CompInterface, StrokeData } from '@/types';
+import type { ElementInterfaceIntersect, StrokeData } from '@/types';
 import { RendererType } from '@/enums';
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
 export default class DashProperty extends DynamicPropertyContainer {
@@ -7,10 +6,10 @@ export default class DashProperty extends DynamicPropertyContainer {
     dashoffset: Float32Array;
     dashStr: string;
     dataProps: StrokeData[];
-    elem: CompInterface;
+    elem: ElementInterfaceIntersect;
     frameId: number;
     k: boolean;
     renderer: RendererType;
-    constructor(elem: CompInterface, data: StrokeData[], renderer: RendererType, container: SVGStrokeStyleData);
+    constructor(elem: ElementInterfaceIntersect, data: StrokeData[], renderer: RendererType, container: ElementInterfaceIntersect);
     getValue(forceRender?: boolean): void;
 }

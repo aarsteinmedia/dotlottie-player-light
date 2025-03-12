@@ -1,28 +1,22 @@
-import type BaseElement from '@/elements/BaseElement';
-import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement';
-declare class RenderableElement {
-    hidden: boolean;
-    isInRange: boolean;
-    isTransparent: boolean;
-    renderableComponents: any[];
-    addRenderableComponent(component: any): void;
+import type { ElementInterfaceIntersect, SourceRect } from '@/types';
+import FrameElement from '@/elements/helpers/FrameElement';
+export default class RenderableElement extends FrameElement {
+    hidden?: boolean;
+    isInRange?: boolean;
+    isTransparent?: boolean;
+    private renderableComponents;
+    addRenderableComponent(component: ElementInterfaceIntersect): void;
     checkLayerLimits(num: number): void;
     checkTransparency(): void;
     getLayerSize(): {
         h: number;
         w: number;
     };
+    hide(): void;
     initRenderable(): void;
     prepareRenderableFrame(num: number, _?: boolean): void;
-    removeRenderableComponent(component: any): void;
+    removeRenderableComponent(component: ElementInterfaceIntersect): void;
     renderRenderable(): void;
-    sourceRectAtTime(): {
-        height: number;
-        left: number;
-        top: number;
-        width: number;
-    };
+    show(): void;
+    sourceRectAtTime(): SourceRect | null;
 }
-interface RenderableElement extends BaseElement, RenderableDOMElement {
-}
-export default RenderableElement;

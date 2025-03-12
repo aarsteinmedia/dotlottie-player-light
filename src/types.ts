@@ -321,12 +321,6 @@ export type BaseRendererConfig = {
   className?: string
 }
 
-// export interface Process {
-//   [key: string]: unknown
-//   onComplete<T>(data: T): void
-//   onError(): void
-// }
-
 export type FilterSizeConfig = {
   width: string
   height: string
@@ -364,16 +358,6 @@ export type SVGRendererConfig = BaseRendererConfig & {
   id?: string
 }
 
-// export interface TextHandler {
-//   initElement: (
-//     data: LottieLayer,
-//     globalData: GlobalData,
-//     comp: CompInterface
-//   ) => void
-//   renderType: RendererType
-//   textSpans: string[]
-// }
-
 export type CanvasRendererConfig = BaseRendererConfig & {
   clearCanvas?: boolean
   context?: CanvasRenderingContext2D
@@ -403,13 +387,6 @@ export type AnimationConfiguration<T extends RendererType = RendererType.SVG> =
       canvas: CanvasRendererConfig
       html: HTMLRendererConfig
     }[T]
-    // audioFactory?(assetPath: string): {
-    //   play(): void
-    //   seek(): void
-    //   playing(): void
-    //   rate(): void
-    //   setVolume(): void
-    // }
 
     audioFactory?: AudioFactory
     path?: string
@@ -417,11 +394,6 @@ export type AnimationConfiguration<T extends RendererType = RendererType.SVG> =
   }
 
 export type Constructor = new (...args: any[]) => object
-// export interface Constructor<T = unknown> {
-//   // new (...args: any[]): T
-//   prototype: T
-// }
-
 type BoolInt = 0 | 1
 
 export interface GradientColor {
@@ -1046,20 +1018,6 @@ export interface FontList {
   }
 }
 
-// export interface FontHandler {
-//   _warned?: boolean
-//   chars: Characacter[] | null
-//   checkLoadedFonts: (args: unknown) => void
-//   checkLoadedFontsBinded: (args: unknown) => void
-//   fonts: FontList[]
-//   getFontByName: (name?: string) => FontList
-//   initTime: number
-//   isLoaded: boolean
-//   setIsLoaded: (val: boolean) => void
-//   setIsLoadedBinded: (val: boolean) => void
-//   typekitLoaded: number
-// }
-
 export interface Characacter {
   ch?: Characacter
   data: LottieLayer
@@ -1396,19 +1354,6 @@ export interface IntersectData {
   t2: number
   width: number
 }
-
-// export interface BMEvent {
-//   currentLoop: number
-//   currentTime: number
-//   direction: AnimationDirection
-//   firstFrame: number
-//   nativeError: unknown
-//   target: BMEvent
-//   totalFrames: number
-//   totalLoops: number
-//   totalTime: number
-//   type: string
-// }
 
 declare module 'react' {
   namespace JSX {

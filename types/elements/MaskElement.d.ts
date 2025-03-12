@@ -1,19 +1,28 @@
-import type { GlobalData, LottieLayer, Mask } from '@/types';
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer, Mask } from '@/types';
 import type ShapePath from '@/utils/shapes/ShapePath';
+import { ValueProperty } from '@/utils/Properties';
 export default class MaskElement {
     data: LottieLayer;
-    element: any;
+    element: ElementInterfaceIntersect;
     globalData: GlobalData;
     maskElement: SVGElement | null;
     masksProperties: null | Mask[];
     solidPath: string;
-    storedData: any[];
+    storedData: {
+        elem: SVGPathElement;
+        expan: SVGFEMorphologyElement | null;
+        filterId?: string;
+        lastOperator: string;
+        lastPath: string;
+        lastRadius: number;
+        x: ValueProperty | null;
+    }[];
     viewData: any[];
-    constructor(data: LottieLayer, element: any, globalData: GlobalData);
+    constructor(data: LottieLayer, element: ElementInterfaceIntersect, globalData: GlobalData);
     createLayerSolidPath(): string;
     destroy(): void;
     drawPath(pathData: null | Mask, pathNodes: ShapePath, viewData: any): void;
     getMaskelement(): SVGElement | null;
     getMaskProperty(pos: number): any;
-    renderFrame(isFirstFrame?: boolean): void;
+    renderFrame(frame?: number | null): void;
 }

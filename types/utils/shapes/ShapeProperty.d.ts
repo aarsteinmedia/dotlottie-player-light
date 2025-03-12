@@ -1,129 +1,82 @@
-import type { CompInterface, LottieComp, Mask, Shape, StrokeData } from '@/types';
-import type { ValueProperty } from '@/utils/Properties';
+import type { Caching, ElementInterfaceIntersect, Keyframe, KeyframesMetadata, Mask, Merge, Shape, StrokeData, Vector2 } from '@/types';
+import type { MultiDimensionalProperty, ValueProperty } from '@/utils/Properties';
 import type ShapeCollection from '@/utils/shapes/ShapeCollection';
+import ShapeElement from '@/elements/ShapeElement';
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
 import ShapePath from '@/utils/shapes/ShapePath';
 export default class ShapePropertyFactory {
     static getConstructorFunction(): typeof ShapeProperty;
     static getKeyframedConstructorFunction(): typeof KeyframedShapeProperty;
-    static getShapeProp(elem: CompInterface, data: Shape | Mask, type: number, _?: unknown): ShapeProperty | KeyframedShapeProperty | RectShapeProperty | EllShapeProperty | StarShapeProperty | undefined;
+    static getShapeProp(elem: ShapeElement, data: Merge<Shape, Mask>, type: number, _?: unknown): ShapeProperty | KeyframedShapeProperty | RectShapeProperty | EllShapeProperty | StarShapeProperty | undefined;
 }
-declare class RectShapeProperty extends DynamicPropertyContainer {
-    comp: any;
+declare abstract class ShapeBaseProperty extends DynamicPropertyContainer {
+    _caching?: Caching;
+    comp?: ElementInterfaceIntersect;
+    data?: Partial<Shape & Mask>;
+    effectsSequence?: any[];
+    elem?: ShapeElement;
+    frameId?: number;
+    k?: boolean;
+    keyframes?: Keyframe[];
+    keyframesMetadata?: KeyframesMetadata[];
+    kf?: boolean;
+    localShapeCollection?: ShapeCollection;
+    lock?: boolean;
+    offsetTime: number;
+    paths?: ShapeCollection;
+    pv?: ShapePath;
+    v?: ShapePath;
+    interpolateShape(frameNum: number, previousValue: ShapePath, caching?: Caching): void;
+    interpolateShapeCurrentTime(): ShapePath;
+    processEffectsSequence(): void;
+    reset(): void;
+    setVValue(newPath: ShapePath): void;
+    shapesEqual(shape1: ShapePath, shape2: ShapePath): boolean;
+}
+export declare class RectShapeProperty extends ShapeBaseProperty {
     d?: number;
-    data: any;
-    elem: any;
-    frameId: number;
     ir?: ValueProperty;
     is?: ValueProperty;
-    k: boolean;
-    localShapeCollection: ShapeCollection;
     or?: ValueProperty;
     os?: ValueProperty;
-    p: ValueProperty;
-    paths: ShapeCollection;
+    p: MultiDimensionalProperty<Vector2>;
     pt?: ValueProperty;
     r: ValueProperty;
-    reset: typeof resetShape;
-    s: ValueProperty;
-    v: any;
-    constructor(elem: any, data: any);
+    s: MultiDimensionalProperty<Vector2>;
+    constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>);
     convertRectToPath(): void;
     getValue(): void;
 }
-declare class StarShapeProperty extends DynamicPropertyContainer {
-    comp: any;
-    convertToPath: () => void;
+declare class StarShapeProperty extends ShapeBaseProperty {
     d?: StrokeData[];
-    data: any;
-    elem: any;
-    frameId: number;
     ir?: ValueProperty;
     is?: ValueProperty;
-    k: boolean;
-    localShapeCollection: ShapeCollection;
     or: ValueProperty;
     os: ValueProperty;
-    p: ValueProperty;
-    paths: ShapeCollection;
+    p: MultiDimensionalProperty<Vector2>;
     pt: ValueProperty;
     r: ValueProperty;
-    reset: typeof resetShape;
     s?: ValueProperty;
-    v: ShapePath;
     constructor(elem: any, data: any);
     convertPolygonToPath(): void;
     convertStarToPath(): void;
+    convertToPath(): void;
     getValue(): void;
 }
-declare class EllShapeProperty extends DynamicPropertyContainer {
-    comp: any;
-    d?: StrokeData[];
-    elem: any;
-    frameId: number;
-    k: boolean;
-    localShapeCollection: ShapeCollection;
-    p: ValueProperty;
-    paths: ShapeCollection;
-    reset: typeof resetShape;
-    s: ValueProperty;
-    v: ShapePath;
+declare class EllShapeProperty extends ShapeBaseProperty {
+    d?: number;
+    p: MultiDimensionalProperty<Vector2>;
+    s: MultiDimensionalProperty<Vector2>;
     private _cPoint;
-    constructor(elem: any, data: Shape);
+    constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>);
     convertEllToPath(): void;
     getValue(): void;
 }
-export declare class ShapeProperty {
-    _mdf: boolean;
-    addEffect: (func: any) => void;
-    comp: LottieComp;
-    container: unknown;
-    data: Shape;
-    effectsSequence: unknown[];
-    elem: CompInterface;
-    getValue: () => void;
-    interpolateShape: (frame: number, previousValue: any, caching: any) => void;
-    k: boolean;
-    kf: boolean;
-    localShapeCollection: ShapeCollection;
-    paths: ShapeCollection;
-    propType: string;
-    pv: ShapePath;
-    reset: typeof resetShape;
-    setVValue: (shape: ShapePath) => void;
-    v: ShapePath;
-    constructor(elem: CompInterface, data: Shape, type: number);
+export declare class ShapeProperty extends ShapeBaseProperty {
+    constructor(elem: ShapeElement, data: Partial<Shape & Mask>, type: number);
 }
-declare class KeyframedShapeProperty {
-    _caching: {
-        lastFrame: number;
-        lastIndex: number;
-    };
-    addEffect: (func: any) => void;
-    comp: any;
-    container: any;
-    effectsSequence: (typeof interpolateShapeCurrentTime)[];
-    elem: any;
-    getValue: () => void;
-    interpolateShape: (frame: number, previousValue: any, caching: any) => void;
-    k: boolean;
-    keyframes: any;
-    keyframesMetadata: unknown[];
-    kf: boolean;
+declare class KeyframedShapeProperty extends ShapeBaseProperty {
     lastFrame: number;
-    localShapeCollection: ShapeCollection;
-    offsetTime: any;
-    paths: ShapeCollection;
-    propType: string;
-    pv: ShapePath;
-    reset: typeof resetShape;
-    setVValue: (shape: ShapePath) => void;
-    v: ShapePath;
-    constructor(elem: any, data: any, type: number);
+    constructor(elem: ShapeElement, data: Partial<Shape & Mask>, type: number);
 }
-declare function resetShape(this: {
-    paths: ShapeCollection;
-    localShapeCollection: ShapeCollection;
-}): void;
-declare function interpolateShapeCurrentTime(this: any): any;
 export {};

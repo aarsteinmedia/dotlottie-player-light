@@ -36,10 +36,6 @@ export default class TextElement extends TransformElement {
 
   initHierarchy: any
 
-  // buildNewText() {
-  //   throw new Error('TextElement: Method buildNewText is not yet implemented')
-  // }
-
   initRenderable: any
 
   initRendererElement: any

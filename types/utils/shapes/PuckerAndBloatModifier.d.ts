@@ -1,10 +1,10 @@
-import type { ShapeData } from '@/types';
-import { type PropertyType } from '@/utils/PropertyFactory';
+import type { ElementInterfaceIntersect, Shape } from '@/types';
+import type { ValueProperty } from '@/utils/Properties';
+import type ShapePath from '@/utils/shapes/ShapePath';
 import ShapeModifier from '@/utils/shapes/ShapeModifier';
 export default class PuckerAndBloatModifier extends ShapeModifier {
-    amount?: PropertyType;
-    getValue: () => void;
-    initModifierProperties(elem: any, data: any): void;
-    processPath(path: ShapeData, amount: number): ShapeData;
+    amount?: ValueProperty;
+    initModifierProperties(elem: ElementInterfaceIntersect, data: Shape): void;
+    processPath(path: ShapePath, amount: number): ShapePath;
     processShapes(_isFirstFrame: boolean): void;
 }

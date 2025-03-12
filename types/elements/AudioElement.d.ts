@@ -1,8 +1,7 @@
-import type { AnimatedProperty, Audio, GlobalData, LottieAsset } from '@/types';
-import BaseElement from '@/elements/BaseElement';
-import FrameElement from '@/elements/helpers/FrameElement';
-import RenderableElement from '@/elements/helpers/RenderableElement';
-declare class AudioElement {
+import type { Audio, ElementInterfaceIntersect, GlobalData, LottieAsset, LottieLayer, Vector2 } from '@/types';
+import type { MultiDimensionalProperty, ValueProperty } from '@/utils/Properties';
+import RenderableElement from './helpers/RenderableElement';
+export default class AudioElement extends RenderableElement {
     _canPlay: boolean;
     _currentTime: number;
     _isPlaying: boolean;
@@ -11,18 +10,16 @@ declare class AudioElement {
     _volumeMultiplier?: number;
     assetData: null | LottieAsset;
     audio: Audio;
-    lv: AnimatedProperty;
-    tm: AnimatedProperty;
-    constructor(data: any, globalData: GlobalData, comp: any);
+    lv: MultiDimensionalProperty<Vector2>;
+    tm: ValueProperty;
+    constructor(data: LottieLayer, globalData: GlobalData, comp: ElementInterfaceIntersect);
     getBaseElement(): null;
     hide(): void;
     pause(): void;
     prepareFrame(num: number): void;
-    renderFrame(_isFirstFrame?: boolean): void;
+    renderFrame(_frame?: number | null): void;
     resume(): void;
+    setMatte(_id: string): void;
     setRate(rateValue: number): void;
     volume(volumeValue: number): void;
 }
-interface AudioElement extends RenderableElement, BaseElement, FrameElement {
-}
-export default AudioElement;

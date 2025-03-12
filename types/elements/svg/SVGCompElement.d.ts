@@ -1,19 +1,15 @@
-import type { CompInterface, GlobalData, LottieLayer } from '@/types';
-import CompElement from '@/elements/CompElement';
+import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types';
+import type { KeyframedValueProperty } from '@/utils/Properties';
 import SVGBaseElement from '@/elements/svg/SVGBaseElement';
-import SVGRendererBase from '@/renderers/SVGRendererBase';
-import { KeyframedValueProperty } from '@/utils/PropertyFactory';
-declare class SVGCompElement extends SVGBaseElement {
-    completeLayers: boolean;
-    elements: any[];
-    initElement: (data: LottieLayer, globalData: GlobalData, comp: CompInterface) => void;
-    layers: LottieLayer[];
-    pendingElements: any[];
+export default class SVGCompElement extends SVGBaseElement {
+    _debug?: boolean;
+    _mdf?: boolean;
     supports3d: boolean;
     tm?: KeyframedValueProperty;
-    constructor(data: LottieLayer, globalData: GlobalData, comp: CompInterface);
+    constructor(data: LottieLayer, globalData: GlobalData, comp: any);
     createComp(data: LottieLayer): SVGCompElement;
+    destroy(): void;
+    initElement(_data: LottieLayer, _globalData: GlobalData, _comp: ElementInterfaceIntersect): void;
+    prepareFrame(_val: number): void;
+    renderFrame(): void;
 }
-interface SVGCompElement extends SVGRendererBase, CompElement {
-}
-export default SVGCompElement;

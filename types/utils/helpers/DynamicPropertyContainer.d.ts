@@ -1,11 +1,13 @@
-import type { CompInterface, ItemData } from '@/types';
-export default class DynamicPropertyContainer {
+import type { ElementInterfaceIntersect } from '@/types';
+export default abstract class DynamicPropertyContainer {
     _isAnimated: boolean;
     _mdf: boolean;
-    container: CompInterface | null;
-    dynamicProperties: ItemData[];
+    container: ElementInterfaceIntersect | null;
+    dynamicProperties: DynamicPropertyContainer[];
+    propType?: false | string;
     constructor();
-    addDynamicProperty(prop: ItemData): void;
-    initDynamicPropertyContainer(container: CompInterface): void;
+    addDynamicProperty(prop: DynamicPropertyContainer): void;
+    getValue(_flag?: boolean): void;
+    initDynamicPropertyContainer(container: ElementInterfaceIntersect): void;
     iterateDynamicProperties(): void;
 }

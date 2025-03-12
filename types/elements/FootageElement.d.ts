@@ -1,15 +1,12 @@
-import type { GlobalData, LottieAsset, LottieLayer } from '@/types';
-import BaseElement from '@/elements/BaseElement';
+import type { ElementInterfaceIntersect, GlobalData, LottieAsset, LottieLayer } from '@/types';
 import FrameElement from '@/elements/helpers/FrameElement';
-import RenderableElement from '@/elements/helpers/RenderableElement';
-declare class FootageElement extends FrameElement {
+export default class FootageElement extends FrameElement {
     assetData: null | LottieAsset;
     footageData: SVGElement;
-    constructor(data: LottieLayer, globalData: GlobalData, comp: any);
+    constructor(data: LottieLayer, globalData: GlobalData, comp: ElementInterfaceIntersect);
     getBaseElement(): null;
     getFootageData(): SVGElement;
     initExpressions(): void;
+    initRenderable(): void;
+    setMatte(_id: string): void;
 }
-interface FootageElement extends RenderableElement, BaseElement {
-}
-export default FootageElement;

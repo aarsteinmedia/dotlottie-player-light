@@ -15,7 +15,7 @@ export declare const addBrightnessToRGB: (color: Vector3, offset: number) => Vec
     animations: AnimationData[] | null;
     manifest: LottieManifest | null;
     isDotLottie: boolean;
-}>, getBlendMode: (mode?: number) => string, getExt: (str?: string) => string | undefined, getFactory: (name: string) => typeof PropertyFactory | typeof Matrix | typeof ShapePropertyFactory | null, getFilename: (src: string, keepExt?: boolean) => string, getIntersection: (a: any, b: any) => any, getLottieJSON: (resp: Response) => Promise<{
+}>, getBlendMode: (mode?: number) => string, getExt: (str?: string) => string | undefined, getFactory: (name: string) => typeof Matrix | typeof PropertyFactory | typeof ShapePropertyFactory | null, getFilename: (src: string, keepExt?: boolean) => string, getIntersection: (a: any, b: any) => any, getLottieJSON: (resp: Response) => Promise<{
     data: AnimationData[];
     manifest: LottieManifest;
 }>, getManifest: (unzipped: Unzipped) => LottieManifest, getMimeFromExt: (ext?: string) => string, getPerpendicularVector: (pt1: Vector2, pt2: Vector2) => number[], getProjectingAngle: (path: ShapePath, cur: number) => number, handleErrors: (err: unknown) => {

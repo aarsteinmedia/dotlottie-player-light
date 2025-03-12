@@ -1,31 +1,22 @@
-import MaskElement from '@/elements/MaskElement';
+import type { Transformer } from '@/types';
 import SVGEffects from '@/elements/svg/SVGEffects';
-import { CompInterface, GlobalData, LottieLayer } from '@/types';
-export default class SVGBaseElement {
+import BaseRenderer from '@/renderers/BaseRenderer';
+export default abstract class SVGBaseElement extends BaseRenderer {
     _sizeChanged?: boolean;
-    baseElement?: SVGGElement;
-    checkMasks: () => boolean;
-    comp?: CompInterface;
-    data: LottieLayer;
-    finalTransform?: any;
-    globalData: GlobalData;
-    layerElement: SVGGElement;
-    layerId: string;
+    finalTransform?: Transformer;
     maskedElement?: SVGGElement;
-    maskManager: MaskElement;
     matteElement?: SVGGElement;
     matteMasks?: {
-        [key: number]: unknown;
+        [key: number]: string;
     };
     renderableEffectsManager?: SVGEffects;
-    searchEffectTransforms: () => void;
-    setBlendMode: () => void;
+    searchEffectTransforms: any;
     transformedElement?: SVGGElement;
     createContainerElements(): void;
     createRenderableComponents(): void;
     destroyBaseElement(): void;
     getBaseElement(): SVGGElement | null | undefined;
-    getMatte(matteType: number): unknown;
+    getMatte(matteType?: number): string;
     initRendererElement(): void;
     renderElement(): void;
     setMatte(id: string): void;

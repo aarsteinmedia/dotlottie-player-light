@@ -1,15 +1,15 @@
-import type { DocumentData, CompInterface, LetterProperties, TextData, Vector2 } from '@/types';
-export default class TextProperty {
+import type { DocumentData, LetterProperties, TextData, Vector2, ElementInterfaceIntersect } from '@/types';
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
+export default class TextProperty extends DynamicPropertyContainer {
     _frameId: number;
     _isFirstFrame: boolean;
-    _mdf: boolean;
     canResize: boolean;
-    comp: CompInterface['comp'];
+    comp?: ElementInterfaceIntersect;
     currentData: DocumentData;
-    data: TextData;
+    data?: TextData;
     defaultBoxWidth: Vector2;
     effectsSequence: any[];
-    elem: CompInterface;
+    elem: ElementInterfaceIntersect;
     frameId?: number;
     keysIndex: number;
     kf: boolean;
@@ -17,7 +17,7 @@ export default class TextProperty {
     minimumFontSize: number;
     pv: DocumentData | string;
     v: DocumentData | string;
-    constructor(elem: CompInterface, data: TextData);
+    constructor(elem: ElementInterfaceIntersect, data?: TextData);
     addEffect(effectFunction: unknown): void;
     buildFinalText(text: string): string[];
     canResizeFont(_canResize: boolean): void;

@@ -31,10 +31,10 @@ export default class Matrix {
     isIdentity(): boolean;
     multiply(matrix: Matrix): this;
     reset(): this;
-    rotate(angle: number): this;
-    rotateX(angle: number): this;
-    rotateY(angle: number): this;
-    rotateZ(angle: number): this;
+    rotate(angle?: number): this;
+    rotateX(angle?: number): this;
+    rotateY(angle?: number): this;
+    rotateZ(angle?: number): this;
     scale(sx: number, sy: number, sz?: number): this;
     setTransform(a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number, n: number, o: number, p: number): this;
     shear(sx: number, sy: number): this;

@@ -1,26 +1,37 @@
-import type BaseElement from '@/elements/BaseElement';
-import type { AnimationData, LottieLayer } from '@/types';
+import type AnimationItem from '@/animation/AnimationItem';
+import type SVGCompElement from '@/elements/svg/SVGCompElement';
+import type { AnimationData, ElementInterfaceIntersect, LottieLayer } from '@/types';
 import type ProjectInterface from '@/utils/helpers/ProjectInterface';
 import AudioElement from '@/elements/AudioElement';
+import BaseElement from '@/elements/BaseElement';
 import FootageElement from '@/elements/FootageElement';
-declare class BaseRenderer {
+export default abstract class BaseRenderer extends BaseElement {
+    animationItem?: AnimationItem;
     completeLayers?: boolean;
-    addPendingElement(element: unknown): void;
+    elements?: ElementInterfaceIntersect[];
+    layers?: LottieLayer[];
+    pendingElements?: ElementInterfaceIntersect[];
+    addPendingElement(element: ElementInterfaceIntersect): void;
     buildAllItems(): void;
-    buildElementParenting(element: any, parentName?: number, hierarchy?: unknown[]): void;
-    checkLayers(num: number): void;
+    buildElementParenting(element: ElementInterfaceIntersect, parentName?: number, hierarchy?: ElementInterfaceIntersect[]): void;
+    buildItem(_val: number): void;
+    checkLayers(val?: number): void;
+    checkPendingElements(): void;
     createAudio(data: LottieLayer): AudioElement;
     createCamera(_data: LottieLayer): void;
-    createFootage(data: any): FootageElement;
-    createItem(layer: LottieLayer): any;
-    getElementById(ind: number): any;
-    getElementByPath(path: unknown[]): any;
+    createComp(_data: LottieLayer): SVGCompElement;
+    createFootage(data: LottieLayer): FootageElement;
+    createImage(_layer: LottieLayer): void;
+    createItem(layer: LottieLayer): void | AudioElement | FootageElement | SVGCompElement;
+    createNull(_layer: LottieLayer): void;
+    createShape(_layer: LottieLayer): void;
+    createSolid(_layer: LottieLayer): void;
+    createText(_layer: LottieLayer): void;
+    getElementById(ind: number): ElementInterfaceIntersect | null;
+    getElementByPath(path: unknown[]): ElementInterfaceIntersect | undefined;
     includeLayers(newLayers: LottieLayer[]): void;
     initItems(): void;
     searchExtraCompositions(assets: LottieLayer[]): void;
-    setProjectInterface(pInterface: typeof ProjectInterface): void;
+    setProjectInterface(pInterface: typeof ProjectInterface | null): void;
     setupGlobalData(animData: AnimationData, fontsContainer: SVGDefsElement): void;
 }
-interface BaseRenderer extends BaseElement {
-}
-export default BaseRenderer;

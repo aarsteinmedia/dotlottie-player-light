@@ -1,26 +1,38 @@
-import type FrameElement from '@/elements/helpers/FrameElement';
-import type RenderableDOMElement from '@/elements/helpers/RenderableDOMElement';
-import type RenderableElement from '@/elements/helpers/RenderableElement';
-import type ISolidElement from '@/elements/SolidElement';
-import type { DocumentData, GlobalData, LottieLayer, Shape, Vector3 } from '@/types';
+import type { DocumentData, ElementInterfaceIntersect, GlobalData, LottieLayer, Shape, Vector3 } from '@/types';
+import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer';
 import type Matrix from '@/utils/Matrix';
+import TransformElement from '@/elements/helpers/TransformElement';
+import { RendererType } from '@/enums';
 import LetterProps from '@/utils/text/LetterProps';
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty';
-declare class TextElement {
-    emptyProp: LetterProps;
-    lettersChangedFlag: boolean;
-    textAnimator: TextAnimatorProperty;
-    textProperty: any;
+import TextProperty from '@/utils/text/TextProperty';
+export default class TextElement extends TransformElement {
+    _mdf?: boolean;
+    buildNewText: any;
+    createContainerElements: any;
+    createContent: any;
+    createRenderableComponents: any;
+    dynamicProperties?: DynamicPropertyContainer[];
+    emptyProp?: LetterProps;
+    hide: any;
+    initFrame: any;
+    initHierarchy: any;
+    initRenderable: any;
+    initRendererElement: any;
+    isInRange?: boolean;
+    lettersChangedFlag?: boolean;
+    prepareProperties: any;
+    prepareRenderableFrame: any;
+    renderType?: RendererType;
+    textAnimator?: TextAnimatorProperty;
+    textProperty?: TextProperty;
     applyTextPropertiesToMatrix(documentData: DocumentData, matrixHelper: Matrix, lineNumber: number, xPos: number, yPos: number): void;
     buildColor(colorData: Vector3): string;
     canResizeFont(_canResize: boolean): void;
     createPathShape(matrixHelper: Matrix, shapes: Shape[]): string;
-    initElement(data: LottieLayer, globalData: GlobalData, comp: any): void;
+    initElement(data: LottieLayer, globalData: GlobalData, comp: ElementInterfaceIntersect): void;
     prepareFrame(num: number): void;
     setMinimumFontSize(_fontSize: number): void;
     updateDocumentData(newData: DocumentData, index: number): void;
     validateText(): void;
 }
-interface TextElement extends FrameElement, RenderableElement, RenderableDOMElement, ISolidElement, SVGTextElement {
-}
-export default TextElement;

@@ -1,10 +1,8 @@
 import type { GlobalData, LottieLayer } from '@/types';
-export default class NullElement {
+import FrameElement from '@/elements/helpers/FrameElement';
+export default class NullElement extends FrameElement {
     constructor(data: LottieLayer, globalData: GlobalData, comp: any);
-    destroy(): void;
     getBaseElement(): null;
-    hide(): void;
     prepareFrame(num: number): void;
-    renderFrame(): void;
-    sourceRectAtTime(): void;
+    renderFrame(_frame?: number | null): void;
 }

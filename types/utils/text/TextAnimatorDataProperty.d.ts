@@ -1,25 +1,25 @@
-import type { ValueProperty } from '@/utils/Properties';
-import { CompInterface } from '@/types';
+import type { ElementInterfaceIntersect, Vector2 } from '@/types';
+import type { MultiDimensionalProperty, NoProperty, ValueProperty } from '@/utils/Properties';
 import TextSelectorProperty from '@/utils/text/TextSelectorProperty';
 export default class TextAnimatorDataProperty {
     a?: {
-        a: ValueProperty;
-        fb: ValueProperty;
-        fc: ValueProperty;
-        fh: ValueProperty;
-        fs: ValueProperty;
-        o: ValueProperty;
-        p: ValueProperty;
-        r: ValueProperty;
-        rx: ValueProperty;
-        ry: ValueProperty;
-        s: ValueProperty;
-        sa: ValueProperty;
-        sc: ValueProperty;
-        sk: ValueProperty;
-        sw: ValueProperty;
-        t: ValueProperty;
+        a: ValueProperty | NoProperty;
+        fb: ValueProperty | NoProperty;
+        fc: ValueProperty | NoProperty;
+        fh: ValueProperty | NoProperty;
+        fs: ValueProperty | NoProperty;
+        o: ValueProperty | NoProperty;
+        p: MultiDimensionalProperty<Vector2> | NoProperty;
+        r: ValueProperty | NoProperty;
+        rx: ValueProperty | NoProperty;
+        ry: ValueProperty | NoProperty;
+        s: ValueProperty | NoProperty;
+        sa: ValueProperty | NoProperty;
+        sc: ValueProperty | NoProperty;
+        sk: ValueProperty | NoProperty;
+        sw: ValueProperty | NoProperty;
+        t: ValueProperty | NoProperty;
     };
     s?: TextSelectorProperty;
-    constructor(elem: CompInterface, animatorProps?: TextAnimatorDataProperty, container?: CompInterface);
+    constructor(elem: ElementInterfaceIntersect, animatorProps?: TextAnimatorDataProperty, container?: ElementInterfaceIntersect);
 }

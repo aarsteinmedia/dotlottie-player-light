@@ -32,10 +32,10 @@ export default class FontManager {
     private static setUpNode;
     private static trimFontOptions;
     addChars(chars?: Characacter[]): void;
-    addFonts(fontData: {
+    addFonts(fontData?: {
         list: DocumentData[];
     }, defs?: SVGDefsElement): void;
-    getCharData(char: Characacter | string, style: string, font: string): Characacter;
+    getCharData(char: Characacter | string, style?: string, font?: string): Characacter;
     getFontByName(name?: string): DocumentData;
     measureText(char: string, fontName?: string, size?: number): number;
     private checkLoadedFonts;

@@ -1,5 +1,5 @@
 import ShapeCollection from '@/utils/shapes/ShapeCollection';
-export default class ShapeCollectionPool {
+export default abstract class ShapeCollectionPool {
     private static _length;
     private static _maxLength;
     private static pool;
