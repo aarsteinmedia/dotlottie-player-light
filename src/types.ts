@@ -40,6 +40,8 @@ import type TextProperty from '@/utils/text/TextProperty'
 import type TransformProperty from '@/utils/TransformProperty'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
+import SVGElementsRenderer from './renderers/SVGElementsRenderer'
+
 export type AnimationDirection = 1 | -1
 export type AnimationEventName =
   | 'drawnFrame'
@@ -197,13 +199,7 @@ export interface ProcessedElements {
 export interface AnimatedContent {
   data: LottieLayerData
   element: ShapeDataInterface
-  fn:
-    | null
-    | ((
-        styleData: SVGStyleData,
-        itemData: ItemData | ShapeDataInterface,
-        isFirstFrame?: boolean
-      ) => void)
+  fn: SVGElementsRenderer['createRenderFunction']
 }
 
 export interface ItemsData {
@@ -217,6 +213,7 @@ export interface ItemData {
   _frameId?: number
   _isFirstFrame: boolean
   _mdf?: boolean
+  a?: VectorProperty
   addEffect: (effect: Effect) => void
   c: ItemData
   canResize?: boolean
@@ -224,6 +221,7 @@ export interface ItemData {
   completeTextData: (data?: Partial<DocumentData>) => void
   container?: unknown
   copyData: (data?: Partial<DocumentData>, b?: any) => void
+  cst?: SVGStopElement[]
   currentData?: Partial<DocumentData>
   d: ItemData
   dashoffset: Float32Array
@@ -237,6 +235,7 @@ export interface ItemData {
   g: any
   getValue: (val?: unknown) => unknown
   gf: SVGElement
+  h: VectorProperty
   interpolateValue: (frame: number, caching: any) => void
   k: boolean
   keyframes: number[]
@@ -246,7 +245,9 @@ export interface ItemData {
   minimumFontSize?: number
   mult: number
   o: ItemData
+  of?: SVGGradientElement
   offsetTime: number
+  ost?: SVGStopElement[]
   pos: number
   propType: 'multidimensional' | 'unidimensional'
   pv: string | number[] | number
@@ -650,6 +651,7 @@ export type VectorProperty<T = Vector1> = {
   v?: number
   ix?: number
   sid?: number
+  _mdf?: boolean
 }
 
 interface Coordinates {

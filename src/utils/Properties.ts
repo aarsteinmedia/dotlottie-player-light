@@ -16,7 +16,7 @@ import BezierFactory from '@/utils/BezierFactory'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import { createTypedArray } from '@/utils/helpers/arrays'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-class BaseProperty extends DynamicPropertyContainer {
+abstract class BaseProperty extends DynamicPropertyContainer {
   _caching?: Caching
   _isFirstFrame?: boolean
   _placeholder?: boolean
@@ -351,6 +351,8 @@ class BaseProperty extends DynamicPropertyContainer {
   }
 }
 export class ValueProperty extends BaseProperty {
+  override pv: number | string
+  override v: number | string
   constructor(
     elem: ElementInterfaceIntersect,
     data: VectorProperty,
@@ -379,6 +381,7 @@ export class ValueProperty extends BaseProperty {
 export class MultiDimensionalProperty<
   T extends Array<any> = Vector2,
 > extends BaseProperty {
+  override v: T
   constructor(
     elem: ElementInterfaceIntersect,
     data: VectorProperty<T>,
@@ -397,9 +400,9 @@ export class MultiDimensionalProperty<
     this.kf = false
     this.frameId = -1
     const { length } = data.k
-    this.v = createTypedArray(ArrayType.Float32, length) as any[]
-    this.pv = createTypedArray(ArrayType.Float32, length) as any[]
-    this.vel = createTypedArray(ArrayType.Float32, length) as any[]
+    this.v = createTypedArray(ArrayType.Float32, length) as T
+    this.pv = createTypedArray(ArrayType.Float32, length) as T
+    this.vel = createTypedArray(ArrayType.Float32, length) as T
     for (let i = 0; i < length; i++) {
       this.v[i] = data.k[i] * this.mult
       this.pv[i] = data.k[i]
@@ -410,6 +413,8 @@ export class MultiDimensionalProperty<
   }
 }
 export class KeyframedValueProperty extends BaseProperty {
+  override pv: number
+  override v: number
   constructor(
     elem: ElementInterfaceIntersect,
     data: VectorProperty<Keyframe[]>,
@@ -443,7 +448,11 @@ export class KeyframedValueProperty extends BaseProperty {
   }
 }
 
-export class KeyframedMultidimensionalProperty extends BaseProperty {
+export class KeyframedMultidimensionalProperty<
+  T extends Array<any> = Vector2,
+> extends BaseProperty {
+  override pv: T
+  override v: T
   constructor(
     elem: ElementInterfaceIntersect,
     data: VectorProperty<any[]>,
@@ -541,8 +550,8 @@ export class KeyframedMultidimensionalProperty extends BaseProperty {
     this.getValue = this.processEffectsSequence
     this.frameId = -1
     const arrLen = data.k[0].s.length
-    this.v = createTypedArray(ArrayType.Float32, arrLen) as number[]
-    this.pv = createTypedArray(ArrayType.Float32, arrLen) as number[]
+    this.v = createTypedArray(ArrayType.Float32, arrLen) as T
+    this.pv = createTypedArray(ArrayType.Float32, arrLen) as T
     for (i = 0; i < arrLen; i++) {
       this.v[i] = this.initFrame
       this.pv[i] = this.initFrame

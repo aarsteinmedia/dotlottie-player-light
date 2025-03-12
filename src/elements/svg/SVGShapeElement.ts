@@ -79,7 +79,7 @@ export default class SVGShapeElement extends ShapeElement {
     this.animatedContents.push({
       data,
       element,
-      fn: SVGElementsRenderer.createRenderFunction(data) as any,
+      fn: SVGElementsRenderer.createRenderFunction(data),
     })
   }
   buildExpressionInterface() {
