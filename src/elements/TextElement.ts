@@ -15,7 +15,9 @@ import LetterProps from '@/utils/text/LetterProps'
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
 
-export default class TextElement {
+import TransformElement from './helpers/TransformElement'
+
+export default class TextElement extends TransformElement {
   _mdf?: boolean
   emptyProp?: LetterProps
   isInRange?: boolean

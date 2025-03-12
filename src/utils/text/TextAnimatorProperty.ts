@@ -19,7 +19,6 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
   _isFirstFrame: boolean
   defaultPropsArray: number[] = []
   lettersChangedFlag: boolean
-  mHelper = new Matrix()
   renderedLetters: LetterProps[]
   private _animatorsData: any[]
   private _elem: any
@@ -28,10 +27,11 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
     alignment: any
   }
   private _pathData: any
-
   private _renderType: RendererType
 
   private _textData: TextData
+
+  private mHelper = new Matrix()
 
   constructor(textData: TextData, renderType: RendererType, elem: any) {
     super()

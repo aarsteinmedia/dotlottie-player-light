@@ -777,7 +777,7 @@ export interface DocumentData extends FontList {
   of?: string
   ps?: Vector2 | null
   s: number
-  sc?: string
+  sc?: Vector3
   sid?: unknown
   strokeColorAnim?: boolean
   strokeWidthAnim?: boolean

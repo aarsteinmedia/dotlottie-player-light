@@ -13,7 +13,13 @@ export class SliderEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem as any, data.v, 0, 0, container)
+    this.p = PropertyFactory.getProp(
+      elem as any,
+      data.v,
+      0,
+      0,
+      container
+    ) as ValueProperty
   }
 }
 
@@ -26,7 +32,13 @@ export class AngleEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem as any, data.v, 0, 0, container)
+    this.p = PropertyFactory.getProp(
+      elem as any,
+      data.v,
+      0,
+      0,
+      container
+    ) as ValueProperty
   }
 }
 
@@ -39,7 +51,13 @@ export class ColorEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem as any, data.v, 1, 0, container)
+    this.p = PropertyFactory.getProp(
+      elem as any,
+      data.v,
+      1,
+      0,
+      container
+    ) as ValueProperty
   }
 }
 
@@ -52,7 +70,13 @@ export class PointEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem as any, data.v, 1, 0, container)
+    this.p = PropertyFactory.getProp(
+      elem as any,
+      data.v,
+      1,
+      0,
+      container
+    ) as ValueProperty
   }
 }
 
@@ -65,7 +89,13 @@ export class LayerIndexEffect {
     elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+    this.p = PropertyFactory.getProp(
+      elem,
+      data.v,
+      0,
+      0,
+      container
+    ) as ValueProperty
   }
 }
 
@@ -78,7 +108,13 @@ export class MaskIndexEffect {
     elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+    this.p = PropertyFactory.getProp(
+      elem,
+      data.v,
+      0,
+      0,
+      container
+    ) as ValueProperty
   }
 }
 
@@ -91,7 +127,13 @@ export class CheckboxEffect {
     elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(elem, data.v, 0, 0, container)
+    this.p = PropertyFactory.getProp(
+      elem,
+      data.v,
+      0,
+      0,
+      container
+    ) as ValueProperty
   }
 }
 

@@ -6,13 +6,11 @@ import type {
   SourceRect,
   Vector3,
 } from '@/types'
-import type Matrix from '@/utils/Matrix'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGCompElement from '@/elements/svg/SVGCompElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
@@ -34,7 +32,6 @@ export default class SVGTextLottieElement extends TextElement {
   data?: LottieLayer
   globalData?: GlobalData
   layerElement?: SVGGElement
-  mHelper!: Matrix
   renderedFrame?: number
 
   renderedLetters?: string[]
@@ -77,7 +74,7 @@ export default class SVGTextLottieElement extends TextElement {
     }
     if (documentData.sc) {
       this.layerElement.setAttribute('stroke', this.buildColor(documentData.sc))
-      this.layerElement.setAttribute('stroke-width', documentData.sw)
+      this.layerElement.setAttribute('stroke-width', `${documentData.sw || 0}`)
     }
     this.layerElement.setAttribute(
       'font-size',
@@ -426,7 +423,7 @@ export default class SVGTextLottieElement extends TextElement {
 extendPrototype(
   [
     BaseElement,
-    TransformElement,
+    // TransformElement,
     SVGBaseElement,
     HierarchyElement,
     FrameElement,
