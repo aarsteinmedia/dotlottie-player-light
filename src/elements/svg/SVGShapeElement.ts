@@ -220,7 +220,7 @@ export default class SVGShapeElement extends ShapeElement {
     this.itemsData = null as any
   }
   filterUniqueShapes() {
-    const len = this.shapes?.length
+    const { length } = this.shapes || []
     const jLen = this.stylesList.length
     let style
     const tempShapes = []
@@ -229,14 +229,15 @@ export default class SVGShapeElement extends ShapeElement {
       style = this.stylesList[j]
       areAnimated = false
       tempShapes.length = 0
-      for (let i = 0; i < len; i++) {
-        if (this.shapes?.[i].styles.indexOf(style) !== -1) {
-          tempShapes.push(this.shapes[i])
-          areAnimated = this.shapes[i]._isAnimated || areAnimated
+      for (let i = 0; i < length; i++) {
+        if ((this.shapes?.[i] as SVGShapeData).styles.indexOf(style) !== -1) {
+          tempShapes.push(this.shapes?.[i])
+          areAnimated =
+            (this.shapes?.[i] as SVGShapeData)._isAnimated || areAnimated
         }
       }
       if (tempShapes.length > 1 && areAnimated) {
-        this.setShapesAsAnimated(tempShapes)
+        this.setShapesAsAnimated(tempShapes as any)
       }
     }
   }
@@ -262,14 +263,13 @@ export default class SVGShapeElement extends ShapeElement {
       true
     )
     this.filterUniqueShapes()
-    const { length: dLength } = this.dynamicProperties
+    const { length: dLength } = this.dynamicProperties || []
     for (let i = 0; i < dLength; i++) {
-      this.dynamicProperties[i].getValue()
+      this.dynamicProperties?.[i].getValue()
     }
     this.renderModifiers()
   }
-  // TODO:
-  renderInnerContent = function (this: any) {
+  override renderInnerContent() {
     this.renderModifiers()
     const { length } = this.stylesList
     for (let i = 0; i < length; i++) {
