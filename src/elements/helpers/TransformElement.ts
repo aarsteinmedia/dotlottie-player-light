@@ -1,11 +1,7 @@
 import type SVGEffects from '@/elements/svg/SVGEffects'
-import type {
-  ElementInterfaceIntersect,
-  LottieLayer,
-  Transformer,
-  Vector3,
-} from '@/types'
+import type { ElementInterfaceIntersect, Transformer, Vector3 } from '@/types'
 
+import BaseElement from '@/elements/BaseElement'
 import Matrix from '@/utils/Matrix'
 import TransformProperty from '@/utils/TransformProperty'
 
@@ -13,10 +9,8 @@ const effectTypes = {
   TRANSFORM_EFFECT: 'transformEffect',
 }
 
-export default class TransformElement {
+export default class TransformElement extends BaseElement {
   _isFirstFrame?: boolean
-  comp?: ElementInterfaceIntersect
-  data?: LottieLayer
   finalTransform?: Transformer
   hierarchy?: ElementInterfaceIntersect[]
   localTransforms?: Transformer[]

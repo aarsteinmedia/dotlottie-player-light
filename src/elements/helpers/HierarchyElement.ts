@@ -4,12 +4,12 @@
  *
  */
 
-import BaseElement from '@/elements/BaseElement'
+import type { ElementInterfaceIntersect } from '@/types'
 
-export default abstract class HierarchyElement extends BaseElement {
+import TransformElement from '@/elements/helpers/TransformElement'
+
+export default abstract class HierarchyElement extends TransformElement {
   _isParent?: boolean
-
-  hierarchy?: unknown[]
   /**
    * Searches layer's parenting chain
    */
@@ -39,7 +39,7 @@ export default abstract class HierarchyElement extends BaseElement {
    * @param {array} hierarchy
    * layer's parent list
    */
-  setHierarchy(hierarchy: unknown[]) {
+  setHierarchy(hierarchy: ElementInterfaceIntersect[]) {
     this.hierarchy = hierarchy
   }
 }

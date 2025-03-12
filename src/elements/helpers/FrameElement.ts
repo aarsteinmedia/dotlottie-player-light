@@ -9,7 +9,6 @@ export default abstract class FrameElement extends HierarchyElement {
    * Initializes frame related properties.
    *
    */
-  _isFirstFrame?: boolean
   _mdf?: boolean
   dynamicProperties?: DynamicPropertyContainer[]
   addDynamicProperty(prop: DynamicPropertyContainer) {

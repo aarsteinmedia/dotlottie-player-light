@@ -1,8 +1,8 @@
 import type { GlobalData, LottieLayer } from '@/types'
 
 import FrameElement from '@/elements/helpers/FrameElement'
-import TransformElement from '@/elements/helpers/TransformElement'
-import { extendPrototype } from '@/utils/functionExtensions'
+// import TransformElement from '@/elements/helpers/TransformElement'
+// import { extendPrototype } from '@/utils/functionExtensions'
 export default class NullElement extends FrameElement {
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
     super()
@@ -16,9 +16,9 @@ export default class NullElement extends FrameElement {
     return null
   }
 
-  initTransform() {
-    throw new Error('NullElement: Method initTransform not yet implemented')
-  }
+  // initTransform() {
+  //   throw new Error('NullElement: Method initTransform not yet implemented')
+  // }
 
   prepareFrame(num: number) {
     this.prepareProperties(num, true)
@@ -30,4 +30,4 @@ export default class NullElement extends FrameElement {
   }
 }
 
-extendPrototype([TransformElement], NullElement)
+// extendPrototype([TransformElement], NullElement)
