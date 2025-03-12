@@ -16,7 +16,7 @@ import PropertyFactory from '@/utils/PropertyFactory'
 export default class TransformProperty extends DynamicPropertyContainer {
   _addDynamicProperty = DynamicPropertyContainer.prototype.addDynamicProperty
   _isDirty?: boolean
-  a?: MultiDimensionalProperty<Vector2>
+  a?: MultiDimensionalProperty<Vector3>
   // _mdf?: boolean
   appliedTransformations: number
   autoOriented?: boolean

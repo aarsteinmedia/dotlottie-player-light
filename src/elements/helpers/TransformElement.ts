@@ -13,6 +13,7 @@ const effectTypes = {
 }
 
 export default class TransformElement {
+  comp?: ElementInterfaceIntersect
   data?: LottieLayer
   finalTransform?: Transformer
   mHelper = new Matrix()
@@ -23,7 +24,7 @@ export default class TransformElement {
     let flag = true
     let comp = this.comp
     while (flag) {
-      if (comp.finalTransform) {
+      if (comp?.finalTransform) {
         if (comp.data.hasMask) {
           transforms.splice(0, 0, comp.finalTransform)
         }
@@ -58,12 +59,12 @@ export default class TransformElement {
           )
         : { o: 0 },
     }
-    if (this.data.ao) {
+    if (this.data?.ao && this.finalTransform) {
       this.finalTransform.mProp.autoOriented = true
     }
 
     // TODO: check TYPE 11: Guided elements
-    if (this.data.ty !== 11) {
+    if (this.data?.ty !== 11) {
       // this.createElements();
     }
   }

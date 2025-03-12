@@ -13,39 +13,44 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import TransformProperty from '@/utils/TransformProperty'
 
 export default class RepeaterModifier extends ShapeModifier {
-  _currentCopies!: number
+  _currentCopies?: number
 
-  _elements!: ShapeGroupData[]
+  _elements?: ShapeGroupData[]
 
-  _groups!: ShapeGroupData[]
+  _groups?: ShapeGroupData[]
 
-  arr!: ShapeGroupData[]
+  arr?: ShapeGroupData[]
 
   c: any
   data: any
   elemsData!: any
   eo: any
-  matrix!: Matrix
+  matrix?: Matrix
   o: any
-  pMatrix!: Matrix
-  pos!: number
-  rMatrix!: Matrix
-  sMatrix!: Matrix
+  pMatrix?: Matrix
+  pos?: number
+  rMatrix?: Matrix
+  sMatrix?: Matrix
   so: any
-  tMatrix!: Matrix
+  tMatrix?: Matrix
   tr: any
-  override addShape() {} // TODO: This might be a legitimate override
+  // addShape() {
+  //   throw new Error('RepeaterModifier: Method addShape not yet implemented')
+  // }
   applyTransforms(
     pMatrix: Matrix,
     rMatrix: Matrix,
     sMatrix: Matrix,
-    transform: any,
+    transform: TransformProperty,
     perc: number,
     inv?: boolean
   ) {
-    const dir = inv ? -1 : 1
-    const scaleX = transform.s.v[0] + (1 - transform.s.v[0]) * (1 - perc)
-    const scaleY = transform.s.v[1] + (1 - transform.s.v[1]) * (1 - perc)
+    if (!transform.s || !transform.p || !transform.a || !transform.r) {
+      throw new Error('Missing required data from Transform')
+    }
+    const dir = inv ? -1 : 1,
+      scaleX = transform.s.v[0] + (1 - transform.s.v[0]) * (1 - perc),
+      scaleY = transform.s.v[1] + (1 - transform.s.v[1]) * (1 - perc)
     pMatrix.translate(
       transform.p.v[0] * dir * perc,
       transform.p.v[1] * dir * perc,
@@ -90,7 +95,7 @@ export default class RepeaterModifier extends ShapeModifier {
     this.initDynamicPropertyContainer(elem)
     this.initModifierProperties(elem as ElementInterfaceIntersect, arr[pos])
     while (pos > 0) {
-      pos -= 1
+      pos--
       // this._elements.unshift(arr.splice(pos,1)[0]);
       this._elements.unshift(arr[pos])
     }
@@ -129,10 +134,10 @@ export default class RepeaterModifier extends ShapeModifier {
     let hasReloaded = false
     if (this._mdf || _isFirstFrame) {
       const copies = Math.ceil(this.c.v)
-      if (this._groups.length < copies) {
-        while (this._groups.length < copies) {
+      if (Number(this._groups?.length) < copies) {
+        while (Number(this._groups?.length) < copies) {
           const group = {
-            it: this.cloneElements(this._elements),
+            it: this.cloneElements(this._elements || []),
             ty: 'gr',
           } as unknown as ShapeGroupData
           group.it.push({
@@ -154,19 +159,27 @@ export default class RepeaterModifier extends ShapeModifier {
             ty: ShapeType.Transform,
           } as Shape)
 
-          this.arr.splice(0, 0, group)
-          this._groups.splice(0, 0, group)
-          this._currentCopies += 1
+          this.arr?.splice(0, 0, group)
+          this._groups?.splice(0, 0, group)
+          if (this._currentCopies) {
+            this._currentCopies++
+          } else {
+            this._currentCopies = 1
+          }
         }
-        this.elem.reloadShapes()
+        this.elem?.reloadShapes()
         hasReloaded = true
       }
       cont = 0
       let renderFlag
-      for (i = 0; i <= this._groups.length - 1; i++) {
+      const length = Number(this._groups?.length) - 1
+      for (i = 0; i <= length - 1; i++) {
         renderFlag = cont < copies
-        this._groups[i]._render = renderFlag
-        this.changeGroupRender(this._groups[i].it, renderFlag)
+        if (this._groups?.[i]) {
+          this._groups[i]._render = renderFlag
+        }
+
+        this.changeGroupRender(this._groups?.[i].it || [], renderFlag)
         if (!renderFlag) {
           const elems = this.elemsData[i].it
           const transformData = elems[elems.length - 1]
@@ -177,10 +190,20 @@ export default class RepeaterModifier extends ShapeModifier {
             transformData.transform.op.v = 0
           }
         }
-        cont += 1
+        cont++
       }
 
       this._currentCopies = copies
+
+      if (
+        !this.matrix ||
+        !this.pMatrix ||
+        !this.rMatrix ||
+        !this.sMatrix ||
+        !this.tMatrix
+      ) {
+        throw new Error('RepeaterModifier: Could not set Matrix')
+      }
 
       const offset = this.o.v
       const offsetModulo = offset % 1
@@ -205,7 +228,7 @@ export default class RepeaterModifier extends ShapeModifier {
             1,
             false
           )
-          iteration += 1
+          iteration++
         }
         if (offsetModulo) {
           this.applyTransforms(
@@ -228,7 +251,7 @@ export default class RepeaterModifier extends ShapeModifier {
             1,
             true
           )
-          iteration -= 1
+          iteration--
         }
         if (offsetModulo) {
           this.applyTransforms(
@@ -338,8 +361,8 @@ export default class RepeaterModifier extends ShapeModifier {
           }
           this.matrix.reset()
         }
-        iteration += 1
-        cont -= 1
+        iteration++
+        cont--
         i += dir
       }
     } else {
@@ -351,7 +374,7 @@ export default class RepeaterModifier extends ShapeModifier {
         itemsTransform = items[items.length - 1].transform.mProps.v.props
         items[items.length - 1].transform.mProps._mdf = false
         items[items.length - 1].transform.op._mdf = false
-        cont -= 1
+        cont--
         i += dir
       }
     }

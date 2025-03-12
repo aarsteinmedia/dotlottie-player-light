@@ -11,11 +11,11 @@ import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 
 class ShapeModifier extends DynamicPropertyContainer {
   // addShapeToModifier!: (data: SVGShapeData) => void
-  closed!: boolean
-  elem!: ElementInterfaceIntersect
+  closed?: boolean
+  elem?: ElementInterfaceIntersect
   frameId?: number
-  k!: boolean
-  shapes!: any[]
+  k?: boolean
+  shapes?: any[]
   addShape(data: SVGShapeData) {
     // console.log(data)
     if (!this.closed) {
@@ -26,7 +26,7 @@ class ShapeModifier extends DynamicPropertyContainer {
         localShapeCollection: ShapeCollectionPool.newShapeCollection(),
         shape: data.sh,
       } as unknown as SVGShapeData
-      this.shapes.push(shapeData)
+      this.shapes?.push(shapeData)
       this.addShapeToModifier(shapeData)
       if (this._isAnimated) {
         data.setAsAnimated()
@@ -52,10 +52,10 @@ class ShapeModifier extends DynamicPropertyContainer {
   isAnimatedWithShape(_data: Shape) {}
 
   processKeys() {
-    if (this.elem.globalData.frameId === this.frameId) {
+    if (this.elem?.globalData.frameId === this.frameId) {
       return
     }
-    this.frameId = this.elem.globalData.frameId
+    this.frameId = this.elem?.globalData.frameId
     this.iterateDynamicProperties()
   }
 }

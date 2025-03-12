@@ -9,9 +9,18 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
 export default class RoundCornersModifier extends ShapeModifier {
   rd?: ValueProperty
-  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
+  override initModifierProperties(
+    elem: ElementInterfaceIntersect,
+    data: Shape
+  ) {
     this.getValue = this.processKeys
-    this.rd = PropertyFactory.getProp(elem, data.r, 0, null, this)
+    this.rd = PropertyFactory.getProp(
+      elem,
+      data.r,
+      0,
+      null,
+      this
+    ) as ValueProperty
     this._isAnimated = !!this.rd?.effectsSequence.length
   }
 
@@ -122,7 +131,7 @@ export default class RoundCornersModifier extends ShapeModifier {
   processShapes(_isFirstFrame: boolean) {
     let shapePaths
     let i
-    const len = this.shapes.length
+    const { length } = this.shapes || []
     let j
     let jLen
     const rd = this.rd?.v
@@ -130,8 +139,8 @@ export default class RoundCornersModifier extends ShapeModifier {
     if (rd !== 0) {
       let shapeData
       let localShapeCollection
-      for (i = 0; i < len; i++) {
-        shapeData = this.shapes[i]
+      for (i = 0; i < length; i++) {
+        shapeData = this.shapes?.[i]
         localShapeCollection = shapeData.localShapeCollection
         if (!(!shapeData.shape._mdf && !this._mdf && !_isFirstFrame)) {
           localShapeCollection?.releaseShapes()
