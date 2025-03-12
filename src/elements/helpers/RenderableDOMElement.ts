@@ -10,16 +10,20 @@ import { extendPrototype } from '@/utils/functionExtensions'
 export default class RenderableDOMElement extends RenderableElement {
   innerElem?: SVGElement | null
 
+  // initTransform() {
+  //   throw new Error('RenderableDOMElement: Method initTransform not implemented')
+  // }
+
   destroy() {
     this.innerElem = null
     this.destroyBaseElement()
   }
 
-  destroyBaseElement() {
-    throw new Error(
-      'RenderableDOMElement: Method destroyBaseElement in not implemented'
-    )
-  }
+  // destroyBaseElement() {
+  //   throw new Error(
+  //     'RenderableDOMElement: Method destroyBaseElement in not implemented'
+  //   )
+  // }
   initElement(
     data: LottieLayer,
     globalData: GlobalData,
