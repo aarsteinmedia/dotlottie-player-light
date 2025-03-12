@@ -22,7 +22,7 @@ import { createSizedArray } from '@/utils/helpers/arrays'
 export default class SVGRendererBase extends SVGBaseElement {
   destroyed?: boolean
   renderConfig?: SVGRendererConfig
-  renderedFrame!: number
+  renderedFrame?: number
 
   svgElement?: SVGSVGElement
 

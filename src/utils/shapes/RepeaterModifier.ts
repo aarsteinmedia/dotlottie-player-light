@@ -24,7 +24,7 @@ export default class RepeaterModifier extends ShapeModifier {
 
   c?: ValueProperty
   data: any
-  elemsData!: any
+  elemsData?: any
   eo: any
   matrix?: Matrix
   o: any

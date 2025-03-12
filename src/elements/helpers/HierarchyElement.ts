@@ -7,9 +7,9 @@
 import BaseElement from '@/elements/BaseElement'
 
 export default abstract class HierarchyElement extends BaseElement {
-  _isParent!: boolean
+  _isParent?: boolean
 
-  hierarchy!: unknown[]
+  hierarchy?: unknown[]
   /**
    * Searches layer's parenting chain
    */

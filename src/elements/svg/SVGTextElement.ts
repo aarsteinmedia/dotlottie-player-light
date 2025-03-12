@@ -28,8 +28,6 @@ export default class SVGTextLottieElement extends TextElement {
     top: number
     width: number
   }
-  comp?: ElementInterfaceIntersect
-  data?: LottieLayer
   globalData?: GlobalData
   layerElement?: SVGGElement
   renderedFrame?: number

@@ -388,7 +388,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * so that next-button will show up
    * on load, if controls are visible
    */
-  private _animations!: AnimationData[]
+  private _animations: AnimationData[] = []
 
   /**
    * @state
@@ -402,7 +402,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
   private _lottieInstance: AnimationItem | null = null
 
-  private _manifest!: LottieManifest
+  private _manifest?: LottieManifest
 
   /**
    * Multi-animation settings
@@ -1283,12 +1283,12 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         ? this._multiAnimationSettings?.[this._currentAnimation]
         : undefined,
       currentAnimationManifest =
-        this._manifest.animations?.[this._currentAnimation]
+        this._manifest?.animations?.[this._currentAnimation]
 
     // Loop
     let loop = !!this.loop
     if (
-      currentAnimationManifest.loop !== undefined &&
+      currentAnimationManifest?.loop !== undefined &&
       this.loop === undefined
     ) {
       loop = !!currentAnimationManifest.loop
@@ -1300,7 +1300,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     // Autoplay
     let autoplay = !!this.autoplay
     if (
-      currentAnimationManifest.autoplay !== undefined &&
+      currentAnimationManifest?.autoplay !== undefined &&
       this.autoplay === undefined
     ) {
       autoplay = !!currentAnimationManifest.autoplay

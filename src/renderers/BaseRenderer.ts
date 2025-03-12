@@ -14,7 +14,7 @@ import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import FontManager from '@/utils/FontManager'
 import SlotManager from '@/utils/SlotManager'
 
-export default class BaseRenderer extends BaseElement {
+export default abstract class BaseRenderer extends BaseElement {
   animationItem?: AnimationItem
   completeLayers?: boolean
   elements?: ElementInterfaceIntersect[]
@@ -25,10 +25,10 @@ export default class BaseRenderer extends BaseElement {
 
   layers?: LottieLayer[]
 
-  pendingElements!: ElementInterfaceIntersect[]
+  pendingElements?: ElementInterfaceIntersect[]
 
   addPendingElement(element: ElementInterfaceIntersect) {
-    this.pendingElements.push(element)
+    this.pendingElements?.push(element)
   }
 
   buildAllItems() {

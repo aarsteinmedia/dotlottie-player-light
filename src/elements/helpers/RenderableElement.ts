@@ -11,7 +11,7 @@ export default class RenderableElement extends FrameElement {
   hidden?: boolean
   isInRange?: boolean
   isTransparent?: boolean
-  renderableComponents!: ElementInterfaceIntersect[]
+  private renderableComponents: ElementInterfaceIntersect[] = []
   addRenderableComponent(component: ElementInterfaceIntersect) {
     if (this.renderableComponents.indexOf(component) === -1) {
       this.renderableComponents.push(component)
@@ -103,14 +103,7 @@ export default class RenderableElement extends FrameElement {
     /* this.maskManager.renderFrame(this.finalTransform.mat);
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */
   }
-  /**
-   * @function
-   * Initializes frame related properties.
-   *
-   * @param {number} num
-   * current frame number in Layer's time
-   *
-   */
+
   show() {
     // console.log('SHOW', this);
     if (this.isInRange && !this.isTransparent) {

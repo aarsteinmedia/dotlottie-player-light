@@ -10,7 +10,6 @@ import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 
 class ShapeModifier extends DynamicPropertyContainer {
-  // addShapeToModifier!: (data: SVGShapeData) => void
   closed?: boolean
   elem?: ElementInterfaceIntersect
   frameId?: number
