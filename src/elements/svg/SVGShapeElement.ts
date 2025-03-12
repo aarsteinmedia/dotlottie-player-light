@@ -10,7 +10,6 @@ import type {
 } from '@/types'
 
 import FrameElement from '@/elements/helpers/FrameElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import {
   ShapeGroupData,
   SVGFillStyleData,
@@ -22,7 +21,6 @@ import {
   SVGStyleData,
   SVGTransformData,
 } from '@/elements/helpers/shapes'
-import TransformElement from '@/elements/helpers/TransformElement'
 import ShapeElement from '@/elements/ShapeElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { lineCapEnum, lineJoinEnum } from '@/enums'
@@ -449,15 +447,4 @@ export default class SVGShapeElement extends ShapeElement {
   }
 }
 
-extendPrototype(
-  [
-    // BaseElement,
-    TransformElement,
-    SVGBaseElement,
-    // ShapeElement,
-    HierarchyElement,
-    FrameElement,
-    // RenderableDOMElement,
-  ],
-  SVGShapeElement
-)
+extendPrototype([SVGBaseElement, FrameElement], SVGShapeElement)

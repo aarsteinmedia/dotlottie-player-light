@@ -77,7 +77,7 @@
     "esbuild": "^0.25.1",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-import-resolver-typescript": "^3.8.5",
+    "eslint-import-resolver-typescript": "^3.8.6",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsdoc": "^50.6.6",
     "eslint-plugin-perfectionist": "^4.10.1",

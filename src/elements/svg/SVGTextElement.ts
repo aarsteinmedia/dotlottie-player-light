@@ -1,7 +1,6 @@
 /* eslint-disable max-depth */
 import type { GlobalData, LottieLayer, SourceRect, Vector3 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
@@ -420,8 +419,6 @@ export default class SVGTextLottieElement extends TextElement {
 
 extendPrototype(
   [
-    BaseElement,
-    // TransformElement,
     SVGBaseElement,
     HierarchyElement,
     FrameElement,

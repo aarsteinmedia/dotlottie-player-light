@@ -69,4 +69,6 @@ export default abstract class RenderableDOMElement extends RenderableElement {
   renderInnerContent() {}
 }
 
+// TODO: TextElement needs this mixin
+
 extendPrototype([RenderableElement], RenderableDOMElement)
