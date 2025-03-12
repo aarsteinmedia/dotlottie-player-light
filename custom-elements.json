@@ -129,7 +129,7 @@
             {
               "kind": "method",
               "name": "getLottie",
-              "description": "Returns the lottie-web instance used in the component"
+              "description": "Returns the Lottie instance used in the component"
             },
             {
               "kind": "method",

@@ -592,7 +592,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   }
 
   /**
-   * Returns the lottie-web instance used in the component
+   * Returns the Lottie instance used in the component
    */
   public getLottie() {
     return this._lottieInstance
