@@ -9,11 +9,11 @@ import type {
 
 import FontManager, { getFontProperties } from '@/utils/FontManager'
 import { initialDefaultFrame } from '@/utils/getterSetter'
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
-export default class TextProperty {
+export default class TextProperty extends DynamicPropertyContainer {
   _frameId: number
   _isFirstFrame: boolean
-  _mdf: boolean
   canResize: boolean
   comp?: ElementInterfaceIntersect
   currentData: DocumentData
@@ -30,6 +30,7 @@ export default class TextProperty {
   v: DocumentData | string
 
   constructor(elem: ElementInterfaceIntersect, data?: TextData) {
+    super()
     this._frameId = initialDefaultFrame
     this.pv = ''
     this.v = ''
@@ -75,7 +76,7 @@ export default class TextProperty {
       t: 0,
       tr: 0,
       yOffset: 0,
-    } as any
+    } as unknown as DocumentData
     this.copyData(this.currentData, this.data?.d?.k[0].s)
 
     // console.log(this.data)
@@ -453,7 +454,7 @@ export default class TextProperty {
   }
   getKeyframeValue() {
     const textKeys = this.data?.d?.k
-    const frameNum = this.elem.comp.renderedFrame
+    const frameNum = Number(this.elem.comp?.renderedFrame)
     let i = 0
     const len = textKeys?.length || 0
     while (i <= len - 1) {
@@ -467,7 +468,7 @@ export default class TextProperty {
     }
     return this.data?.d?.k[this.keysIndex].s
   }
-  getValue(_finalValue: unknown) {
+  override getValue(_finalValue: unknown) {
     if (
       (this.elem.globalData.frameId === this.frameId ||
         !this.effectsSequence.length) &&
@@ -484,11 +485,10 @@ export default class TextProperty {
     }
     this.lock = true
     this._mdf = false
-    let i
-    const len = this.effectsSequence.length
+    const { length } = this.effectsSequence
     let finalValue =
       (_finalValue as DocumentData) || this.data?.d?.k[this.keysIndex].s
-    for (i = 0; i < len; i++) {
+    for (let i = 0; i < length; i++) {
       // Checking if index changed to prevent creating a new object every time the expression updates.
       if (currentIndex === this.keysIndex) {
         finalValue = this.effectsSequence[i](this.currentData, finalValue?.t)

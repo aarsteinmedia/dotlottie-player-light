@@ -67,7 +67,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
     }
   }
 
-  getMult(indFromProps: number) {
+  getMult(indFromProps: number, _val?: number): number | number[] {
     let ind = indFromProps
     if (
       this._currentTextLength !== this.elem.textProperty?.currentData.l?.length

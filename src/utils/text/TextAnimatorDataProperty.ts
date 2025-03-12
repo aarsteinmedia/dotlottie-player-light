@@ -1,5 +1,9 @@
-import type { ElementInterfaceIntersect } from '@/types'
-import type { NoProperty, ValueProperty } from '@/utils/Properties'
+import type { ElementInterfaceIntersect, Vector2 } from '@/types'
+import type {
+  MultiDimensionalProperty,
+  NoProperty,
+  ValueProperty,
+} from '@/utils/Properties'
 
 import { degToRads } from '@/utils'
 import PropertyFactory from '@/utils/PropertyFactory'
@@ -13,7 +17,7 @@ export default class TextAnimatorDataProperty {
     fh: ValueProperty | NoProperty
     fs: ValueProperty | NoProperty
     o: ValueProperty | NoProperty
-    p: ValueProperty | NoProperty
+    p: MultiDimensionalProperty<Vector2> | NoProperty
     r: ValueProperty | NoProperty
     rx: ValueProperty | NoProperty
     ry: ValueProperty | NoProperty
@@ -95,7 +99,7 @@ export default class TextAnimatorDataProperty {
             1,
             0,
             container
-          ) as ValueProperty)
+          ) as MultiDimensionalProperty<Vector2>)
         : defaultData,
       r: textAnimatorAnimatables?.r
         ? (getProp(

@@ -968,13 +968,7 @@ export interface TextData {
   }
   of: string
   /** Text Follow Path TODO: */
-  p?: {
-    a: any
-    p: any
-    r: any
-    f: any
-    l: any
-  }
+  p?: TextPathData
   ps: null | Vector2
   s: number
   sc: string
@@ -984,6 +978,15 @@ export interface TextData {
   t: string // number
   tr: number
   yOffset: number
+}
+
+export interface TextPathData {
+  a: any
+  f: any
+  l: any
+  m?: number
+  p: any
+  r: any
 }
 
 export type EffectElement =
