@@ -293,3 +293,6 @@ export default class SVGElementsRenderer {
     }
   }
 }
+
+export type CreateRenderFunction =
+  typeof SVGElementsRenderer.createRenderFunction

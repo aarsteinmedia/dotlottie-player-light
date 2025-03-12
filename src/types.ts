@@ -28,6 +28,7 @@ import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type TextElement from '@/elements/TextElement'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
 import type BaseRenderer from '@/renderers/BaseRenderer'
+import type { CreateRenderFunction } from '@/renderers/SVGElementsRenderer'
 import type AudioController from '@/utils/audio/AudioController'
 import type FontManager from '@/utils/FontManager'
 import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -39,8 +40,6 @@ import type TextAnimatorDataProperty from '@/utils/text/TextAnimatorDataProperty
 import type TextProperty from '@/utils/text/TextProperty'
 import type TransformProperty from '@/utils/TransformProperty'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
-
-import SVGElementsRenderer from './renderers/SVGElementsRenderer'
 
 export type AnimationDirection = 1 | -1
 export type AnimationEventName =
@@ -199,7 +198,7 @@ export interface ProcessedElements {
 export interface AnimatedContent {
   data: LottieLayerData
   element: ShapeDataInterface
-  fn: SVGElementsRenderer['createRenderFunction']
+  fn: null | CreateRenderFunction
 }
 
 export interface ItemsData {

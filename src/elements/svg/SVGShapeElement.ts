@@ -9,7 +9,6 @@ import type {
   Transformer,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import {
@@ -444,7 +443,7 @@ export default class SVGShapeElement extends ShapeElement {
 
 extendPrototype(
   [
-    BaseElement,
+    // BaseElement,
     TransformElement,
     SVGBaseElement,
     // ShapeElement,

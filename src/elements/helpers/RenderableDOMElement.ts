@@ -66,9 +66,11 @@ export default class RenderableDOMElement extends RenderableElement {
   show() {
     // console.log('SHOW', this);
     if (this.isInRange && !this.isTransparent) {
-      if (!this.data.hd) {
+      if (!this.data?.hd) {
         const elem = this.baseElement || this.layerElement
-        elem.style.display = 'block'
+        if (elem) {
+          elem.style.display = 'block'
+        }
       }
       this.hidden = false
       this._isFirstFrame = true

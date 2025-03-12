@@ -45,7 +45,7 @@ abstract class BaseProperty extends DynamicPropertyContainer {
   vel?: number | any[]
   addEffect(effectFunction: any) {
     this.effectsSequence.push(effectFunction)
-    this.container?.addDynamicProperty?.(this)
+    ;(this.container as any)?.addDynamicProperty?.(this)
   }
   getValueAtCurrentTime() {
     const offsetTime = Number(this.offsetTime),
