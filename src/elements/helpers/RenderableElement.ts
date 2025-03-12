@@ -2,12 +2,10 @@ import type {
   ElementInterfaceIntersect,
   SourceRect,
   SVGRendererConfig,
-  Transformer,
 } from '@/types'
 
 import FrameElement from '@/elements/helpers/FrameElement'
 export default class RenderableElement extends FrameElement {
-  finalTransform?: Transformer
   hidden?: boolean
   isInRange?: boolean
   isTransparent?: boolean

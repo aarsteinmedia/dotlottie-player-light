@@ -5,9 +5,7 @@ import type {
   LottieLayer,
 } from '@/types'
 
-// import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
-// import RenderableElement from '@/elements/helpers/RenderableElement'
 import { getExpressionInterfaces } from '@/utils/getterSetter'
 
 export default class FootageElement extends FrameElement {
@@ -53,5 +51,3 @@ export default class FootageElement extends FrameElement {
     throw new Error('FootageElement: Method setMatte is not implemented')
   }
 }
-
-// extendPrototype([RenderableElement, BaseElement], FootageElement)

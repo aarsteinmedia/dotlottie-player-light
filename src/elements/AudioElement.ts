@@ -11,10 +11,12 @@ import type {
   ValueProperty,
 } from '@/utils/Properties'
 
-import FrameElement from '@/elements/helpers/FrameElement'
+// import FrameElement from '@/elements/helpers/FrameElement'
 import PropertyFactory from '@/utils/PropertyFactory'
 
-export default class AudioElement extends FrameElement {
+import RenderableElement from './helpers/RenderableElement'
+
+export default class AudioElement extends RenderableElement {
   _canPlay: boolean
   _currentTime: number
   _isPlaying: boolean
@@ -24,8 +26,8 @@ export default class AudioElement extends FrameElement {
   assetData: null | LottieAsset
   audio: Audio
   lv: MultiDimensionalProperty<Vector2>
+
   tm: ValueProperty
-  // destroy() {}
 
   constructor(
     data: LottieLayer,
@@ -75,15 +77,13 @@ export default class AudioElement extends FrameElement {
     this._isPlaying = false
   }
 
-  // initExpressions() {}
-
   pause() {
     this.audio.pause()
     this._isPlaying = false
     this._canPlay = false
   }
 
-  override prepareFrame(num: number) {
+  prepareFrame(num: number) {
     this.prepareRenderableFrame(num, true)
     this.prepareProperties(num, true)
     if (this.tm._placeholder) {
@@ -99,7 +99,7 @@ export default class AudioElement extends FrameElement {
     }
   }
 
-  override renderFrame(_frame?: number | null) {
+  renderFrame(_frame?: number | null) {
     if (this.isInRange && this._canPlay) {
       if (!this._isPlaying) {
         this.audio.play()
@@ -127,15 +127,9 @@ export default class AudioElement extends FrameElement {
   setRate(rateValue: number) {
     this.audio.rate(rateValue)
   }
-
-  // show() {
-  //   // this.audio.play()
-  // }
   volume(volumeValue: number) {
     this._volumeMultiplier = volumeValue
     this._previousVolume = volumeValue * this._volume
     this.audio.volume(this._previousVolume)
   }
 }
-
-// extendPrototype([RenderableElement, BaseElement, FrameElement], AudioElement)
