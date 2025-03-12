@@ -12,7 +12,7 @@ import { getBlendMode } from '@/utils'
 import { createElementID, getExpressionInterfaces } from '@/utils/getterSetter'
 import ProjectInterface from '@/utils/helpers/ProjectInterface'
 
-export default class BaseElement {
+export default abstract class BaseElement {
   baseElement?: SVGGElement
   comp?: ElementInterfaceIntersect
   compInterface?: ProjectInterface

@@ -1,11 +1,10 @@
 import type { ElementInterfaceIntersect, Shape } from '@/types'
+import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
+import type ShapePath from '@/utils/shapes/ShapePath'
 
-import { ProcessedElement, SVGShapeData } from '@/elements/helpers/shapes'
-import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import ShapePath from '@/utils/shapes/ShapePath'
-
-import RenderableDOMElement from './helpers/RenderableDOMElement'
+import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+import { ProcessedElement, type SVGShapeData } from '@/elements/helpers/shapes'
 
 export default class ShapeElement extends RenderableDOMElement {
   _length?: number

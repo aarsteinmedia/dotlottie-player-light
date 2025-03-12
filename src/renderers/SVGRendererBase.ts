@@ -1,6 +1,7 @@
 import type {
   AnimationData,
   ElementInterfaceIntersect,
+  ElementInterfaceUnion,
   LottieLayer,
   SVGRendererConfig,
 } from '@/types'
@@ -63,6 +64,10 @@ export default class SVGRendererBase extends SVGBaseElement {
 
     const element = this.createItem(this.layers[pos])
 
+    if (!element) {
+      throw new Error('Could not create element')
+    }
+
     elements![pos] = element as ElementInterfaceIntersect
     if (getExpressionsPlugin()) {
       if (this.layers?.[pos].ty === 0) {
@@ -70,7 +75,7 @@ export default class SVGRendererBase extends SVGBaseElement {
       }
       element.initExpressions()
     }
-    this.appendElementInPos(element, pos)
+    this.appendElementInPos(element as ElementInterfaceIntersect, pos)
     if (this.layers?.[pos].tt) {
       const elementIndex =
         'tp' in this.layers[pos]

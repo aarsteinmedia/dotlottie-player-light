@@ -7,7 +7,7 @@ import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
-export default class SVGBaseElement extends BaseRenderer {
+export default abstract class SVGBaseElement extends BaseRenderer {
   _sizeChanged?: boolean
   finalTransform?: Transformer
   maskedElement?: SVGGElement
@@ -88,7 +88,7 @@ export default class SVGBaseElement extends BaseRenderer {
       }
     }
     if (this.data?.bm !== 0) {
-      this.setBlendMode() // TODO: Must be inherited
+      this.setBlendMode()
     }
   }
   createRenderableComponents() {
@@ -223,11 +223,10 @@ export default class SVGBaseElement extends BaseRenderer {
       )
     }
   }
-  // setBlendMode() {
-  //   throw new Error('Method not yet implemented') TODO: Must be inherited
-  // }
   // searchEffectTransforms() {
-  //   throw new Error('Method not yet implemented') TODO: Must be inherited
+  //   throw new Error(
+  //     'SVGBaseElement: Method searchEffectTransforms is not yet implemented'
+  //   )
   // }
   setMatte(id: string) {
     if (!this.matteElement) {
