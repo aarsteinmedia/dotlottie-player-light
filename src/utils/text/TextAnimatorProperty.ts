@@ -718,7 +718,6 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
           matrixHelper.translate(xPos, yPos, 0)
 
           if (documentData.ps) {
-            // matrixHelper.translate(documentData.ps[0],documentData.ps[1],0);
             matrixHelper.translate(
               documentData.ps[0],
               documentData.ps[1] + Number(documentData.ascent),

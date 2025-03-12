@@ -184,11 +184,7 @@ export default class TextAnimatorDataProperty {
         : defaultData,
     }
 
-    this.s = new TextSelectorProperty(
-      elem,
-      animatorProps?.s as any
-      // container
-    )
+    this.s = new TextSelectorProperty(elem, animatorProps?.s as any)
     ;(this.s as any).t = (animatorProps as any)?.s?.t
   }
 }

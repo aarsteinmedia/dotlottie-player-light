@@ -17,7 +17,6 @@ export default class TransformProperty extends DynamicPropertyContainer {
   _addDynamicProperty = DynamicPropertyContainer.prototype.addDynamicProperty
   _isDirty?: boolean
   a?: MultiDimensionalProperty<Vector3>
-  // _mdf?: boolean
   appliedTransformations: number
   autoOriented?: boolean
   data: Shape
@@ -124,7 +123,6 @@ export default class TransformProperty extends DynamicPropertyContainer {
         degToRads,
         this
       ) as MultiDimensionalProperty<Vector3>
-      // sh Indicates it needs to be capped between -180 and 180
       this.or.sh = true as any
     } else {
       this.r = PropertyFactory.getProp(
@@ -230,8 +228,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
     }
   }
   autoOrient() {
-    //
-    // var prevP = this.getValueAtTime();
+    /** Nothing */
   }
 
   override getValue(forceRender?: boolean) {

@@ -53,7 +53,6 @@ export default class ZigZagModifier extends ShapeModifier {
       amplitude,
       nextDist / ((frequency + 1) * 2),
       prevDist / ((frequency + 1) * 2)
-      // pointType
     )
   }
   /**
@@ -87,7 +86,6 @@ export default class ZigZagModifier extends ShapeModifier {
         amplitude,
         dist / ((frequency + 1) * 2),
         dist / ((frequency + 1) * 2)
-        // pointType
       )
 
       direction = -direction as AnimationDirection

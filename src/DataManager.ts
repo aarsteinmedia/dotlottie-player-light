@@ -186,7 +186,6 @@ export default class DataManager {
         ['var _workerSelf = self; self.onmessage = ', fn.toString()],
         { type: 'text/javascript' }
       )
-      // var blob = new Blob(['self.onmessage = ', fn.toString()], { type: 'text/javascript' });
       const url = URL.createObjectURL(blob)
       return new Worker(url)
     }

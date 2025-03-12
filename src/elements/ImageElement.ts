@@ -7,7 +7,6 @@ import type {
 } from '@/types'
 
 import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { createNS } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
@@ -69,4 +68,4 @@ export default class ImageElement extends RenderableDOMElement {
   }
 }
 
-extendPrototype([TransformElement, SVGBaseElement], ImageElement)
+extendPrototype([SVGBaseElement], ImageElement)

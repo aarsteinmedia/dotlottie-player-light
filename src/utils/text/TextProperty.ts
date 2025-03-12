@@ -59,7 +59,6 @@ export default class TextProperty extends DynamicPropertyContainer {
       finalText: [],
       fStyle: '',
       fWeight: '',
-      // j: '',
       justifyOffset: 0,
       l: [],
       lh: 0,
@@ -72,14 +71,12 @@ export default class TextProperty extends DynamicPropertyContainer {
       strokeColorAnim: false,
       strokeWidthAnim: false,
       sw: 0,
-      // sz: 0,
       t: 0,
       tr: 0,
       yOffset: 0,
     } as unknown as DocumentData
     this.copyData(this.currentData, this.data?.d?.k[0].s)
 
-    // console.log(this.data)
     if (!this.searchProperty()) {
       this.completeTextData(this.currentData)
     }
@@ -219,7 +216,6 @@ export default class TextProperty extends DynamicPropertyContainer {
               ? 0
               : (charData.w * documentData.finalSize) / 100
           } else {
-            // tCanvasHelper.font = documentData.s + 'px '+ fontData.fFamily;
             cLength =
               fontManager?.measureText(
                 finalText[i],
@@ -236,7 +232,6 @@ export default class TextProperty extends DynamicPropertyContainer {
             currentHeight +=
               documentData.finalLineHeight || documentData.finalSize * 1.2
             finalText.splice(i, lastSpaceIndex === i ? 1 : 0, '\r')
-            // finalText = finalText.substr(0,i) + "\r" + finalText.substr(i === lastSpaceIndex ? i + 1 : i);
             lastSpaceIndex = -1
             lineWidth = 0
           } else {
@@ -288,8 +283,6 @@ export default class TextProperty extends DynamicPropertyContainer {
         )
         cLength = newLineFlag ? 0 : (charData.w * documentData.finalSize) / 100
       } else {
-        // var charWidth = fontManager.measureText(val, documentData.f, documentData.finalSize);
-        // tCanvasHelper.font = documentData.finalSize + 'px '+ fontManager.getFontByName(documentData.f).fFamily;
         cLength = fontManager.measureText(
           val,
           documentData.f,

@@ -137,7 +137,6 @@ abstract class BaseProperty extends DynamicPropertyContainer {
             newValue[k] = bezierData.points[ind].point[k]
           }
         }
-        // caching._lastKeyframeIndex = -1;
       } else {
         if (keyframeMetadata.__fnct) {
           fnc = keyframeMetadata.__fnct as (val: number) => number

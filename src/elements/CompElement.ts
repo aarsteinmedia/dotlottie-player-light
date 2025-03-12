@@ -87,13 +87,7 @@ export default class CompElement extends SVGRendererBase {
 }
 
 extendPrototype(
-  [
-    // BaseElement,
-    TransformElement,
-    HierarchyElement,
-    FrameElement,
-    RenderableDOMElement,
-  ],
+  [TransformElement, HierarchyElement, FrameElement, RenderableDOMElement],
   CompElement
 )
 

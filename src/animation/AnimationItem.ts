@@ -83,7 +83,6 @@ export default class AnimationItem extends BaseEvent {
   protected onEnterFrame: null | ((arg: unknown) => void) = null
   protected onLoopComplete: null | ((arg: unknown) => void) = null
   protected onSegmentStart: null | ((arg: unknown) => void) = null
-  // private _cbs: null | any
   private _completedLoop: boolean
   private _idle: boolean
   constructor() {

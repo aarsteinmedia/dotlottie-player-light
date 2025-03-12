@@ -35,9 +35,6 @@ export default class RepeaterModifier extends ShapeModifier {
   so: any
   tMatrix?: Matrix
   tr: any
-  // addShape() {
-  //   throw new Error('RepeaterModifier: Method addShape not yet implemented')
-  // }
   applyTransforms(
     pMatrix: Matrix,
     rMatrix: Matrix,
@@ -97,7 +94,6 @@ export default class RepeaterModifier extends ShapeModifier {
     this.initModifierProperties(elem as ElementInterfaceIntersect, arr[pos])
     while (pos > 0) {
       pos--
-      // this._elements.unshift(arr.splice(pos,1)[0]);
       this._elements.unshift(arr[pos])
     }
     if (this.dynamicProperties.length) {

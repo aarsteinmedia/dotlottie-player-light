@@ -128,7 +128,6 @@ export default class TrimModifier extends ShapeModifier {
             lengths[j - 1]
           ) as number[]
           this.addSegmentFromArray(segment, shapePath, segmentCount, newShape)
-          // this.addSegment(segment.pt1, segment.pt3, segment.pt4, segment.pt2, shapePath, segmentCount, newShape);
           newShape = false
           shapePath.c = false
         }
@@ -164,7 +163,6 @@ export default class TrimModifier extends ShapeModifier {
               lengths[j - 1]
             ) as number[]
             this.addSegmentFromArray(segment, shapePath, segmentCount, newShape)
-            // this.addSegment(segment.pt1, segment.pt3, segment.pt4, segment.pt2, shapePath, segmentCount, newShape);
             newShape = false
             shapePath.c = false
           }

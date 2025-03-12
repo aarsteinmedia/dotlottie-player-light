@@ -16,7 +16,6 @@ class ShapeModifier extends DynamicPropertyContainer {
   k?: boolean
   shapes?: any[]
   addShape(data: SVGShapeData) {
-    // console.log(data)
     if (!this.closed) {
       // Adding shape to dynamic properties. It covers the case where a shape has no effects applied, to reset it's _mdf state on every tick.
       data.sh.container?.addDynamicProperty(data.sh as any)

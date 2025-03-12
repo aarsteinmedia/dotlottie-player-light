@@ -73,7 +73,6 @@ export class GroupEffect extends DynamicPropertyContainer {
         case 5:
           eff = new EffectsManager(layer, element)
           break
-        // case 6:
         default:
           eff = new NoValueEffect()
           break

@@ -401,16 +401,6 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     const pVector = getPerpendicularVector(prevPoint!, nextPoint!)
     return Math.atan2(0, 1) - Math.atan2(pVector[1], pVector[0])
   },
-  // getQueryVariable = (variableFromProps: string, queryString: string) => {
-  //   const vars = queryString.split('&')
-  //   for (const variable of vars) {
-  //     const pair = variable.split('=')
-  //     if (decodeURIComponent(pair[0]) === variableFromProps) {
-  //       return decodeURIComponent(pair[1])
-  //     }
-  //   }
-  //   return null
-  // },
   handleErrors = (err: unknown) => {
     const res = {
       message: 'Unknown error',
@@ -1054,19 +1044,7 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
       intersectData(split[1], data.t, data.t2),
     ]
   },
-  // styleDiv = (element: HTMLElement) => {
-  //   element.style.position = 'absolute'
-  //   element.style.top = '0'
-  //   element.style.left = '0'
-  //   element.style.display = 'block'
-  //   element.style.transformOrigin = '0 0'
-  //   element.style.backfaceVisibility = 'visible'
-  //   element.style.transformStyle = 'preserve-3d'
-  // },
-  unzip = async (
-    resp: Response
-    // filter: UnzipFileFilter = () => true
-  ): Promise<Unzipped> => {
+  unzip = async (resp: Response): Promise<Unzipped> => {
     const buffer = new Uint8Array(await resp.arrayBuffer()),
       unzipped = await new Promise<Unzipped>((resolve, reject) => {
         unzipOrg(
@@ -1079,11 +1057,5 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
           }
         )
       })
-    // console.log('unzipped', unzipped)
     return unzipped
   }
-// useId = (prefix?: string) => {
-//   const s4 = () =>
-//     (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-//   return `${prefix ?? `:${s4()}`}-${s4()}`
-// }
