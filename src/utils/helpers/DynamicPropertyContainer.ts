@@ -1,6 +1,6 @@
 import type { ElementInterfaceIntersect } from '@/types'
 
-export default class DynamicPropertyContainer {
+export default abstract class DynamicPropertyContainer {
   _isAnimated: boolean
   _mdf: boolean
   container: ElementInterfaceIntersect | null
@@ -24,7 +24,11 @@ export default class DynamicPropertyContainer {
     }
   }
 
-  getValue(_flag?: boolean) {}
+  getValue(_flag?: boolean) {
+    throw new Error(
+      'DynamicPropertyContainer: Method getValue is not implemented'
+    )
+  }
 
   initDynamicPropertyContainer(container: ElementInterfaceIntersect): void {
     this.container = container

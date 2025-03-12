@@ -35,7 +35,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
   rx?: ValueProperty
   ry?: ValueProperty
   rz?: ValueProperty
-  s?: MultiDimensionalProperty<Vector2>
+  s?: MultiDimensionalProperty<Vector3>
   sa?: ValueProperty
   sk?: ValueProperty
   v: Matrix
@@ -164,7 +164,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
       1,
       0.01,
       this
-    ) as MultiDimensionalProperty<Vector2>
+    ) as MultiDimensionalProperty<Vector3>
     // Opacity is not part of the transform properties, that's why it won't use this.dynamicProperties. That way transforms won't get updated if opacity changes.
     if (data.o) {
       this.o = PropertyFactory.getProp(
@@ -192,18 +192,10 @@ export default class TransformProperty extends DynamicPropertyContainer {
     this.iterateDynamicProperties()
     this._mdf = this._mdf || _mdf
     if (this.a) {
-      mat.translate(
-        -(this.a.v as number[] as number[])[0],
-        -(this.a.v as number[])[1],
-        (this.a.v as number[])[2]
-      )
+      mat.translate(-this.a.v[0], -this.a.v[1], this.a.v[2])
     }
     if (this.s) {
-      mat.scale(
-        (this.s.v as number[])[0],
-        (this.s.v as number[])[1],
-        (this.s.v as number[])[2]
-      )
+      mat.scale(this.s.v[0], this.s.v[1], this.s.v[2])
     }
     if (this.sk) {
       mat.skewFromAxis(-this.sk.v, Number(this.sa?.v))
@@ -256,19 +248,11 @@ export default class TransformProperty extends DynamicPropertyContainer {
     if (this._mdf || forceRender) {
       let frameRate
       this.v.cloneFromProps(this.pre.props as unknown as number[])
-      if (this.appliedTransformations < 1) {
-        this.v.translate(
-          -(this.a?.v as number[])[0],
-          -(this.a?.v as number[])[1],
-          (this.a?.v as number[])[2]
-        )
+      if (this.appliedTransformations < 1 && this.a) {
+        this.v.translate(-this.a.v[0], -this.a.v[1], this.a.v[2])
       }
-      if (this.appliedTransformations < 2) {
-        this.v.scale(
-          (this.s?.v as number[])[0],
-          (this.s?.v as number[])[1],
-          (this.s?.v as number[])[2]
-        )
+      if (this.appliedTransformations < 2 && this.s) {
+        this.v.scale(this.s.v[0], this.s.v[1], this.s.v[2])
       }
       if (this.sk && this.appliedTransformations < 3) {
         this.v.skewFromAxis(-this.sk.v, Number(this.sa?.v))
@@ -404,12 +388,8 @@ export default class TransformProperty extends DynamicPropertyContainer {
         } else {
           this.v.translate(Number(this.px?.v), Number(this.py?.v), 0)
         }
-      } else {
-        this.v.translate(
-          (this.p?.v as number[])[0],
-          (this.p?.v as number[])[1],
-          -(this.p?.v as number[])[2]
-        )
+      } else if (this.p) {
+        this.v.translate(this.p.v[0], this.p.v[1], -this.p.v[2])
       }
     }
     this.frameId = this.elem.globalData.frameId!
@@ -421,21 +401,23 @@ export default class TransformProperty extends DynamicPropertyContainer {
     if (this.a?.effectsSequence.length) {
       return
     }
-    this.pre.translate(
-      -(this.a?.v as number[])[0],
-      -(this.a?.v as number[])[1],
-      (this.a?.v as number[])[2]
-    )
+
+    if (!this.a) {
+      throw new Error('TransformProperty: Cannot read value')
+    }
+
+    this.pre.translate(-this.a.v[0], -this.a.v[1], this.a.v[2])
     this.appliedTransformations = 1
 
     if (this.s?.effectsSequence.length) {
       return
     }
-    this.pre.scale(
-      (this.s?.v as number[])[0],
-      (this.s?.v as number[])[1],
-      (this.s?.v as number[])[2]
-    )
+
+    if (!this.s) {
+      throw new Error('TransformProperty: Cannot read value')
+    }
+
+    this.pre.scale(this.s.v[0], this.s.v[1], this.s.v[2])
     this.appliedTransformations = 2
 
     if (this.sk) {
