@@ -8,9 +8,9 @@ import type {
 import ImageElement from '@/elements/ImageElement'
 import NullElement from '@/elements/NullElement'
 import SolidElement from '@/elements/SolidElement'
-// import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import SVGTextLottieElement from '@/elements/svg/SVGTextElement'
+import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
 import {
   createElementID,
@@ -18,8 +18,6 @@ import {
   getLocationHref,
 } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
-
-import BaseRenderer from './BaseRenderer'
 
 export default class SVGRendererBase extends BaseRenderer {
   destroyed?: boolean
