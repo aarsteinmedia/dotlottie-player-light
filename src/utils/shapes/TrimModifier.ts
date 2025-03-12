@@ -333,7 +333,7 @@ export default class TrimModifier extends ShapeModifier {
     }
     let shapePaths
     let i
-    const len = this.shapes.length
+    const { length } = this.shapes || []
     let j
     let jLen
     let pathsData
@@ -342,20 +342,22 @@ export default class TrimModifier extends ShapeModifier {
     let totalModifierLength = 0
 
     if (e === s) {
-      for (i = 0; i < len; i++) {
-        this.shapes[i].localShapeCollection.releaseShapes()
-        this.shapes[i].shape._mdf = true
-        this.shapes[i].shape.paths = this.shapes[i].localShapeCollection
-        if (this._mdf) {
-          this.shapes[i].pathsData.length = 0
+      for (i = 0; i < length; i++) {
+        this.shapes?.[i].localShapeCollection.releaseShapes()
+        if (this.shapes) {
+          this.shapes[i].shape._mdf = true
+          this.shapes[i].shape.paths = this.shapes?.[i].localShapeCollection
+          if (this._mdf) {
+            this.shapes[i].pathsData.length = 0
+          }
         }
       }
     } else if (!((e === 1 && s === 0) || (e === 0 && s === 1))) {
       const segments = []
       let shapeData
       let localShapeCollection
-      for (i = 0; i < len; i++) {
-        shapeData = this.shapes[i]
+      for (i = 0; i < length; i++) {
+        shapeData = this.shapes?.[i]
         // if shape hasn't changed and trim properties haven't changed, cached previous path can be used
         if (
           !shapeData.shape._mdf &&
@@ -389,13 +391,12 @@ export default class TrimModifier extends ShapeModifier {
       let shapeE = e
       let addedLength = 0
       let edges
-      for (i = len - 1; i >= 0; i--) {
-        shapeData = this.shapes[i]
+      for (i = length - 1; i >= 0; i--) {
+        shapeData = this.shapes?.[i]
         if (shapeData.shape._mdf) {
           localShapeCollection = shapeData.localShapeCollection
           localShapeCollection.releaseShapes()
-          // if m === 2 means paths are trimmed individually so edges need to be found for this specific shape relative to whoel group
-          if (this.m === 2 && len > 1) {
+          if (this.m === 2 && length > 1) {
             edges = this.calculateShapeEdges(
               s,
               e,
@@ -459,9 +460,12 @@ export default class TrimModifier extends ShapeModifier {
         }
       }
     } else if (this._mdf) {
-      for (i = 0; i < len; i++) {
+      for (i = 0; i < length; i++) {
         // Releasign Trim Cached paths data when no trim applied in case shapes are modified inbetween.
         // Don't remove this even if it's losing cached info.
+        if (!this.shapes) {
+          continue
+        }
         this.shapes[i].pathsData.length = 0
         this.shapes[i].shape._mdf = true
       }
