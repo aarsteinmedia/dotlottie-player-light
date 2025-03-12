@@ -5,12 +5,10 @@ import type {
   Transformer,
 } from '@/types'
 
-import FrameElement from '@/elements/helpers/FrameElement'
-export default class RenderableElement extends FrameElement {
+// import FrameElement from '@/elements/helpers/FrameElement'
+import RenderableDOMElement from './RenderableDOMElement'
+export default class RenderableElement extends RenderableDOMElement {
   finalTransform?: Transformer
-  hidden?: boolean
-  isInRange?: boolean
-  isTransparent?: boolean
   renderableComponents!: ElementInterfaceIntersect[]
   addRenderableComponent(component: ElementInterfaceIntersect) {
     if (this.renderableComponents.indexOf(component) === -1) {
@@ -60,17 +58,7 @@ export default class RenderableElement extends FrameElement {
     }
     return { h: Number(this.data?.height), w: Number(this.data?.width) }
   }
-  hide() {
-    // console.log('HIDE', this);
-    if (!this.hidden && (!this.isInRange || this.isTransparent)) {
-      const elem = this.baseElement || this.layerElement
-      if (elem) {
-        elem.style.display = 'none'
-      }
 
-      this.hidden = true
-    }
-  }
   // hide() {
   //   throw new Error('RenderableElement: Method hide not implemented yet')
   // }
@@ -103,27 +91,7 @@ export default class RenderableElement extends FrameElement {
     /* this.maskManager.renderFrame(this.finalTransform.mat);
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */
   }
-  /**
-   * @function
-   * Initializes frame related properties.
-   *
-   * @param {number} num
-   * current frame number in Layer's time
-   *
-   */
-  show() {
-    // console.log('SHOW', this);
-    if (this.isInRange && !this.isTransparent) {
-      if (!this.data?.hd) {
-        const elem = this.baseElement || this.layerElement
-        if (elem) {
-          elem.style.display = 'block'
-        }
-      }
-      this.hidden = false
-      this._isFirstFrame = true
-    }
-  }
+
   // show() {
   //   throw new Error('RenderableElement: Method show not implemented yet')
   // }

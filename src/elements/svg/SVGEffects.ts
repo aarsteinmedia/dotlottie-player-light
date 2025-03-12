@@ -9,7 +9,7 @@ import type {
   SliderEffect,
 } from '@/effects'
 
-import { ElementInterfaceIntersect } from '@/types'
+import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import FiltersFactory from '@/utils/FiltersFactory'
 import {
   createElementID,
@@ -30,9 +30,9 @@ type Filter =
 export default class SVGEffects {
   static idPrefix = 'filter_result_'
   filters: Filter[]
-  constructor(elem: ElementInterfaceIntersect) {
+  constructor(elem: SVGBaseElement) {
     // let source = 'SourceGraphic' TODO: Perhaps for main version
-    const len = elem.data.ef ? elem.data.ef.length : 0
+    const len = elem.data?.ef ? elem.data.ef.length : 0
     const filId = createElementID()
     const fil = FiltersFactory.createFilter(filId, true)
     let count = 0
@@ -40,7 +40,7 @@ export default class SVGEffects {
     let filterManager
     for (let i = 0; i < len; i++) {
       filterManager = null
-      if (elem.data.ef?.[i].ty && registeredEffects[elem.data.ef?.[i].ty]) {
+      if (elem.data?.ef?.[i].ty && registeredEffects[elem.data.ef?.[i].ty]) {
         const Effect = registeredEffects[elem.data.ef[i].ty].effect
         // TODO: This looks very wrong and should be tested
         filterManager = new Effect(
@@ -60,7 +60,7 @@ export default class SVGEffects {
       }
     }
     if (count) {
-      elem.globalData.defs.appendChild(fil)
+      elem.globalData?.defs.appendChild(fil)
       elem.layerElement?.setAttribute(
         'filter',
         `url(${getLocationHref()}#${filId})`

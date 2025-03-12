@@ -5,17 +5,22 @@
  */
 
 import BaseElement from '@/elements/BaseElement'
+import { ElementInterfaceIntersect } from '@/types'
 
 export default abstract class HierarchyElement extends BaseElement {
-  _isParent!: boolean
+  _isParent?: boolean
 
-  hierarchy!: unknown[]
+  hierarchy?: ElementInterfaceIntersect[]
   /**
    * Searches layer's parenting chain
    */
   checkParenting() {
     if ('parent' in (this.data || {})) {
-      this.comp?.buildElementParenting(this as any, this.data?.parent, [])
+      this.comp?.buildElementParenting(
+        this as unknown as ElementInterfaceIntersect,
+        this.data?.parent,
+        []
+      )
     }
   }
   /**
@@ -39,7 +44,7 @@ export default abstract class HierarchyElement extends BaseElement {
    * @param {array} hierarchy
    * layer's parent list
    */
-  setHierarchy(hierarchy: unknown[]) {
+  setHierarchy(hierarchy: ElementInterfaceIntersect[]) {
     this.hierarchy = hierarchy
   }
 }

@@ -1,24 +1,16 @@
 import type SVGEffects from '@/elements/svg/SVGEffects'
-import type {
-  ElementInterfaceIntersect,
-  LottieLayer,
-  Transformer,
-  Vector3,
-} from '@/types'
+import type { ElementInterfaceIntersect, Transformer, Vector3 } from '@/types'
 
 import Matrix from '@/utils/Matrix'
 import TransformProperty from '@/utils/TransformProperty'
+
+import RenderableElement from './RenderableElement'
 
 const effectTypes = {
   TRANSFORM_EFFECT: 'transformEffect',
 }
 
-export default class TransformElement {
-  _isFirstFrame?: boolean
-  comp?: ElementInterfaceIntersect
-  data?: LottieLayer
-  finalTransform?: Transformer
-  hierarchy?: ElementInterfaceIntersect[]
+export default class TransformElement extends RenderableElement {
   localTransforms?: Transformer[]
   mHelper = new Matrix()
   renderableEffectsManager?: SVGEffects

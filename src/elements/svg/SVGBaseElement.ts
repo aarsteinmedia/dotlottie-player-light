@@ -7,6 +7,8 @@ import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
+import TransformElement from '../helpers/TransformElement'
+
 export default abstract class SVGBaseElement extends BaseRenderer {
   _sizeChanged?: boolean
   finalTransform?: Transformer
@@ -16,7 +18,6 @@ export default abstract class SVGBaseElement extends BaseRenderer {
     [key: number]: string
   }
   renderableEffectsManager?: SVGEffects
-  searchEffectTransforms: any // TODO: is inherited from TransformElement
   transformedElement?: SVGGElement
   createContainerElements() {
     this.matteElement = createNS<SVGGElement>('g')
@@ -101,7 +102,8 @@ export default abstract class SVGBaseElement extends BaseRenderer {
       this as unknown as ElementInterfaceIntersect,
       this.globalData
     )
-    this.renderableEffectsManager = new SVGEffects(this as any)
+    this.renderableEffectsManager = new SVGEffects(this)
+    this.searchEffectTransforms = new TransformElement().searchEffectTransforms
     this.searchEffectTransforms()
   }
   destroyBaseElement() {
@@ -227,6 +229,11 @@ export default abstract class SVGBaseElement extends BaseRenderer {
         `${this.finalTransform.localOpacity}`
       )
     }
+  }
+  searchEffectTransforms() {
+    throw new Error(
+      'SVGBaseElement: Method searchEffectTransforms is not implemented'
+    )
   }
   // searchEffectTransforms() {
   //   throw new Error(

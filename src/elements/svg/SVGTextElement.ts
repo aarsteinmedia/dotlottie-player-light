@@ -1,24 +1,29 @@
 /* eslint-disable max-depth */
 import type {
-  ElementInterfaceIntersect,
+  // ElementInterfaceIntersect,
   GlobalData,
   LottieLayer,
   SourceRect,
   Vector3,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
-import FrameElement from '@/elements/helpers/FrameElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import SVGBaseElement from '@/elements/svg/SVGBaseElement'
+// import SVGBaseElement from '@/elements/svg/SVGBaseElement'
+// import BaseElement from '@/elements/BaseElement'
+// import FrameElement from '@/elements/helpers/FrameElement'
+// import HierarchyElement from '@/elements/helpers/HierarchyElement'
+// import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+// import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGCompElement from '@/elements/svg/SVGCompElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import TextElement from '@/elements/TextElement'
 import { RendererType } from '@/enums'
+import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { createNS } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
+// import { extendPrototype } from '@/utils/functionExtensions'
+// import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
+
+// import RenderableElement from '../helpers/RenderableElement'
 
 export default class SVGTextLottieElement extends TextElement {
   _sizeChanged?: boolean
@@ -28,12 +33,12 @@ export default class SVGTextLottieElement extends TextElement {
     top: number
     width: number
   }
-  comp?: ElementInterfaceIntersect
-  data?: LottieLayer
-  globalData?: GlobalData
-  layerElement?: SVGGElement
-  renderedFrame?: number
 
+  // comp?: ElementInterfaceIntersect
+  // data?: LottieLayer
+  // globalData?: GlobalData
+  // layerElement?: SVGGElement
+  renderedFrame?: number
   renderedLetters?: string[]
   textContainer?: SVGTextElement
   textSpans: {
@@ -41,18 +46,31 @@ export default class SVGTextLottieElement extends TextElement {
     glyph: null | SVGCompElement | SVGShapeElement
     span: null | SVGTextElement | SVGGElement
   }[]
+
   private emptyShapeData = {
     shapes: [],
   } as unknown as LottieLayer
 
-  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: SVGRendererBase
+  ) {
     super()
+    comp.initRendererElement()
+    comp.createContainerElements()
+    comp.createRenderableComponents()
+    this.createContent()
+    this.getBaseElement = comp.getBaseElement
+    this.renderElement = comp.renderElement
+    this.globalData = comp.globalData
+    this.layerElement = comp.layerElement
     this.textSpans = []
     this.renderType = RendererType.SVG
     this.initElement(data, globalData, comp)
   }
 
-  buildNewText() {
+  override buildNewText() {
     this.addDynamicProperty(this as any)
     let i
     let len
@@ -184,7 +202,7 @@ export default class SVGTextLottieElement extends TextElement {
           }
         }
 
-        matrixHelper.reset()
+        matrixHelper?.reset()
         if (singleShape) {
           if (letters[i].n) {
             xPos = -trackingOffset
@@ -263,7 +281,7 @@ export default class SVGTextLottieElement extends TextElement {
           if (singleShape) {
             tSpan?.setAttribute(
               'transform',
-              `translate(${matrixHelper.props[12]},${matrixHelper.props[13]})`
+              `translate(${matrixHelper?.props[12]},${matrixHelper?.props[13]})`
             )
           }
           if (tSpan) {
@@ -288,6 +306,7 @@ export default class SVGTextLottieElement extends TextElement {
 
     this._sizeChanged = true
   }
+
   buildShapeData(data: LottieLayer, scale: number) {
     // data should probably be cloned to apply scale separately to each instance of a text on different layers
     // but since text internal content gets only rendered once and then it's never rerendered,
@@ -305,6 +324,7 @@ export default class SVGTextLottieElement extends TextElement {
     }
     return data
   }
+
   buildTextContents(textArray: string[]) {
     let i = 0
     const len = textArray.length
@@ -330,6 +350,11 @@ export default class SVGTextLottieElement extends TextElement {
       this.textContainer = createNS<SVGTextElement>('text')
     }
   }
+  getBaseElement() {
+    throw new Error(
+      'SVGTextLottieElement: Method getBaseElement is not implemented'
+    )
+  }
   getValue() {
     let i
     const { length } = this.textSpans
@@ -347,8 +372,11 @@ export default class SVGTextLottieElement extends TextElement {
       }
     }
   }
+  renderElement() {
+    throw new Error('SVGTextElement: Method renderElement is not implemented')
+  }
   // TODO: Find out why this doesn't work as a normal prototype
-  renderInnerContent = function (this: SVGTextLottieElement) {
+  override renderInnerContent() {
     this.validateText()
     if (this.data?.singleShape && !this._mdf) {
       return
@@ -400,7 +428,7 @@ export default class SVGTextLottieElement extends TextElement {
     }
   }
 
-  sourceRectAtTime(): SourceRect | null {
+  override sourceRectAtTime(): SourceRect | null {
     this.prepareFrame(Number(this.comp?.renderedFrame) - Number(this.data?.st))
     this.renderInnerContent()
     if (this._sizeChanged) {
@@ -420,15 +448,16 @@ export default class SVGTextLottieElement extends TextElement {
   }
 }
 
-extendPrototype(
-  [
-    BaseElement,
-    // TransformElement,
-    SVGBaseElement,
-    HierarchyElement,
-    FrameElement,
-    RenderableDOMElement,
-    TextElement,
-  ],
-  SVGTextLottieElement
-)
+// extendPrototype(
+//   [
+//     BaseElement,
+//     // TransformElement,
+//     SVGBaseElement,
+//     HierarchyElement,
+//     FrameElement,
+//     RenderableDOMElement,
+//     // RenderableElement,
+//     TextElement,
+//   ],
+//   SVGTextLottieElement
+// )

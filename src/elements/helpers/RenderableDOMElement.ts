@@ -4,11 +4,15 @@ import type {
   LottieLayer,
 } from '@/types'
 
-import RenderableElement from '@/elements/helpers/RenderableElement'
-import { extendPrototype } from '@/utils/functionExtensions'
+// import RenderableElement from '@/elements/helpers/RenderableElement'
+// import { extendPrototype } from '@/utils/functionExtensions'
+import FrameElement from '@/elements/helpers/FrameElement'
 
-export default abstract class RenderableDOMElement extends RenderableElement {
+export default abstract class RenderableDOMElement extends FrameElement {
+  hidden?: boolean
   innerElem?: SVGElement | null
+  isInRange?: boolean
+  isTransparent?: boolean
 
   // initTransform() {
   //   throw new Error('RenderableDOMElement: Method initTransform not implemented')
@@ -17,6 +21,18 @@ export default abstract class RenderableDOMElement extends RenderableElement {
   destroy() {
     this.innerElem = null
     this.destroyBaseElement()
+  }
+
+  hide() {
+    // console.log('HIDE', this);
+    if (!this.hidden && (!this.isInRange || this.isTransparent)) {
+      const elem = this.baseElement || this.layerElement
+      if (elem) {
+        elem.style.display = 'none'
+      }
+
+      this.hidden = true
+    }
   }
 
   // destroyBaseElement() {
@@ -40,6 +56,7 @@ export default abstract class RenderableDOMElement extends RenderableElement {
     this.createContent()
     this.hide()
   }
+
   // initFrame() {
   //   throw new Error('RenderableDOMElement: Method initFrame in not implemented')
   // }
@@ -65,6 +82,19 @@ export default abstract class RenderableDOMElement extends RenderableElement {
     }
   }
   renderInnerContent() {}
+  show() {
+    // console.log('SHOW', this);
+    if (this.isInRange && !this.isTransparent) {
+      if (!this.data?.hd) {
+        const elem = this.baseElement || this.layerElement
+        if (elem) {
+          elem.style.display = 'block'
+        }
+      }
+      this.hidden = false
+      this._isFirstFrame = true
+    }
+  }
 }
 
-extendPrototype([RenderableElement], RenderableDOMElement)
+// extendPrototype([RenderableElement], RenderableDOMElement)

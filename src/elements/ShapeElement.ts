@@ -3,10 +3,11 @@ import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContai
 import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+import RenderableElement from '@/elements/helpers/RenderableElement'
+// import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import { ProcessedElement, type SVGShapeData } from '@/elements/helpers/shapes'
 
-export default class ShapeElement extends RenderableDOMElement {
+export default class ShapeElement extends RenderableElement {
   _length?: number
 
   processedElements?: ProcessedElement[]
@@ -15,7 +16,7 @@ export default class ShapeElement extends RenderableDOMElement {
 
   shapes?: SVGShapeData[] | ShapePath[]
 
-  addDynamicProperty(_prop: DynamicPropertyContainer) {
+  override addDynamicProperty(_prop: DynamicPropertyContainer) {
     throw new Error(
       'ShapeElement: Method addDynamicProperty is not yet implemented'
     )

@@ -11,15 +11,16 @@ import type Matrix from '@/utils/Matrix'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import TransformElement from '@/elements/helpers/TransformElement'
+// import CompElement from './CompElement'
+// import RenderableElement from '@/elements/helpers/RenderableElement'
+// import TransformElement from '@/elements/helpers/TransformElement'
 import { buildShapeString } from '@/utils'
 import LetterProps from '@/utils/text/LetterProps'
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
 
-export default class TextElement extends TransformElement {
-  _mdf?: boolean
+export default abstract class TextElement extends TransformElement {
   emptyProp?: LetterProps
-  isInRange?: boolean
 
   lettersChangedFlag?: boolean
 
@@ -28,10 +29,6 @@ export default class TextElement extends TransformElement {
   textAnimator?: TextAnimatorProperty
 
   textProperty?: TextProperty
-
-  // buildNewText() {
-  //   throw new Error('TextElement: Method buildNewText is not yet implemented')
-  // }
 
   applyTextPropertiesToMatrix(
     documentData: DocumentData,
@@ -80,6 +77,10 @@ export default class TextElement extends TransformElement {
     )},${Math.round(colorData[2] * 255)})`
   }
 
+  buildNewText() {
+    throw new Error('TextElement: Method buildNewText is not yet implemented')
+  }
+
   canResizeFont(_canResize: boolean) {
     this.textProperty?.canResizeFont(_canResize)
   }
@@ -103,7 +104,7 @@ export default class TextElement extends TransformElement {
     return shapeStr
   }
 
-  initElement(
+  override initElement(
     data: LottieLayer,
     globalData: GlobalData,
     comp: ElementInterfaceIntersect
@@ -117,15 +118,21 @@ export default class TextElement extends TransformElement {
     this.initTransform()
     this.initHierarchy()
     this.initRenderable()
-    this.initRendererElement()
-    this.createContainerElements()
-    this.createRenderableComponents()
-    this.createContent()
+    // this.initRendererElement()
+    // this.createContainerElements()
+    // this.createRenderableComponents()
+    // this.createContent()
     this.hide()
-    this.textAnimator.searchProperties(this.dynamicProperties)
+    this.textAnimator.searchProperties(this.dynamicProperties || [])
   }
 
-  prepareFrame(num: number) {
+  // initRendererElement() {
+  //   throw new Error(
+  //     'TextElement: Method initRendererElement is not yet implemented'
+  //   )
+  // }
+
+  override prepareFrame(num: number) {
     this._mdf = false
     this.prepareRenderableFrame(num)
     this.prepareProperties(num, this.isInRange)

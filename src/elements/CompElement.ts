@@ -6,11 +6,15 @@ import type {
 
 import FrameElement from '@/elements/helpers/FrameElement'
 import HierarchyElement from '@/elements/helpers/HierarchyElement'
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+// import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
 import TransformElement from '@/elements/helpers/TransformElement'
 import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { ValueProperty } from '@/utils/Properties'
+
+import RenderableDOMElement from './helpers/RenderableDOMElement'
+import RenderableElement from './helpers/RenderableElement'
+// import RenderableElement from './helpers/RenderableElement'
 
 // import BaseElement from './BaseElement'
 
@@ -104,7 +108,8 @@ extendPrototype(
     TransformElement,
     HierarchyElement,
     FrameElement,
-    RenderableDOMElement,
+    // RenderableDOMElement,
+    RenderableElement,
   ],
   CompElement
 )
