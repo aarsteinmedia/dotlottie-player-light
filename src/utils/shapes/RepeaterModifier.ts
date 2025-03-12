@@ -4,6 +4,7 @@ import type {
   ElementInterfaceUnion,
   Shape,
 } from '@/types'
+import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { ShapeType } from '@/enums'
@@ -21,7 +22,7 @@ export default class RepeaterModifier extends ShapeModifier {
 
   arr?: ShapeGroupData[]
 
-  c: any
+  c?: ValueProperty
   data: any
   elemsData!: any
   eo: any
@@ -108,7 +109,13 @@ export default class RepeaterModifier extends ShapeModifier {
 
   override initModifierProperties(elem: ElementInterfaceIntersect, data: any) {
     this.getValue = this.processKeys
-    this.c = PropertyFactory.getProp(elem, data.c, 0, null, this)
+    this.c = PropertyFactory.getProp(
+      elem,
+      data.c,
+      0,
+      null,
+      this
+    ) as ValueProperty
     this.o = PropertyFactory.getProp(elem, data.o, 0, null, this)
     this.tr = new TransformProperty(elem, data.tr, this as any)
     this.so = PropertyFactory.getProp(elem, data.tr?.so, 0, 0.01, this)
@@ -133,7 +140,7 @@ export default class RepeaterModifier extends ShapeModifier {
     let cont: number
     let hasReloaded = false
     if (this._mdf || _isFirstFrame) {
-      const copies = Math.ceil(this.c.v)
+      const copies = Math.ceil(Number(this.c?.v))
       if (Number(this._groups?.length) < copies) {
         while (Number(this._groups?.length) < copies) {
           const group = {
