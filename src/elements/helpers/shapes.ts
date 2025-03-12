@@ -160,7 +160,7 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
     styleData: SVGStyleData
   ) {
     super()
-    this.initDynamicPropertyContainer(elem)
+    this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
     this.getValue = this.iterateDynamicProperties
     this.initGradientData(elem, data, styleData)
   }
@@ -204,7 +204,11 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
       degToRads,
       this
     ) as MultiDimensionalProperty
-    this.g = new GradientProperty(elem, data.g!, this)
+    this.g = new GradientProperty(
+      elem as ElementInterfaceIntersect,
+      data.g!,
+      this
+    )
     this.style = styleData
     this.stops = []
     this.setGradientData(styleData.pElem, data)
@@ -293,7 +297,7 @@ export class SVGGradientStrokeStyleData extends SVGGradientFillStyleData {
     styleData: SVGStyleData
   ) {
     super(elem, data, styleData)
-    this.initDynamicPropertyContainer(elem)
+    this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
     this.getValue = this.iterateDynamicProperties
     this.w = PropertyFactory.getProp(
       elem as ElementInterfaceIntersect,
@@ -313,19 +317,46 @@ export class SVGGradientStrokeStyleData extends SVGGradientFillStyleData {
   }
 }
 
-export class SVGStrokeStyleData extends DynamicPropertyContainer {
+export class SVGFillStyleData extends DynamicPropertyContainer {
   c?: MultiDimensionalProperty<Vector3>
-  d: DashProperty
   o?: ValueProperty
   style: SVGStyleData
-  w?: ValueProperty
   constructor(
     elem: ElementInterfaceUnion,
     data: Shape,
     styleObj: SVGStyleData
   ) {
     super()
-    this.initDynamicPropertyContainer(elem)
+    this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
+    this.getValue = this.iterateDynamicProperties
+    this.o = PropertyFactory.getProp(
+      elem as ElementInterfaceIntersect,
+      data.o,
+      0,
+      0.01,
+      this
+    ) as ValueProperty
+    this.c = PropertyFactory.getProp(
+      elem as ElementInterfaceIntersect,
+      data.c,
+      1,
+      255,
+      this
+    ) as MultiDimensionalProperty<Vector3>
+    this.style = styleObj
+  }
+}
+
+export class SVGStrokeStyleData extends SVGFillStyleData {
+  d: DashProperty
+  w?: ValueProperty
+  constructor(
+    elem: ElementInterfaceUnion,
+    data: Shape,
+    styleObj: SVGStyleData
+  ) {
+    super(elem, data, styleObj)
+    this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
     this.getValue = this.iterateDynamicProperties
     this.o = PropertyFactory.getProp(
       elem as ElementInterfaceIntersect,
@@ -359,36 +390,6 @@ export class SVGStrokeStyleData extends DynamicPropertyContainer {
   }
 }
 
-export class SVGFillStyleData extends DynamicPropertyContainer {
-  c?: MultiDimensionalProperty<Vector3>
-  o?: ValueProperty
-  style: SVGStyleData
-  constructor(
-    elem: ElementInterfaceUnion,
-    data: Shape,
-    styleObj: SVGStyleData
-  ) {
-    super()
-    this.initDynamicPropertyContainer(elem)
-    this.getValue = this.iterateDynamicProperties
-    this.o = PropertyFactory.getProp(
-      elem as ElementInterfaceIntersect,
-      data.o,
-      0,
-      0.01,
-      this
-    ) as ValueProperty
-    this.c = PropertyFactory.getProp(
-      elem as ElementInterfaceIntersect,
-      data.c,
-      1,
-      255,
-      this
-    ) as MultiDimensionalProperty<Vector3>
-    this.style = styleObj
-  }
-}
-
 export class SVGNoStyleData extends DynamicPropertyContainer {
   style: SVGStyleData
   constructor(
@@ -397,7 +398,7 @@ export class SVGNoStyleData extends DynamicPropertyContainer {
     styleObj: SVGStyleData
   ) {
     super()
-    this.initDynamicPropertyContainer(elem)
+    this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
     this.getValue = this.iterateDynamicProperties
     this.style = styleObj
   }

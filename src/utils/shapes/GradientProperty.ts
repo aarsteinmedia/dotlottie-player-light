@@ -1,4 +1,4 @@
-import type { GradientColor } from '@/types'
+import type { ElementInterfaceIntersect, GradientColor } from '@/types'
 
 import { ArrayType } from '@/enums'
 import { createTypedArray } from '@/utils/helpers/arrays'
@@ -15,7 +15,11 @@ export default class GradientProperty extends DynamicPropertyContainer {
   k: any
   o: Float32Array
   prop: any
-  constructor(elem: any, data: GradientColor, container: any) {
+  constructor(
+    elem: ElementInterfaceIntersect,
+    data: GradientColor,
+    container: any
+  ) {
     super()
     this.data = data
     this.c = createTypedArray(ArrayType.Uint8c, data.p * 4) as Uint8ClampedArray

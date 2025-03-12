@@ -78,15 +78,15 @@ export default class SVGShapeElement extends ShapeElement {
     this.animatedContents.push({
       data,
       element,
-      fn: SVGElementsRenderer.createRenderFunction(data),
+      fn: SVGElementsRenderer.createRenderFunction(data) as any,
     })
   }
   buildExpressionInterface() {
     throw new Error('Method not yet implemented')
   }
   createContent() {
-    if (!this.layerElement) {
-      throw new Error('Could not access Layer')
+    if (!this.layerElement || !this.shapesData) {
+      throw new Error('SVGShapeElement: Could not access Layer or ShapesData')
     }
     this.searchShapes(
       this.shapesData,
@@ -136,7 +136,7 @@ export default class SVGShapeElement extends ShapeElement {
       level,
       shapeProperty as ShapeProperty
     )
-    this.shapes?.push(elementData)
+    this.shapes?.push(elementData as any)
     this.addShapeToModifiers(elementData)
     this.addToAnimatedContents(data, elementData)
     return elementData
@@ -168,7 +168,7 @@ export default class SVGShapeElement extends ShapeElement {
         )
       }
     } else if (data.ty === 'no') {
-      elementData = new SVGNoStyleData(this, data, styleOb)
+      elementData = new SVGNoStyleData(this, data as any, styleOb)
     }
 
     if (data.ty === 'st' || data.ty === 'gs') {

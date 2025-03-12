@@ -12,8 +12,8 @@ export default class ProjectInterface {
   textInterface?: ProjectInterface
   constructor(name?: string) {
     let i = 0
-    const len = ProjectInterface.compositions.length
-    while (i < len) {
+    const { length } = ProjectInterface.compositions
+    while (i < length) {
       if (
         ProjectInterface.compositions[i].data &&
         ProjectInterface.compositions[i].data.nm === name

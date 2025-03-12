@@ -40,9 +40,14 @@ export default class SVGElementsRenderer {
 
   private static renderContentTransform(
     _: SVGStyleData,
-    itemData: SVGTransformData,
-    isFirstFrame: boolean
+    itemData?: SVGTransformData,
+    isFirstFrame?: boolean
   ) {
+    if (!itemData) {
+      throw new Error(
+        'SVGElementsRenderer: Method renderContetTransform is missing data'
+      )
+    }
     if (isFirstFrame || itemData.transform.op._mdf) {
       itemData.transform.container?.setAttribute(
         'opacity',
@@ -59,9 +64,12 @@ export default class SVGElementsRenderer {
 
   private static renderFill(
     _: SVGStyleData,
-    itemData: SVGFillStyleData,
-    isFirstFrame: boolean
+    itemData?: SVGFillStyleData,
+    isFirstFrame?: boolean
   ) {
+    if (!itemData) {
+      throw new Error('SVGElementsRenderer: Method renderFill is missing data')
+    }
     const styleElem = itemData.style
 
     if (itemData.c?.v && (itemData.c._mdf || isFirstFrame)) {
@@ -79,9 +87,14 @@ export default class SVGElementsRenderer {
 
   private static renderGradient(
     styleData: SVGStyleData,
-    itemData: ItemData,
-    isFirstFrame: boolean
+    itemData?: ItemData,
+    isFirstFrame?: boolean
   ) {
+    if (!itemData) {
+      throw new Error(
+        'SVGElementsRenderer: Method renderGradient is missing data'
+      )
+    }
     const gfill = itemData.gf,
       hasOpacity = itemData.g._hasOpacity,
       pt1 = itemData.s.v,
@@ -191,20 +204,23 @@ export default class SVGElementsRenderer {
 
   private static renderGradientStroke(
     styleData: SVGStyleData,
-    itemData: ItemData,
-    isFirstFrame: boolean
+    itemData?: ItemData,
+    isFirstFrame?: boolean
   ) {
     this.renderGradient(styleData, itemData, isFirstFrame)
     this.renderStroke(styleData, itemData, isFirstFrame)
   }
 
-  private static renderNoop() {}
+  private static renderNoop(_: SVGStyleData) {}
 
   private static renderPath(
     styleData: SVGStyleData,
-    itemData: ShapeDataInterface,
+    itemData?: ShapeDataInterface,
     isFirstFrame?: boolean
   ) {
+    if (!itemData) {
+      throw new Error('SVGElementsRenderer: Method renderPath is missing data')
+    }
     let j: number
     let jLen: number
     let pathStringTransformed
@@ -267,9 +283,14 @@ export default class SVGElementsRenderer {
 
   private static renderStroke(
     _: SVGStyleData,
-    itemData: ItemData,
-    isFirstFrame: boolean
+    itemData?: ItemData,
+    isFirstFrame?: boolean
   ) {
+    if (!itemData) {
+      throw new Error(
+        'SVGElementsRenderer: Method renderStroke is missing data'
+      )
+    }
     const styleElem = itemData.style
     const d = itemData.d
     if (d && (d._mdf || isFirstFrame) && d.dashStr) {
