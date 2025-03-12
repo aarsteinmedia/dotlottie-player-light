@@ -11,15 +11,9 @@ import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
 import PropertyFactory from '@/utils/PropertyFactory'
-/**
- *
- */
+
 export default class SVGCompElement extends SVGBaseElement {
   _debug?: boolean
-  completeLayers: boolean
-  elements: ElementInterfaceIntersect[]
-  layers: LottieLayer[]
-  pendingElements: ElementInterfaceIntersect[]
   supports3d: boolean
   tm?: KeyframedValueProperty
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
@@ -42,7 +36,10 @@ export default class SVGCompElement extends SVGBaseElement {
         : { _placeholder: true }
     ) as any
   }
-  createComp(data: LottieLayer) {
+  override createComp(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error('SVGCompElement: Cannot access global data')
+    }
     return new SVGCompElement(data, this.globalData, this)
   }
 

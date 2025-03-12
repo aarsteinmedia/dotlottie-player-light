@@ -19,10 +19,6 @@ export default abstract class BaseRenderer extends BaseElement {
   completeLayers?: boolean
   elements?: ElementInterfaceIntersect[]
 
-  // createImage(_data: LottieLayer) { TODO:
-  //   throw new Error('Method not yet implemented')
-  // }
-
   layers?: LottieLayer[]
 
   pendingElements?: ElementInterfaceIntersect[]
@@ -111,7 +107,7 @@ export default abstract class BaseRenderer extends BaseElement {
     if (!this.globalData) {
       throw new Error("Can't access Global Data")
     }
-    return new FootageElement(data, this.globalData, this)
+    return new FootageElement(data, this.globalData, this as any)
   }
   createImage(_layer: LottieLayer) {
     throw new Error('BaseRenderer: Method createImage not yet implemented')

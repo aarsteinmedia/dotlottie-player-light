@@ -45,6 +45,10 @@ export default class FootageElement extends FrameElement {
     this.layerInterface = (FootageInterface as any)(this)
   }
 
+  initRenderable() {
+    throw new Error('FootageElement: Method initRenderable is not implemented')
+  }
+
   setMatte(_id: string) {
     throw new Error('FootageElement: Method setMatte is not implemented')
   }

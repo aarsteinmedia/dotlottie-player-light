@@ -150,7 +150,7 @@ export default class MaskElement {
           lastOperator: '',
           lastPath: '',
           lastRadius: 0,
-          x,
+          x: x as any,
         }
         if (properties[i].mode === 'i') {
           jLen = currentMasks.length

@@ -12,36 +12,22 @@ export default class NullElement extends FrameElement {
     this.initHierarchy()
   }
 
-  // destroy() {
-  //   // TODO: check if this is a fallback too
-  //   // throw new Error('NullElement: Method destroy not yet implemented')
-  // }
-
   getBaseElement() {
     return null
   }
-
-  // hide() {
-  //   // TODO: check if this is a fallback too
-  //   // throw new Error('NullElement: Method hide not yet implemented')
-  // }
 
   initTransform() {
     throw new Error('NullElement: Method initTransform not yet implemented')
   }
 
-  override prepareFrame(num: number) {
+  prepareFrame(num: number) {
     this.prepareProperties(num, true)
   }
 
   /** Fallback */
-  override renderFrame(_frame?: number | null) {
+  renderFrame(_frame?: number | null) {
     // throw new Error('NullElement: Method renderFrame not yet implemented')
   }
-
-  // sourceRectAtTime(): SourceRect | null {
-  //   throw new Error('NullElement: Method sourceRectAtTime not yet implemented')
-  // }
 }
 
 extendPrototype([TransformElement], NullElement)
