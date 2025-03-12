@@ -1,4 +1,3 @@
-import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type {
   Caching,
   ElementInterfaceIntersect,
@@ -651,10 +650,10 @@ export class ShapeProperty {
   public _mdf: boolean
   public addEffect: (func: any) => void
   public comp?: ElementInterfaceIntersect
-  public container: SVGShapeElement
+  public container: ShapeElement
   public data: Partial<Shape & Mask>
   public effectsSequence: unknown[]
-  public elem: SVGShapeElement
+  public elem: ShapeElement
   public getValue: () => void
   public interpolateShape: (
     frame: number,

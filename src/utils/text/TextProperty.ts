@@ -1,10 +1,10 @@
 import type {
   DocumentData,
-  CompInterface,
   Letter,
   LetterProperties,
   TextData,
   Vector2,
+  ElementInterfaceIntersect,
 } from '@/types'
 
 import FontManager, { getFontProperties } from '@/utils/FontManager'
@@ -15,12 +15,12 @@ export default class TextProperty {
   _isFirstFrame: boolean
   _mdf: boolean
   canResize: boolean
-  comp: CompInterface['comp']
+  comp?: ElementInterfaceIntersect
   currentData: DocumentData
   data?: TextData
   defaultBoxWidth: Vector2 = [0, 0]
   effectsSequence: any[]
-  elem: CompInterface
+  elem: ElementInterfaceIntersect
   frameId?: number
   keysIndex: number
   kf: boolean
@@ -29,7 +29,7 @@ export default class TextProperty {
   pv: DocumentData | string
   v: DocumentData | string
 
-  constructor(elem: CompInterface, data?: TextData) {
+  constructor(elem: ElementInterfaceIntersect, data?: TextData) {
     this._frameId = initialDefaultFrame
     this.pv = ''
     this.v = ''

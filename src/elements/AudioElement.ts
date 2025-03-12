@@ -4,10 +4,14 @@ import type {
   GlobalData,
   LottieAsset,
   LottieLayer,
+  Vector2,
 } from '@/types'
+import type {
+  MultiDimensionalProperty,
+  ValueProperty,
+} from '@/utils/Properties'
 
 import FrameElement from '@/elements/helpers/FrameElement'
-import { ValueProperty } from '@/utils/Properties'
 import PropertyFactory from '@/utils/PropertyFactory'
 
 export default class AudioElement extends FrameElement {
@@ -19,7 +23,7 @@ export default class AudioElement extends FrameElement {
   _volumeMultiplier?: number
   assetData: null | LottieAsset
   audio: Audio
-  lv: ValueProperty
+  lv: MultiDimensionalProperty<Vector2>
   tm: ValueProperty
   // destroy() {}
 
@@ -52,14 +56,14 @@ export default class AudioElement extends FrameElement {
             this
           )
         : { _placeholder: true }
-    ) as any
+    ) as ValueProperty
     this.lv = PropertyFactory.getProp(
       this as any,
       (data.au && data.au.lv ? data.au.lv : { k: [100] }) as any,
       1,
       0.01,
       this
-    )
+    ) as MultiDimensionalProperty<Vector2>
   }
 
   getBaseElement() {
@@ -87,7 +91,7 @@ export default class AudioElement extends FrameElement {
     } else {
       this._currentTime = Number(this.tm.v)
     }
-    this._volume = (this.lv?.v as number[])[0]
+    this._volume = Number(this.lv?.v[0])
     const totalVolume = this._volume * Number(this._volumeMultiplier)
     if (this._previousVolume !== totalVolume) {
       this._previousVolume = totalVolume
@@ -117,9 +121,13 @@ export default class AudioElement extends FrameElement {
     this._canPlay = true
   }
 
+  setMatte(_id: string) {
+    throw new Error('AudioElement: Method setMatte is not implemented')
+  }
   setRate(rateValue: number) {
     this.audio.rate(rateValue)
   }
+
   // show() {
   //   // this.audio.play()
   // }

@@ -44,6 +44,10 @@ export default class FootageElement extends FrameElement {
     const FootageInterface = new expressionsInterfaces('footage')
     this.layerInterface = (FootageInterface as any)(this)
   }
+
+  setMatte(_id: string) {
+    throw new Error('FootageElement: Method setMatte is not implemented')
+  }
 }
 
 // extendPrototype([RenderableElement, BaseElement], FootageElement)

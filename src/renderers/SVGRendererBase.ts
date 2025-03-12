@@ -1,7 +1,6 @@
 import type {
   AnimationData,
   ElementInterfaceIntersect,
-  ElementInterfaceUnion,
   LottieLayer,
   SVGRendererConfig,
 } from '@/types'
@@ -89,7 +88,7 @@ export default class SVGRendererBase extends SVGBaseElement {
         this.elements[elementIndex] === (true as any)
       ) {
         this.buildItem(elementIndex)
-        this.addPendingElement(element)
+        this.addPendingElement(element as ElementInterfaceIntersect)
       } else {
         const matteElement = elements![elementIndex]
         const matteMask = matteElement.getMatte(this.layers[pos].tt)
@@ -214,7 +213,7 @@ export default class SVGRendererBase extends SVGBaseElement {
     if (!this.globalData) {
       throw new Error('SVGRendererBase cannotaccess Global Data')
     }
-    return new ImageElement(data, this.globalData, this)
+    return new ImageElement(data, this.globalData, this as any)
   }
 
   override createNull(data: LottieLayer) {

@@ -1,4 +1,4 @@
-import type { Transformer } from '@/types'
+import type { ElementInterfaceIntersect, Transformer } from '@/types'
 
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
@@ -16,6 +16,7 @@ export default abstract class SVGBaseElement extends BaseRenderer {
     [key: number]: string
   }
   renderableEffectsManager?: SVGEffects
+  searchEffectTransforms: any // TODO: is inherited from TransformElement
   transformedElement?: SVGGElement
   createContainerElements() {
     this.matteElement = createNS<SVGGElement>('g')
@@ -95,9 +96,13 @@ export default abstract class SVGBaseElement extends BaseRenderer {
     if (!this.data || !this.globalData) {
       throw new Error("Can't access Global Data")
     }
-    this.maskManager = new MaskElement(this.data, this, this.globalData)
+    this.maskManager = new MaskElement(
+      this.data,
+      this as unknown as ElementInterfaceIntersect,
+      this.globalData
+    )
     this.renderableEffectsManager = new SVGEffects(this as any)
-    this.searchEffectTransforms() // TODO: Must be inherited
+    this.searchEffectTransforms()
   }
   destroyBaseElement() {
     this.layerElement = null as any

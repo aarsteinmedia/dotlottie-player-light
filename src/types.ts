@@ -25,6 +25,7 @@ import type TransformElement from '@/elements/helpers/TransformElement'
 import type MaskElement from '@/elements/MaskElement'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
 import type ShapeElement from '@/elements/ShapeElement'
+import type SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import type SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import type TextElement from '@/elements/TextElement'
 import type { RendererType, PlayMode, ShapeType } from '@/enums'
@@ -97,6 +98,7 @@ export type ElementInterfaceUnion =
   | AudioElement
   | CompElement
   | MaskElement
+  | SVGBaseElement
   | SVGShapeElement
   | SVGTextElement
   | SVGStopElement
@@ -111,6 +113,7 @@ export type ElementInterfaceIntersect = BaseElement &
   AudioElement &
   CompElement &
   MaskElement &
+  SVGBaseElement &
   SVGShapeElement &
   SVGTextElement &
   SVGStopElement &
