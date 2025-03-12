@@ -435,8 +435,8 @@ export default class SVGShapeElement extends ShapeElement {
     }
   }
   setShapesAsAnimated(shapes: ShapeDataInterface[]) {
-    const len = shapes.length
-    for (let i = 0; i < len; i++) {
+    const { length } = shapes
+    for (let i = 0; i < length; i++) {
       shapes[i].setAsAnimated()
     }
   }
