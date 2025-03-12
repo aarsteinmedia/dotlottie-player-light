@@ -7,7 +7,7 @@ import type {
 import RenderableElement from '@/elements/helpers/RenderableElement'
 import { extendPrototype } from '@/utils/functionExtensions'
 
-export default class RenderableDOMElement extends RenderableElement {
+export default abstract class RenderableDOMElement extends RenderableElement {
   innerElem?: SVGElement | null
 
   // initTransform() {
