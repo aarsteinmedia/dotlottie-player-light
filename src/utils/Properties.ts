@@ -115,7 +115,7 @@ abstract class BaseProperty extends DynamicPropertyContainer {
     let perc
     let jLen
     let j
-    let fnc: (val: number) => number
+    let fnc: null | ((val: number) => number) = null
     const nextKeyTime = Number(nextKeyData?.t) - offsetTime
     const keyTime = Number(keyData?.t) - offsetTime
     let endValue
@@ -254,23 +254,26 @@ abstract class BaseProperty extends DynamicPropertyContainer {
                 }
                 if ((keyframeMetadata.__fnct as any)[i]) {
                   fnc = (keyframeMetadata.__fnct as any)[i]
-                } else {
+                } else if (
+                  Array.isArray(keyData.o.y) &&
+                  Array.isArray(keyData.i.y)
+                ) {
                   outX =
                     keyData.o.x[i] === undefined
                       ? keyData.o.x[0]
                       : keyData.o.x[i]
                   outY =
-                    (keyData.o.y as number[])[i] === undefined
-                      ? (keyData.o.y as number[])[0]
-                      : (keyData.o.y as number[])[i]
+                    keyData.o.y[i] === undefined
+                      ? keyData.o.y[0]
+                      : keyData.o.y[i]
                   inX =
-                    (keyData.o.x as number[])[i] === undefined
+                    keyData.o.x[i] === undefined
                       ? (keyData.o.x as number[])[0]
                       : (keyData.o.x as number[])[i]
                   inY =
-                    (keyData.i.y as number[])[i] === undefined
-                      ? (keyData.i.y as number[])[0]
-                      : (keyData.i.y as number[])[i]
+                    keyData.i.y[i] === undefined
+                      ? keyData.i.y[0]
+                      : keyData.i.y[i]
                   fnc = BezierFactory.getBezierEasing(outX, outY, inX, inY).get
                   ;(keyframeMetadata.__fnct as any[])[i] = fnc
                 }
@@ -284,7 +287,7 @@ abstract class BaseProperty extends DynamicPropertyContainer {
                 fnc = BezierFactory.getBezierEasing(outX, outY, inX, inY).get
                 keyData!.keyframeMetadata = fnc
               }
-              perc = fnc((frameNum - keyTime) / (nextKeyTime - keyTime))
+              perc = fnc?.((frameNum - keyTime) / (nextKeyTime - keyTime))
             }
           }
 

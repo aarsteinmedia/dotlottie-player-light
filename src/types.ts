@@ -666,8 +666,8 @@ export type VectorProperty<T = Vector1> = {
 
 interface Coordinates {
   c?: boolean
-  x: number
-  y: number
+  x: number | number[]
+  y: number | number[]
 }
 
 export interface MaskData {
