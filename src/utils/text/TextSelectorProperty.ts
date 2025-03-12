@@ -9,7 +9,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
   _currentTextLength: number
   a: ValueProperty
   b?: any
-  comp: ElementInterfaceIntersect
+  comp?: ElementInterfaceIntersect
   data: TextRangeValue
   e: ValueProperty | { v: number }
   elem: ElementInterfaceIntersect
@@ -38,42 +38,30 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
       data.s || { k: 0 },
       0,
       0,
-      this as any
-    )
+      this
+    ) as ValueProperty
     if ('e' in data) {
-      this.e = PropertyFactory.getProp(elem, data.e, 0, 0, this as any)
+      this.e = PropertyFactory.getProp(
+        elem,
+        data.e,
+        0,
+        0,
+        this
+      ) as ValueProperty
     } else {
       this.e = { v: 100 }
     }
-    this.o = PropertyFactory.getProp(
+    this.o = PropertyFactory.getProp(elem, data.o || { k: 0 }, 0, 0, this)
+    this.xe = PropertyFactory.getProp(elem, data.xe || { k: 0 }, 0, 0, this)
+    this.ne = PropertyFactory.getProp(elem, data.ne || { k: 0 }, 0, 0, this)
+    this.sm = PropertyFactory.getProp(elem, data.sm || { k: 100 }, 0, 0, this)
+    this.a = PropertyFactory.getProp(
       elem,
-      data.o || { k: 0 },
+      data.a,
       0,
-      0,
-      this as any
-    )
-    this.xe = PropertyFactory.getProp(
-      elem,
-      data.xe || { k: 0 },
-      0,
-      0,
-      this as any
-    )
-    this.ne = PropertyFactory.getProp(
-      elem,
-      data.ne || { k: 0 },
-      0,
-      0,
-      this as any
-    )
-    this.sm = PropertyFactory.getProp(
-      elem,
-      data.sm || { k: 100 },
-      0,
-      0,
-      this as any
-    )
-    this.a = PropertyFactory.getProp(elem, data.a, 0, 0.01, this as any)
+      0.01,
+      this
+    ) as ValueProperty
     if (!this.dynamicProperties.length) {
       this.getValue()
     }
@@ -82,7 +70,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
   getMult(indFromProps: number) {
     let ind = indFromProps
     if (
-      this._currentTextLength !== this.elem.textProperty?.currentData.l.length
+      this._currentTextLength !== this.elem.textProperty?.currentData.l?.length
     ) {
       this.getValue()
     }
@@ -194,7 +182,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
   override getValue(newCharsFlag?: boolean) {
     this.iterateDynamicProperties()
     this._mdf = newCharsFlag || this._mdf
-    this._currentTextLength = this.elem.textProperty?.currentData.l.length || 0
+    this._currentTextLength = this.elem.textProperty?.currentData.l?.length || 0
     if (newCharsFlag && this.data.r === 2 && this.e?.v) {
       this.e.v = this._currentTextLength
     }

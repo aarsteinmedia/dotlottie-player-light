@@ -1,20 +1,22 @@
-import type {
-  MultiDimensionalProperty,
-  ValueProperty,
-} from '@/utils/Properties'
+import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import PolynomialBezier from '@/elements/PolynomialBezier'
-import { AnimationDirection, ElementInterfaceIntersect, Shape, Vector2 } from '@/types'
+import {
+  AnimationDirection,
+  ElementInterfaceIntersect,
+  Shape,
+  Vector2,
+} from '@/types'
 import { getProjectingAngle, setPoint } from '@/utils'
 import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
-class ZigZagModifier extends ShapeModifier {
+export default class ZigZagModifier extends ShapeModifier {
   amplitude?: ValueProperty
   frequency?: ValueProperty
-  pointsType?: MultiDimensionalProperty
+  pointsType?: ValueProperty
   static zigZagCorner(
     outputBezier: ShapePath,
     path: ShapePath,
@@ -94,11 +96,32 @@ class ZigZagModifier extends ShapeModifier {
     return direction
   }
 
-  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
+  override initModifierProperties(
+    elem: ElementInterfaceIntersect,
+    data: Shape
+  ) {
     this.getValue = this.processKeys
-    this.amplitude = PropertyFactory.getProp(elem, data.s, 0, null, this)
-    this.frequency = PropertyFactory.getProp(elem, data.r, 0, null, this)
-    this.pointsType = PropertyFactory.getProp(elem, data.pt, 0, null, this)
+    this.amplitude = PropertyFactory.getProp(
+      elem,
+      data.s,
+      0,
+      null,
+      this
+    ) as ValueProperty
+    this.frequency = PropertyFactory.getProp(
+      elem,
+      data.r,
+      0,
+      null,
+      this
+    ) as ValueProperty
+    this.pointsType = PropertyFactory.getProp(
+      elem,
+      data.pt,
+      0,
+      null,
+      this
+    ) as ValueProperty
     this._isAnimated =
       this.amplitude?.effectsSequence.length !== 0 ||
       this.frequency?.effectsSequence.length !== 0 ||
@@ -171,9 +194,9 @@ class ZigZagModifier extends ShapeModifier {
     const len = this.shapes.length
     let j
     let jLen
-    const amplitude = this.amplitude?.v as number
+    const amplitude = Number(this.amplitude?.v)
     const frequency = Math.max(0, Math.round(Number(this.frequency?.v)))
-    const pointType = this.pointsType?.v as number
+    const pointType = Number(this.pointsType?.v)
 
     if (amplitude !== 0) {
       let shapeData
@@ -200,5 +223,3 @@ class ZigZagModifier extends ShapeModifier {
     }
   }
 }
-
-export default ZigZagModifier

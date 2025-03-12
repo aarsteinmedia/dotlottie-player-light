@@ -1,4 +1,4 @@
-import type { Characacter, DocumentData, FontList } from '@/types'
+import type { Characacter, DocumentData, FontList, LottieLayer } from '@/types'
 
 import { RendererType } from '@/enums'
 import { createNS, createTag, isServer } from '@/utils'
@@ -13,15 +13,14 @@ export default class FontManager {
     2370, 2371, 2372, 2373, 2374, 2375, 2376, 2377, 2378, 2379, 2380, 2381,
     2382, 2383, 2387, 2388, 2389, 2390, 2391, 2402, 2403,
   ]
-  private static readonly emptyChar: Characacter = {
-    // @ts-expect-error: incomplete Layer type
+  private static readonly emptyChar = {
     data: {
       shapes: [],
-    },
+    } as unknown as LottieLayer,
     shapes: [],
     size: 0,
     w: 0,
-  }
+  } as unknown as Characacter
   private static readonly maxWaitingTime = 5000
   private static readonly REGIONAL_CHARACTER_A_CODE_POINT = 127462
   private static readonly REGIONAL_CHARACTER_Z_CODE_POINT = 127487

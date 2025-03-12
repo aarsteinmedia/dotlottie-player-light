@@ -2,6 +2,7 @@ import type { ElementInterfaceIntersect, Shape } from '@/types'
 import type { ShapeModifierInterface } from '@/utils/shapes/ShapeModifiers'
 
 import { ProcessedElement, SVGShapeData } from '@/elements/helpers/shapes'
+import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapePath from '@/utils/shapes/ShapePath'
 
 import RenderableDOMElement from './helpers/RenderableDOMElement'
@@ -14,6 +15,12 @@ export default class ShapeElement extends RenderableDOMElement {
   shapeModifiers?: ShapeModifierInterface[]
 
   shapes?: SVGShapeData[] | ShapePath[]
+
+  addDynamicProperty(_prop: DynamicPropertyContainer) {
+    throw new Error(
+      'ShapeElement: Method addDynamicProperty is not yet implemented'
+    )
+  }
 
   addProcessedElement(elem: ElementInterfaceIntersect, pos: number) {
     const elements = this.processedElements

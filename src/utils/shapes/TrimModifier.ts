@@ -11,16 +11,16 @@ import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import ShapePath from '@/utils/shapes/ShapePath'
 
 export default class TrimModifier extends ShapeModifier {
-  e!: ValueProperty
+  e?: ValueProperty
 
-  eValue!: number
+  eValue?: number
 
-  m!: Shape['m']
-  o!: ValueProperty
+  m?: Shape['m']
+  o?: ValueProperty
 
-  s!: ValueProperty
+  s?: ValueProperty
 
-  sValue!: number
+  sValue?: number
 
   addPaths(newPaths: ShapePath[], localShapeCollection: ShapeCollection) {
     const { length } = newPaths
@@ -266,10 +266,25 @@ export default class TrimModifier extends ShapeModifier {
     return shapeSegments
   }
 
-  override initModifierProperties(elem: ElementInterfaceIntersect, data: Shape) {
-    this.s = PropertyFactory.getProp(elem, data.s, 0, 0.01, this)
-    this.e = PropertyFactory.getProp(elem, data.e, 0, 0.01, this)
-    this.o = PropertyFactory.getProp(elem, data.o, 0, 0, this)
+  override initModifierProperties(
+    elem: ElementInterfaceIntersect,
+    data: Shape
+  ) {
+    this.s = PropertyFactory.getProp(
+      elem,
+      data.s,
+      0,
+      0.01,
+      this
+    ) as ValueProperty
+    this.e = PropertyFactory.getProp(
+      elem,
+      data.e,
+      0,
+      0.01,
+      this
+    ) as ValueProperty
+    this.o = PropertyFactory.getProp(elem, data.o, 0, 0, this) as ValueProperty
     this.sValue = 0
     this.eValue = 0
     this.getValue = this.processKeys
@@ -284,23 +299,23 @@ export default class TrimModifier extends ShapeModifier {
     let s
     let e
     if (this._mdf || _isFirstFrame) {
-      let o = (Number(this.o.v) % 360) / 360
+      let o = (Number(this.o?.v) % 360) / 360
       if (o < 0) {
         o += 1
       }
-      if (Number(this.s.v) > 1) {
+      if (Number(this.s?.v) > 1) {
         s = 1 + o
-      } else if (Number(this.s.v) < 0) {
+      } else if (Number(this.s?.v) < 0) {
         s = 0 + o
       } else {
-        s = Number(this.s.v) + o
+        s = Number(this.s?.v) + o
       }
-      if (Number(this.e.v) > 1) {
+      if (Number(this.e?.v) > 1) {
         e = 1 + o
-      } else if (Number(this.e.v) < 0) {
+      } else if (Number(this.e?.v) < 0) {
         e = 0 + o
       } else {
-        e = Number(this.e.v) + o
+        e = Number(this.e?.v) + o
       }
 
       if (s > e) {
@@ -394,8 +409,8 @@ export default class TrimModifier extends ShapeModifier {
           }
           jLen = edges.length
           for (j = 0; j < jLen; j++) {
-            shapeS = edges[j][0]
-            shapeE = edges[j][1]
+            shapeS = Number(edges[j][0])
+            shapeE = Number(edges[j][1])
             segments.length = 0
             if (shapeE <= 1) {
               segments.push({

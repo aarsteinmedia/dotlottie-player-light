@@ -363,7 +363,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
                 frameRate,
               0
             )
-            v2[0] = px.getValueAtTime(
+            v2[0] = px.getValueAtTime?.(
               (Number(px.keyframes?.[Number(px.keyframes?.length) - 1].t) -
                 0.01) /
                 frameRate,
@@ -463,7 +463,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
         .rotateZ(-Number(this.rz?.v))
         .rotateY(Number(this.ry?.v))
         .rotateX(Number(this.rx?.v))
-        .rotateZ(-this.or?.v[2])
+        .rotateZ(-Number(this.or?.v[2]))
         .rotateY(this.or?.v[1])
         .rotateX(this.or?.v[0])
       this.appliedTransformations = 4

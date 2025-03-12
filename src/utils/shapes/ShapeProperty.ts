@@ -6,10 +6,15 @@ import type {
   Merge,
   Shape,
   StrokeData,
+  Vector2,
 } from '@/types'
-import type { ValueProperty } from '@/utils/Properties'
+import type {
+  MultiDimensionalProperty,
+  ValueProperty,
+} from '@/utils/Properties'
 import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
+import ShapeElement from '@/elements/ShapeElement'
 import { degToRads } from '@/utils'
 import BezierFactory from '@/utils/BezierFactory'
 import { initialDefaultFrame, roundCorner } from '@/utils/getterSetter'
@@ -29,7 +34,7 @@ export default class ShapePropertyFactory {
   }
 
   static getShapeProp(
-    elem: SVGShapeElement,
+    elem: ShapeElement,
     data: Merge<Shape, Mask>,
     type: number,
     _?: unknown
@@ -69,12 +74,12 @@ export class RectShapeProperty extends DynamicPropertyContainer {
   localShapeCollection: ShapeCollection
   or?: ValueProperty
   os?: ValueProperty
-  p: ValueProperty
+  p: MultiDimensionalProperty<Vector2>
   paths: ShapeCollection
   pt?: ValueProperty
   r: ValueProperty
   reset = resetShape
-  s: ValueProperty
+  s: MultiDimensionalProperty<Vector2>
   v: ShapePath
 
   constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>) {
@@ -89,9 +94,27 @@ export class RectShapeProperty extends DynamicPropertyContainer {
     this.frameId = -1
     this.d = data.d as number
     this.initDynamicPropertyContainer(elem)
-    this.p = PropertyFactory.getProp(elem, data.p as any, 1, 0, this as any)
-    this.s = PropertyFactory.getProp(elem, data.s, 1, 0, this as any)
-    this.r = PropertyFactory.getProp(elem, data.r as any, 0, 0, this as any)
+    this.p = PropertyFactory.getProp(
+      elem,
+      data.p as any,
+      1,
+      0,
+      this
+    ) as MultiDimensionalProperty<Vector2>
+    this.s = PropertyFactory.getProp(
+      elem,
+      data.s,
+      1,
+      0,
+      this
+    ) as MultiDimensionalProperty<Vector2>
+    this.r = PropertyFactory.getProp(
+      elem,
+      data.r as any,
+      0,
+      0,
+      this
+    ) as ValueProperty
     if (this.dynamicProperties.length) {
       this.k = true
     } else {
@@ -100,10 +123,10 @@ export class RectShapeProperty extends DynamicPropertyContainer {
     }
   }
   convertRectToPath() {
-    const p0 = (this.p.v as number[])[0]
-    const p1 = (this.p.v as number[])[1]
-    const v0 = (this.s.v as number[])[0] / 2
-    const v1 = (this.s.v as number[])[1] / 2
+    const p0 = this.p.v[0]
+    const p1 = this.p.v[1]
+    const v0 = this.s.v[0] / 2
+    const v1 = this.s.v[1] / 2
     const round = Math.min(v0, v1, Number(this.r?.v))
     const cPoint = round * (1 - roundCorner)
     this.v._length = 0
@@ -354,7 +377,7 @@ class StarShapeProperty extends DynamicPropertyContainer {
   localShapeCollection: ShapeCollection
   or: ValueProperty
   os: ValueProperty
-  p: ValueProperty
+  p: MultiDimensionalProperty<Vector2>
   paths: ShapeCollection
   pt: ValueProperty
   r: ValueProperty
@@ -373,17 +396,59 @@ class StarShapeProperty extends DynamicPropertyContainer {
     this.d = data.d
     this.initDynamicPropertyContainer(elem)
     if (data.sy === 1) {
-      this.ir = PropertyFactory.getProp(elem, data.ir, 0, 0, this)
-      this.is = PropertyFactory.getProp(elem, data.is, 0, 0.01, this)
+      this.ir = PropertyFactory.getProp(
+        elem,
+        data.ir,
+        0,
+        0,
+        this
+      ) as ValueProperty
+      this.is = PropertyFactory.getProp(
+        elem,
+        data.is,
+        0,
+        0.01,
+        this
+      ) as ValueProperty
       this.convertToPath = this.convertStarToPath
     } else {
       this.convertToPath = this.convertPolygonToPath
     }
-    this.pt = PropertyFactory.getProp(elem, data.pt, 0, 0, this)
-    this.p = PropertyFactory.getProp(elem, data.p, 1, 0, this)
-    this.r = PropertyFactory.getProp(elem, data.r, 0, degToRads, this)
-    this.or = PropertyFactory.getProp(elem, data.or, 0, 0, this)
-    this.os = PropertyFactory.getProp(elem, data.os, 0, 0.01, this)
+    this.pt = PropertyFactory.getProp(
+      elem,
+      data.pt,
+      0,
+      0,
+      this
+    ) as ValueProperty
+    this.p = PropertyFactory.getProp(
+      elem,
+      data.p,
+      1,
+      0,
+      this
+    ) as MultiDimensionalProperty<Vector2>
+    this.r = PropertyFactory.getProp(
+      elem,
+      data.r,
+      0,
+      degToRads,
+      this
+    ) as ValueProperty
+    this.or = PropertyFactory.getProp(
+      elem,
+      data.or,
+      0,
+      0,
+      this
+    ) as ValueProperty
+    this.os = PropertyFactory.getProp(
+      elem,
+      data.os,
+      0,
+      0.01,
+      this
+    ) as ValueProperty
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.localShapeCollection.addShape(this.v)
     this.paths = this.localShapeCollection
@@ -410,8 +475,8 @@ class StarShapeProperty extends DynamicPropertyContainer {
       let y = rad * Math.sin(currentAng)
       const ox = x === 0 && y === 0 ? 0 : y / Math.sqrt(x * x + y * y)
       const oy = x === 0 && y === 0 ? 0 : -x / Math.sqrt(x * x + y * y)
-      x += +(this.p.v as number[])[0]
-      y += +(this.p.v as number[])[1]
+      x += +this.p.v[0]
+      y += +this.p.v[1]
       this.v.setTripleAt(
         x,
         y,
@@ -455,8 +520,8 @@ class StarShapeProperty extends DynamicPropertyContainer {
       let y = rad * Math.sin(currentAng)
       const ox = x === 0 && y === 0 ? 0 : y / Math.sqrt(x * x + y * y)
       const oy = x === 0 && y === 0 ? 0 : -x / Math.sqrt(x * x + y * y)
-      x += +(this.p.v as number[])[0]
-      y += +(this.p.v as number[])[1]
+      x += +this.p.v[0]
+      y += +this.p.v[1]
       this.v.setTripleAt(
         x,
         y,
@@ -489,17 +554,17 @@ class StarShapeProperty extends DynamicPropertyContainer {
 }
 
 class EllShapeProperty extends DynamicPropertyContainer {
-  comp: ElementInterfaceIntersect
+  comp?: ElementInterfaceIntersect
 
   d?: number
   elem: ElementInterfaceIntersect
   frameId: number
   k: boolean
   localShapeCollection: ShapeCollection
-  p: ValueProperty
+  p: MultiDimensionalProperty<Vector2>
   paths: ShapeCollection
   reset = resetShape
-  s: ValueProperty
+  s: MultiDimensionalProperty<Vector2>
   v: ShapePath
   private _cPoint = roundCorner
 
@@ -515,8 +580,20 @@ class EllShapeProperty extends DynamicPropertyContainer {
     this.comp = elem.comp
     this.frameId = -1
     this.initDynamicPropertyContainer(elem)
-    this.p = PropertyFactory.getProp(elem, data.p, 1, 0, this)
-    this.s = PropertyFactory.getProp(elem, data.s, 1, 0, this)
+    this.p = PropertyFactory.getProp(
+      elem,
+      data.p,
+      1,
+      0,
+      this
+    ) as MultiDimensionalProperty<Vector2>
+    this.s = PropertyFactory.getProp(
+      elem,
+      data.s,
+      1,
+      0,
+      this
+    ) as MultiDimensionalProperty<Vector2>
     if (this.dynamicProperties.length) {
       this.k = true
     } else {
@@ -525,10 +602,10 @@ class EllShapeProperty extends DynamicPropertyContainer {
     }
   }
   convertEllToPath() {
-    const p0 = (this.p.v as number[])[0]
-    const p1 = (this.p.v as number[])[1]
-    const s0 = (this.s.v as number[])[0] / 2
-    const s1 = (this.s.v as number[])[1] / 2
+    const p0 = this.p.v[0]
+    const p1 = this.p.v[1]
+    const s0 = this.s.v[0] / 2
+    const s1 = this.s.v[1] / 2
     const _cw = this.d !== 3
     const _v = this.v
     _v.v[0][0] = p0
@@ -573,7 +650,7 @@ export class ShapeProperty {
   _caching?: Caching
   public _mdf: boolean
   public addEffect: (func: any) => void
-  public comp: ElementInterfaceIntersect
+  public comp?: ElementInterfaceIntersect
   public container: SVGShapeElement
   public data: Partial<Shape & Mask>
   public effectsSequence: unknown[]
@@ -593,11 +670,7 @@ export class ShapeProperty {
   public reset
   public setVValue: (shape: ShapePath) => void
   public v: ShapePath
-  constructor(
-    elem: SVGShapeElement,
-    data: Partial<Shape & Mask>,
-    type: number
-  ) {
+  constructor(elem: ShapeElement, data: Partial<Shape & Mask>, type: number) {
     this.propType = 'shape'
     this.comp = elem.comp
     this.container = elem

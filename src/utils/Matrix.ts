@@ -219,8 +219,8 @@ export default class Matrix {
     return this
   }
 
-  rotate(angle: number): this {
-    if (angle === 0) {
+  rotate(angle?: number): this {
+    if (!angle) {
       return this
     }
     const mCos = Math.cos(angle)
