@@ -10,15 +10,17 @@ import type {
 import type Matrix from '@/utils/Matrix'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
+// import RenderableDOMElement from './helpers/RenderableDOMElement'
+// import CompElement from '@/elements/CompElement'
 import { buildShapeString } from '@/utils'
 import LetterProps from '@/utils/text/LetterProps'
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
 
-export default class TextElement {
-  _mdf?: boolean
+import SVGBaseElement from './svg/SVGBaseElement'
+
+export default class TextElement extends SVGBaseElement {
   emptyProp?: LetterProps
-  isInRange?: boolean
 
   lettersChangedFlag?: boolean
 
@@ -102,7 +104,7 @@ export default class TextElement {
     return shapeStr
   }
 
-  initElement(
+  override initElement(
     data: LottieLayer,
     globalData: GlobalData,
     comp: ElementInterfaceIntersect

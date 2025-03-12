@@ -1,15 +1,13 @@
-import type { Transformer } from '@/types'
-
+import CompElement from '@/elements/CompElement'
 import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
-import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
 import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
-export default class SVGBaseElement extends BaseRenderer {
+export default class SVGBaseElement extends CompElement {
   _sizeChanged?: boolean
-  finalTransform?: Transformer
+  // finalTransform?: Transformer
   maskedElement?: SVGGElement
   matteElement?: SVGGElement
   matteMasks?: {
@@ -17,7 +15,7 @@ export default class SVGBaseElement extends BaseRenderer {
   }
   renderableEffectsManager?: SVGEffects
   transformedElement?: SVGGElement
-  createContainerElements() {
+  override createContainerElements() {
     this.matteElement = createNS<SVGGElement>('g')
     this.transformedElement = this.layerElement
     this.maskedElement = this.layerElement
@@ -91,7 +89,7 @@ export default class SVGBaseElement extends BaseRenderer {
       this.setBlendMode() // TODO: Must be inherited
     }
   }
-  createRenderableComponents() {
+  override createRenderableComponents() {
     if (!this.data || !this.globalData) {
       throw new Error("Can't access Global Data")
     }
@@ -99,7 +97,7 @@ export default class SVGBaseElement extends BaseRenderer {
     this.renderableEffectsManager = new SVGEffects(this as any)
     this.searchEffectTransforms() // TODO: Must be inherited
   }
-  destroyBaseElement() {
+  override destroyBaseElement() {
     this.layerElement = null as any
     this.matteElement = null as any
     this.maskManager?.destroy()
@@ -206,10 +204,10 @@ export default class SVGBaseElement extends BaseRenderer {
     }
     return this.matteMasks[matteType]
   }
-  initRendererElement() {
+  override initRendererElement() {
     this.layerElement = createNS('g')
   }
-  renderElement() {
+  override renderElement() {
     if (this.finalTransform?._localMatMdf) {
       this.transformedElement?.setAttribute(
         'transform',

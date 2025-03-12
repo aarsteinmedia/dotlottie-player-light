@@ -678,7 +678,7 @@ export default class AnimationItem extends BaseEvent {
         )
       }
 
-      this.renderer?.setProjectInterface(this.projectInterface)
+      this.renderer?.setProjectInterface?.(this.projectInterface)
       this.animType = animType
       if (
         params.loop === '' ||

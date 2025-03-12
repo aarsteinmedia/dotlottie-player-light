@@ -3,40 +3,43 @@ import type { Vector3 } from '@/types'
 import Matrix from '@/utils/Matrix'
 import TransformProperty from '@/utils/TransformProperty'
 
-const effectTypes = {
-  TRANSFORM_EFFECT: 'transformEffect',
-}
+import BaseElement from '../BaseElement'
 
-export default function TransformElement() {}
+// import BaseElement from '../BaseElement'
 
-TransformElement.prototype.globalToLocal = function (point: Vector3) {
-  let pt = point
-  const transforms = []
-  transforms.push(this.finalTransform)
-  let flag = true
-  let comp = this.comp
-  while (flag) {
-    if (comp.finalTransform) {
-      if (comp.data.hasMask) {
-        transforms.splice(0, 0, comp.finalTransform)
+export default class TransformElement extends BaseElement {
+  mHelper = new Matrix()
+
+  private effectTypes = {
+    TRANSFORM_EFFECT: 'transformEffect',
+  }
+
+  globalToLocal(point: Vector3) {
+    let pt = point
+    const transforms = []
+    transforms.push(this.finalTransform)
+    let flag = true
+    let comp = this.comp
+    while (flag) {
+      if (comp.finalTransform) {
+        if (comp.data.hasMask) {
+          transforms.splice(0, 0, comp.finalTransform)
+        }
+        comp = comp.comp
+      } else {
+        flag = false
       }
-      comp = comp.comp
-    } else {
-      flag = false
     }
+    const len = transforms.length
+    let ptNew
+    for (let i = 0; i < len; i++) {
+      ptNew = transforms[i].mat.applyToPointArray(0, 0, 0)
+      // ptNew = transforms[i].mat.applyToPointArray(pt[0],pt[1],pt[2]);
+      pt = [pt[0] - ptNew[0], pt[1] - ptNew[1], 0]
+    }
+    return pt
   }
-  const len = transforms.length
-  let ptNew
-  for (let i = 0; i < len; i++) {
-    ptNew = transforms[i].mat.applyToPointArray(0, 0, 0)
-    // ptNew = transforms[i].mat.applyToPointArray(pt[0],pt[1],pt[2]);
-    pt = [pt[0] - ptNew[0], pt[1] - ptNew[1], 0]
-  }
-  return pt
-}
-
-TransformElement.prototype = {
-  initTransform: function () {
+  initTransform() {
     const mat = new Matrix()
     this.finalTransform = {
       _localMatMdf: false,
@@ -57,9 +60,8 @@ TransformElement.prototype = {
     if (this.data.ty !== 11) {
       // this.createElements();
     }
-  },
-  mHelper: new Matrix(),
-  renderLocalTransform: function () {
+  }
+  renderLocalTransform() {
     if (this.localTransforms) {
       let i = 0
       const len = this.localTransforms.length
@@ -93,8 +95,8 @@ TransformElement.prototype = {
         this.finalTransform.localOpacity = localOp
       }
     }
-  },
-  renderTransform: function () {
+  }
+  renderTransform() {
     this.finalTransform._opMdf =
       this.finalTransform.mProp.o._mdf || this._isFirstFrame
     this.finalTransform._matMdf =
@@ -130,11 +132,11 @@ TransformElement.prototype = {
     if (this.finalTransform._opMdf) {
       this.finalTransform.localOpacity = this.finalTransform.mProp.o.v
     }
-  },
-  searchEffectTransforms: function () {
+  }
+  searchEffectTransforms() {
     if (this.renderableEffectsManager) {
       const transformEffects = this.renderableEffectsManager.getEffects(
-        effectTypes.TRANSFORM_EFFECT
+        this.effectTypes.TRANSFORM_EFFECT
       )
       if (transformEffects.length) {
         this.localTransforms = []
@@ -145,5 +147,5 @@ TransformElement.prototype = {
         }
       }
     }
-  },
+  }
 }

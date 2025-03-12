@@ -9,9 +9,9 @@ import type {
   Transformer,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
-import FrameElement from '@/elements/helpers/FrameElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
+// import BaseElement from '@/elements/BaseElement'
+// import FrameElement from '@/elements/helpers/FrameElement'
+// import HierarchyElement from '@/elements/helpers/HierarchyElement'
 import {
   ShapeGroupData,
   SVGFillStyleData,
@@ -23,13 +23,13 @@ import {
   SVGStyleData,
   SVGTransformData,
 } from '@/elements/helpers/shapes'
-import TransformElement from '@/elements/helpers/TransformElement'
+// import TransformElement from '@/elements/helpers/TransformElement'
 import ShapeElement from '@/elements/ShapeElement'
-import SVGBaseElement from '@/elements/svg/SVGBaseElement'
+// import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { lineCapEnum, lineJoinEnum } from '@/enums'
 import SVGElementsRenderer from '@/renderers/SVGElementsRenderer'
 import { getBlendMode } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
+// import { extendPrototype } from '@/utils/functionExtensions'
 import { getLocationHref } from '@/utils/getterSetter'
 import ShapeModifiers from '@/utils/shapes/ShapeModifiers' // type ShapeModifierInterface,
 import ShapePropertyFactory, {
@@ -85,7 +85,7 @@ export default class SVGShapeElement extends ShapeElement {
   buildExpressionInterface() {
     throw new Error('Method not yet implemented')
   }
-  createContent() {
+  override createContent() {
     if (!this.layerElement) {
       throw new Error('Could not access Layer')
     }
@@ -221,8 +221,8 @@ export default class SVGShapeElement extends ShapeElement {
     this.itemsData = null as any
   }
   filterUniqueShapes() {
-    const len = this.shapes?.length
-    const jLen = this.stylesList.length
+    const { length } = this.shapes || []
+    const { length: jLen } = this.stylesList
     let style
     const tempShapes = []
     let areAnimated = false
@@ -230,7 +230,7 @@ export default class SVGShapeElement extends ShapeElement {
       style = this.stylesList[j]
       areAnimated = false
       tempShapes.length = 0
-      for (let i = 0; i < len; i++) {
+      for (let i = 0; i < length; i++) {
         if (this.shapes?.[i].styles.indexOf(style) !== -1) {
           tempShapes.push(this.shapes[i])
           areAnimated = this.shapes[i]._isAnimated || areAnimated
@@ -270,7 +270,7 @@ export default class SVGShapeElement extends ShapeElement {
     this.renderModifiers()
   }
   // TODO:
-  renderInnerContent = function (this: any) {
+  override renderInnerContent() {
     this.renderModifiers()
     const { length } = this.stylesList
     for (let i = 0; i < length; i++) {
@@ -282,7 +282,7 @@ export default class SVGShapeElement extends ShapeElement {
         continue
       }
       if (this.stylesList[i].msElem) {
-        this.stylesList[i].msElem.setAttribute('d', this.stylesList[i].d)
+        this.stylesList[i].msElem?.setAttribute('d', this.stylesList[i].d)
         // Adding M0 0 fixes same mask bug on all browsers
         this.stylesList[i].d = `M0 0${this.stylesList[i].d}`
       }
@@ -442,15 +442,15 @@ export default class SVGShapeElement extends ShapeElement {
   }
 }
 
-extendPrototype(
-  [
-    BaseElement,
-    TransformElement,
-    SVGBaseElement,
-    // ShapeElement,
-    HierarchyElement,
-    FrameElement,
-    // RenderableDOMElement,
-  ],
-  SVGShapeElement
-)
+// extendPrototype(
+//   [
+//     BaseElement,
+//     TransformElement,
+//     SVGBaseElement,
+//     // ShapeElement,
+//     HierarchyElement,
+//     FrameElement,
+//     // RenderableDOMElement,
+//   ],
+//   SVGShapeElement
+// )

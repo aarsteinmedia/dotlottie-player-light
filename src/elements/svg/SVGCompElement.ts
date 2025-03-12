@@ -1,25 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import type { ElementInterfaceIntersect, GlobalData, LottieLayer } from '@/types'
-import type { KeyframedValueProperty } from '@/utils/Properties'
+import type {
+  ElementInterfaceIntersect,
+  GlobalData,
+  LottieLayer,
+} from '@/types'
+// import type { KeyframedValueProperty } from '@/utils/Properties'
 
 import CompElement from '@/elements/CompElement'
-import SVGBaseElement from '@/elements/svg/SVGBaseElement'
-import SVGRendererBase from '@/renderers/SVGRendererBase'
-import { extendPrototype } from '@/utils/functionExtensions'
+// import SVGBaseElement from '@/elements/svg/SVGBaseElement'
+// import SVGRendererBase from '@/renderers/SVGRendererBase'
+// import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
 import PropertyFactory from '@/utils/PropertyFactory'
 /**
  *
  */
-class SVGCompElement extends SVGBaseElement {
+export default class SVGCompElement extends CompElement {
   _debug?: boolean
-  completeLayers: boolean
-  elements: ElementInterfaceIntersect[]
-  layers: LottieLayer[]
-  pendingElements: ElementInterfaceIntersect[]
+  // completeLayers: boolean
+  // elements: ElementInterfaceIntersect[]
+  // layers: LottieLayer[]
+  // pendingElements: ElementInterfaceIntersect[]
   supports3d: boolean
-  tm?: KeyframedValueProperty
-  constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
+  // tm?: KeyframedValueProperty
+  constructor(
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterfaceIntersect
+  ) {
     super()
     this.layers = data.layers!
     this.supports3d = true
@@ -39,19 +46,18 @@ class SVGCompElement extends SVGBaseElement {
         : { _placeholder: true }
     ) as any
   }
-  createComp(data: LottieLayer) {
-    return new SVGCompElement(data, this.globalData, this)
+  override createComp(data: LottieLayer) {
+    if (!this.globalData) {
+      throw new Error('SVGCompElement: Cannot access global data')
+    }
+    return new SVGCompElement(data, this.globalData, this as any)
   }
 
-  initElement(
-    _data: LottieLayer,
-    _globalData: GlobalData,
-    _comp: ElementInterfaceIntersect
-  ) {}
+  // initElement(
+  //   _data: LottieLayer,
+  //   _globalData: GlobalData,
+  //   _comp: ElementInterfaceIntersect
+  // ) {}
 }
 
-extendPrototype([SVGRendererBase, CompElement], SVGCompElement)
-
-interface SVGCompElement extends SVGRendererBase, CompElement {}
-
-export default SVGCompElement
+// extendPrototype([SVGRendererBase, SVGBaseElement], SVGCompElement)

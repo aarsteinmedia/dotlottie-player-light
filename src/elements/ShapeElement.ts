@@ -52,11 +52,11 @@ export default class ShapeElement extends RenderableDOMElement {
     this.prepareProperties(num, this.isInRange)
   }
 
-  prepareProperties(_val: number, _flag?: boolean) {
-    throw new Error(
-      'ShapeElement: Method prepareProperties not yet implemented'
-    )
-  }
+  // override prepareProperties(_val: number, _flag?: boolean) {
+  //   throw new Error(
+  //     'ShapeElement: Method prepareProperties not yet implemented'
+  //   )
+  // }
 
   renderModifiers() {
     if (!this.shapeModifiers?.length) {

@@ -5,8 +5,9 @@ import type {
   Transformer,
 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
-export default class RenderableElement extends BaseElement {
+// import BaseRenderer from '@/renderers/BaseRenderer'
+import FrameElement from '@/elements/helpers/FrameElement'
+export default class RenderableElement extends FrameElement {
   _isFirstFrame?: boolean
   _mdf?: boolean
   finalTransform?: Transformer
@@ -70,9 +71,9 @@ export default class RenderableElement extends BaseElement {
     }
     return { h: Number(this.data?.height), w: Number(this.data?.width) }
   }
-  // hide() {
-  //   throw new Error('RenderableElement: Method hide not implemented yet')
-  // }
+  hide() {
+    throw new Error('RenderableElement: Method hide is not yet implemented')
+  }
   initRenderable() {
     // layer's visibility related to inpoint and outpoint. Rename isVisible to isInRange
     this.isInRange = false
@@ -101,6 +102,9 @@ export default class RenderableElement extends BaseElement {
     }
     /* this.maskManager.renderFrame(this.finalTransform.mat);
       this.renderableEffectsManager.renderFrame(this._isFirstFrame); */
+  }
+  show() {
+    throw new Error('RenderableElement: Method hide is not yet implemented')
   }
   // show() {
   //   throw new Error('RenderableElement: Method show not implemented yet')

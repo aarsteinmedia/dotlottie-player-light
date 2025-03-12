@@ -1,27 +1,13 @@
 /* eslint-disable max-depth */
-import type {
-  ElementInterfaceIntersect,
-  GlobalData,
-  LottieLayer,
-  SourceRect,
-  Vector3,
-} from '@/types'
-import type Matrix from '@/utils/Matrix'
+import type { GlobalData, LottieLayer, SourceRect, Vector3 } from '@/types'
 
-import BaseElement from '@/elements/BaseElement'
-import FrameElement from '@/elements/helpers/FrameElement'
-import HierarchyElement from '@/elements/helpers/HierarchyElement'
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
-import TransformElement from '@/elements/helpers/TransformElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import SVGCompElement from '@/elements/svg/SVGCompElement'
 import SVGShapeElement from '@/elements/svg/SVGShapeElement'
 import TextElement from '@/elements/TextElement'
 import { RendererType } from '@/enums'
 import { createNS } from '@/utils'
-import { extendPrototype } from '@/utils/functionExtensions'
 import { createSizedArray } from '@/utils/helpers/arrays'
-
 export default class SVGTextLottieElement extends TextElement {
   _sizeChanged?: boolean
   bbox?: {
@@ -30,11 +16,11 @@ export default class SVGTextLottieElement extends TextElement {
     top: number
     width: number
   }
-  comp?: ElementInterfaceIntersect
-  data?: LottieLayer
-  globalData?: GlobalData
-  layerElement?: SVGGElement
-  mHelper!: Matrix
+  // comp?: ElementInterfaceIntersect
+  // data?: LottieLayer
+  // globalData?: GlobalData
+  // layerElement?: SVGGElement
+  // mHelper?: Matrix
   renderedFrame?: number
 
   renderedLetters?: string[]
@@ -77,7 +63,7 @@ export default class SVGTextLottieElement extends TextElement {
     }
     if (documentData.sc) {
       this.layerElement.setAttribute('stroke', this.buildColor(documentData.sc))
-      this.layerElement.setAttribute('stroke-width', documentData.sw)
+      this.layerElement.setAttribute('stroke-width', `${documentData.sw}`)
     }
     this.layerElement.setAttribute(
       'font-size',
@@ -218,7 +204,7 @@ export default class SVGTextLottieElement extends TextElement {
             glyphElement = new SVGCompElement(
               charData.data,
               this.globalData,
-              this
+              this as any
             )
           } else {
             let data = this.emptyShapeData
@@ -350,8 +336,8 @@ export default class SVGTextLottieElement extends TextElement {
       }
     }
   }
-  // TODO: Find out why this doesn't work as a normal prototype
-  renderInnerContent = function (this: SVGTextLottieElement) {
+
+  override renderInnerContent() {
     this.validateText()
     if (this.data?.singleShape && !this._mdf) {
       return
@@ -403,7 +389,7 @@ export default class SVGTextLottieElement extends TextElement {
     }
   }
 
-  sourceRectAtTime(): SourceRect | null {
+  override sourceRectAtTime(): SourceRect | null {
     this.prepareFrame(Number(this.comp?.renderedFrame) - Number(this.data?.st))
     this.renderInnerContent()
     if (this._sizeChanged) {
@@ -423,15 +409,15 @@ export default class SVGTextLottieElement extends TextElement {
   }
 }
 
-extendPrototype(
-  [
-    BaseElement,
-    TransformElement,
-    SVGBaseElement,
-    HierarchyElement,
-    FrameElement,
-    RenderableDOMElement,
-    TextElement,
-  ],
-  SVGTextLottieElement
-)
+// extendPrototype(
+//   [
+//     // BaseElement,
+//     TransformElement,
+//     // SVGBaseElement,
+//     // HierarchyElement,
+//     // FrameElement,
+//     // RenderableDOMElement,
+//     // TextElement,
+//   ],
+//   SVGTextLottieElement
+// )

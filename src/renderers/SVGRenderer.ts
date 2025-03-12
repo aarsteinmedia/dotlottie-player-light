@@ -8,6 +8,8 @@ import { createNS } from '@/utils'
 import { createElementID } from '@/utils/getterSetter'
 
 export default class SVGRenderer extends SVGRendererBase {
+  // animationItem: AnimationItem
+  // layers: LottieLayer[]
   rendererType: RendererType
 
   constructor(animationItem: AnimationItem, config?: SVGRendererConfig) {
@@ -82,6 +84,6 @@ export default class SVGRenderer extends SVGRendererBase {
     if (!this.globalData) {
       throw new Error("Can't access global data")
     }
-    return new SVGCompElement(data, this.globalData, this)
+    return new SVGCompElement(data, this.globalData, this as any)
   }
 }

@@ -4,9 +4,11 @@
  *
  */
 
-import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+// import RenderableDOMElement from '@/elements/helpers/RenderableDOMElement'
+import BaseElement from '../BaseElement'
+import TransformElement from './TransformElement'
 
-export default class HierarchyElement extends RenderableDOMElement {
+export default class HierarchyElement extends TransformElement {
   _isParent!: boolean
 
   hierarchy!: unknown[]
