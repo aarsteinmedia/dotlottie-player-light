@@ -301,7 +301,7 @@ class CheckChars extends DataFunctionManager {
             sa: { a: 0, k: 0 },
             sk: { a: 0, k: 0 },
             ty: ShapeType.Transform,
-          } as Shape)
+          } as unknown as Shape)
         }
       }
     }

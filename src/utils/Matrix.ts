@@ -228,8 +228,8 @@ export default class Matrix {
     return this._t(mCos, -mSin, 0, 0, mSin, mCos, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
   }
 
-  rotateX(angle: number): this {
-    if (angle === 0) {
+  rotateX(angle?: number): this {
+    if (!angle) {
       return this
     }
     const mCos = Math.cos(angle)
@@ -237,8 +237,8 @@ export default class Matrix {
     return this._t(1, 0, 0, 0, 0, mCos, -mSin, 0, 0, mSin, mCos, 0, 0, 0, 0, 1)
   }
 
-  rotateY(angle: number): this {
-    if (angle === 0) {
+  rotateY(angle?: number): this {
+    if (!angle) {
       return this
     }
     const mCos = Math.cos(angle)
@@ -246,8 +246,8 @@ export default class Matrix {
     return this._t(mCos, 0, mSin, 0, 0, 1, 0, 0, -mSin, 0, mCos, 0, 0, 0, 0, 1)
   }
 
-  rotateZ(angle: number): this {
-    if (angle === 0) {
+  rotateZ(angle?: number): this {
+    if (!angle) {
       return this
     }
     const mCos = Math.cos(angle)

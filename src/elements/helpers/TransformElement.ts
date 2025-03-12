@@ -1,4 +1,9 @@
-import type { Vector3 } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  LottieLayer,
+  Transformer,
+  Vector3,
+} from '@/types'
 
 import Matrix from '@/utils/Matrix'
 import TransformProperty from '@/utils/TransformProperty'
@@ -8,8 +13,9 @@ const effectTypes = {
 }
 
 export default class TransformElement {
+  data?: LottieLayer
+  finalTransform?: Transformer
   mHelper = new Matrix()
-
   globalToLocal(point: Vector3) {
     let pt = point
     const transforms = []
@@ -29,9 +35,9 @@ export default class TransformElement {
     const len = transforms.length
     let ptNew
     for (let i = 0; i < len; i++) {
-      ptNew = transforms[i].mat.applyToPointArray(0, 0, 0)
+      ptNew = transforms[i]?.mat.applyToPointArray(0, 0, 0)
       // ptNew = transforms[i].mat.applyToPointArray(pt[0],pt[1],pt[2]);
-      pt = [pt[0] - ptNew[0], pt[1] - ptNew[1], 0]
+      pt = [pt[0] - Number(ptNew?.[0]), pt[1] - Number(ptNew?.[1]), 0]
     }
     return pt
   }
@@ -44,8 +50,12 @@ export default class TransformElement {
       localMat: mat,
       localOpacity: 1,
       mat: mat,
-      mProp: this.data.ks
-        ? new TransformProperty(this, this.data.ks, this)
+      mProp: this.data?.ks
+        ? new TransformProperty(
+            this as ElementInterfaceIntersect,
+            this.data.ks,
+            this
+          )
         : { o: 0 },
     }
     if (this.data.ao) {

@@ -1,4 +1,9 @@
-import type { ElementInterfaceIntersect, Shape, Vector2 } from '@/types'
+import type {
+  ElementInterfaceIntersect,
+  Shape,
+  Vector2,
+  Vector3,
+} from '@/types'
 import type {
   MultiDimensionalProperty,
   ValueProperty,
@@ -19,8 +24,8 @@ export default class TransformProperty extends DynamicPropertyContainer {
   elem: ElementInterfaceIntersect
   frameId: number
   o?: ValueProperty
-  or?: ValueProperty
-  p?: ValueProperty
+  or?: MultiDimensionalProperty<Vector3>
+  p?: MultiDimensionalProperty<Vector3>
   pre: Matrix
   override propType: 'transform'
   px?: ValueProperty
@@ -56,23 +61,23 @@ export default class TransformProperty extends DynamicPropertyContainer {
         (data.p as any).x,
         0,
         0,
-        this as any
-      )
+        this
+      ) as ValueProperty
       this.py = PropertyFactory.getProp(
         elem,
         (data.p as any).y,
         0,
         0,
-        this as any
-      )
+        this
+      ) as ValueProperty
       if ('z' in data.p) {
         this.pz = PropertyFactory.getProp(
           elem,
           data.p.z as any,
           0,
           0,
-          this as any
-        )
+          this
+        ) as ValueProperty
       }
     } else {
       this.p = PropertyFactory.getProp(
@@ -80,8 +85,8 @@ export default class TransformProperty extends DynamicPropertyContainer {
         data.p || ({ k: [0, 0, 0] } as any),
         1,
         0,
-        this as any
-      )
+        this
+      ) as MultiDimensionalProperty<Vector3>
     }
     if ('rx' in data) {
       this.rx = PropertyFactory.getProp(
@@ -89,22 +94,22 @@ export default class TransformProperty extends DynamicPropertyContainer {
         data.rx,
         0,
         degToRads,
-        this as any
-      )
+        this
+      ) as ValueProperty
       this.ry = PropertyFactory.getProp(
         elem,
         data.ry,
         0,
         degToRads,
-        this as any
-      )
+        this
+      ) as ValueProperty
       this.rz = PropertyFactory.getProp(
         elem,
         data.rz,
         0,
         degToRads,
-        this as any
-      )
+        this
+      ) as ValueProperty
       if (data.or?.k[0].ti) {
         const { length } = data.or.k
         for (let i = 0; i < length; i++) {
@@ -117,8 +122,8 @@ export default class TransformProperty extends DynamicPropertyContainer {
         data.or as any,
         1,
         degToRads,
-        this as any
-      )
+        this
+      ) as MultiDimensionalProperty<Vector3>
       // sh Indicates it needs to be capped between -180 and 180
       this.or.sh = true as any
     } else {
@@ -127,8 +132,8 @@ export default class TransformProperty extends DynamicPropertyContainer {
         data.r || ({ k: 0 } as any),
         0,
         degToRads,
-        this as any
-      )
+        this
+      ) as ValueProperty
     }
     if (data.sk) {
       this.sk = PropertyFactory.getProp(
@@ -136,33 +141,39 @@ export default class TransformProperty extends DynamicPropertyContainer {
         data.sk,
         0,
         degToRads,
-        this as any
-      )
+        this
+      ) as ValueProperty
       this.sa = PropertyFactory.getProp(
         elem,
         data.sa,
         0,
         degToRads,
-        this as any
-      )
+        this
+      ) as ValueProperty
     }
     this.a = PropertyFactory.getProp(
       elem,
       data.a || ({ k: [0, 0, 0] } as any),
       1,
       0,
-      this as any
-    )
+      this
+    ) as MultiDimensionalProperty<Vector2>
     this.s = PropertyFactory.getProp(
       elem,
       data.s || ({ k: [100, 100, 100] } as any),
       1,
       0.01,
-      this as any
-    )
+      this
+    ) as MultiDimensionalProperty<Vector2>
     // Opacity is not part of the transform properties, that's why it won't use this.dynamicProperties. That way transforms won't get updated if opacity changes.
     if (data.o) {
-      this.o = PropertyFactory.getProp(elem, data.o, 0, 0.01, elem)
+      this.o = PropertyFactory.getProp(
+        elem,
+        data.o,
+        0,
+        0.01,
+        elem
+      ) as ValueProperty
     } else {
       this.o = { _mdf: false, v: 1 } as any
     }
@@ -195,7 +206,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
       )
     }
     if (this.sk) {
-      mat.skewFromAxis(-(this.sk.v as number[]), Number(this.sa?.v))
+      mat.skewFromAxis(-this.sk.v, Number(this.sa?.v))
     }
     if (this.r) {
       mat.rotate(-Number(this.r.v))
@@ -204,9 +215,9 @@ export default class TransformProperty extends DynamicPropertyContainer {
         .rotateZ(-Number(this.rz?.v))
         .rotateY(Number(this.ry?.v))
         .rotateX(Number(this.rx?.v))
-        .rotateZ(-(this.or?.v as number[])[2])
-        .rotateY((this.or?.v as number[])[1])
-        .rotateX((this.or?.v as number[])[0])
+        .rotateZ(-Number(this.or?.v[2]))
+        .rotateY(Number(this.or?.v[1]))
+        .rotateX(Number(this.or?.v[0]))
     }
     if (this.data?.p && 's' in this.data.p) {
       if ('z' in this.data.p) {
@@ -220,9 +231,9 @@ export default class TransformProperty extends DynamicPropertyContainer {
       }
     } else {
       mat.translate(
-        (this.p?.v as number[])[0],
-        (this.p?.v as number[])[1],
-        -(this.p?.v as number[])[2]
+        Number(this.p?.v[0]),
+        Number(this.p?.v[1]),
+        -Number(this.p?.v[2])
       )
     }
   }
@@ -260,7 +271,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
         )
       }
       if (this.sk && this.appliedTransformations < 3) {
-        this.v.skewFromAxis(-(this.sk.v as number[]), Number(this.sa?.v))
+        this.v.skewFromAxis(-this.sk.v, Number(this.sa?.v))
       }
       if (this.r && this.appliedTransformations < 4) {
         this.v.rotate(-Number(this.r.v))
@@ -269,24 +280,24 @@ export default class TransformProperty extends DynamicPropertyContainer {
           .rotateZ(-Number(this.rz?.v))
           .rotateY(Number(this.ry?.v))
           .rotateX(Number(this.rx?.v))
-          .rotateZ(-(this.or?.v as number[])[2])
-          .rotateY((this.or?.v as number[])[1])
-          .rotateX((this.or?.v as number[])[0])
+          .rotateZ(-Number(this.or?.v[2]))
+          .rotateY(Number(this.or?.v[1]))
+          .rotateX(Number(this.or?.v[0]))
       }
       if (this.autoOriented) {
         let v1
         let v2
         frameRate = this.elem.globalData.frameRate
-        if (this.p && this.p.keyframes && 'getValueAtTime' in this.p) {
+        if (this.p?.keyframes) {
           if (
             Number(this.p._caching?.lastFrame) + Number(this.p.offsetTime) <=
             this.p.keyframes[0].t
           ) {
-            v1 = (this.p as any).getValueAtTime?.(
+            v1 = this.p.getValueAtTime?.(
               (this.p.keyframes[0].t + 0.01) / frameRate,
               0
             )
-            v2 = (this.p as any).getValueAtTime(
+            v2 = this.p.getValueAtTime?.(
               Number(this.p.keyframes[0].t) / frameRate,
               0
             )
@@ -294,32 +305,26 @@ export default class TransformProperty extends DynamicPropertyContainer {
             Number(this.p._caching?.lastFrame) + Number(this.p.offsetTime) >=
             this.p.keyframes[this.p.keyframes.length - 1].t
           ) {
-            v1 = (this.p as any).getValueAtTime(
+            v1 = this.p.getValueAtTime?.(
               this.p.keyframes[this.p.keyframes.length - 1].t / frameRate,
               0
             )
-            v2 = (this.p as any).getValueAtTime(
+            v2 = this.p.getValueAtTime?.(
               (this.p.keyframes[this.p.keyframes.length - 1].t - 0.05) /
                 frameRate,
               0
             )
           } else {
             v1 = this.p.pv
-            v2 = (this.p as any).getValueAtTime(
+            v2 = this.p.getValueAtTime?.(
               (Number(this.p._caching?.lastFrame) +
                 Number(this.p.offsetTime) -
                 0.01) /
                 frameRate,
-              this.p.offsetTime
+              Number(this.p.offsetTime)
             )
           }
-        } else if (
-          this.px &&
-          this.px.keyframes &&
-          this.py?.keyframes &&
-          'getValueAtTime' in this.px &&
-          'getValueAtTime' in this.py
-        ) {
+        } else if (this.px?.keyframes && this.py?.keyframes) {
           v1 = []
           v2 = []
           const px = this.px
@@ -328,19 +333,19 @@ export default class TransformProperty extends DynamicPropertyContainer {
             Number(px._caching?.lastFrame) + Number(px.offsetTime) <=
             Number(px.keyframes?.[0].t)
           ) {
-            v1[0] = (px as any).getValueAtTime(
+            v1[0] = px.getValueAtTime?.(
               (Number(px.keyframes?.[0].t) + 0.01) / frameRate,
               0
             )
-            v1[1] = (py as any).getValueAtTime(
+            v1[1] = py.getValueAtTime?.(
               (Number(py.keyframes?.[0].t) + 0.01) / frameRate,
               0
             )
-            v2[0] = (px as any).getValueAtTime(
+            v2[0] = px.getValueAtTime?.(
               Number(px.keyframes?.[0].t) / frameRate,
               0
             )
-            v2[1] = (py as any).getValueAtTime(
+            v2[1] = py.getValueAtTime?.(
               Number(py.keyframes?.[0]?.t) / frameRate,
               0
             )
@@ -348,23 +353,23 @@ export default class TransformProperty extends DynamicPropertyContainer {
             Number(px._caching?.lastFrame) + Number(px.offsetTime) >=
             Number(px.keyframes?.[Number(px.keyframes?.length) - 1].t)
           ) {
-            v1[0] = (px as any).getValueAtTime(
+            v1[0] = px.getValueAtTime?.(
               Number(px.keyframes?.[Number(px.keyframes?.length) - 1].t) /
                 frameRate,
               0
             )
-            v1[1] = (py as any).getValueAtTime(
+            v1[1] = py.getValueAtTime?.(
               Number(py.keyframes?.[Number(py.keyframes?.length) - 1].t) /
                 frameRate,
               0
             )
-            v2[0] = (px as any).getValueAtTime(
+            v2[0] = px.getValueAtTime(
               (Number(px.keyframes?.[Number(px.keyframes?.length) - 1].t) -
                 0.01) /
                 frameRate,
               0
             )
-            v2[1] = (py as any).getValueAtTime(
+            v2[1] = py.getValueAtTime?.(
               (Number(py.keyframes?.[Number(py.keyframes?.length) - 1].t) -
                 0.01) /
                 frameRate,
@@ -372,12 +377,12 @@ export default class TransformProperty extends DynamicPropertyContainer {
             )
           } else {
             v1 = [px.pv, py.pv]
-            v2[0] = (px as any).getValueAtTime(
+            v2[0] = px.getValueAtTime?.(
               (Number(px._caching?.lastFrame) + Number(px.offsetTime) - 0.01) /
                 frameRate,
               px.offsetTime
             )
-            v2[1] = (py as any).getValueAtTime(
+            v2[1] = py.getValueAtTime?.(
               (Number(py._caching?.lastFrame) + Number(py.offsetTime) - 0.01) /
                 frameRate,
               py.offsetTime
@@ -437,7 +442,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
       if (this.sk.effectsSequence.length || this.sa?.effectsSequence.length) {
         return
       }
-      this.pre.skewFromAxis(-(this.sk.v as number[]), Number(this.sa?.v))
+      this.pre.skewFromAxis(-this.sk.v, Number(this.sa?.v))
       this.appliedTransformations = 3
     }
     if (this.r) {
@@ -458,9 +463,9 @@ export default class TransformProperty extends DynamicPropertyContainer {
         .rotateZ(-Number(this.rz?.v))
         .rotateY(Number(this.ry?.v))
         .rotateX(Number(this.rx?.v))
-        .rotateZ(-(this.or?.v as number[])[2])
-        .rotateY((this.or?.v as number[])[1])
-        .rotateX((this.or?.v as number[])[0])
+        .rotateZ(-this.or?.v[2])
+        .rotateY(this.or?.v[1])
+        .rotateX(this.or?.v[0])
       this.appliedTransformations = 4
     }
   }

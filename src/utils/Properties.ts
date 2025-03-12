@@ -27,6 +27,7 @@ abstract class BaseProperty extends DynamicPropertyContainer {
   elem?: any
   frameId?: number
   g?: any
+  getValueAtTime?: (a: number, b?: number) => any
   initFrame = initialDefaultFrame
   k?: boolean
   keyframes?: Keyframe[]

@@ -10,12 +10,11 @@ import type {
 import type Matrix from '@/utils/Matrix'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
+import TransformElement from '@/elements/helpers/TransformElement'
 import { buildShapeString } from '@/utils'
 import LetterProps from '@/utils/text/LetterProps'
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
 import TextProperty from '@/utils/text/TextProperty'
-
-import TransformElement from './helpers/TransformElement'
 
 export default class TextElement extends TransformElement {
   _mdf?: boolean

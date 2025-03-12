@@ -21,6 +21,7 @@ import type {
   SVGStrokeStyleData,
   SVGStyleData,
 } from '@/elements/helpers/shapes'
+import type TransformElement from '@/elements/helpers/TransformElement'
 import type MaskElement from '@/elements/MaskElement'
 import type PolynomialBezier from '@/elements/PolynomialBezier'
 import type ShapeElement from '@/elements/ShapeElement'
@@ -103,6 +104,7 @@ export type ElementInterfaceUnion =
   | TextElement
   | BaseRenderer
   | AnimationItem
+  | TransformElement
 
 export type ElementInterfaceIntersect = BaseElement &
   HierarchyElement &
@@ -115,7 +117,8 @@ export type ElementInterfaceIntersect = BaseElement &
   SVGStrokeStyleData &
   TextElement &
   BaseRenderer &
-  AnimationItem
+  AnimationItem &
+  TransformElement
 
 export interface LayerInterFace {
   registerEffectsInterface: (effect: unknown) => void
