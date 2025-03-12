@@ -195,10 +195,6 @@ export default abstract class BaseRenderer extends BaseElement {
     }
   }
 
-  // initExpressions() {
-  //   throw new Error('Method not yet implemented')
-  // }
-
   initItems() {
     if (!this.globalData?.progressiveLoad) {
       this.buildAllItems()

@@ -55,15 +55,17 @@ const checkReady = () => {
 try {
   if (
     !(typeof exports === 'object' && typeof module !== 'undefined') &&
-    // @ts-expect-error: define must be a global object from bodymovin
-    !(typeof define === 'function' && define.amd) &&
+    !(
+      'define' in window &&
+      typeof window.define === 'function' &&
+      'amd' in window.define
+    ) &&
     !isServer()
   ) {
-    // @ts-expect-error: bodymovin is not in window
-    window.bodymovin = Lottie
+    ;(window as any).bodymovin = Lottie
   }
 } catch (_err) {
-  //
+  /** You don't use bodymovin */
 }
 
 // Registering renderers

@@ -11,7 +11,6 @@ import type {
   ValueProperty,
 } from '@/utils/Properties'
 
-// import FrameElement from '@/elements/helpers/FrameElement'
 import PropertyFactory from '@/utils/PropertyFactory'
 
 import RenderableElement from './helpers/RenderableElement'

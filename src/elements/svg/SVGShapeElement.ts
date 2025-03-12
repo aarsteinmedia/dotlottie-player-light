@@ -214,11 +214,19 @@ export default class SVGShapeElement extends ShapeElement {
     this.addToAnimatedContents(data, elementData)
     return elementData
   }
+
   override destroy() {
     this.destroyBaseElement()
     this.shapesData = null as any
     this.itemsData = null as any
   }
+
+  destroyBaseElement() {
+    throw new Error(
+      'SVGShapeElement: Method destroyBaseElement is not implemented'
+    )
+  }
+
   filterUniqueShapes() {
     const { length } = this.shapes || []
     const jLen = this.stylesList.length
@@ -245,8 +253,8 @@ export default class SVGShapeElement extends ShapeElement {
     throw new Error('Method not yet implemented')
   }
   reloadShapes() {
-    if (!this.layerElement) {
-      throw new Error('Could not access Layer Element')
+    if (!this.layerElement || !this.shapesData) {
+      throw new Error('SVGShapeElement: Could not access required data')
     }
     this._isFirstFrame = true
     const { length } = this.itemsData || []
@@ -281,7 +289,7 @@ export default class SVGShapeElement extends ShapeElement {
         continue
       }
       if (this.stylesList[i].msElem) {
-        this.stylesList[i].msElem.setAttribute('d', this.stylesList[i].d)
+        this.stylesList[i].msElem?.setAttribute('d', this.stylesList[i].d)
         // Adding M0 0 fixes same mask bug on all browsers
         this.stylesList[i].d = `M0 0${this.stylesList[i].d}`
       }
@@ -295,8 +303,8 @@ export default class SVGShapeElement extends ShapeElement {
         (this._isFirstFrame || this.animatedContents[i].element._isAnimated) &&
         this.animatedContents[i].data !== (true as any)
       ) {
-        this.animatedContents[i].fn?.(
-          this.animatedContents[i].data as any, // TODO: Find out what this is
+        ;(this.animatedContents[i].fn as any)?.(
+          this.animatedContents[i].data, // TODO: Find out what this is
           this.animatedContents[i].element,
           this._isFirstFrame
         )
@@ -396,7 +404,7 @@ export default class SVGShapeElement extends ShapeElement {
           modifier.closed = false
         } else {
           modifier = ShapeModifiers.getModifier(arr[i].ty)
-          modifier.init(this, (arr as any[])[i])
+          modifier.init(this as any, (arr as any[])[i])
           itemsData[i] = modifier
           this.shapeModifiers?.push(modifier)
         }
@@ -408,13 +416,18 @@ export default class SVGShapeElement extends ShapeElement {
         } else {
           modifier = ShapeModifiers.getModifier(arr[i].ty)
           itemsData[i] = modifier
-          modifier.init(this, arr as unknown as ShapeGroupData[], i, itemsData)
+          modifier.init(
+            this as any,
+            arr as unknown as ShapeGroupData[],
+            i,
+            itemsData
+          )
           this.shapeModifiers?.push(modifier)
           render = false
         }
         ownModifiers.push(modifier)
       }
-      this.addProcessedElement(arr[i], i + 1)
+      this.addProcessedElement(arr[i] as any, i + 1)
     }
     const { length: sLen } = ownStyles
     for (let i = 0; i < sLen; i++) {

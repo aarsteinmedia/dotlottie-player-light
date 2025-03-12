@@ -12,15 +12,20 @@ import SVGRendererBase from '@/renderers/SVGRendererBase'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { ValueProperty } from '@/utils/Properties'
 
-// import BaseElement from './BaseElement'
-
 export default class CompElement extends SVGRendererBase {
   _mdf?: boolean
+  createContainerElements: any
+  createRenderableComponents: any
+  initRendererElement: any
   isInRange?: boolean
+
   tm?: ValueProperty
   override destroy() {
     this.destroyElements()
     this.destroyBaseElement()
+  }
+  destroyBaseElement() {
+    throw new Error('CompElement: Method destroyBaseElement not implemented')
   }
   destroyElements() {
     const { length } = this.layers || []
@@ -30,9 +35,11 @@ export default class CompElement extends SVGRendererBase {
       }
     }
   }
+
   getElements(): ElementInterfaceIntersect[] | undefined {
     return this.elements
   }
+
   initElement(
     _data: LottieLayer,
     _globalData: GlobalData,
@@ -40,25 +47,6 @@ export default class CompElement extends SVGRendererBase {
   ) {
     throw new Error('CompElement: Method initElement not implemented')
   }
-
-  // initElement(
-  //   data: LottieLayer,
-  //   globalData: GlobalData,
-  //   comp: ElementInterfaceIntersect
-  // ) {
-  //   this.initFrame()
-  //   this.initBaseData(data, globalData, comp)
-  //   this.initTransform()
-  //   this.initRenderable()
-  //   this.initHierarchy()
-  //   this.initRendererElement()
-  //   this.createContainerElements()
-  //   this.createRenderableComponents()
-  //   if (this.data?.xt || !globalData.progressiveLoad) {
-  //     this.buildAllItems()
-  //   }
-  //   this.hide()
-  // }
 
   initFrame() {
     throw new Error('CompElement: Method initFrame not implemented')
@@ -83,12 +71,12 @@ export default class CompElement extends SVGRendererBase {
   prepareProperties(_val: number, _isInRange?: boolean) {
     throw new Error('CompElement: Method prepareProperties not implemented')
   }
-
   prepareRenderableFrame(_val: number, _?: boolean) {
     throw new Error(
       'CompElement: Method prepareRenderableFrame not implemented'
     )
   }
+
   renderInnerContent() {
     throw new Error('CompElement: Method renderInnerContent not implemented')
   }

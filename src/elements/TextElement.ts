@@ -1,4 +1,3 @@
-import type { RendererType } from '@/enums'
 import type {
   DocumentData,
   ElementInterfaceIntersect,
@@ -7,10 +6,12 @@ import type {
   Shape,
   Vector3,
 } from '@/types'
+import type DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import type Matrix from '@/utils/Matrix'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import TransformElement from '@/elements/helpers/TransformElement'
+import { RendererType } from '@/enums'
 import { buildShapeString } from '@/utils'
 import LetterProps from '@/utils/text/LetterProps'
 import TextAnimatorProperty from '@/utils/text/TextAnimatorProperty'
@@ -18,21 +19,41 @@ import TextProperty from '@/utils/text/TextProperty'
 
 export default class TextElement extends TransformElement {
   _mdf?: boolean
+  buildNewText: any
+  createContainerElements: any
+
+  createContent: any
+
+  createRenderableComponents: any
+
+  dynamicProperties?: DynamicPropertyContainer[]
+
   emptyProp?: LetterProps
-  isInRange?: boolean
 
-  lettersChangedFlag?: boolean
+  hide: any
 
-  renderType?: RendererType
+  initFrame: any
 
-  textAnimator?: TextAnimatorProperty
-
-  textProperty?: TextProperty
+  initHierarchy: any
 
   // buildNewText() {
   //   throw new Error('TextElement: Method buildNewText is not yet implemented')
   // }
 
+  initRenderable: any
+
+  initRendererElement: any
+
+  isInRange?: boolean
+
+  lettersChangedFlag?: boolean
+
+  prepareProperties: any
+
+  prepareRenderableFrame: any
+  renderType?: RendererType
+  textAnimator?: TextAnimatorProperty
+  textProperty?: TextProperty
   applyTextPropertiesToMatrix(
     documentData: DocumentData,
     matrixHelper: Matrix,
@@ -73,17 +94,14 @@ export default class TextElement extends TransformElement {
     }
     matrixHelper.translate(xPos, yPos, 0)
   }
-
   buildColor(colorData: Vector3) {
     return `rgb(${Math.round(colorData[0] * 255)},${Math.round(
       colorData[1] * 255
     )},${Math.round(colorData[2] * 255)})`
   }
-
   canResizeFont(_canResize: boolean) {
     this.textProperty?.canResizeFont(_canResize)
   }
-
   createPathShape(matrixHelper: Matrix, shapes: Shape[]) {
     const jLen = shapes.length
     let pathNodes: ShapePath
@@ -112,8 +130,12 @@ export default class TextElement extends TransformElement {
     this.lettersChangedFlag = true
     this.initFrame()
     this.initBaseData(data, globalData, comp)
-    this.textProperty = new TextProperty(this as any, data.t) // this.dynamicProperties
-    this.textAnimator = new TextAnimatorProperty(data.t!, this.renderType, this)
+    this.textProperty = new TextProperty(this as any, data.t)
+    this.textAnimator = new TextAnimatorProperty(
+      data.t!,
+      this.renderType || RendererType.SVG,
+      this as any
+    )
     this.initTransform()
     this.initHierarchy()
     this.initRenderable()
@@ -122,7 +144,7 @@ export default class TextElement extends TransformElement {
     this.createRenderableComponents()
     this.createContent()
     this.hide()
-    this.textAnimator.searchProperties(this.dynamicProperties)
+    this.textAnimator.searchProperties(this.dynamicProperties || [])
   }
 
   prepareFrame(num: number) {

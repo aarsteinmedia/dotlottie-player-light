@@ -14,6 +14,7 @@ import PropertyFactory from '@/utils/PropertyFactory'
 
 export default class SVGCompElement extends SVGBaseElement {
   _debug?: boolean
+  _mdf?: boolean
   supports3d: boolean
   tm?: KeyframedValueProperty
   constructor(data: LottieLayer, globalData: GlobalData, comp: any) {
@@ -36,6 +37,7 @@ export default class SVGCompElement extends SVGBaseElement {
         : { _placeholder: true }
     ) as any
   }
+
   override createComp(data: LottieLayer) {
     if (!this.globalData) {
       throw new Error('SVGCompElement: Cannot access global data')
@@ -43,11 +45,23 @@ export default class SVGCompElement extends SVGBaseElement {
     return new SVGCompElement(data, this.globalData, this)
   }
 
+  destroy() {
+    throw new Error('SVGCompElement: Method destroy is not implemented')
+  }
+
   initElement(
     _data: LottieLayer,
     _globalData: GlobalData,
     _comp: ElementInterfaceIntersect
   ) {}
+
+  prepareFrame(_val: number) {
+    throw new Error('SVGCompElement: Method prepareFrame is not implemented')
+  }
+
+  renderFrame() {
+    throw new Error('SVGCompElement: Method renderFrame is not implemented')
+  }
 }
 
 extendPrototype([SVGRendererBase, CompElement], SVGCompElement)

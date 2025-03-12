@@ -177,8 +177,6 @@ export default class SVGRendererBase extends BaseRenderer {
         )
       }
 
-      // this.layerElement.style.transform = 'translate3d(0,0,0)';
-      // this.layerElement.style.transformOrigin = this.layerElement.style.mozTransformOrigin = this.layerElement.style.webkitTransformOrigin = this.layerElement.style['-webkit-transform'] = "0px 0px 0px";
       this.animationItem?.wrapper?.appendChild(this.svgElement)
       // Mask animation
       const defs = this.globalData.defs
@@ -187,8 +185,8 @@ export default class SVGRendererBase extends BaseRenderer {
       this.globalData.progressiveLoad = this.renderConfig?.progressiveLoad
       this.data = animData as any
 
-      const maskElement = createNS('clipPath')
-      const rect = createNS('rect')
+      const maskElement = createNS('clipPath'),
+        rect = createNS('rect')
       rect.setAttribute('width', `${animData.w}`)
       rect.setAttribute('height', `${animData.h}`)
       rect.setAttribute('x', '0')

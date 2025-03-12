@@ -1,11 +1,5 @@
 /* eslint-disable max-depth */
-import type {
-  ElementInterfaceIntersect,
-  GlobalData,
-  LottieLayer,
-  SourceRect,
-  Vector3,
-} from '@/types'
+import type { GlobalData, LottieLayer, SourceRect, Vector3 } from '@/types'
 
 import BaseElement from '@/elements/BaseElement'
 import FrameElement from '@/elements/helpers/FrameElement'
@@ -28,8 +22,6 @@ export default class SVGTextLottieElement extends TextElement {
     top: number
     width: number
   }
-  globalData?: GlobalData
-  layerElement?: SVGGElement
   renderedFrame?: number
 
   renderedLetters?: string[]
@@ -50,8 +42,15 @@ export default class SVGTextLottieElement extends TextElement {
     this.initElement(data, globalData, comp)
   }
 
-  buildNewText() {
-    this.addDynamicProperty(this as any)
+  addDynamicProperty(_element: any) {
+    throw new Error(
+      'SVGTextLottieElement: Method addDynamicProperty is not implemented'
+    )
+  }
+
+  // @ts-expect-error: Mixin issue
+  override buildNewText() {
+    this.addDynamicProperty(this)
     let i
     let len
 
@@ -241,8 +240,8 @@ export default class SVGTextLottieElement extends TextElement {
           }
           this.textSpans[i].glyph = glyphElement
           glyphElement._debug = true
-          glyphElement.prepareFrame?.(0)
-          glyphElement.renderFrame?.()
+          glyphElement.prepareFrame(0)
+          glyphElement.renderFrame()
           if (glyphElement.layerElement) {
             this.textSpans[i].childSpan?.appendChild(glyphElement.layerElement)
           }
@@ -323,7 +322,8 @@ export default class SVGTextLottieElement extends TextElement {
     textContents.push(currentTextContent)
     return textContents
   }
-  createContent() {
+  // @ts-expect-error: Mixin issue
+  override createContent() {
     if (this.data?.singleShape && !this.globalData?.fontManager?.chars) {
       this.textContainer = createNS<SVGTextElement>('text')
     }

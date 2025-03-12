@@ -15,7 +15,7 @@ export default class ShapeElement extends RenderableDOMElement {
 
   shapes?: SVGShapeData[] | ShapePath[]
 
-  addDynamicProperty(_prop: DynamicPropertyContainer) {
+  override addDynamicProperty(_prop: DynamicPropertyContainer) {
     throw new Error(
       'ShapeElement: Method addDynamicProperty is not yet implemented'
     )
@@ -58,7 +58,7 @@ export default class ShapeElement extends RenderableDOMElement {
     this.prepareProperties(num, this.isInRange)
   }
 
-  prepareProperties(_val: number, _flag?: boolean) {
+  override prepareProperties(_val: number, _flag?: boolean) {
     throw new Error(
       'ShapeElement: Method prepareProperties not yet implemented'
     )

@@ -16,7 +16,7 @@ export default abstract class SVGBaseElement extends BaseRenderer {
     [key: number]: string
   }
   renderableEffectsManager?: SVGEffects
-  searchEffectTransforms: any // TODO: is inherited from TransformElement
+  searchEffectTransforms: any
   transformedElement?: SVGGElement
   createContainerElements() {
     this.matteElement = createNS<SVGGElement>('g')
@@ -53,7 +53,10 @@ export default abstract class SVGBaseElement extends BaseRenderer {
     if (this.data?.cl) {
       this.layerElement?.setAttribute('class', this.data.cl)
     }
-    // Clipping compositions to hide content that exceeds boundaries. If collapsed transformations is on, component should not be clipped
+    /**
+     * Clipping compositions to hide content that exceeds boundaries.
+     * If collapsed transformations is on, component should not be clipped
+     * */
     if (this.data?.ty === 0 && !this.data.hd) {
       const cp = createNS<SVGClipPathElement>('clipPath'),
         pt = createNS<SVGPathElement>('path')
@@ -228,11 +231,6 @@ export default abstract class SVGBaseElement extends BaseRenderer {
       )
     }
   }
-  // searchEffectTransforms() {
-  //   throw new Error(
-  //     'SVGBaseElement: Method searchEffectTransforms is not yet implemented'
-  //   )
-  // }
   setMatte(id: string) {
     if (!this.matteElement) {
       return

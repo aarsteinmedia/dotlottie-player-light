@@ -5,7 +5,6 @@ import type {
   DocumentData,
   LottieAsset,
   LottieLayer,
-  LottieLayerData,
   MaskData,
   Shape,
   ShapeColorValue,
@@ -128,29 +127,13 @@ export default class DataFunctionManager {
       if (chars[i].t !== 1) {
         continue
       }
-      // var compData = findComp(chars[i].data.refId, assets);
       chars[i].data.layers = this.findCompLayers(chars[i].data.refId, assets)
-      // chars[i].data.ip = 0;
-      // chars[i].data.op = 99999;
-      // chars[i].data.st = 0;
-      // chars[i].data.sr = 1;
-      // chars[i].w = compData.w;
-      // chars[i].data.ks = {
-      //   a: { k: [0, 0, 0], a: 0 },
-      //   p: { k: [0, -compData.h, 0], a: 0 },
-      //   r: { k: 0, a: 0 },
-      //   s: { k: [100, 100], a: 0 },
-      //   o: { k: 100, a: 0 },
-      // };
       this.completeLayers(chars[i].data.layers || [], assets)
     }
   }
 
   private static completeText(_data: LottieLayer) {
-    // TODO: Find usecase or remove
-    // if (data.t?.a?.length === 0 && !('m' in (data.t.p || {}))) {
-    //   // data.singleShape = true;
-    // }
+    /** Abstract Fallback */
   }
 
   private static convertPathsToAbsoluteValues(path: any) {
@@ -285,9 +268,9 @@ class CheckChars extends DataFunctionManager {
           a: { a: 0, k: [0, 0] },
           o: { a: 0, k: 100 },
           p: { a: 0, k: [0, 0] },
-          r: { a: 0, k: 0 },
+          r: { a: 0, k: 0 as any },
           s: { a: 0, k: [100, 100] },
-        } as LottieLayerData
+        } as any
         if (!animationData.chars[i].t) {
           animationData.chars[i].data.shapes?.push({
             ty: ShapeType.NoStyle,

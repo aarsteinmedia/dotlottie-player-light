@@ -263,7 +263,6 @@ export default class SVGElementsRenderer {
         for (j = 0; j < jLen; j += 1) {
           pathNodes = paths.shapes?.[j] as ShapePath
           if (pathNodes && pathNodes._length) {
-            // console.log(pathNodes)
             pathStringTransformed += buildShapeString(
               pathNodes,
               pathNodes._length,
