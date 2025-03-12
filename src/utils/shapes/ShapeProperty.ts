@@ -1,6 +1,8 @@
 import type {
   Caching,
   ElementInterfaceIntersect,
+  Keyframe,
+  KeyframesMetadata,
   Mask,
   Merge,
   Shape,
@@ -22,7 +24,6 @@ import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 import ShapePool from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePath from '@/utils/shapes/ShapePath'
-
 export default class ShapePropertyFactory {
   static getConstructorFunction() {
     return ShapeProperty
@@ -61,25 +62,228 @@ export default class ShapePropertyFactory {
   }
 }
 
-export class RectShapeProperty extends DynamicPropertyContainer {
-  comp?: ElementInterfaceIntersect
+abstract class ShapeBaseProperty extends DynamicPropertyContainer {
+  _caching?: Caching
+  public comp?: ElementInterfaceIntersect
+  public data?: Partial<Shape & Mask>
+  public effectsSequence?: any[]
+  public elem?: ShapeElement
+  frameId?: number
+  public k?: boolean
+  keyframes?: Keyframe[]
+  keyframesMetadata?: KeyframesMetadata[]
+  public kf?: boolean
+  public localShapeCollection?: ShapeCollection
+  lock?: boolean
+  offsetTime: number = 0
+  public paths?: ShapeCollection
+  public pv?: ShapePath
+  public v?: ShapePath
+  interpolateShape(
+    frameNum: number,
+    previousValue: ShapePath,
+    caching?: Caching
+  ) {
+    let iterationIndex = caching?.lastIndex
+    let keyPropS
+    let keyPropE
+    let isHold
+    let k
+    let perc = 0
+    let vertexValue
+    const kf = this.keyframes
+    if (!kf) {
+      throw new Error('ShapeBaseProperty: Could not read keyframe data')
+    }
+    if (frameNum < kf[0].t - this.offsetTime) {
+      keyPropS = kf[0].s[0]
+      isHold = true
+      iterationIndex = 0
+    } else if (frameNum >= kf[kf.length - 1].t - this.offsetTime) {
+      keyPropS = kf[kf.length - 1].s
+        ? kf[kf.length - 1].s[0]
+        : kf[kf.length - 2].e[0]
+      /* if(kf[kf.length - 1].s){
+                keyPropS = kf[kf.length - 1].s[0];
+            }else{
+                keyPropS = kf[kf.length - 2].e[0];
+            } */
+      isHold = true
+    } else {
+      let i = Number(iterationIndex)
+      const len = kf.length - 1
+      let flag = true
+      let keyData
+      let nextKeyData
+      while (flag) {
+        keyData = kf[i]
+        nextKeyData = kf[i + 1]
+        if (nextKeyData.t - this.offsetTime > frameNum) {
+          break
+        }
+        if (i < len - 1) {
+          i++
+        } else {
+          flag = false
+        }
+      }
+      if (!keyData || !nextKeyData) {
+        throw new Error('ShapeBaseProperty: Could not set keyframe data')
+      }
+      const keyframeMetadata = this.keyframesMetadata?.[i] || {}
+      isHold = keyData.h === 1
+      iterationIndex = i
+      if (!isHold) {
+        if (frameNum >= nextKeyData.t - this.offsetTime) {
+          perc = 1
+        } else if (frameNum < keyData.t - this.offsetTime) {
+          perc = 0
+        } else {
+          let fnc
+          if (keyframeMetadata.__fnct) {
+            fnc = keyframeMetadata.__fnct
+          } else {
+            fnc = BezierFactory.getBezierEasing(
+              keyData.o.x,
+              keyData.o.y,
+              keyData.i.x,
+              keyData.i.y
+            ).get
+            keyframeMetadata.__fnct = fnc
+          }
+          perc = fnc(
+            (frameNum - (keyData.t - this.offsetTime)) /
+              (nextKeyData.t - this.offsetTime - (keyData.t - this.offsetTime))
+          )
+        }
+        keyPropE = nextKeyData.s ? nextKeyData.s[0] : keyData.e[0]
+      }
+      keyPropS = keyData.s[0]
+    }
+    const jLen = previousValue._length
+    const kLen = keyPropS.i[0].length
+    caching!.lastIndex = Number(iterationIndex)
+
+    for (let j = 0; j < jLen; j++) {
+      for (k = 0; k < kLen; k += 1) {
+        vertexValue = isHold
+          ? keyPropS.i[j][k]
+          : keyPropS.i[j][k] + (keyPropE.i[j][k] - keyPropS.i[j][k]) * perc
+        previousValue.i[j][k] = vertexValue
+        vertexValue = isHold
+          ? keyPropS.o[j][k]
+          : keyPropS.o[j][k] + (keyPropE.o[j][k] - keyPropS.o[j][k]) * perc
+        previousValue.o[j][k] = vertexValue
+        vertexValue = isHold
+          ? keyPropS.v[j][k]
+          : keyPropS.v[j][k] + (keyPropE.v[j][k] - keyPropS.v[j][k]) * perc
+        previousValue.v[j][k] = vertexValue
+      }
+    }
+  }
+  interpolateShapeCurrentTime() {
+    if (!this.pv) {
+      throw new Error('ShapeBaseProperty: Cannot parse ShapePath v value')
+    }
+    const frameNum = Number(this.comp?.renderedFrame) - this.offsetTime,
+      initTime = Number(this.keyframes?.[0].t) - this.offsetTime,
+      endTime =
+        Number(this.keyframes?.[Number(this.keyframes.length) - 1].t) -
+        this.offsetTime,
+      lastFrame = Number(this._caching?.lastFrame)
+    if (
+      !(
+        lastFrame !== initialDefaultFrame &&
+        ((lastFrame < initTime && frameNum < initTime) ||
+          (lastFrame > endTime && frameNum > endTime))
+      )
+    ) {
+      // / /
+      this._caching!.lastIndex =
+        lastFrame < frameNum ? Number(this._caching?.lastIndex) : 0
+      this.interpolateShape(frameNum, this.pv, this._caching)
+      // / /
+    }
+    this._caching!.lastFrame = frameNum
+    return this.pv
+  }
+  processEffectsSequence() {
+    if (this.elem?.globalData?.frameId === this.frameId || 0) {
+      return
+    }
+    if (!this.effectsSequence?.length) {
+      this._mdf = false
+      return
+    }
+    if (this.lock && this.pv) {
+      this.setVValue(this.pv)
+      return
+    }
+    this.lock = true
+    this._mdf = false
+    let finalValue
+    if (this.kf) {
+      finalValue = this.pv
+    } else if (this.data?.ks) {
+      finalValue = this.data.ks.k
+    } else {
+      finalValue = this.data?.pt?.k
+    }
+    let i
+    const len = this.effectsSequence.length
+    for (i = 0; i < len; i++) {
+      finalValue = this.effectsSequence?.[i](finalValue)
+    }
+    this.setVValue(finalValue)
+    this.lock = false
+    this.frameId = this.elem?.globalData?.frameId || 0
+  }
+  reset() {
+    this.paths = this.localShapeCollection
+  }
+  setVValue(newPath: ShapePath) {
+    if (!this.v) {
+      throw new Error('ShapeBaseProperty: ShapePath is not set')
+    }
+    if (!this.shapesEqual(this.v, newPath)) {
+      this.v = ShapePool.clone(newPath)
+      this.localShapeCollection?.releaseShapes()
+      this.localShapeCollection?.addShape(this.v)
+      this._mdf = true
+      this.paths = this.localShapeCollection
+    }
+  }
+  shapesEqual(shape1: ShapePath, shape2: ShapePath) {
+    if (shape1._length !== shape2._length || shape1.c !== shape2.c) {
+      return false
+    }
+    const len = shape1._length || 0
+    for (let i = 0; i < len; i++) {
+      if (
+        shape1.v[i]?.[0] !== shape2.v[i]?.[0] ||
+        shape1.v[i]?.[1] !== shape2.v[i]?.[1] ||
+        shape1.o[i]?.[0] !== shape2.o[i]?.[0] ||
+        shape1.o[i]?.[1] !== shape2.o[i]?.[1] ||
+        shape1.i[i]?.[0] !== shape2.i[i]?.[0] ||
+        shape1.i[i]?.[1] !== shape2.i[i]?.[1]
+      ) {
+        return false
+      }
+    }
+    return true
+  }
+}
+
+export class RectShapeProperty extends ShapeBaseProperty {
   d?: number
-  data?: Merge<Shape, Mask>
-  elem: ElementInterfaceIntersect
-  frameId: number
   ir?: ValueProperty
   is?: ValueProperty
-  k: boolean
-  localShapeCollection: ShapeCollection
   or?: ValueProperty
   os?: ValueProperty
   p: MultiDimensionalProperty<Vector2>
-  paths: ShapeCollection
   pt?: ValueProperty
   r: ValueProperty
-  reset = resetShape
   s: MultiDimensionalProperty<Vector2>
-  v: ShapePath
 
   constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>) {
     super()
@@ -128,10 +332,10 @@ export class RectShapeProperty extends DynamicPropertyContainer {
     const v1 = this.s.v[1] / 2
     const round = Math.min(v0, v1, Number(this.r?.v))
     const cPoint = round * (1 - roundCorner)
-    this.v._length = 0
+    this.v!._length = 0
 
     if (this.d === 2 || this.d === 1) {
-      this.v.setTripleAt(
+      this.v?.setTripleAt(
         p0 + v0,
         p1 - v1 + round,
         p0 + v0,
@@ -141,7 +345,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
         0,
         true
       )
-      this.v.setTripleAt(
+      this.v?.setTripleAt(
         p0 + v0,
         p1 + v1 - round,
         p0 + v0,
@@ -152,7 +356,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
         true
       )
       if (round === 0) {
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 + v1,
           p0 - v0 + cPoint,
@@ -161,7 +365,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           p1 + v1,
           2
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 - v1,
           p0 - v0,
@@ -171,7 +375,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           3
         )
       } else {
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 + v0 - round,
           p1 + v1,
           p0 + v0 - round,
@@ -181,7 +385,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           2,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0 + round,
           p1 + v1,
           p0 - v0 + cPoint,
@@ -191,7 +395,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           3,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 + v1 - round,
           p0 - v0,
@@ -201,7 +405,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           4,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 - v1 + round,
           p0 - v0,
@@ -211,7 +415,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           5,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0 + round,
           p1 - v1,
           p0 - v0 + round,
@@ -221,7 +425,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           6,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 + v0 - round,
           p1 - v1,
           p0 + v0 - cPoint,
@@ -233,7 +437,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
         )
       }
     } else {
-      this.v.setTripleAt(
+      this.v?.setTripleAt(
         p0 + v0,
         p1 - v1 + round,
         p0 + v0,
@@ -244,7 +448,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
         true
       )
       if (round === 0) {
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 - v1,
           p0 - v0 + cPoint,
@@ -254,7 +458,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           1,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 + v1,
           p0 - v0,
@@ -264,7 +468,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           2,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 + v0,
           p1 + v1,
           p0 + v0 - cPoint,
@@ -275,7 +479,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           true
         )
       } else {
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 + v0 - round,
           p1 - v1,
           p0 + v0 - round,
@@ -285,7 +489,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           1,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0 + round,
           p1 - v1,
           p0 - v0 + cPoint,
@@ -295,7 +499,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           2,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 - v1 + round,
           p0 - v0,
@@ -305,7 +509,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           3,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0,
           p1 + v1 - round,
           p0 - v0,
@@ -315,7 +519,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           4,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 - v0 + round,
           p1 + v1,
           p0 - v0 + round,
@@ -325,7 +529,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           5,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 + v0 - round,
           p1 + v1,
           p0 + v0 - cPoint,
@@ -335,7 +539,7 @@ export class RectShapeProperty extends DynamicPropertyContainer {
           6,
           true
         )
-        this.v.setTripleAt(
+        this.v?.setTripleAt(
           p0 + v0,
           p1 + v1 - round,
           p0 + v0,
@@ -349,10 +553,10 @@ export class RectShapeProperty extends DynamicPropertyContainer {
     }
   }
   override getValue() {
-    if (this.elem.globalData?.frameId === this.frameId) {
+    if (this.elem?.globalData?.frameId === this.frameId) {
       return
     }
-    if (this.elem.globalData?.frameId) {
+    if (this.elem?.globalData?.frameId) {
       this.frameId = this.elem.globalData.frameId
     }
 
@@ -363,27 +567,16 @@ export class RectShapeProperty extends DynamicPropertyContainer {
   }
 }
 
-class StarShapeProperty extends DynamicPropertyContainer {
-  comp: any
-  convertToPath: () => void
+class StarShapeProperty extends ShapeBaseProperty {
   d?: StrokeData[]
-  data: any
-  elem: any
-  frameId: number
   ir?: ValueProperty
   is?: ValueProperty
-  k: boolean
-  localShapeCollection: ShapeCollection
   or: ValueProperty
   os: ValueProperty
   p: MultiDimensionalProperty<Vector2>
-  paths: ShapeCollection
   pt: ValueProperty
   r: ValueProperty
-  reset = resetShape
   s?: ValueProperty
-  v: ShapePath
-
   constructor(elem: any, data: any) {
     super()
     this.v = ShapePool.newElement()
@@ -458,6 +651,7 @@ class StarShapeProperty extends DynamicPropertyContainer {
       this.convertToPath()
     }
   }
+
   convertPolygonToPath() {
     const numPts = Math.floor(Number(this.pt?.v))
     const angle = (Math.PI * 2) / numPts
@@ -466,9 +660,9 @@ class StarShapeProperty extends DynamicPropertyContainer {
     const perimSegment = (2 * Math.PI * rad) / (numPts * 4)
     let i
     let currentAng = -Math.PI * 0.5
-    const dir = this.data.d === 3 ? -1 : 1
+    const dir = this.data?.d === 3 ? -1 : 1
     currentAng += Number(this.r?.v)
-    this.v._length = 0
+    this.v!._length = 0
     for (i = 0; i < numPts; i++) {
       let x = rad * Math.cos(currentAng)
       let y = rad * Math.sin(currentAng)
@@ -476,7 +670,7 @@ class StarShapeProperty extends DynamicPropertyContainer {
       const oy = x === 0 && y === 0 ? 0 : -x / Math.sqrt(x * x + y * y)
       x += +this.p.v[0]
       y += +this.p.v[1]
-      this.v.setTripleAt(
+      this.v?.setTripleAt(
         x,
         y,
         x - ox * perimSegment * roundness * dir,
@@ -509,8 +703,8 @@ class StarShapeProperty extends DynamicPropertyContainer {
     let perimSegment
     let currentAng = -Math.PI / 2
     currentAng += Number(this.r?.v)
-    const dir = this.data.d === 3 ? -1 : 1
-    this.v._length = 0
+    const dir = this.data?.d === 3 ? -1 : 1
+    this.v!._length = 0
     for (let i = 0; i < numPts; i++) {
       rad = longFlag ? longRad : shortRad
       roundness = longFlag ? longRound : shortRound
@@ -521,7 +715,7 @@ class StarShapeProperty extends DynamicPropertyContainer {
       const oy = x === 0 && y === 0 ? 0 : -x / Math.sqrt(x * x + y * y)
       x += +this.p.v[0]
       y += +this.p.v[1]
-      this.v.setTripleAt(
+      this.v?.setTripleAt(
         x,
         y,
         x - ox * perimSegment * roundness * dir,
@@ -540,11 +734,16 @@ class StarShapeProperty extends DynamicPropertyContainer {
       currentAng += angle * dir
     }
   }
+  convertToPath() {
+    throw new Error(
+      'StarShapeProperty: Method convertToPath is not implemented'
+    )
+  }
   override getValue() {
-    if (this.elem.globalData.frameId === this.frameId) {
+    if (this.elem?.globalData?.frameId === this.frameId) {
       return
     }
-    this.frameId = this.elem.globalData.frameId
+    this.frameId = this.elem?.globalData?.frameId || 0
     this.iterateDynamicProperties()
     if (this._mdf) {
       this.convertToPath()
@@ -552,19 +751,10 @@ class StarShapeProperty extends DynamicPropertyContainer {
   }
 }
 
-class EllShapeProperty extends DynamicPropertyContainer {
-  comp?: ElementInterfaceIntersect
-
+class EllShapeProperty extends ShapeBaseProperty {
   d?: number
-  elem: ElementInterfaceIntersect
-  frameId: number
-  k: boolean
-  localShapeCollection: ShapeCollection
   p: MultiDimensionalProperty<Vector2>
-  paths: ShapeCollection
-  reset = resetShape
   s: MultiDimensionalProperty<Vector2>
-  v: ShapePath
   private _cPoint = roundCorner
 
   constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>) {
@@ -601,12 +791,16 @@ class EllShapeProperty extends DynamicPropertyContainer {
     }
   }
   convertEllToPath() {
-    const p0 = this.p.v[0]
-    const p1 = this.p.v[1]
-    const s0 = this.s.v[0] / 2
-    const s1 = this.s.v[1] / 2
-    const _cw = this.d !== 3
-    const _v = this.v
+    const p0 = this.p.v[0],
+      p1 = this.p.v[1],
+      s0 = this.s.v[0] / 2,
+      s1 = this.s.v[1] / 2,
+      _cw = this.d !== 3,
+      _v = this.v
+
+    if (!_v) {
+      throw new Error('EllShapeProperty: Could not get value of ellipse')
+    }
     _v.v[0][0] = p0
     _v.v[0][1] = p1 - s1
     _v.v[1][0] = _cw ? p0 + s0 : p0 - s0
@@ -633,10 +827,10 @@ class EllShapeProperty extends DynamicPropertyContainer {
     _v.o[3][1] = p1 - s1 * this._cPoint
   }
   override getValue() {
-    if (this.elem.globalData.frameId === this.frameId) {
+    if (this.elem?.globalData?.frameId === this.frameId) {
       return
     }
-    this.frameId = this.elem.globalData.frameId
+    this.frameId = this.elem?.globalData?.frameId || 0
     this.iterateDynamicProperties()
 
     if (this._mdf) {
@@ -645,31 +839,9 @@ class EllShapeProperty extends DynamicPropertyContainer {
   }
 }
 
-export class ShapeProperty {
-  _caching?: Caching
-  public _mdf: boolean
-  public addEffect: (func: any) => void
-  public comp?: ElementInterfaceIntersect
-  public container: ShapeElement
-  public data: Partial<Shape & Mask>
-  public effectsSequence: unknown[]
-  public elem: ShapeElement
-  public getValue: () => void
-  public interpolateShape: (
-    frame: number,
-    previousValue: any,
-    caching?: Caching
-  ) => void
-  public k: boolean
-  public kf: boolean
-  public localShapeCollection: ShapeCollection
-  public paths: ShapeCollection
-  public propType: string
-  public pv: ShapePath
-  public reset
-  public setVValue: (shape: ShapePath) => void
-  public v: ShapePath
+export class ShapeProperty extends ShapeBaseProperty {
   constructor(elem: ShapeElement, data: Partial<Shape & Mask>, type: number) {
+    super()
     this.propType = 'shape'
     this.comp = elem.comp
     this.container = elem
@@ -687,281 +859,34 @@ export class ShapeProperty {
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)
-    this.reset = resetShape
     this.effectsSequence = []
-    this.interpolateShape = interpolateShape
-    this.getValue = processEffectsSequence
-    this.setVValue = setVValue
-    this.addEffect = addEffect
+    this.getValue = this.processEffectsSequence
   }
 }
 
-class KeyframedShapeProperty {
-  public _caching
-
-  public addEffect: (func: any) => void
-  public comp
-  public container
-  public effectsSequence
-  public elem
-  public getValue: () => void
-  public interpolateShape: (
-    frame: number,
-    previousValue: any,
-    caching: any
-  ) => void
-  public k
-  public keyframes
-  public keyframesMetadata: unknown[]
-  public kf
+class KeyframedShapeProperty extends ShapeBaseProperty {
   public lastFrame
-  public localShapeCollection
-  public offsetTime
-  public paths
-  public propType
-  public pv
-  public reset
-  public setVValue: (shape: ShapePath) => void
-  public v: ShapePath
-  constructor(elem: any, data: any, type: number) {
+  constructor(elem: ShapeElement, data: Partial<Shape & Mask>, type: number) {
+    super()
     this.propType = 'shape'
     this.comp = elem.comp
     this.elem = elem
     this.container = elem
-    this.offsetTime = elem.data.st
-    this.keyframes = type === 3 ? data.pt.k : data.ks.k
+    this.offsetTime = elem.data?.st || 0
+    this.keyframes = (type === 3 ? data.pt?.k : (data.ks?.k ?? [])) as any
     this.keyframesMetadata = []
     this.k = true
     this.kf = true
-    const len = this.keyframes[0].s[0].i.length
+    const len = this.keyframes?.[0]?.s?.[0].i.length || 0
     this.v = ShapePool.newElement()
-    this.v.setPathData(this.keyframes[0].s[0].c, len)
+    this.v.setPathData(!!this.keyframes?.[0].s?.[0].c, len)
     this.pv = ShapePool.clone(this.v)
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)
     this.lastFrame = initialDefaultFrame
-    this.reset = resetShape
-    this._caching = { lastFrame: initialDefaultFrame, lastIndex: 0 }
-    this.effectsSequence = [interpolateShapeCurrentTime.bind(this)]
-    this.getValue = processEffectsSequence
-    this.interpolateShape = interpolateShape
-    this.setVValue = setVValue
-    this.addEffect = addEffect
+    this._caching = { lastFrame: initialDefaultFrame, lastIndex: 0 } as Caching
+    this.effectsSequence = [this.interpolateShapeCurrentTime.bind(this)]
+    this.getValue = this.processEffectsSequence
   }
-}
-
-/**
- *
- */
-function addEffect(this: ShapeProperty, effectFunction: any) {
-  this.effectsSequence.push(effectFunction)
-  this.container.addDynamicProperty(this as any)
-}
-
-/**
- *
- */
-function processEffectsSequence(this: any) {
-  if (this.elem.globalData.frameId === this.frameId) {
-    return
-  }
-  if (!this.effectsSequence.length) {
-    this._mdf = false
-    return
-  }
-  if (this.lock) {
-    this.setVValue(this.pv)
-    return
-  }
-  this.lock = true
-  this._mdf = false
-  let finalValue
-  if (this.kf) {
-    finalValue = this.pv
-  } else if (this.data.ks) {
-    finalValue = this.data.ks.k
-  } else {
-    finalValue = this.data.pt.k
-  }
-  let i
-  const len = this.effectsSequence.length
-  for (i = 0; i < len; i++) {
-    finalValue = this.effectsSequence[i](finalValue)
-  }
-  this.setVValue(finalValue)
-  this.lock = false
-  this.frameId = this.elem.globalData.frameId
-}
-
-/**
- *
- */
-function setVValue(this: any, newPath: ShapePath) {
-  if (!shapesEqual(this.v, newPath)) {
-    this.v = ShapePool.clone(newPath)
-    this.localShapeCollection.releaseShapes()
-    this.localShapeCollection.addShape(this.v)
-    this._mdf = true
-    this.paths = this.localShapeCollection
-  }
-}
-
-/**
- *
- */
-function interpolateShape(
-  this: any,
-  frameNum: number,
-  previousValue: any,
-  caching: any
-) {
-  let iterationIndex = caching.lastIndex
-  let keyPropS
-  let keyPropE
-  let isHold
-  let k
-  let perc
-  let vertexValue
-  const kf = this.keyframes
-  if (frameNum < kf[0].t - this.offsetTime) {
-    keyPropS = kf[0].s[0]
-    isHold = true
-    iterationIndex = 0
-  } else if (frameNum >= kf[kf.length - 1].t - this.offsetTime) {
-    keyPropS = kf[kf.length - 1].s
-      ? kf[kf.length - 1].s[0]
-      : kf[kf.length - 2].e[0]
-    /* if(kf[kf.length - 1].s){
-              keyPropS = kf[kf.length - 1].s[0];
-          }else{
-              keyPropS = kf[kf.length - 2].e[0];
-          } */
-    isHold = true
-  } else {
-    let i = iterationIndex
-    const len = kf.length - 1
-    let flag = true
-    let keyData
-    let nextKeyData
-    while (flag) {
-      keyData = kf[i]
-      nextKeyData = kf[i + 1]
-      if (nextKeyData.t - this.offsetTime > frameNum) {
-        break
-      }
-      if (i < len - 1) {
-        i++
-      } else {
-        flag = false
-      }
-    }
-    const keyframeMetadata = this.keyframesMetadata[i] || {}
-    isHold = keyData.h === 1
-    iterationIndex = i
-    if (!isHold) {
-      if (frameNum >= nextKeyData.t - this.offsetTime) {
-        perc = 1
-      } else if (frameNum < keyData.t - this.offsetTime) {
-        perc = 0
-      } else {
-        let fnc
-        if (keyframeMetadata.__fnct) {
-          fnc = keyframeMetadata.__fnct
-        } else {
-          fnc = BezierFactory.getBezierEasing(
-            keyData.o.x,
-            keyData.o.y,
-            keyData.i.x,
-            keyData.i.y
-          ).get
-          keyframeMetadata.__fnct = fnc
-        }
-        perc = fnc(
-          (frameNum - (keyData.t - this.offsetTime)) /
-            (nextKeyData.t - this.offsetTime - (keyData.t - this.offsetTime))
-        )
-      }
-      keyPropE = nextKeyData.s ? nextKeyData.s[0] : keyData.e[0]
-    }
-    keyPropS = keyData.s[0]
-  }
-  const jLen = previousValue._length
-  const kLen = keyPropS.i[0].length
-  caching.lastIndex = iterationIndex
-
-  for (let j = 0; j < jLen; j++) {
-    for (k = 0; k < kLen; k += 1) {
-      vertexValue = isHold
-        ? keyPropS.i[j][k]
-        : keyPropS.i[j][k] + (keyPropE.i[j][k] - keyPropS.i[j][k]) * perc
-      previousValue.i[j][k] = vertexValue
-      vertexValue = isHold
-        ? keyPropS.o[j][k]
-        : keyPropS.o[j][k] + (keyPropE.o[j][k] - keyPropS.o[j][k]) * perc
-      previousValue.o[j][k] = vertexValue
-      vertexValue = isHold
-        ? keyPropS.v[j][k]
-        : keyPropS.v[j][k] + (keyPropE.v[j][k] - keyPropS.v[j][k]) * perc
-      previousValue.v[j][k] = vertexValue
-    }
-  }
-}
-
-/**
- *
- */
-function resetShape(this: {
-  paths: ShapeCollection
-  localShapeCollection: ShapeCollection
-}) {
-  this.paths = this.localShapeCollection
-}
-
-/**
- *
- */
-function shapesEqual(shape1: ShapePath, shape2: ShapePath) {
-  if (shape1._length !== shape2._length || shape1.c !== shape2.c) {
-    return false
-  }
-  const len = shape1._length || 0
-  for (let i = 0; i < len; i++) {
-    if (
-      shape1.v[i]?.[0] !== shape2.v[i]?.[0] ||
-      shape1.v[i]?.[1] !== shape2.v[i]?.[1] ||
-      shape1.o[i]?.[0] !== shape2.o[i]?.[0] ||
-      shape1.o[i]?.[1] !== shape2.o[i]?.[1] ||
-      shape1.i[i]?.[0] !== shape2.i[i]?.[0] ||
-      shape1.i[i]?.[1] !== shape2.i[i]?.[1]
-    ) {
-      return false
-    }
-  }
-  return true
-}
-
-/**
- *
- */
-function interpolateShapeCurrentTime(this: KeyframedShapeProperty) {
-  const frameNum = this.comp.renderedFrame - this.offsetTime,
-    initTime = this.keyframes[0].t - this.offsetTime,
-    endTime = this.keyframes[this.keyframes.length - 1].t - this.offsetTime,
-    lastFrame = this._caching.lastFrame
-  if (
-    !(
-      lastFrame !== initialDefaultFrame &&
-      ((lastFrame < initTime && frameNum < initTime) ||
-        (lastFrame > endTime && frameNum > endTime))
-    )
-  ) {
-    // / /
-    this._caching!.lastIndex =
-      lastFrame < frameNum ? Number(this._caching?.lastIndex) : 0
-    this.interpolateShape(frameNum, this.pv, this._caching)
-    // / /
-  }
-  this._caching!.lastFrame = frameNum
-  return this.pv
 }

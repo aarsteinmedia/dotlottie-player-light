@@ -215,6 +215,9 @@ export interface ItemsData {
   prevViewData: ItemsData[]
 }
 
+export interface KeyframesMetadata {
+  __fnct?: (val: number) => number
+}
 export interface ItemData {
   _caching: Caching
   _frameId?: number
@@ -246,7 +249,7 @@ export interface ItemData {
   interpolateValue: (frame: number, caching: any) => void
   k: boolean
   keyframes: number[]
-  keyframesMetadata: unknown[]
+  keyframesMetadata: KeyframesMetadata[]
   keysIndex?: number
   kf: boolean
   minimumFontSize?: number
@@ -1304,17 +1307,11 @@ export interface ImageData {
 export interface Keyframe {
   e: Vector2
   h?: number
-  i: {
-    x: number | number[]
-    y: number | number[]
-  }
+  i: Coordinates
   keyframeMetadata: any
   n: string
-  o: {
-    x: number | number[]
-    y: number | number[]
-  }
-  s: Vector3
+  o: Coordinates
+  s: any // { i: any }[]
   t: number
   ti: Vector2
   to: Vector2
