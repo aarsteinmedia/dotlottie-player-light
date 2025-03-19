@@ -20,6 +20,11 @@ export default class CompElement extends SVGRendererBase {
   isInRange?: boolean
 
   tm?: ValueProperty
+
+  // constructor() {
+  //   super()
+  //   this.initFrame = new FrameElement().initFrame
+  // }
   override destroy() {
     this.destroyElements()
     this.destroyBaseElement()
@@ -35,17 +40,27 @@ export default class CompElement extends SVGRendererBase {
       }
     }
   }
-
   getElements(): ElementInterfaceIntersect[] | undefined {
     return this.elements
   }
 
   initElement(
-    _data: LottieLayer,
-    _globalData: GlobalData,
-    _comp: ElementInterfaceIntersect
+    data: LottieLayer,
+    globalData: GlobalData,
+    comp: ElementInterfaceIntersect
   ) {
-    throw new Error('CompElement: Method initElement not implemented')
+    this.initFrame()
+    this.initBaseData(data, globalData, comp)
+    this.initTransform()
+    this.initRenderable()
+    this.initHierarchy()
+    this.initRendererElement()
+    this.createContainerElements()
+    this.createRenderableComponents()
+    if (this.data?.xt || !globalData.progressiveLoad) {
+      this.buildAllItems()
+    }
+    this.hide()
   }
 
   initFrame() {
@@ -90,25 +105,6 @@ extendPrototype(
   [TransformElement, HierarchyElement, FrameElement, RenderableDOMElement],
   CompElement
 )
-
-CompElement.prototype.initElement = function (
-  data: LottieLayer,
-  globalData: GlobalData,
-  comp: ElementInterfaceIntersect
-) {
-  this.initFrame()
-  this.initBaseData(data, globalData, comp)
-  this.initTransform()
-  this.initRenderable()
-  this.initHierarchy()
-  this.initRendererElement()
-  this.createContainerElements()
-  this.createRenderableComponents()
-  if (this.data?.xt || !globalData.progressiveLoad) {
-    this.buildAllItems()
-  }
-  this.hide()
-}
 
 CompElement.prototype.prepareFrame = function (val: number) {
   this._mdf = false

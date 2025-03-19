@@ -9,7 +9,7 @@ import { initialDefaultFrame } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 
-class ShapeModifier extends DynamicPropertyContainer {
+export default class ShapeModifier extends DynamicPropertyContainer {
   closed?: boolean
   elem?: ElementInterfaceIntersect
   frameId?: number
@@ -40,7 +40,7 @@ class ShapeModifier extends DynamicPropertyContainer {
     this.frameId = initialDefaultFrame
     this.closed = false
     this.k = false
-    if (this.dynamicProperties.length) {
+    if (this.dynamicProperties?.length) {
       this.k = true
     } else {
       this.getValue(true)
@@ -57,5 +57,3 @@ class ShapeModifier extends DynamicPropertyContainer {
     this.iterateDynamicProperties()
   }
 }
-
-export default ShapeModifier

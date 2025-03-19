@@ -10,13 +10,15 @@ import { extendPrototype } from '@/utils/functionExtensions'
 export default abstract class RenderableDOMElement extends RenderableElement {
   createContainerElements: any
 
-  createContent: any
-
   createRenderableComponents: any
 
   initRendererElement: any
+
   innerElem?: SVGElement | null
   renderElement: any
+  createContent() {
+    /** Fallback */
+  }
   destroy() {
     this.innerElem = null
     this.destroyBaseElement()

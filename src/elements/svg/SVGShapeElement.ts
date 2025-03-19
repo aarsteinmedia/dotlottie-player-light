@@ -82,7 +82,6 @@ export default class SVGShapeElement extends ShapeElement {
   buildExpressionInterface() {
     throw new Error('Method not yet implemented')
   }
-  // @ts-expect-error: Mixin issue
   override createContent() {
     if (!this.layerElement || !this.shapesData) {
       throw new Error('SVGShapeElement: Could not access Layer or ShapesData')

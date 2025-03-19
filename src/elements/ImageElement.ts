@@ -36,7 +36,6 @@ export default class ImageElement extends RenderableDOMElement {
     }
   }
 
-  // @ts-expect-error: Mixin issue
   override createContent() {
     let assetPath = ''
     if (this.assetData && this.globalData?.getAssetsPath) {

@@ -14,7 +14,6 @@ import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import Matrix from '@/utils/Matrix'
 import PropertyFactory from '@/utils/PropertyFactory'
 export default class TransformProperty extends DynamicPropertyContainer {
-  _addDynamicProperty = DynamicPropertyContainer.prototype.addDynamicProperty
   _isDirty?: boolean
   a?: MultiDimensionalProperty<Vector3>
   appliedTransformations: number
@@ -176,12 +175,12 @@ export default class TransformProperty extends DynamicPropertyContainer {
       this.o = { _mdf: false, v: 1 } as any
     }
     this._isDirty = true
-    if (!this.dynamicProperties.length) {
+    if (!this.dynamicProperties?.length) {
       this.getValue(true)
     }
   }
-  override addDynamicProperty(prop: any) {
-    this._addDynamicProperty(prop)
+  override addDynamicProperty(prop: DynamicPropertyContainer) {
+    super.addDynamicProperty(prop)
     this.elem.addDynamicProperty(prop)
     this._isDirty = true
   }

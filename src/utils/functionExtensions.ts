@@ -22,13 +22,4 @@ function getDescriptor(object: object, prop: string) {
   return Object.getOwnPropertyDescriptor(object, prop)
 }
 
-/**
- *
- */
-function createProxyFunction<T = unknown>(prototype: T) {
-  function ProxyFunction() {}
-  ProxyFunction.prototype = prototype
-  return ProxyFunction
-}
-
-export { extendPrototype, getDescriptor, createProxyFunction }
+export { extendPrototype, getDescriptor }
