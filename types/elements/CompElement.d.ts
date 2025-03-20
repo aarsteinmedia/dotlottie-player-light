@@ -12,7 +12,7 @@ export default class CompElement extends SVGRendererBase {
     destroyBaseElement(): void;
     destroyElements(): void;
     getElements(): ElementInterfaceIntersect[] | undefined;
-    initElement(_data: LottieLayer, _globalData: GlobalData, _comp: ElementInterfaceIntersect): void;
+    initElement(data: LottieLayer, globalData: GlobalData, comp: ElementInterfaceIntersect): void;
     initFrame(): void;
     initHierarchy(): void;
     initRenderable(): void;

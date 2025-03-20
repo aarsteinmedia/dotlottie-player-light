@@ -3,7 +3,6 @@ import type { MultiDimensionalProperty, ValueProperty } from '../utils/Propertie
 import DynamicPropertyContainer from '../utils/helpers/DynamicPropertyContainer';
 import Matrix from '../utils/Matrix';
 export default class TransformProperty extends DynamicPropertyContainer {
-    _addDynamicProperty: (prop: DynamicPropertyContainer) => void;
     _isDirty?: boolean;
     a?: MultiDimensionalProperty<Vector3>;
     appliedTransformations: number;
@@ -29,7 +28,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
     v: Matrix;
     private defaultVector;
     constructor(elem: ElementInterfaceIntersect, data: Shape, container: ElementInterfaceIntersect);
-    addDynamicProperty(prop: any): void;
+    addDynamicProperty(prop: DynamicPropertyContainer): void;
     applyToMatrix(mat: Matrix): void;
     autoOrient(): void;
     getValue(forceRender?: boolean): void;

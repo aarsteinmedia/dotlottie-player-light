@@ -22,7 +22,7 @@ import type AudioController from './utils/audio/AudioController';
 import type FontManager from './utils/FontManager';
 import type DynamicPropertyContainer from './utils/helpers/DynamicPropertyContainer';
 import type Matrix from './utils/Matrix';
-import type { ValueProperty } from './utils/Properties';
+import type { BaseProperty, ValueProperty } from './utils/Properties';
 import type ShapePath from './utils/shapes/ShapePath';
 import type SlotManager from './utils/SlotManager';
 import type LetterProps from './utils/text/LetterProps';
@@ -148,7 +148,7 @@ export interface ItemData {
     getValue: (val?: unknown) => unknown;
     gf: SVGElement;
     h: VectorProperty;
-    interpolateValue: (frame: number, caching: any) => void;
+    interpolateValue: BaseProperty['interpolateValue'];
     k: boolean;
     keyframes: number[];
     keyframesMetadata: KeyframesMetadata[];
@@ -452,7 +452,7 @@ export type VectorProperty<T = Vector1> = {
     sid?: number;
     _mdf?: boolean;
 };
-interface Coordinates {
+export interface Coordinates {
     c?: boolean;
     x: number | number[];
     y: number | number[];

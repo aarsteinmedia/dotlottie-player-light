@@ -68,16 +68,14 @@ export default class PuckerAndBloatModifier extends ShapeModifier {
 
   processShapes(_isFirstFrame: boolean) {
     let shapePaths
-    let i
     const { length } = this.shapes || []
-    let j
     let jLen: number
     const amount = this.amount?.v
 
     if (amount !== 0) {
       let shapeData
       let localShapeCollection
-      for (i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {
         shapeData = this.shapes?.[i]
         localShapeCollection = shapeData.localShapeCollection
         if (!(!shapeData.shape._mdf && !this._mdf && !_isFirstFrame)) {
@@ -85,7 +83,7 @@ export default class PuckerAndBloatModifier extends ShapeModifier {
           shapeData.shape._mdf = true
           shapePaths = shapeData.shape.paths.shapes
           jLen = shapeData.shape.paths._length
-          for (j = 0; j < jLen; j++) {
+          for (let j = 0; j < jLen; j++) {
             localShapeCollection?.addShape(
               this.processPath(shapePaths[j], amount as number)
             )
@@ -96,7 +94,7 @@ export default class PuckerAndBloatModifier extends ShapeModifier {
         }
       }
     }
-    if (!this.dynamicProperties.length) {
+    if (!this.dynamicProperties?.length) {
       this._mdf = false
     }
   }

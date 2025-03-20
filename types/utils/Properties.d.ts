@@ -1,7 +1,7 @@
-import type { Caching, ElementInterfaceIntersect, Keyframe, Shape, Vector2, VectorProperty } from '../types';
+import type { Caching, ElementInterfaceIntersect, Keyframe, Shape, Vector2, Vector3, VectorProperty } from '../types';
 import { type BezierData } from '../utils/Bezier';
 import DynamicPropertyContainer from '../utils/helpers/DynamicPropertyContainer';
-declare abstract class BaseProperty extends DynamicPropertyContainer {
+export declare abstract class BaseProperty extends DynamicPropertyContainer {
     _caching?: Caching;
     _isFirstFrame?: boolean;
     _placeholder?: boolean;
@@ -31,7 +31,7 @@ declare abstract class BaseProperty extends DynamicPropertyContainer {
     vel?: number | any[];
     addEffect(effectFunction: any): void;
     getValueAtCurrentTime(): string | number | any[] | undefined;
-    interpolateValue(frameNum: number, caching?: Caching): any;
+    interpolateValue(frameNum: number, caching?: Caching): Vector3;
     processEffectsSequence(): void;
     setVValue(val: number | number[]): void;
 }
@@ -57,4 +57,3 @@ export declare class KeyframedMultidimensionalProperty<T extends Array<any> = Ve
 export declare class NoProperty extends BaseProperty {
     constructor();
 }
-export {};

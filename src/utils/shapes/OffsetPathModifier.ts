@@ -169,7 +169,7 @@ export default class OffsetPathModifier extends ShapeModifier {
         shapeData.shape.paths = shapeData.localShapeCollection
       }
     }
-    if (!this.dynamicProperties.length) {
+    if (!this.dynamicProperties?.length) {
       this._mdf = false
     }
   }

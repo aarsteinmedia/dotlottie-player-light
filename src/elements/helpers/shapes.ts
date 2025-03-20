@@ -64,7 +64,7 @@ export class SVGShapeData {
     let i = 0
     const len = transformers.length
     while (i < len) {
-      if (transformers[i].mProps.dynamicProperties.length) {
+      if (transformers[i].mProps.dynamicProperties?.length) {
         this._isAnimated = true
         break
       }
@@ -92,7 +92,7 @@ export class SVGTransformData {
     } as Transformer
     this.elements = []
     this._isAnimated = !!(
-      this.transform.mProps.dynamicProperties.length ||
+      this.transform.mProps.dynamicProperties?.length ||
       this.transform.op.effectsSequence.length
     )
   }

@@ -1,7 +1,7 @@
 import type { ElementInterfaceIntersect, ElementInterfaceUnion, Shape } from '../../types';
 import { type SVGShapeData } from '../../elements/helpers/shapes';
 import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
-declare class ShapeModifier extends DynamicPropertyContainer {
+export default class ShapeModifier extends DynamicPropertyContainer {
     closed?: boolean;
     elem?: ElementInterfaceIntersect;
     frameId?: number;
@@ -14,4 +14,3 @@ declare class ShapeModifier extends DynamicPropertyContainer {
     isAnimatedWithShape(_data: Shape): void;
     processKeys(): void;
 }
-export default ShapeModifier;

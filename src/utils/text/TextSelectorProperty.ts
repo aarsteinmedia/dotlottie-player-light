@@ -62,7 +62,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
       0.01,
       this
     ) as ValueProperty
-    if (!this.dynamicProperties.length) {
+    if (!this.dynamicProperties?.length) {
       this.getValue()
     }
   }

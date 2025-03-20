@@ -96,7 +96,7 @@ export default class RepeaterModifier extends ShapeModifier {
       pos--
       this._elements.unshift(arr[pos])
     }
-    if (this.dynamicProperties.length) {
+    if (this.dynamicProperties?.length) {
       this.k = true
     } else {
       this.getValue(true)
@@ -117,10 +117,10 @@ export default class RepeaterModifier extends ShapeModifier {
     this.so = PropertyFactory.getProp(elem, data.tr?.so, 0, 0.01, this)
     this.eo = PropertyFactory.getProp(elem, data.tr?.eo, 0, 0.01, this)
     this.data = data
-    if (!this.dynamicProperties.length) {
+    if (!this.dynamicProperties?.length) {
       this.getValue(true)
     }
-    this._isAnimated = !!this.dynamicProperties.length
+    this._isAnimated = !!this.dynamicProperties?.length
     this.pMatrix = new Matrix()
     this.rMatrix = new Matrix()
     this.sMatrix = new Matrix()

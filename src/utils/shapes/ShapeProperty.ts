@@ -326,7 +326,7 @@ export class RectShapeProperty extends ShapeBaseProperty {
       0,
       this
     ) as ValueProperty
-    if (this.dynamicProperties.length) {
+    if (this.dynamicProperties?.length) {
       this.k = true
     } else {
       this.k = false
@@ -652,7 +652,7 @@ class StarShapeProperty extends ShapeBaseProperty {
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.localShapeCollection.addShape(this.v)
     this.paths = this.localShapeCollection
-    if (this.dynamicProperties.length) {
+    if (this.dynamicProperties?.length) {
       this.k = true
     } else {
       this.k = false
@@ -791,7 +791,7 @@ class EllShapeProperty extends ShapeBaseProperty {
       0,
       this
     ) as MultiDimensionalProperty<Vector2>
-    if (this.dynamicProperties.length) {
+    if (this.dynamicProperties?.length) {
       this.k = true
     } else {
       this.k = false
