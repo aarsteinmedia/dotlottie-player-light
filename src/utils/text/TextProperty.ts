@@ -7,7 +7,15 @@ import type {
 } from '@/types'
 import type LetterProps from '@/utils/text/LetterProps'
 
-import FontManager, { getFontProperties } from '@/utils/FontManager'
+import {
+  getFontProperties,
+  isCombinedCharacter,
+  isFlagEmoji,
+  isModifier,
+  isRegionalFlag,
+  isVariationSelector,
+  isZeroWidthJoiner,
+} from '@/utils/FontManager'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
@@ -101,21 +109,21 @@ export default class TextProperty extends DynamicPropertyContainer {
       shouldCombineNext = false
       charCode = text.charCodeAt(i)
       currentChars = text.charAt(i)
-      if (FontManager.isCombinedCharacter(charCode)) {
+      if (isCombinedCharacter(charCode)) {
         shouldCombine = true
         // It's a potential surrogate pair (this is the High surrogate)
       } else if (charCode >= 0xd800 && charCode <= 0xdbff) {
-        if (FontManager.isRegionalFlag(text, i)) {
+        if (isRegionalFlag(text, i)) {
           currentChars = text.substring(i, 14)
         } else {
           secondCharCode = text.charCodeAt(i + 1)
           // It's a surrogate pair (this is the Low surrogate)
           if (secondCharCode >= 0xdc00 && secondCharCode <= 0xdfff) {
             // eslint-disable-next-line max-depth
-            if (FontManager.isModifier(charCode, secondCharCode)) {
+            if (isModifier(charCode, secondCharCode)) {
               currentChars = text.substring(i, 2)
               shouldCombine = true
-            } else if (FontManager.isFlagEmoji(text.substring(i, 4))) {
+            } else if (isFlagEmoji(text.substring(i, 4))) {
               currentChars = text.substring(i, 4)
             } else {
               currentChars = text.substring(i, 2)
@@ -124,10 +132,10 @@ export default class TextProperty extends DynamicPropertyContainer {
         }
       } else if (charCode > 0xdbff) {
         secondCharCode = text.charCodeAt(i + 1)
-        if (FontManager.isVariationSelector(charCode)) {
+        if (isVariationSelector(charCode)) {
           shouldCombine = true
         }
-      } else if (FontManager.isZeroWidthJoiner(charCode)) {
+      } else if (isZeroWidthJoiner(charCode)) {
         shouldCombine = true
         shouldCombineNext = true
       }

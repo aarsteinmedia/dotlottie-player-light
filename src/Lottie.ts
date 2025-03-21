@@ -1,6 +1,25 @@
 import type { ExpressionsPlugin } from '@/types'
 
-import AnimationManager from '@/animation/AnimationManager'
+import {
+  play,
+  pause,
+  togglePause,
+  setSpeed,
+  setDirection,
+  stop,
+  registerAnimation,
+  resize,
+  goToAndStop,
+  destroy,
+  freeze,
+  unfreeze,
+  setVolume,
+  mute,
+  unmute,
+  getRegisteredAnimations,
+  searchAnimations,
+  loadAnimation,
+} from '@/animation/AnimationManager'
 import { RendererType } from '@/enums'
 import SVGRenderer from '@/renderers/SVGRenderer'
 import { getFactory, inBrowser, isServer } from '@/utils'
@@ -21,23 +40,48 @@ import ShapeModifiers from '@/utils/shapes/ShapeModifiers'
 import TrimModifier from '@/utils/shapes/TrimModifier'
 import ZigZagModifier from '@/utils/shapes/ZigZagModifier'
 
-export default class Lottie extends AnimationManager {
-  static __getFactory = getFactory
-  static inBrowser = inBrowser
-  static setIDPrefix = setIDPrefix
-  static setLocationHref = setLocationHref
-  static setQuality = setQuality
-  static useWebWorker = setWebWorker
-  static version = '[[BM_VERSION]]'
+const version = '[[BM_VERSION]]'
 
-  static installPlugin(type: string, plugin: ExpressionsPlugin) {
-    if (type === 'expressions') {
-      setExpressionsPlugin(plugin)
-    }
+export {
+  getFactory as __getFactory,
+  inBrowser,
+  setIDPrefix,
+  setLocationHref,
+  setQuality,
+  setWebWorker as useWebWorker,
+  play,
+  pause,
+  togglePause,
+  setSpeed,
+  setDirection,
+  stop,
+  registerAnimation,
+  resize,
+  goToAndStop,
+  destroy,
+  freeze,
+  unfreeze,
+  setVolume,
+  mute,
+  unmute,
+  getRegisteredAnimations,
+  loadAnimation,
+  version,
+}
+
+/**
+ *
+ */
+export function installPlugin(type: string, plugin: ExpressionsPlugin) {
+  if (type === 'expressions') {
+    setExpressionsPlugin(plugin)
   }
-  static setSubframeRendering(flag: boolean) {
-    setSubframeEnabled(flag)
-  }
+}
+/**
+ *
+ */
+export function setSubframeRendering(flag: boolean) {
+  setSubframeEnabled(flag)
 }
 
 const checkReady = () => {
@@ -46,27 +90,10 @@ const checkReady = () => {
     }
     if (document.readyState === 'complete') {
       clearInterval(readyStateCheckInterval)
-      Lottie.searchAnimations()
+      searchAnimations()
     }
   },
   readyStateCheckInterval = setInterval(checkReady, 100)
-
-// this adds bodymovin to the window object for backwards compatibility
-try {
-  if (
-    !(typeof exports === 'object' && typeof module !== 'undefined') &&
-    !(
-      'define' in window &&
-      typeof window.define === 'function' &&
-      'amd' in window.define
-    ) &&
-    !isServer()
-  ) {
-    ;(window as any).bodymovin = Lottie
-  }
-} catch (_err) {
-  /** You don't use bodymovin */
-}
 
 // Registering renderers
 registerRenderer(RendererType.SVG, SVGRenderer)

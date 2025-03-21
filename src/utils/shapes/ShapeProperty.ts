@@ -17,11 +17,11 @@ import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import ShapeElement from '@/elements/ShapeElement'
 import { degToRads } from '@/utils'
-import BezierFactory from '@/utils/BezierFactory'
+import { getBezierEasing } from '@/utils/BezierFactory'
 import { initialDefaultFrame, roundCorner } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
-import ShapePool from '@/utils/pooling/ShapePool'
+import { clone, newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePath from '@/utils/shapes/ShapePath'
 export default class ShapePropertyFactory {
@@ -148,7 +148,7 @@ abstract class ShapeBaseProperty extends DynamicPropertyContainer {
             typeof keyData.i.x === 'number' &&
             typeof keyData.i.y === 'number'
           ) {
-            fnc = BezierFactory.getBezierEasing(
+            fnc = getBezierEasing(
               keyData.o.x,
               keyData.o.y,
               keyData.i.x,
@@ -254,7 +254,7 @@ abstract class ShapeBaseProperty extends DynamicPropertyContainer {
       throw new Error('ShapeBaseProperty: ShapePath is not set')
     }
     if (!this.shapesEqual(this.v, newPath)) {
-      this.v = ShapePool.clone(newPath)
+      this.v = clone(newPath)
       this.localShapeCollection?.releaseShapes()
       this.localShapeCollection?.addShape(this.v)
       this._mdf = true
@@ -295,7 +295,7 @@ export class RectShapeProperty extends ShapeBaseProperty {
 
   constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>) {
     super()
-    this.v = ShapePool.newElement()
+    this.v = newElement()
     this.v.c = true
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.localShapeCollection.addShape(this.v)
@@ -587,7 +587,7 @@ class StarShapeProperty extends ShapeBaseProperty {
   s?: ValueProperty
   constructor(elem: any, data: any) {
     super()
-    this.v = ShapePool.newElement()
+    this.v = newElement()
     this.v.setPathData(true, 0)
     this.elem = elem
     this.comp = elem.comp
@@ -767,7 +767,7 @@ class EllShapeProperty extends ShapeBaseProperty {
 
   constructor(elem: ElementInterfaceIntersect, data: Merge<Shape, Mask>) {
     super()
-    this.v = ShapePool.newElement()
+    this.v = newElement()
     this.v.setPathData(true, 4)
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
@@ -862,8 +862,8 @@ export class ShapeProperty extends ShapeBaseProperty {
     if (!pathData) {
       throw new Error('Could now get Path Data')
     }
-    this.v = ShapePool.clone(pathData as ShapePath)
-    this.pv = ShapePool.clone(this.v)
+    this.v = clone(pathData as ShapePath)
+    this.pv = clone(this.v)
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)
@@ -886,9 +886,9 @@ class KeyframedShapeProperty extends ShapeBaseProperty {
     this.k = true
     this.kf = true
     const len = this.keyframes?.[0]?.s?.[0].i.length || 0
-    this.v = ShapePool.newElement()
+    this.v = newElement()
     this.v.setPathData(!!this.keyframes?.[0].s?.[0].c, len)
-    this.pv = ShapePool.clone(this.v)
+    this.pv = clone(this.v)
     this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)

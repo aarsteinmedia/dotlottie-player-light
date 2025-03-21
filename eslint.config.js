@@ -56,7 +56,7 @@ export default TSESlint.config(
       'array-bracket-spacing': 'error',
       'arrow-body-style': ['error', 'as-needed'],
 
-      camelcase: 'warn',
+      // camelcase: 'warn',
 
       'computed-property-spacing': ['error', 'never'],
       curly: ['warn', 'all'],

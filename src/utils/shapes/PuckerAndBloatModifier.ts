@@ -2,7 +2,7 @@ import type { ElementInterfaceIntersect, Shape } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
-import ShapePool from '@/utils/pooling/ShapePool'
+import { newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
@@ -34,7 +34,7 @@ export default class PuckerAndBloatModifier extends ShapeModifier {
     }
     centerPoint[0] /= pathLength
     centerPoint[1] /= pathLength
-    const clonedPath = ShapePool.newElement<ShapePath>()
+    const clonedPath = newElement<ShapePath>()
     clonedPath.c = path.c
     let vX
     let vY

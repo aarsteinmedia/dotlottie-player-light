@@ -1,6 +1,6 @@
 import type { ImageData, LottieAsset } from '@/types'
 
-import DataManager from '@/DataManager'
+import { loadData } from '@/DataManager'
 import { RendererType } from '@/enums'
 import { createNS, createTag, isSafari, isServer } from '@/utils'
 
@@ -39,7 +39,7 @@ export default class ImagePreloader {
       img: null,
     }
     const path = this.getAssetsPath(data, this.assetsPath, this.path)
-    DataManager.loadData(
+    loadData(
       path,
       function (this: ImagePreloader, footageData: unknown) {
         if (footageData) {

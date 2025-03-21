@@ -11,8 +11,13 @@ import type {
 
 import { ArrayType } from '@/enums'
 import { createQuaternion, quaternionToEuler, slerp } from '@/utils'
-import Bezier, { type BezierData } from '@/utils/Bezier'
-import BezierFactory from '@/utils/BezierFactory'
+import {
+  buildBezierData,
+  pointOnLine2D,
+  pointOnLine3D,
+  type BezierData,
+} from '@/utils/Bezier'
+import { getBezierEasing } from '@/utils/BezierFactory'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import { createTypedArray } from '@/utils/helpers/arrays'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
@@ -124,7 +129,7 @@ export abstract class BaseProperty extends DynamicPropertyContainer {
     let endValue
     if (keyData?.to) {
       if (!keyframeMetadata.bezierData) {
-        keyframeMetadata.bezierData = Bezier.buildBezierData(
+        keyframeMetadata.bezierData = buildBezierData(
           keyData.s,
           nextKeyData?.s || keyData.e,
           keyData.to,
@@ -143,7 +148,7 @@ export abstract class BaseProperty extends DynamicPropertyContainer {
         if (keyframeMetadata.__fnct) {
           fnc = keyframeMetadata.__fnct as (val: number) => number
         } else {
-          fnc = BezierFactory.getBezierEasing(
+          fnc = getBezierEasing(
             keyData.o.x as number,
             keyData.o.y as number,
             keyData.i.x as number,
@@ -267,7 +272,7 @@ export abstract class BaseProperty extends DynamicPropertyContainer {
                     keyData.i.y[i] === undefined
                       ? keyData.i.y[0]
                       : keyData.i.y[i]
-                  fnc = BezierFactory.getBezierEasing(outX, outY, inX, inY).get
+                  fnc = getBezierEasing(outX, outY, inX, inY).get
                   ;(keyframeMetadata.__fnct as any)[i] = fnc
                 }
               } else if (keyframeMetadata.__fnct) {
@@ -277,7 +282,7 @@ export abstract class BaseProperty extends DynamicPropertyContainer {
                 outY = Number(keyData?.o.y)
                 inX = Number(keyData?.i.x)
                 inY = Number(keyData?.i.y)
-                fnc = BezierFactory.getBezierEasing(outX, outY, inX, inY).get
+                fnc = getBezierEasing(outX, outY, inX, inY).get
                 keyData!.keyframeMetadata = fnc
               }
               perc = fnc?.((frameNum - keyTime) / (nextKeyTime - keyTime))
@@ -471,15 +476,8 @@ export class KeyframedMultidimensionalProperty<
         if (
           (s.length === 2 &&
             !(s[0] === e[0] && s[1] === e[1]) &&
-            Bezier.pointOnLine2D(
-              s[0],
-              s[1],
-              e[0],
-              e[1],
-              s[0] + to[0],
-              s[1] + to[1]
-            ) &&
-            Bezier.pointOnLine2D(
+            pointOnLine2D(s[0], s[1], e[0], e[1], s[0] + to[0], s[1] + to[1]) &&
+            pointOnLine2D(
               s[0],
               s[1],
               e[0],
@@ -489,7 +487,7 @@ export class KeyframedMultidimensionalProperty<
             )) ||
           (s.length === 3 &&
             !(s[0] === e[0] && s[1] === e[1] && s[2] === e[2]) &&
-            Bezier.pointOnLine3D(
+            pointOnLine3D(
               s[0],
               s[1],
               s[2],
@@ -500,7 +498,7 @@ export class KeyframedMultidimensionalProperty<
               s[1] + to[1],
               s[2] + to[2]
             ) &&
-            Bezier.pointOnLine3D(
+            pointOnLine3D(
               s[0],
               s[1],
               s[2],

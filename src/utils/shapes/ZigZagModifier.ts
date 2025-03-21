@@ -1,7 +1,7 @@
 import type { ValueProperty } from '@/utils/Properties'
 import type ShapePath from '@/utils/shapes/ShapePath'
 
-import PolynomialBezier from '@/elements/PolynomialBezier'
+import PolynomialBezier, { shapeSegment } from '@/elements/PolynomialBezier'
 import {
   AnimationDirection,
   ElementInterfaceIntersect,
@@ -9,7 +9,7 @@ import {
   Vector2,
 } from '@/types'
 import { getProjectingAngle, setPoint } from '@/utils'
-import ShapePool from '@/utils/pooling/ShapePool'
+import { newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
@@ -133,7 +133,7 @@ export default class ZigZagModifier extends ShapeModifier {
     pointType: number
   ) {
     let count = path._length
-    const clonedPath = ShapePool.newElement<ShapePath>()
+    const clonedPath = newElement<ShapePath>()
     clonedPath.c = path.c
 
     if (!path.c) {
@@ -145,7 +145,7 @@ export default class ZigZagModifier extends ShapeModifier {
     }
 
     let direction: AnimationDirection = -1,
-      segment = PolynomialBezier.shapeSegment(path, 0)
+      segment = shapeSegment(path, 0)
     ZigZagModifier.zigZagCorner(
       clonedPath,
       path,
@@ -169,7 +169,7 @@ export default class ZigZagModifier extends ShapeModifier {
       if (i === count - 1 && !path.c) {
         segment = null as any
       } else {
-        segment = PolynomialBezier.shapeSegment(path, (i + 1) % count)
+        segment = shapeSegment(path, (i + 1) % count)
       }
 
       ZigZagModifier.zigZagCorner(

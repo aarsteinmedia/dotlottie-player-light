@@ -1,7 +1,7 @@
 import type ShapePath from '@/utils/shapes/ShapePath'
 
 import { createSizedArray } from '@/utils/helpers/arrays'
-import ShapePool from '@/utils/pooling/ShapePool'
+import { release } from '@/utils/pooling/ShapePool'
 
 export default class ShapeCollection {
   public _length: number
@@ -23,7 +23,7 @@ export default class ShapeCollection {
   releaseShapes() {
     const { _length } = this
     for (let i = 0; i < _length; i++) {
-      ShapePool.release(this.shapes[i])
+      release(this.shapes[i])
     }
     this._length = 0
   }

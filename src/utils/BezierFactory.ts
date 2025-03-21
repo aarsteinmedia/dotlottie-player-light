@@ -1,32 +1,29 @@
 const beziers: Record<string, BezierEasing> = {}
 
-export default class BezierFactory {
-  /**
-   * BezierEasing - use bezier curve for transition easing function
-   * by Gaëtan Renaudeau 2014 - 2015 – MIT License
-   *
-   * Credits: is based on Firefox's nsSMILKeySpline.cpp
-   * Usage:
-   * var spline = BezierEasing([ 0.25, 0.1, 0.25, 1.0 ])
-   * spline.get(x) => returns the easing value | x must be in [0, 1] range
-   *
-   */
-
-  static getBezierEasing(
-    a: number,
-    b: number,
-    c: number,
-    d: number,
-    nm?: string
-  ) {
-    const str = nm || `bez_${a}_${b}_${c}_${d}`.replace(/\./g, 'p')
-    if (beziers[str]) {
-      return beziers[str]
-    }
-    const bezEasing = new BezierEasing([a, b, c, d])
-    beziers[str] = bezEasing
-    return bezEasing
+/**
+ * BezierEasing - use bezier curve for transition easing function
+ * by Gaëtan Renaudeau 2014 - 2015 – MIT License
+ *
+ * Credits: is based on Firefox's nsSMILKeySpline.cpp
+ * Usage:
+ * var spline = BezierEasing([ 0.25, 0.1, 0.25, 1.0 ])
+ * spline.get(x) => returns the easing value | x must be in [0, 1] range
+ *
+ */
+export function getBezierEasing(
+  a: number,
+  b: number,
+  c: number,
+  d: number,
+  nm?: string
+) {
+  const str = nm || `bez_${a}_${b}_${c}_${d}`.replace(/\./g, 'p')
+  if (beziers[str]) {
+    return beziers[str]
   }
+  const bezEasing = new BezierEasing([a, b, c, d])
+  beziers[str] = bezEasing
+  return bezEasing
 }
 
 class BezierEasing {

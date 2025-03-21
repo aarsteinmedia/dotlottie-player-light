@@ -3,9 +3,9 @@ import type ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 import { SVGShapeData } from '@/elements/helpers/shapes'
 import { ElementInterfaceIntersect, Shape, Vector2 } from '@/types'
-import Bezier from '@/utils/Bezier'
+import { getNewSegment, getSegmentsLength } from '@/utils/Bezier'
 import { segmentsLengthPool } from '@/utils/pooling'
-import ShapePool from '@/utils/pooling/ShapePool'
+import { newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import ShapePath from '@/utils/shapes/ShapePath'
@@ -77,7 +77,7 @@ export default class TrimModifier extends ShapeModifier {
       segmentCount = shapePath._length
       initPos = shapePath._length
     } else {
-      shapePath = ShapePool.newElement()
+      shapePath = newElement()
       segmentCount = 0
       initPos = 0
     }
@@ -118,7 +118,7 @@ export default class TrimModifier extends ShapeModifier {
           )
           newShape = false
         } else {
-          segment = Bezier.getNewSegment(
+          segment = getNewSegment(
             shapePaths[i].v[j - 1],
             shapePaths[i].v[j],
             shapePaths[i].o[j - 1],
@@ -153,7 +153,7 @@ export default class TrimModifier extends ShapeModifier {
             )
             newShape = false
           } else {
-            segment = Bezier.getNewSegment(
+            segment = getNewSegment(
               shapePaths[i].v[j - 1],
               shapePaths[i].v[0],
               shapePaths[i].o[j - 1],
@@ -190,7 +190,7 @@ export default class TrimModifier extends ShapeModifier {
         break
       }
       if (i < len - 1) {
-        shapePath = ShapePool.newElement()
+        shapePath = newElement()
         newShape = true
         if (shapePath) {
           shapes.push(shapePath)
@@ -373,7 +373,7 @@ export default class TrimModifier extends ShapeModifier {
           } else {
             pathsData = this.releasePathsData(shapeData.pathsData)
             for (j = 0; j < jLen; j++) {
-              pathData = Bezier.getSegmentsLength(shapePaths.shapes[j])
+              pathData = getSegmentsLength(shapePaths.shapes[j])
               pathsData.push(pathData)
               totalShapeLength += pathData.totalLength
             }

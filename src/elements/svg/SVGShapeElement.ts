@@ -24,7 +24,7 @@ import {
 import ShapeElement from '@/elements/ShapeElement'
 import SVGBaseElement from '@/elements/svg/SVGBaseElement'
 import { lineCapEnum, lineJoinEnum } from '@/enums'
-import SVGElementsRenderer from '@/renderers/SVGElementsRenderer'
+import { createRenderFunction } from '@/renderers/SVGElementsRenderer'
 import { getBlendMode } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { getLocationHref } from '@/utils/getterSetter'
@@ -76,7 +76,7 @@ export default class SVGShapeElement extends ShapeElement {
     this.animatedContents.push({
       data,
       element,
-      fn: SVGElementsRenderer.createRenderFunction(data) as any,
+      fn: createRenderFunction(data) as any,
     })
   }
   buildExpressionInterface() {

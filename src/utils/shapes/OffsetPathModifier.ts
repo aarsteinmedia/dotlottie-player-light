@@ -1,14 +1,14 @@
 import type { ElementInterfaceIntersect, Shape } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
-import PolynomialBezier from '@/elements/PolynomialBezier'
+import { shapeSegment, shapeSegmentInverted } from '@/elements/PolynomialBezier'
 import {
   joinLines,
   offsetSegmentSplit,
   pointEqual,
   pruneIntersections,
 } from '@/utils'
-import ShapePool from '@/utils/pooling/ShapePool'
+import { newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 import ShapePath from '@/utils/shapes/ShapePath'
@@ -46,7 +46,7 @@ export default class OffsetPathModifier extends ShapeModifier {
     lineJoin: number,
     miterLimit: number
   ) {
-    const outputBezier = ShapePool.newElement<ShapePath>()
+    const outputBezier = newElement<ShapePath>()
     outputBezier.c = inputBezier.c
     let count = inputBezier.length()
     if (!inputBezier.c) {
@@ -56,13 +56,13 @@ export default class OffsetPathModifier extends ShapeModifier {
     let multiSegments = []
 
     for (let i = 0; i < count; i++) {
-      segment = PolynomialBezier.shapeSegment(inputBezier, i)
+      segment = shapeSegment(inputBezier, i)
       multiSegments.push(offsetSegmentSplit(segment, amount))
     }
 
     if (!inputBezier.c) {
       for (let i = count - 1; i >= 0; i--) {
-        segment = PolynomialBezier.shapeSegmentInverted(inputBezier, i)
+        segment = shapeSegmentInverted(inputBezier, i)
         multiSegments.push(offsetSegmentSplit(segment, amount))
       }
     }

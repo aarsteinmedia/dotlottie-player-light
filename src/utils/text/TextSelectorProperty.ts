@@ -1,6 +1,6 @@
 import type { ElementInterfaceIntersect, TextRangeValue } from '@/types'
 
-import BezierFactory from '@/utils/BezierFactory'
+import { getBezierEasing } from '@/utils/BezierFactory'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import { ValueProperty } from '@/utils/Properties'
 import PropertyFactory from '@/utils/PropertyFactory'
@@ -88,7 +88,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
     } else {
       y2 = 1.0 + this.xe.v / 100.0
     }
-    const easer = BezierFactory.getBezierEasing(x1, y1, x2, y2).get
+    const easer = getBezierEasing(x1, y1, x2, y2).get
 
     let mult = 0
     const s = this.finalS

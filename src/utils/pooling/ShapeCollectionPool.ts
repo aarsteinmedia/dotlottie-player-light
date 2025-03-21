@@ -1,6 +1,6 @@
 import { createSizedArray } from '@/utils/helpers/arrays'
 import { Pooling } from '@/utils/pooling'
-import ShapePool from '@/utils/pooling/ShapePool'
+import { release } from '@/utils/pooling/ShapePool'
 import ShapeCollection from '@/utils/shapes/ShapeCollection'
 
 export default abstract class ShapeCollectionPool {
@@ -19,7 +19,7 @@ export default abstract class ShapeCollectionPool {
   }
   static release(shapeCollection: ShapeCollection) {
     for (let i = 0; i < shapeCollection._length; i++) {
-      ShapePool.release(shapeCollection.shapes[i])
+      release(shapeCollection.shapes[i])
     }
     shapeCollection._length = 0
 

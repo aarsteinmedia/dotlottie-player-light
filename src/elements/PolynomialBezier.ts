@@ -41,26 +41,6 @@ export default class PolynomialBezier {
     this.d = [coeffx[3], coeffy[3]]
     this.points = [p0, p1, p2, p3]
   }
-  static shapeSegment(shapePath: ShapePath, index: number) {
-    const nextIndex = (index + 1) % shapePath.length()
-    return new PolynomialBezier(
-      shapePath.v[index]!,
-      shapePath.o[index]!,
-      shapePath.i[nextIndex]!,
-      shapePath.v[nextIndex]!,
-      true
-    )
-  }
-  static shapeSegmentInverted(shapePath: ShapePath, index: number) {
-    const nextIndex = (index + 1) % shapePath.length()
-    return new PolynomialBezier(
-      shapePath.v[nextIndex]!,
-      shapePath.i[nextIndex]!,
-      shapePath.o[index]!,
-      shapePath.v[index]!,
-      true
-    )
-  }
 
   boundingBox() {
     const bounds = this.bounds()
@@ -196,4 +176,31 @@ export default class PolynomialBezier {
       min: min,
     }
   }
+}
+
+/**
+ *
+ */
+export function shapeSegment(shapePath: ShapePath, index: number) {
+  const nextIndex = (index + 1) % shapePath.length()
+  return new PolynomialBezier(
+    shapePath.v[index]!,
+    shapePath.o[index]!,
+    shapePath.i[nextIndex]!,
+    shapePath.v[nextIndex]!,
+    true
+  )
+}
+/**
+ *
+ */
+export function shapeSegmentInverted(shapePath: ShapePath, index: number) {
+  const nextIndex = (index + 1) % shapePath.length()
+  return new PolynomialBezier(
+    shapePath.v[nextIndex]!,
+    shapePath.i[nextIndex]!,
+    shapePath.o[index]!,
+    shapePath.v[index]!,
+    true
+  )
 }

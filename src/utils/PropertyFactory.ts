@@ -13,14 +13,14 @@ import {
 } from '@/utils/Properties'
 
 export default class PropertyFactory {
-  static getProp = (
+  static getProp(
     // <T = number>
     elem: ElementInterfaceIntersect,
     dataFromProps?: any, // VectorProperty<T>,
     type?: number,
     mult?: null | number,
     container?: any // ElementInterfaceIntersect | GroupEffect
-  ) => {
+  ) {
     let data = dataFromProps
     if (data && 'sid' in data && data.sid) {
       data = elem.globalData?.slotManager?.getProp(data as VectorProperty)

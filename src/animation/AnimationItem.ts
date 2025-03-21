@@ -9,7 +9,7 @@ import type {
   Vector2,
 } from '@/types'
 
-import DataManager from '@/DataManager'
+import { completeAnimation, loadAnimation, loadData } from '@/DataManager'
 import { RendererType } from '@/enums'
 import {
   BaseEvent,
@@ -438,7 +438,7 @@ export default class AnimationItem extends BaseEvent {
       }
     }
     this.animationData.__complete = false
-    DataManager.completeAnimation(
+    completeAnimation(
       this.animationData as AnimationData,
       this.onSegmentComplete
     )
@@ -454,7 +454,7 @@ export default class AnimationItem extends BaseEvent {
     this.timeCompleted = Number(segment?.time) * this.frameRate
     const segmentPath = `${this.path + this.fileName}_${this.segmentPos}.json`
     this.segmentPos++
-    DataManager.loadData(segmentPath, this.includeLayers.bind(this), () => {
+    loadData(segmentPath, this.includeLayers.bind(this), () => {
       this.trigger('data_failed')
     })
   }
@@ -720,11 +720,7 @@ export default class AnimationItem extends BaseEvent {
           0,
           this.fileName.lastIndexOf('.json')
         )
-        DataManager.loadAnimation(
-          params.path,
-          this.configAnimation,
-          this.onSetupError
-        )
+        loadAnimation(params.path, this.configAnimation, this.onSetupError)
       }
     } catch (err) {
       console.error(err)
@@ -759,7 +755,7 @@ export default class AnimationItem extends BaseEvent {
     this.isSubframeEnabled = !!flag
   }
   public setupAnimation(data: AnimationData) {
-    DataManager.completeAnimation(data, this.configAnimation)
+    completeAnimation(data, this.configAnimation)
   }
   public setVolume(val: number, name?: string) {
     if (name && this.name !== name) {

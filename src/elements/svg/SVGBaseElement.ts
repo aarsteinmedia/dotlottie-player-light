@@ -4,7 +4,11 @@ import MaskElement from '@/elements/MaskElement'
 import SVGEffects from '@/elements/svg/SVGEffects'
 import BaseRenderer from '@/renderers/BaseRenderer'
 import { createNS } from '@/utils'
-import FiltersFactory, { FeatureSupport } from '@/utils/FiltersFactory'
+import {
+  createAlphaToLuminanceFilter,
+  createFilter,
+  FeatureSupport,
+} from '@/utils/FiltersFactory'
 import { createElementID, getLocationHref } from '@/utils/getterSetter'
 
 export default abstract class SVGBaseElement extends BaseRenderer {
@@ -150,9 +154,9 @@ export default abstract class SVGBaseElement extends BaseRenderer {
         if (!featureSupport.maskType && matteType === 1) {
           masker.setAttribute('mask-type', 'luminance')
           filId = createElementID()
-          fil = FiltersFactory.createFilter(filId)
+          fil = createFilter(filId)
           this.globalData?.defs.appendChild(fil)
-          fil.appendChild(FiltersFactory.createAlphaToLuminanceFilter())
+          fil.appendChild(createAlphaToLuminanceFilter())
           gg = createNS('g')
           gg?.appendChild(useElement)
           masker.appendChild(gg)
@@ -165,7 +169,7 @@ export default abstract class SVGBaseElement extends BaseRenderer {
         const maskGrouper = createNS('g')
         maskGroup.appendChild(maskGrouper)
         filId = createElementID()
-        fil = FiltersFactory.createFilter(filId)
+        fil = createFilter(filId)
         // / /
         const feCTr = createNS<SVGFEComponentTransferElement>(
           'feComponentTransfer'
@@ -199,7 +203,7 @@ export default abstract class SVGBaseElement extends BaseRenderer {
         maskGrouper.appendChild(useElement)
         if (!featureSupport.maskType) {
           maskGroup.setAttribute('mask-type', 'luminance')
-          fil.appendChild(FiltersFactory.createAlphaToLuminanceFilter())
+          fil.appendChild(createAlphaToLuminanceFilter())
           gg = createNS('g')
           maskGrouper.appendChild(alphaRect)
           if (this.layerElement) {

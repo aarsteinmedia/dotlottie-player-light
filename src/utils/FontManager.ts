@@ -3,38 +3,174 @@ import type { Characacter, DocumentData, FontList, LottieLayer } from '@/types'
 import { RendererType } from '@/enums'
 import { createNS, createTag, isServer } from '@/utils'
 
-export default class FontManager {
-  private static readonly A_TAG_CODE_POINT = 917601
-  private static readonly BLACK_FLAG_CODE_POINT = 127988
-  private static readonly CANCEL_TAG_CODE_POINT = 917631
-  private static readonly combinedCharacters: number[] = [
+const A_TAG_CODE_POINT = 917601,
+  BLACK_FLAG_CODE_POINT = 127988,
+  CANCEL_TAG_CODE_POINT = 917631,
+  combinedCharacters: number[] = [
     // Hindi characters
     2304, 2305, 2306, 2307, 2362, 2363, 2364, 2364, 2366, 2367, 2368, 2369,
     2370, 2371, 2372, 2373, 2374, 2375, 2376, 2377, 2378, 2379, 2380, 2381,
     2382, 2383, 2387, 2388, 2389, 2390, 2391, 2402, 2403,
-  ]
-  private static readonly emptyChar = {
+  ],
+  emptyChar = {
     data: {
       shapes: [],
     } as unknown as LottieLayer,
     shapes: [],
     size: 0,
     w: 0,
-  } as unknown as Characacter
-  private static readonly maxWaitingTime = 5000
-  private static readonly REGIONAL_CHARACTER_A_CODE_POINT = 127462
-  private static readonly REGIONAL_CHARACTER_Z_CODE_POINT = 127487
-  private static readonly surrogateModifiers = [
+  } as unknown as Characacter,
+  maxWaitingTime = 5000,
+  REGIONAL_CHARACTER_A_CODE_POINT = 127462,
+  REGIONAL_CHARACTER_Z_CODE_POINT = 127487,
+  surrogateModifiers = [
     'd83cdffb',
     'd83cdffc',
     'd83cdffd',
     'd83cdffe',
     'd83cdfff',
-  ]
-  private static readonly VARIATION_SELECTOR_16_CODE_POINT = 65039
-  private static readonly Z_TAG_CODE_POINT = 917626
-  private static readonly ZERO_WIDTH_JOINER_CODE_POINT = 8205
+  ],
+  VARIATION_SELECTOR_16_CODE_POINT = 65039,
+  Z_TAG_CODE_POINT = 917626,
+  ZERO_WIDTH_JOINER_CODE_POINT = 8205
 
+/**
+ *
+ */
+export function isCombinedCharacter(char: number): boolean {
+  return combinedCharacters.indexOf(char) !== -1
+}
+
+/**
+ *
+ */
+export function isFlagEmoji(string: string): boolean {
+  return (
+    isRegionalCode(string.substring(0, 2)) &&
+    isRegionalCode(string.substring(2, 2))
+  )
+}
+
+/**
+ *
+ */
+export function isModifier(
+  firstCharCode: number,
+  secondCharCode: number
+): boolean {
+  const sum = firstCharCode.toString(16) + secondCharCode.toString(16)
+  return surrogateModifiers.indexOf(sum) !== -1
+}
+
+/**
+ *
+ */
+export function isRegionalCode(string: string): boolean {
+  const codePoint = getCodePoint(string)
+  return (
+    codePoint >= REGIONAL_CHARACTER_A_CODE_POINT &&
+    codePoint <= REGIONAL_CHARACTER_Z_CODE_POINT
+  )
+}
+
+/**
+ *
+ */
+export function isRegionalFlag(text: string, indexFromProps: number): boolean {
+  let index = indexFromProps
+  let codePoint = getCodePoint(text.substring(index, 2))
+  if (codePoint !== BLACK_FLAG_CODE_POINT) {
+    return false
+  }
+  let count = 0
+  index += 2
+  while (count < 5) {
+    codePoint = getCodePoint(text.substring(index, 2))
+    if (codePoint < A_TAG_CODE_POINT || codePoint > Z_TAG_CODE_POINT) {
+      return false
+    }
+    count += 1
+    index += 2
+  }
+  return getCodePoint(text.substr(index, 2)) === CANCEL_TAG_CODE_POINT
+}
+
+/**
+ *
+ */
+export function isVariationSelector(charCode: number): boolean {
+  return charCode === VARIATION_SELECTOR_16_CODE_POINT
+}
+
+/**
+ *
+ */
+export function isZeroWidthJoiner(charCode: number): boolean {
+  return charCode === ZERO_WIDTH_JOINER_CODE_POINT
+}
+
+/**
+ *
+ */
+function getCodePoint(string: string): number {
+  let codePoint = 0
+  const first = string.charCodeAt(0)
+  if (first >= 0xd800 && first <= 0xdbff) {
+    const second = string.charCodeAt(1)
+    if (second >= 0xdc00 && second <= 0xdfff) {
+      codePoint = (first - 0xd800) * 0x400 + second - 0xdc00 + 0x10000
+    }
+  }
+  return codePoint
+}
+
+/**
+ *
+ */
+function setUpNode(
+  font: string,
+  family: string
+): { node: HTMLElement; parent: HTMLElement; w: number } | undefined {
+  if (isServer()) {
+    return
+  }
+  const parentNode = createTag('span')
+  parentNode.setAttribute('aria-hidden', 'true')
+  parentNode.style.fontFamily = family
+  const node = createTag('span')
+  node.innerText = 'giItT1WQy@!-/#'
+  parentNode.style.position = 'absolute'
+  parentNode.style.left = '-10000px'
+  parentNode.style.top = '-10000px'
+  parentNode.style.fontSize = '300px'
+  parentNode.style.fontVariant = 'normal'
+  parentNode.style.fontStyle = 'normal'
+  parentNode.style.fontWeight = 'normal'
+  parentNode.style.letterSpacing = '0'
+  parentNode.appendChild(node)
+  document.body.appendChild(parentNode)
+
+  const width = node.offsetWidth
+  node.style.fontFamily = `${trimFontOptions(font)}, ${family}`
+  return { node, parent: parentNode, w: width }
+}
+
+/**
+ *
+ */
+function trimFontOptions(font: string): string {
+  const familyArray = font.split(',')
+  const len = familyArray.length
+  const enabledFamilies = []
+  for (let i = 0; i < len; i++) {
+    if (familyArray[i] !== 'sans-serif' && familyArray[i] !== 'monospace') {
+      enabledFamilies.push(familyArray[i])
+    }
+  }
+  return enabledFamilies.join(',')
+}
+
+export default class FontManager {
   public chars: Characacter[] | null = null
   public fonts: DocumentData[] = []
   public isLoaded = false
@@ -47,118 +183,6 @@ export default class FontManager {
   constructor() {
     this.setIsLoadedBinded = this.setIsLoaded.bind(this)
     this.checkLoadedFontsBinded = this.checkLoadedFonts.bind(this)
-  }
-
-  public static isCombinedCharacter(char: number): boolean {
-    return FontManager.combinedCharacters.indexOf(char) !== -1
-  }
-
-  public static isFlagEmoji(string: string): boolean {
-    return (
-      FontManager.isRegionalCode(string.substring(0, 2)) &&
-      FontManager.isRegionalCode(string.substring(2, 2))
-    )
-  }
-
-  public static isModifier(
-    firstCharCode: number,
-    secondCharCode: number
-  ): boolean {
-    const sum = firstCharCode.toString(16) + secondCharCode.toString(16)
-    return FontManager.surrogateModifiers.indexOf(sum) !== -1
-  }
-
-  public static isRegionalCode(string: string): boolean {
-    const codePoint = FontManager.getCodePoint(string)
-    return (
-      codePoint >= FontManager.REGIONAL_CHARACTER_A_CODE_POINT &&
-      codePoint <= FontManager.REGIONAL_CHARACTER_Z_CODE_POINT
-    )
-  }
-
-  public static isRegionalFlag(text: string, indexFromProps: number): boolean {
-    let index = indexFromProps
-    let codePoint = FontManager.getCodePoint(text.substring(index, 2))
-    if (codePoint !== FontManager.BLACK_FLAG_CODE_POINT) {
-      return false
-    }
-    let count = 0
-    index += 2
-    while (count < 5) {
-      codePoint = FontManager.getCodePoint(text.substring(index, 2))
-      if (
-        codePoint < FontManager.A_TAG_CODE_POINT ||
-        codePoint > FontManager.Z_TAG_CODE_POINT
-      ) {
-        return false
-      }
-      count += 1
-      index += 2
-    }
-    return (
-      FontManager.getCodePoint(text.substr(index, 2)) ===
-      FontManager.CANCEL_TAG_CODE_POINT
-    )
-  }
-
-  public static isVariationSelector(charCode: number): boolean {
-    return charCode === FontManager.VARIATION_SELECTOR_16_CODE_POINT
-  }
-
-  public static isZeroWidthJoiner(charCode: number): boolean {
-    return charCode === FontManager.ZERO_WIDTH_JOINER_CODE_POINT
-  }
-
-  private static getCodePoint(string: string): number {
-    let codePoint = 0
-    const first = string.charCodeAt(0)
-    if (first >= 0xd800 && first <= 0xdbff) {
-      const second = string.charCodeAt(1)
-      if (second >= 0xdc00 && second <= 0xdfff) {
-        codePoint = (first - 0xd800) * 0x400 + second - 0xdc00 + 0x10000
-      }
-    }
-    return codePoint
-  }
-
-  private static setUpNode(
-    font: string,
-    family: string
-  ): { node: HTMLElement; parent: HTMLElement; w: number } | undefined {
-    if (isServer()) {
-      return
-    }
-    const parentNode = createTag('span')
-    parentNode.setAttribute('aria-hidden', 'true')
-    parentNode.style.fontFamily = family
-    const node = createTag('span')
-    node.innerText = 'giItT1WQy@!-/#'
-    parentNode.style.position = 'absolute'
-    parentNode.style.left = '-10000px'
-    parentNode.style.top = '-10000px'
-    parentNode.style.fontSize = '300px'
-    parentNode.style.fontVariant = 'normal'
-    parentNode.style.fontStyle = 'normal'
-    parentNode.style.fontWeight = 'normal'
-    parentNode.style.letterSpacing = '0'
-    parentNode.appendChild(node)
-    document.body.appendChild(parentNode)
-
-    const width = node.offsetWidth
-    node.style.fontFamily = `${FontManager.trimFontOptions(font)}, ${family}`
-    return { node, parent: parentNode, w: width }
-  }
-
-  private static trimFontOptions(font: string): string {
-    const familyArray = font.split(',')
-    const len = familyArray.length
-    const enabledFamilies = []
-    for (let i = 0; i < len; i++) {
-      if (familyArray[i] !== 'sans-serif' && familyArray[i] !== 'monospace') {
-        enabledFamilies.push(familyArray[i])
-      }
-    }
-    return enabledFamilies.join(',')
   }
 
   public addChars(chars?: Characacter[]): void {
@@ -221,11 +245,11 @@ export default class FontManager {
       let shouldLoadFont = true
       let loadedSelector
       fontData.list[i].loaded = false
-      fontData.list[i].monoCase = FontManager.setUpNode(
+      fontData.list[i].monoCase = setUpNode(
         fontData.list[i].fFamily,
         'monospace'
       )
-      fontData.list[i].sansCase = FontManager.setUpNode(
+      fontData.list[i].sansCase = setUpNode(
         fontData.list[i].fFamily,
         'sans-serif'
       )
@@ -342,7 +366,7 @@ export default class FontManager {
         font
       )
     }
-    return FontManager.emptyChar
+    return emptyChar
   }
 
   public getFontByName(name?: string): DocumentData {
@@ -411,10 +435,7 @@ export default class FontManager {
       )
     }
 
-    if (
-      loadedCount !== 0 &&
-      Date.now() - this.initTime < FontManager.maxWaitingTime
-    ) {
+    if (loadedCount !== 0 && Date.now() - this.initTime < maxWaitingTime) {
       setTimeout(this.checkLoadedFontsBinded, 20)
       return
     }

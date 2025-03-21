@@ -8,7 +8,7 @@ import type {
 
 import { RendererType } from '@/enums'
 import { addBrightnessToRGB, addHueToRGB, addSaturationToRGB } from '@/utils'
-import Bezier, { type BezierData } from '@/utils/Bezier'
+import { buildBezierData, type BezierData } from '@/utils/Bezier'
 import { createSizedArray } from '@/utils/helpers/arrays'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 import Matrix from '@/utils/Matrix'
@@ -115,7 +115,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
         let bezierData
         totalLength = 0
         for (i = 0; i < len; i += 1) {
-          bezierData = Bezier.buildBezierData(
+          bezierData = buildBezierData(
             paths.v[i],
             paths.v[i + 1],
             [paths.o[i][0] - paths.v[i][0], paths.o[i][1] - paths.v[i][1]],
@@ -130,7 +130,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
         }
         i = len
         if (mask.v.c) {
-          bezierData = Bezier.buildBezierData(
+          bezierData = buildBezierData(
             paths.v[i],
             paths.v[0],
             [paths.o[i][0] - paths.v[i][0], paths.o[i][1] - paths.v[i][1]],

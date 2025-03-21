@@ -1,14 +1,13 @@
 import type { AnimationData, WorkerEvent } from '@/types'
 
-import DataFunctionManager from '@/DataFunctionsManager'
+import { completeData } from '@/DataFunctions'
 import { isServer } from '@/utils'
-import AssetLoader from '@/utils/AssetLoader'
+import { loadAsset } from '@/utils/AssetLoader'
 import { getWebWorker } from '@/utils/getterSetter'
 
-export default class DataManager {
-  private static _counterId = 1
-  private static workerFn: (e: WorkerEvent) => void
-  private static workerProxy: Worker = {
+let _counterId = 1,
+  workerFn: (e: WorkerEvent) => void
+const workerProxy: Worker = {
     addEventListener: <K extends keyof WorkerEventMap>(
       _type: K,
       _listener: (this: Worker, ev: WorkerEventMap[K]) => unknown,
@@ -23,7 +22,7 @@ export default class DataManager {
     onmessage: (_: { data: string }) => {},
     onmessageerror: null,
     postMessage: (data: WorkerEvent['data']) => {
-      this.workerFn({
+      workerFn({
         data,
       })
     },
@@ -37,10 +36,8 @@ export default class DataManager {
     terminate: (): void => {
       throw new Error('Function not implemented.')
     },
-  }
-  private static _workerSelf: {
-    assetLoader?: typeof AssetLoader
-    dataManager?: typeof DataFunctionManager
+  },
+  _workerSelf: {
     postMessage: (data: {
       id: string
       payload?: unknown
@@ -48,10 +45,10 @@ export default class DataManager {
     }) => void
   } = {
     postMessage: (data: { id: string; payload?: unknown; status: string }) => {
-      if (!this.workerProxy.onmessage) {
+      if (!workerProxy.onmessage) {
         return
       }
-      this.workerProxy.onmessage({
+      workerProxy.onmessage({
         AT_TARGET: 2,
         bubbles: false,
         BUBBLING_PHASE: 3,
@@ -107,168 +104,174 @@ export default class DataManager {
         type: '',
       })
     },
-  }
-  private static processes: {
+  },
+  processes: {
     [key: string]: {
       onComplete: (data: AnimationData) => void
       onError?: (error?: unknown) => void
     }
   } = {}
-  private static workerInstance: Worker
-  static completeAnimation(
-    animation: AnimationData,
-    onComplete: (data: AnimationData) => void,
-    onError?: (error?: unknown) => void
-  ) {
-    this.setupWorker()
-    const processId = this.createProcess(onComplete, onError)
-    this.workerInstance.postMessage({
-      animation,
-      id: processId,
-      type: 'complete',
-    })
+let workerInstance: Worker
+/**
+ *
+ */
+export function completeAnimation(
+  animation: AnimationData,
+  onComplete: (data: AnimationData) => void,
+  onError?: (error?: unknown) => void
+) {
+  setupWorker()
+  const processId = createProcess(onComplete, onError)
+  workerInstance.postMessage({
+    animation,
+    id: processId,
+    type: 'complete',
+  })
+}
+/**
+ *
+ */
+export function loadAnimation(
+  path: string,
+  onComplete: (data: AnimationData) => void,
+  onError?: (error?: unknown) => void
+) {
+  if (isServer()) {
+    return
   }
-  static loadAnimation(
-    path: string,
-    onComplete: (data: AnimationData) => void,
-    onError?: (error?: unknown) => void
-  ) {
-    if (isServer()) {
-      return
+  setupWorker()
+  const processId = createProcess(onComplete, onError)
+  workerInstance.postMessage({
+    fullPath: isServer()
+      ? path
+      : window.location.origin + window.location.pathname,
+    id: processId,
+    path: path,
+    type: 'loadAnimation',
+  })
+}
+/**
+ *
+ */
+export function loadData(
+  path: string,
+  onComplete: (data: AnimationData) => void,
+  onError?: (error?: unknown) => void
+) {
+  setupWorker()
+  const processId = createProcess(onComplete, onError)
+  workerInstance.postMessage({
+    fullPath: isServer()
+      ? path
+      : window.location.origin + window.location.pathname,
+    id: processId,
+    path: path,
+    type: 'loadData',
+  })
+}
+/**
+ *
+ */
+function createProcess(
+  onComplete: (data: AnimationData) => void,
+  onError?: (error?: unknown) => void
+) {
+  _counterId += 1
+  const id = `processId_${_counterId}`
+  try {
+    processes[id] = {
+      onComplete,
+      onError,
     }
-    this.setupWorker()
-    const processId = this.createProcess(onComplete, onError)
-    this.workerInstance.postMessage({
-      fullPath: isServer()
-        ? path
-        : window.location.origin + window.location.pathname,
-      id: processId,
-      path: path,
-      type: 'loadAnimation',
-    })
+    return id
+  } catch (err) {
+    console.error(err)
+    throw new Error('Could not create animation proccess')
   }
-  static loadData(
-    path: string,
-    onComplete: (data: AnimationData) => void,
-    onError?: (error?: unknown) => void
-  ) {
-    this.setupWorker()
-    const processId = this.createProcess(onComplete, onError)
-    this.workerInstance.postMessage({
-      fullPath: isServer()
-        ? path
-        : window.location.origin + window.location.pathname,
-      id: processId,
-      path: path,
-      type: 'loadData',
-    })
+}
+/**
+ *
+ */
+function createWorker(fn: (e: WorkerEvent) => unknown): Worker {
+  if (!isServer() && window.Worker && window.Blob && getWebWorker()) {
+    const blob = new Blob(
+      ['var _workerSelf = self; self.onmessage = ', fn.toString()],
+      { type: 'text/javascript' }
+    )
+    const url = URL.createObjectURL(blob)
+    return new Worker(url)
   }
-  private static createProcess(
-    onComplete: (data: AnimationData) => void,
-    onError?: (error?: unknown) => void
-  ) {
-    this._counterId += 1
-    const id = `processId_${this._counterId}`
-    try {
-      this.processes[id] = {
-        onComplete,
-        onError,
-      }
-      return id
-    } catch (err) {
-      console.error(err)
-      throw new Error('Could not create animation proccess')
-    }
+  workerFn = fn
+  return workerProxy
+}
+function setupWorker() {
+  if (workerInstance) {
+    return
   }
-  private static createWorker(fn: (e: WorkerEvent) => unknown): Worker {
-    if (!isServer() && window.Worker && window.Blob && getWebWorker()) {
-      const blob = new Blob(
-        ['var _workerSelf = self; self.onmessage = ', fn.toString()],
-        { type: 'text/javascript' }
+  workerInstance = createWorker((e) => {
+    if (e.data.type === 'loadAnimation') {
+      loadAsset(
+        e.data.path,
+        e.data.fullPath,
+        (data) => {
+          completeData(data)
+
+          _workerSelf.postMessage({
+            id: e.data.id,
+            payload: data,
+            status: 'success',
+          })
+        },
+        () => {
+          _workerSelf.postMessage({
+            id: e.data.id,
+            status: 'error',
+          })
+        }
       )
-      const url = URL.createObjectURL(blob)
-      return new Worker(url)
-    }
-    this.workerFn = fn
-    return this.workerProxy
-  }
-  private static setupWorker() {
-    if (this.workerInstance) {
       return
     }
-    this.workerInstance = this.createWorker((e) => {
-      if (!this._workerSelf.dataManager) {
-        this._workerSelf.dataManager = DataFunctionManager
-      }
+    if (e.data.type === 'complete') {
+      const animation = e.data.animation
+      completeData(animation)
+      _workerSelf.postMessage({
+        id: e.data.id,
+        payload: animation,
+        status: 'success',
+      })
+      return
+    }
+    if (e.data.type === 'loadData') {
+      loadAsset(
+        e.data.path,
+        e.data.fullPath,
+        (data) => {
+          _workerSelf.postMessage({
+            id: e.data.id,
+            payload: data,
+            status: 'success',
+          })
+        },
+        () => {
+          _workerSelf.postMessage({
+            id: e.data.id,
+            status: 'error',
+          })
+        }
+      )
+    }
+  })
 
-      if (!this._workerSelf.assetLoader) {
-        this._workerSelf.assetLoader = AssetLoader
-      }
-
-      if (e.data.type === 'loadAnimation') {
-        this._workerSelf.assetLoader.load(
-          e.data.path,
-          e.data.fullPath,
-          (data) => {
-            this._workerSelf.dataManager?.completeData?.(data)
-
-            this._workerSelf.postMessage({
-              id: e.data.id,
-              payload: data,
-              status: 'success',
-            })
-          },
-          () => {
-            this._workerSelf.postMessage({
-              id: e.data.id,
-              status: 'error',
-            })
-          }
-        )
-        return
-      }
-      if (e.data.type === 'complete') {
-        const animation = e.data.animation
-        this._workerSelf.dataManager.completeData?.(animation)
-        this._workerSelf.postMessage({
-          id: e.data.id,
-          payload: animation,
-          status: 'success',
-        })
-        return
-      }
-      if (e.data.type === 'loadData') {
-        this._workerSelf.assetLoader?.load(
-          e.data.path,
-          e.data.fullPath,
-          (data) => {
-            this._workerSelf.postMessage({
-              id: e.data.id,
-              payload: data,
-              status: 'success',
-            })
-          },
-          () => {
-            this._workerSelf.postMessage({
-              id: e.data.id,
-              status: 'error',
-            })
-          }
-        )
-      }
-    })
-
-    this.workerInstance.onmessage = ({ data }) => {
-      const { id } = data
-      const process = this.processes[id]
-      this.processes[id] = null as any
-      if (data.status === 'success') {
-        process.onComplete(data.payload)
-        return
-      }
-      if (process.onError) {
-        process.onError()
-      }
+  workerInstance.onmessage = ({ data }) => {
+    const { id } = data
+    const process = processes[id]
+    processes[id] = null as any
+    if (data.status === 'success') {
+      process.onComplete(data.payload)
+      return
+    }
+    if (process.onError) {
+      process.onError()
     }
   }
 }

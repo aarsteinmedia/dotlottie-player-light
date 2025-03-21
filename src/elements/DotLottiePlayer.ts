@@ -22,7 +22,7 @@ import {
   PreserveAspectRatio,
   RendererType,
 } from '@/enums'
-import Lottie from '@/Lottie'
+import { loadAnimation } from '@/Lottie'
 import styles from '@/styles.css'
 import renderControls from '@/templates/controls'
 import renderPlayer from '@/templates/player'
@@ -679,7 +679,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
       // Initialize lottie player and load animation
       if (!isServer()) {
-        this._lottieInstance = Lottie.loadAnimation({
+        this._lottieInstance = loadAnimation({
           ...this._getOptions(),
           animationData: animations[this._currentAnimation],
         })
@@ -1509,7 +1509,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
       // Re-initialize lottie player
       if (!isServer()) {
-        this._lottieInstance = Lottie.loadAnimation({
+        this._lottieInstance = loadAnimation({
           ...this._getOptions(),
           animationData: this._animations[this._currentAnimation],
         })
