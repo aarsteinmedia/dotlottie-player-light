@@ -7,7 +7,7 @@ import type {
 import { type SVGShapeData } from '@/elements/helpers/shapes'
 import { initialDefaultFrame } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
+import { newShapeCollection } from '@/utils/pooling/ShapeCollectionPool'
 
 export default class ShapeModifier extends DynamicPropertyContainer {
   closed?: boolean
@@ -21,7 +21,7 @@ export default class ShapeModifier extends DynamicPropertyContainer {
       data.sh.container?.addDynamicProperty(data.sh as any)
       const shapeData = {
         data: data,
-        localShapeCollection: ShapeCollectionPool.newShapeCollection(),
+        localShapeCollection: newShapeCollection(),
         shape: data.sh,
       } as unknown as SVGShapeData
       this.shapes?.push(shapeData)

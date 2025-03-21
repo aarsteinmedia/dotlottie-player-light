@@ -20,7 +20,7 @@ import { degToRads } from '@/utils'
 import { getBezierEasing } from '@/utils/BezierFactory'
 import { initialDefaultFrame, roundCorner } from '@/utils/getterSetter'
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
-import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
+import { newShapeCollection } from '@/utils/pooling/ShapeCollectionPool'
 import { clone, newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePath from '@/utils/shapes/ShapePath'
@@ -304,7 +304,7 @@ export class RectShapeProperty extends ShapeBaseProperty {
     super()
     this.v = newElement()
     this.v.c = true
-    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = newShapeCollection()
     this.localShapeCollection.addShape(this.v)
     this.paths = this.localShapeCollection
     this.elem = elem
@@ -656,7 +656,7 @@ class StarShapeProperty extends ShapeBaseProperty {
       0.01,
       this
     ) as ValueProperty
-    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = newShapeCollection()
     this.localShapeCollection.addShape(this.v)
     this.paths = this.localShapeCollection
     if (this.dynamicProperties?.length) {
@@ -776,7 +776,7 @@ class EllShapeProperty extends ShapeBaseProperty {
     super()
     this.v = newElement()
     this.v.setPathData(true, 4)
-    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = newShapeCollection()
     this.paths = this.localShapeCollection
     this.localShapeCollection.addShape(this.v)
     this.d = data.d as number
@@ -871,7 +871,7 @@ export class ShapeProperty extends ShapeBaseProperty {
     }
     this.v = clone(pathData as ShapePath)
     this.pv = clone(this.v)
-    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)
     this.effectsSequence = []
@@ -896,7 +896,7 @@ class KeyframedShapeProperty extends ShapeBaseProperty {
     this.v = newElement()
     this.v.setPathData(!!this.keyframes?.[0].s?.[0].c, len)
     this.pv = clone(this.v)
-    this.localShapeCollection = ShapeCollectionPool.newShapeCollection()
+    this.localShapeCollection = newShapeCollection()
     this.paths = this.localShapeCollection
     this.paths.addShape(this.v)
     this.lastFrame = initialDefaultFrame

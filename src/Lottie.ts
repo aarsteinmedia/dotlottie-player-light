@@ -36,7 +36,7 @@ import OffsetPathModifier from '@/utils/shapes/OffsetPathModifier'
 import PuckerAndBloatModifier from '@/utils/shapes/PuckerAndBloatModifier'
 import RepeaterModifier from '@/utils/shapes/RepeaterModifier'
 import RoundCornersModifier from '@/utils/shapes/RoundCornersModifier'
-import ShapeModifiers from '@/utils/shapes/ShapeModifiers'
+import { registerModifier } from '@/utils/shapes/ShapeModifiers'
 import TrimModifier from '@/utils/shapes/TrimModifier'
 import ZigZagModifier from '@/utils/shapes/ZigZagModifier'
 
@@ -99,9 +99,9 @@ const checkReady = () => {
 registerRenderer(RendererType.SVG, SVGRenderer)
 
 // Registering shape modifiers
-ShapeModifiers.registerModifier('tm', TrimModifier)
-ShapeModifiers.registerModifier('pb', PuckerAndBloatModifier)
-ShapeModifiers.registerModifier('rp', RepeaterModifier)
-ShapeModifiers.registerModifier('rd', RoundCornersModifier)
-ShapeModifiers.registerModifier('zz', ZigZagModifier)
-ShapeModifiers.registerModifier('op', OffsetPathModifier)
+registerModifier('tm', TrimModifier)
+registerModifier('pb', PuckerAndBloatModifier)
+registerModifier('rp', RepeaterModifier)
+registerModifier('rd', RoundCornersModifier)
+registerModifier('zz', ZigZagModifier)
+registerModifier('op', OffsetPathModifier)

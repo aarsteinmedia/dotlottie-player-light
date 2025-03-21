@@ -28,7 +28,7 @@ import { createRenderFunction } from '@/renderers/SVGElementsRenderer'
 import { getBlendMode } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { getLocationHref } from '@/utils/getterSetter'
-import ShapeModifiers from '@/utils/shapes/ShapeModifiers' // type ShapeModifierInterface,
+import { getModifier } from '@/utils/shapes/ShapeModifiers' // type ShapeModifierInterface,
 import { getShapeProp, type ShapeProperty } from '@/utils/shapes/ShapeProperty'
 import TransformProperty from '@/utils/TransformProperty'
 export default class SVGShapeElement extends ShapeElement {
@@ -388,7 +388,7 @@ export default class SVGShapeElement extends ShapeElement {
           modifier = itemsData[i]
           modifier.closed = false
         } else {
-          modifier = ShapeModifiers.getModifier(arr[i].ty)
+          modifier = getModifier(arr[i].ty)
           modifier.init(this as any, (arr as any[])[i])
           itemsData[i] = modifier
           this.shapeModifiers?.push(modifier)
@@ -399,7 +399,7 @@ export default class SVGShapeElement extends ShapeElement {
           modifier = itemsData[i]
           modifier.closed = true
         } else {
-          modifier = ShapeModifiers.getModifier(arr[i].ty)
+          modifier = getModifier(arr[i].ty)
           itemsData[i] = modifier
           modifier.init(
             this as any,
