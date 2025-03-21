@@ -102,21 +102,21 @@ export default class ZigZagModifier extends ShapeModifier {
     data: Shape
   ) {
     this.getValue = this.processKeys
-    this.amplitude = PropertyFactory.getProp(
+    this.amplitude = PropertyFactory(
       elem,
       data.s,
       0,
       null,
       this
     ) as ValueProperty
-    this.frequency = PropertyFactory.getProp(
+    this.frequency = PropertyFactory(
       elem,
       data.r,
       0,
       null,
       this
     ) as ValueProperty
-    this.pointsType = PropertyFactory.getProp(
+    this.pointsType = PropertyFactory(
       elem,
       data.pt,
       0,

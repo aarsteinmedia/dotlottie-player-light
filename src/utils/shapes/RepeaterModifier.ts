@@ -105,17 +105,11 @@ export default class RepeaterModifier extends ShapeModifier {
 
   override initModifierProperties(elem: ElementInterfaceIntersect, data: any) {
     this.getValue = this.processKeys
-    this.c = PropertyFactory.getProp(
-      elem,
-      data.c,
-      0,
-      null,
-      this
-    ) as ValueProperty
-    this.o = PropertyFactory.getProp(elem, data.o, 0, null, this)
+    this.c = PropertyFactory(elem, data.c, 0, null, this) as ValueProperty
+    this.o = PropertyFactory(elem, data.o, 0, null, this)
     this.tr = new TransformProperty(elem, data.tr, this as any)
-    this.so = PropertyFactory.getProp(elem, data.tr?.so, 0, 0.01, this)
-    this.eo = PropertyFactory.getProp(elem, data.tr?.eo, 0, 0.01, this)
+    this.so = PropertyFactory(elem, data.tr?.so, 0, 0.01, this)
+    this.eo = PropertyFactory(elem, data.tr?.eo, 0, 0.01, this)
     this.data = data
     if (!this.dynamicProperties?.length) {
       this.getValue(true)

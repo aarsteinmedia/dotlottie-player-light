@@ -1,5 +1,5 @@
 import { createSizedArray } from '@/utils/helpers/arrays'
-import { Pooling } from '@/utils/pooling'
+import { double } from '@/utils/pooling'
 import { release } from '@/utils/pooling/ShapePool'
 import ShapeCollection from '@/utils/shapes/ShapeCollection'
 
@@ -29,7 +29,7 @@ export function releaseShape(shapeCollection: ShapeCollection) {
   shapeCollection._length = 0
 
   if (_length === _maxLength) {
-    pool = Pooling.double(pool)
+    pool = double(pool)
     _maxLength *= 2
   }
   pool[_length] = shapeCollection

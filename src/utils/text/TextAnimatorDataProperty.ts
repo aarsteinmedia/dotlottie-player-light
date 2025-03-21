@@ -35,11 +35,10 @@ export default class TextAnimatorDataProperty {
     container?: ElementInterfaceIntersect
   ) {
     const defaultData = { propType: false } as NoProperty,
-      { getProp } = PropertyFactory,
       textAnimatorAnimatables = animatorProps?.a
     this.a = {
       a: textAnimatorAnimatables?.a
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.a,
             1,
@@ -48,7 +47,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       fb: textAnimatorAnimatables?.fb
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.fb,
             0,
@@ -57,7 +56,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       fc: textAnimatorAnimatables?.fc
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.fc,
             1,
@@ -66,7 +65,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       fh: textAnimatorAnimatables?.fh
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.fh,
             0,
@@ -75,7 +74,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       fs: textAnimatorAnimatables?.fs
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.fs,
             0,
@@ -84,7 +83,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       o: textAnimatorAnimatables?.o
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.o,
             0,
@@ -93,7 +92,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       p: textAnimatorAnimatables?.p
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.p,
             1,
@@ -102,7 +101,7 @@ export default class TextAnimatorDataProperty {
           ) as MultiDimensionalProperty<Vector2>)
         : defaultData,
       r: textAnimatorAnimatables?.r
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.r,
             0,
@@ -111,7 +110,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       rx: textAnimatorAnimatables?.rx
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.rx,
             0,
@@ -120,7 +119,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       ry: textAnimatorAnimatables?.ry
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.ry,
             0,
@@ -129,7 +128,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       s: textAnimatorAnimatables?.s
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.s,
             1,
@@ -138,7 +137,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       sa: textAnimatorAnimatables?.sa
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.sa,
             0,
@@ -147,7 +146,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       sc: textAnimatorAnimatables?.sc
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.sc,
             1,
@@ -156,7 +155,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       sk: textAnimatorAnimatables?.sk
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.sk,
             0,
@@ -165,7 +164,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       sw: textAnimatorAnimatables?.sw
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.sw,
             0,
@@ -174,7 +173,7 @@ export default class TextAnimatorDataProperty {
           ) as ValueProperty)
         : defaultData,
       t: textAnimatorAnimatables?.t
-        ? (getProp(
+        ? (PropertyFactory(
             elem,
             textAnimatorAnimatables.t,
             0,

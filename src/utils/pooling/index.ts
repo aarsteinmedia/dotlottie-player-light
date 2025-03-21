@@ -33,7 +33,7 @@ export default class PoolFactory {
   }
   release<T = unknown>(element: T) {
     if (this._length === this._maxLength) {
-      this.pool = Pooling.double(this.pool)
+      this.pool = double(this.pool)
       this._maxLength *= 2
     }
     if (this._release) {
@@ -44,10 +44,11 @@ export default class PoolFactory {
   }
 }
 
-export abstract class Pooling {
-  static double(arr: unknown[]) {
-    return arr.concat(createSizedArray(arr.length))
-  }
+/**
+ *
+ */
+export function double(arr: unknown[]) {
+  return arr.concat(createSizedArray(arr.length))
 }
 
 export const pointPool = (() =>

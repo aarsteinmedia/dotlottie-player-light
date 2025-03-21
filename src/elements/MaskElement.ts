@@ -90,7 +90,7 @@ export default class MaskElement {
         this.viewData[i] = {
           elem: path,
           lastPath: '',
-          op: PropertyFactory.getProp(
+          op: PropertyFactory(
             this.element,
             properties[i].o,
             0,
@@ -116,7 +116,7 @@ export default class MaskElement {
         } else {
           maskType = 'mask'
           maskRef = 'mask'
-          x = PropertyFactory.getProp(
+          x = PropertyFactory(
             this.element,
             properties[i].x,
             0,
@@ -177,7 +177,7 @@ export default class MaskElement {
           elem: path,
           invRect: rect,
           lastPath: '',
-          op: PropertyFactory.getProp(
+          op: PropertyFactory(
             this.element,
             properties[i].o,
             0,

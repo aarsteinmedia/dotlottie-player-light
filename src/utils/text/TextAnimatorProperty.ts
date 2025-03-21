@@ -827,7 +827,6 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
   }
   searchProperties(_: DynamicPropertyContainer[]) {
     const len = this._textData.a?.length || 0
-    const getProp = PropertyFactory.getProp
     for (let i = 0; i < len; i++) {
       this._animatorsData[i] = new TextAnimatorDataProperty(
         this._elem,
@@ -837,18 +836,18 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
     }
     if (this._textData.p && this._textData.p.m) {
       this._pathData = {
-        a: getProp(this._elem, this._textData.p.a, 0, 0, this),
-        f: getProp(this._elem, this._textData.p.f, 0, 0, this),
-        l: getProp(this._elem, this._textData.p.l, 0, 0, this),
+        a: PropertyFactory(this._elem, this._textData.p.a, 0, 0, this),
+        f: PropertyFactory(this._elem, this._textData.p.f, 0, 0, this),
+        l: PropertyFactory(this._elem, this._textData.p.l, 0, 0, this),
         m: this._elem.maskManager?.getMaskProperty(this._textData.p.m),
-        p: getProp(this._elem, this._textData.p.p, 0, 0, this),
-        r: getProp(this._elem, this._textData.p.r, 0, 0, this),
+        p: PropertyFactory(this._elem, this._textData.p.p, 0, 0, this),
+        r: PropertyFactory(this._elem, this._textData.p.r, 0, 0, this),
       }
       this._hasMaskedPath = true
     } else {
       this._hasMaskedPath = false
     }
-    this._moreOptions.alignment = getProp(
+    this._moreOptions.alignment = PropertyFactory(
       this._elem,
       this._textData.m?.a,
       1,

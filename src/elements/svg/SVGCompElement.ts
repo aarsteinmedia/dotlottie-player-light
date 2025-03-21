@@ -27,7 +27,7 @@ export default class SVGCompElement extends SVGBaseElement {
     this.initElement(data, globalData, comp)
     this.tm = (
       data.tm
-        ? PropertyFactory.getProp(
+        ? PropertyFactory(
             this as any,
             data.tm as any,
             0,

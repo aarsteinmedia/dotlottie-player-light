@@ -14,13 +14,7 @@ export default class RoundCornersModifier extends ShapeModifier {
     data: Shape
   ) {
     this.getValue = this.processKeys
-    this.rd = PropertyFactory.getProp(
-      elem,
-      data.r,
-      0,
-      null,
-      this
-    ) as ValueProperty
+    this.rd = PropertyFactory(elem, data.r, 0, null, this) as ValueProperty
     this._isAnimated = !!this.rd?.effectsSequence.length
   }
 

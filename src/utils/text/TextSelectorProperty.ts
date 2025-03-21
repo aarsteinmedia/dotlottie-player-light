@@ -33,7 +33,7 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
     this.finalS = 0
     this.finalE = 0
     this.initDynamicPropertyContainer(elem)
-    this.s = PropertyFactory.getProp(
+    this.s = PropertyFactory(
       elem,
       data.s || { k: 0 },
       0,
@@ -41,27 +41,15 @@ export default class TextSelectorProperty extends DynamicPropertyContainer {
       this
     ) as ValueProperty
     if ('e' in data) {
-      this.e = PropertyFactory.getProp(
-        elem,
-        data.e,
-        0,
-        0,
-        this
-      ) as ValueProperty
+      this.e = PropertyFactory(elem, data.e, 0, 0, this) as ValueProperty
     } else {
       this.e = { v: 100 }
     }
-    this.o = PropertyFactory.getProp(elem, data.o || { k: 0 }, 0, 0, this)
-    this.xe = PropertyFactory.getProp(elem, data.xe || { k: 0 }, 0, 0, this)
-    this.ne = PropertyFactory.getProp(elem, data.ne || { k: 0 }, 0, 0, this)
-    this.sm = PropertyFactory.getProp(elem, data.sm || { k: 100 }, 0, 0, this)
-    this.a = PropertyFactory.getProp(
-      elem,
-      data.a,
-      0,
-      0.01,
-      this
-    ) as ValueProperty
+    this.o = PropertyFactory(elem, data.o || { k: 0 }, 0, 0, this)
+    this.xe = PropertyFactory(elem, data.xe || { k: 0 }, 0, 0, this)
+    this.ne = PropertyFactory(elem, data.ne || { k: 0 }, 0, 0, this)
+    this.sm = PropertyFactory(elem, data.sm || { k: 100 }, 0, 0, this)
+    this.a = PropertyFactory(elem, data.a, 0, 0.01, this) as ValueProperty
     if (!this.dynamicProperties?.length) {
       this.getValue()
     }

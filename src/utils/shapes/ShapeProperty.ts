@@ -312,27 +312,21 @@ export class RectShapeProperty extends ShapeBaseProperty {
     this.frameId = -1
     this.d = data.d as number
     this.initDynamicPropertyContainer(elem)
-    this.p = PropertyFactory.getProp(
+    this.p = PropertyFactory(
       elem,
       data.p as any,
       1,
       0,
       this
     ) as MultiDimensionalProperty<Vector2>
-    this.s = PropertyFactory.getProp(
+    this.s = PropertyFactory(
       elem,
       data.s,
       1,
       0,
       this
     ) as MultiDimensionalProperty<Vector2>
-    this.r = PropertyFactory.getProp(
-      elem,
-      data.r as any,
-      0,
-      0,
-      this
-    ) as ValueProperty
+    this.r = PropertyFactory(elem, data.r as any, 0, 0, this) as ValueProperty
     if (this.dynamicProperties?.length) {
       this.k = true
     } else {
@@ -603,59 +597,23 @@ class StarShapeProperty extends ShapeBaseProperty {
     this.d = data.d
     this.initDynamicPropertyContainer(elem)
     if (data.sy === 1) {
-      this.ir = PropertyFactory.getProp(
-        elem,
-        data.ir,
-        0,
-        0,
-        this
-      ) as ValueProperty
-      this.is = PropertyFactory.getProp(
-        elem,
-        data.is,
-        0,
-        0.01,
-        this
-      ) as ValueProperty
+      this.ir = PropertyFactory(elem, data.ir, 0, 0, this) as ValueProperty
+      this.is = PropertyFactory(elem, data.is, 0, 0.01, this) as ValueProperty
       this.convertToPath = this.convertStarToPath
     } else {
       this.convertToPath = this.convertPolygonToPath
     }
-    this.pt = PropertyFactory.getProp(
-      elem,
-      data.pt,
-      0,
-      0,
-      this
-    ) as ValueProperty
-    this.p = PropertyFactory.getProp(
+    this.pt = PropertyFactory(elem, data.pt, 0, 0, this) as ValueProperty
+    this.p = PropertyFactory(
       elem,
       data.p,
       1,
       0,
       this
     ) as MultiDimensionalProperty<Vector2>
-    this.r = PropertyFactory.getProp(
-      elem,
-      data.r,
-      0,
-      degToRads,
-      this
-    ) as ValueProperty
-    this.or = PropertyFactory.getProp(
-      elem,
-      data.or,
-      0,
-      0,
-      this
-    ) as ValueProperty
-    this.os = PropertyFactory.getProp(
-      elem,
-      data.os,
-      0,
-      0.01,
-      this
-    ) as ValueProperty
+    this.r = PropertyFactory(elem, data.r, 0, degToRads, this) as ValueProperty
+    this.or = PropertyFactory(elem, data.or, 0, 0, this) as ValueProperty
+    this.os = PropertyFactory(elem, data.os, 0, 0.01, this) as ValueProperty
     this.localShapeCollection = newShapeCollection()
     this.localShapeCollection.addShape(this.v)
     this.paths = this.localShapeCollection
@@ -784,14 +742,14 @@ class EllShapeProperty extends ShapeBaseProperty {
     this.comp = elem.comp
     this.frameId = -1
     this.initDynamicPropertyContainer(elem)
-    this.p = PropertyFactory.getProp(
+    this.p = PropertyFactory(
       elem,
       data.p,
       1,
       0,
       this
     ) as MultiDimensionalProperty<Vector2>
-    this.s = PropertyFactory.getProp(
+    this.s = PropertyFactory(
       elem,
       data.s,
       1,

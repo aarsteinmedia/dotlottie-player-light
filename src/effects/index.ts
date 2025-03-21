@@ -13,7 +13,7 @@ export class SliderEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(
+    this.p = PropertyFactory(
       elem as any,
       data.v,
       0,
@@ -32,7 +32,7 @@ export class AngleEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(
+    this.p = PropertyFactory(
       elem as any,
       data.v,
       0,
@@ -51,7 +51,7 @@ export class ColorEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(
+    this.p = PropertyFactory(
       elem as any,
       data.v,
       1,
@@ -70,7 +70,7 @@ export class PointEffect {
     elem: EffectInterface,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(
+    this.p = PropertyFactory(
       elem as any,
       data.v,
       1,
@@ -89,13 +89,7 @@ export class LayerIndexEffect {
     elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(
-      elem,
-      data.v,
-      0,
-      0,
-      container
-    ) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 0, 0, container) as ValueProperty
   }
 }
 
@@ -108,13 +102,7 @@ export class MaskIndexEffect {
     elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(
-      elem,
-      data.v,
-      0,
-      0,
-      container
-    ) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 0, 0, container) as ValueProperty
   }
 }
 
@@ -127,13 +115,7 @@ export class CheckboxEffect {
     elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory.getProp(
-      elem,
-      data.v,
-      0,
-      0,
-      container
-    ) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 0, 0, container) as ValueProperty
   }
 }
 

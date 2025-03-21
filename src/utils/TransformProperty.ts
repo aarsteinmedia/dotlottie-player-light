@@ -54,14 +54,14 @@ export default class TransformProperty extends DynamicPropertyContainer {
     this.appliedTransformations = 0
     this.initDynamicPropertyContainer(container || elem)
     if (data.p && 's' in data.p) {
-      this.px = PropertyFactory.getProp(
+      this.px = PropertyFactory(
         elem,
         (data.p as any).x,
         0,
         0,
         this
       ) as ValueProperty
-      this.py = PropertyFactory.getProp(
+      this.py = PropertyFactory(
         elem,
         (data.p as any).y,
         0,
@@ -69,7 +69,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
         this
       ) as ValueProperty
       if ('z' in data.p) {
-        this.pz = PropertyFactory.getProp(
+        this.pz = PropertyFactory(
           elem,
           data.p.z as any,
           0,
@@ -78,7 +78,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
         ) as ValueProperty
       }
     } else {
-      this.p = PropertyFactory.getProp(
+      this.p = PropertyFactory(
         elem,
         data.p || ({ k: [0, 0, 0] } as any),
         1,
@@ -87,21 +87,21 @@ export default class TransformProperty extends DynamicPropertyContainer {
       ) as MultiDimensionalProperty<Vector3>
     }
     if ('rx' in data) {
-      this.rx = PropertyFactory.getProp(
+      this.rx = PropertyFactory(
         elem,
         data.rx,
         0,
         degToRads,
         this
       ) as ValueProperty
-      this.ry = PropertyFactory.getProp(
+      this.ry = PropertyFactory(
         elem,
         data.ry,
         0,
         degToRads,
         this
       ) as ValueProperty
-      this.rz = PropertyFactory.getProp(
+      this.rz = PropertyFactory(
         elem,
         data.rz,
         0,
@@ -115,7 +115,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
           data.or.k[i].ti = null
         }
       }
-      this.or = PropertyFactory.getProp(
+      this.or = PropertyFactory(
         elem,
         data.or as any,
         1,
@@ -124,7 +124,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
       ) as MultiDimensionalProperty<Vector3>
       this.or.sh = true as any
     } else {
-      this.r = PropertyFactory.getProp(
+      this.r = PropertyFactory(
         elem,
         data.r || ({ k: 0 } as any),
         0,
@@ -133,14 +133,14 @@ export default class TransformProperty extends DynamicPropertyContainer {
       ) as ValueProperty
     }
     if (data.sk) {
-      this.sk = PropertyFactory.getProp(
+      this.sk = PropertyFactory(
         elem,
         data.sk,
         0,
         degToRads,
         this
       ) as ValueProperty
-      this.sa = PropertyFactory.getProp(
+      this.sa = PropertyFactory(
         elem,
         data.sa,
         0,
@@ -148,14 +148,14 @@ export default class TransformProperty extends DynamicPropertyContainer {
         this
       ) as ValueProperty
     }
-    this.a = PropertyFactory.getProp(
+    this.a = PropertyFactory(
       elem,
       data.a || ({ k: [0, 0, 0] } as any),
       1,
       0,
       this
     ) as MultiDimensionalProperty<Vector3>
-    this.s = PropertyFactory.getProp(
+    this.s = PropertyFactory(
       elem,
       data.s || ({ k: [100, 100, 100] } as any),
       1,
@@ -164,13 +164,7 @@ export default class TransformProperty extends DynamicPropertyContainer {
     ) as MultiDimensionalProperty<Vector3>
     // Opacity is not part of the transform properties, that's why it won't use this.dynamicProperties. That way transforms won't get updated if opacity changes.
     if (data.o) {
-      this.o = PropertyFactory.getProp(
-        elem,
-        data.o,
-        0,
-        0.01,
-        elem
-      ) as ValueProperty
+      this.o = PropertyFactory(elem, data.o, 0, 0.01, elem) as ValueProperty
     } else {
       this.o = { _mdf: false, v: 1 } as any
     }

@@ -169,35 +169,35 @@ export class SVGGradientFillStyleData extends DynamicPropertyContainer {
     data: Shape,
     styleData: SVGStyleData
   ) {
-    this.o = PropertyFactory.getProp(
+    this.o = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.o,
       0,
       0.01,
       this
     ) as ValueProperty
-    this.s = PropertyFactory.getProp(
+    this.s = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.s,
       1,
       null,
       this
     ) as MultiDimensionalProperty
-    this.e = PropertyFactory.getProp(
+    this.e = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.e,
       1,
       null,
       this
     ) as MultiDimensionalProperty
-    this.h = PropertyFactory.getProp(
+    this.h = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.h || ({ k: 0 } as any),
       0,
       0.01,
       this
     ) as KeyframedValueProperty
-    this.a = PropertyFactory.getProp(
+    this.a = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.a || ({ k: 0 } as any),
       0,
@@ -299,7 +299,7 @@ export class SVGGradientStrokeStyleData extends SVGGradientFillStyleData {
     super(elem, data, styleData)
     this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
     this.getValue = this.iterateDynamicProperties
-    this.w = PropertyFactory.getProp(
+    this.w = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.w,
       0,
@@ -329,14 +329,14 @@ export class SVGFillStyleData extends DynamicPropertyContainer {
     super()
     this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
     this.getValue = this.iterateDynamicProperties
-    this.o = PropertyFactory.getProp(
+    this.o = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.o,
       0,
       0.01,
       this
     ) as ValueProperty
-    this.c = PropertyFactory.getProp(
+    this.c = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.c,
       1,
@@ -358,14 +358,14 @@ export class SVGStrokeStyleData extends SVGFillStyleData {
     super(elem, data, styleObj)
     this.initDynamicPropertyContainer(elem as ElementInterfaceIntersect)
     this.getValue = this.iterateDynamicProperties
-    this.o = PropertyFactory.getProp(
+    this.o = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.o,
       0,
       0.01,
       this
     ) as ValueProperty
-    this.w = PropertyFactory.getProp(
+    this.w = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.w,
       0,
@@ -378,7 +378,7 @@ export class SVGStrokeStyleData extends SVGFillStyleData {
       RendererType.SVG,
       this as any
     )
-    this.c = PropertyFactory.getProp(
+    this.c = PropertyFactory(
       elem as ElementInterfaceIntersect,
       data.c as any,
       1,

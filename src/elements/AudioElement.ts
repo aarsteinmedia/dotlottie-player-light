@@ -49,7 +49,7 @@ export default class AudioElement extends RenderableElement {
     this._previousVolume = null
     this.tm = (
       data.tm
-        ? PropertyFactory.getProp(
+        ? PropertyFactory(
             this as any,
             data.tm as any,
             0,
@@ -58,7 +58,7 @@ export default class AudioElement extends RenderableElement {
           )
         : { _placeholder: true }
     ) as ValueProperty
-    this.lv = PropertyFactory.getProp(
+    this.lv = PropertyFactory(
       this as any,
       (data.au && data.au.lv ? data.au.lv : { k: [100] }) as any,
       1,
