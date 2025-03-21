@@ -24,42 +24,49 @@ import ShapeCollectionPool from '@/utils/pooling/ShapeCollectionPool'
 import { clone, newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapePath from '@/utils/shapes/ShapePath'
-export default class ShapePropertyFactory {
-  static getConstructorFunction() {
-    return ShapeProperty
-  }
+/**
+ *
+ */
+export function getConstructorFunction() {
+  return ShapeProperty
+}
 
-  static getKeyframedConstructorFunction() {
-    return KeyframedShapeProperty
-  }
+/**
+ *
+ */
+export function getKeyframedConstructorFunction() {
+  return KeyframedShapeProperty
+}
 
-  static getShapeProp(
-    elem: ShapeElement,
-    data: Merge<Shape, Mask>,
-    type: number,
-    _?: unknown
-  ) {
-    let prop
-    if (type === 3 || type === 4) {
-      const dataProp = type === 3 ? data.pt : data.ks
-      const keys = dataProp?.k
-      if (keys?.length) {
-        prop = new KeyframedShapeProperty(elem, data, type)
-      } else {
-        prop = new ShapeProperty(elem, data, type)
-      }
-    } else if (type === 5) {
-      prop = new RectShapeProperty(elem as ElementInterfaceIntersect, data)
-    } else if (type === 6) {
-      prop = new EllShapeProperty(elem as ElementInterfaceIntersect, data)
-    } else if (type === 7) {
-      prop = new StarShapeProperty(elem, data)
+/**
+ *
+ */
+export function getShapeProp(
+  elem: ShapeElement,
+  data: Merge<Shape, Mask>,
+  type: number,
+  _?: unknown
+) {
+  let prop
+  if (type === 3 || type === 4) {
+    const dataProp = type === 3 ? data.pt : data.ks
+    const keys = dataProp?.k
+    if (keys?.length) {
+      prop = new KeyframedShapeProperty(elem, data, type)
+    } else {
+      prop = new ShapeProperty(elem, data, type)
     }
-    if (prop?.k) {
-      elem.addDynamicProperty(prop as any)
-    }
-    return prop
+  } else if (type === 5) {
+    prop = new RectShapeProperty(elem as ElementInterfaceIntersect, data)
+  } else if (type === 6) {
+    prop = new EllShapeProperty(elem as ElementInterfaceIntersect, data)
+  } else if (type === 7) {
+    prop = new StarShapeProperty(elem, data)
   }
+  if (prop?.k) {
+    elem.addDynamicProperty(prop as any)
+  }
+  return prop
 }
 
 abstract class ShapeBaseProperty extends DynamicPropertyContainer {

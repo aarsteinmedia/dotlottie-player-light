@@ -17,8 +17,8 @@ import PolynomialBezier from '@/elements/PolynomialBezier'
 import { ObjectFit } from '@/enums'
 import { createElementID, roundCorner } from '@/utils/getterSetter'
 import Matrix from '@/utils/Matrix'
-import PropertyFactory from '@/utils/PropertyFactory'
-import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
+// import PropertyFactory from '@/utils/PropertyFactory'
+// import {} from '@/utils/shapes/ShapeProperty'
 import { strFromU8, unzip as unzipOrg, type Unzipped } from 'fflate'
 
 export class CustomError extends Error {
@@ -297,18 +297,18 @@ export const addBrightnessToRGB = (color: Vector3, offset: number) => {
     }
     return str.split('.').pop()?.toLowerCase()
   },
-  getFactory = (name: string) => {
-    switch (name) {
-      case 'propertyFactory':
-        return PropertyFactory
-      case 'shapePropertyFactory':
-        return ShapePropertyFactory
-      case 'matrix':
-        return Matrix
-      default:
-        return null
-    }
-  },
+  // getFactory = (name: string) => {
+  //   switch (name) {
+  //     case 'propertyFactory':
+  //       return PropertyFactory
+  //     case 'shapePropertyFactory':
+  //       return ShapePropertyFactory
+  //     case 'matrix':
+  //       return Matrix
+  //     default:
+  //       return null
+  //   }
+  // },
   getFilename = (src: string, keepExt?: boolean) => {
     // Because the regex strips all special characters, we need to extract the file extension, so we can add it later if we need it
     const ext = getExt(src)

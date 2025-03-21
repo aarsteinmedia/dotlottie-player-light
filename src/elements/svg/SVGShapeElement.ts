@@ -29,9 +29,7 @@ import { getBlendMode } from '@/utils'
 import { extendPrototype } from '@/utils/functionExtensions'
 import { getLocationHref } from '@/utils/getterSetter'
 import ShapeModifiers from '@/utils/shapes/ShapeModifiers' // type ShapeModifierInterface,
-import ShapePropertyFactory, {
-  type ShapeProperty,
-} from '@/utils/shapes/ShapeProperty'
+import { getShapeProp, type ShapeProperty } from '@/utils/shapes/ShapeProperty'
 import TransformProperty from '@/utils/TransformProperty'
 export default class SVGShapeElement extends ShapeElement {
   _debug?: boolean
@@ -123,12 +121,7 @@ export default class SVGShapeElement extends ShapeElement {
     } else if (data.ty === 'sr') {
       ty = 7
     }
-    const shapeProperty = ShapePropertyFactory.getShapeProp(
-      this,
-      data as any,
-      ty,
-      this
-    )
+    const shapeProperty = getShapeProp(this, data as any, ty, this)
     const elementData = new SVGShapeData(
       ownTransformers,
       level,

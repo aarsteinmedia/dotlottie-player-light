@@ -11,7 +11,7 @@ import { createElementID, getLocationHref } from '@/utils/getterSetter'
 import { createSizedArray } from '@/utils/helpers/arrays'
 import { ValueProperty } from '@/utils/Properties'
 import PropertyFactory from '@/utils/PropertyFactory'
-import ShapePropertyFactory from '@/utils/shapes/ShapeProperty'
+import { getShapeProp } from '@/utils/shapes/ShapeProperty'
 
 export default class MaskElement {
   data: LottieLayer
@@ -97,11 +97,7 @@ export default class MaskElement {
             0.01,
             this.element
           ),
-          prop: ShapePropertyFactory.getShapeProp(
-            this.element,
-            properties[i] as any,
-            3
-          ),
+          prop: getShapeProp(this.element, properties[i] as any, 3),
         }
         defs?.appendChild(path)
       } else {
@@ -188,11 +184,7 @@ export default class MaskElement {
             0.01,
             this.element
           ),
-          prop: ShapePropertyFactory.getShapeProp(
-            this.element,
-            properties[i] as any,
-            3
-          ),
+          prop: getShapeProp(this.element, properties[i] as any, 3),
         }
         if (!this.viewData[i].prop.k) {
           this.drawPath(

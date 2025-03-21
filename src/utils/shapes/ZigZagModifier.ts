@@ -13,86 +13,89 @@ import { newElement } from '@/utils/pooling/ShapePool'
 import PropertyFactory from '@/utils/PropertyFactory'
 import ShapeModifier from '@/utils/shapes/ShapeModifier'
 
+/**
+ *
+ */
+function zigZagCorner(
+  outputBezier: ShapePath,
+  path: ShapePath,
+  cur: number,
+  amplitude: number,
+  frequency: number,
+  pointType: number,
+  direction: AnimationDirection
+) {
+  const angle = getProjectingAngle(path, cur),
+    point = path.v[cur % Number(path._length)],
+    prevPoint = path.v[cur === 0 ? Number(path._length) - 1 : cur - 1],
+    nextPoint = path.v[(cur + 1) % Number(path._length)],
+    prevDist =
+      pointType === 2
+        ? Math.sqrt(
+            Math.pow(Number(point?.[0]) - Number(prevPoint?.[0]), 2) +
+              Math.pow(Number(point?.[1]) - Number(prevPoint?.[1]), 2)
+          )
+        : 0,
+    nextDist =
+      pointType === 2
+        ? Math.sqrt(
+            Math.pow(Number(point?.[0]) - Number(nextPoint?.[0]), 2) +
+              Math.pow(Number(point?.[1]) - Number(nextPoint?.[1]), 2)
+          )
+        : 0
+
+  setPoint(
+    outputBezier,
+    (path.v[cur % Number(path._length)] || [0, 0]) as Vector2,
+    angle,
+    direction,
+    amplitude,
+    nextDist / ((frequency + 1) * 2),
+    prevDist / ((frequency + 1) * 2)
+  )
+}
+/**
+ *
+ */
+function zigZagSegment(
+  outputBezier: ShapePath,
+  segment: PolynomialBezier,
+  amplitude: number,
+  frequency: number,
+  pointType: number,
+  directionFromProps: AnimationDirection
+) {
+  let direction = directionFromProps
+  for (let i = 0; i < frequency; i++) {
+    const t = (i + 1) / (frequency + 1),
+      dist =
+        pointType === 2
+          ? Math.sqrt(
+              Math.pow(segment.points[3][0] - segment.points[0][0], 2) +
+                Math.pow(segment.points[3][1] - segment.points[0][1], 2)
+            )
+          : 0,
+      angle = segment.normalAngle(t),
+      point = segment.point(t) as Vector2
+    setPoint(
+      outputBezier,
+      point,
+      angle,
+      direction,
+      amplitude,
+      dist / ((frequency + 1) * 2),
+      dist / ((frequency + 1) * 2)
+    )
+
+    direction = -direction as AnimationDirection
+  }
+
+  return direction
+}
 export default class ZigZagModifier extends ShapeModifier {
   amplitude?: ValueProperty
   frequency?: ValueProperty
   pointsType?: ValueProperty
-  static zigZagCorner(
-    outputBezier: ShapePath,
-    path: ShapePath,
-    cur: number,
-    amplitude: number,
-    frequency: number,
-    pointType: number,
-    direction: AnimationDirection
-  ) {
-    const angle = getProjectingAngle(path, cur),
-      point = path.v[cur % Number(path._length)],
-      prevPoint = path.v[cur === 0 ? Number(path._length) - 1 : cur - 1],
-      nextPoint = path.v[(cur + 1) % Number(path._length)],
-      prevDist =
-        pointType === 2
-          ? Math.sqrt(
-              Math.pow(Number(point?.[0]) - Number(prevPoint?.[0]), 2) +
-                Math.pow(Number(point?.[1]) - Number(prevPoint?.[1]), 2)
-            )
-          : 0,
-      nextDist =
-        pointType === 2
-          ? Math.sqrt(
-              Math.pow(Number(point?.[0]) - Number(nextPoint?.[0]), 2) +
-                Math.pow(Number(point?.[1]) - Number(nextPoint?.[1]), 2)
-            )
-          : 0
-
-    setPoint(
-      outputBezier,
-      (path.v[cur % Number(path._length)] || [0, 0]) as Vector2,
-      angle,
-      direction,
-      amplitude,
-      nextDist / ((frequency + 1) * 2),
-      prevDist / ((frequency + 1) * 2)
-    )
-  }
-  /**
-   *
-   */
-  static zigZagSegment(
-    outputBezier: ShapePath,
-    segment: PolynomialBezier,
-    amplitude: number,
-    frequency: number,
-    pointType: number,
-    directionFromProps: AnimationDirection
-  ) {
-    let direction = directionFromProps
-    for (let i = 0; i < frequency; i++) {
-      const t = (i + 1) / (frequency + 1),
-        dist =
-          pointType === 2
-            ? Math.sqrt(
-                Math.pow(segment.points[3][0] - segment.points[0][0], 2) +
-                  Math.pow(segment.points[3][1] - segment.points[0][1], 2)
-              )
-            : 0,
-        angle = segment.normalAngle(t),
-        point = segment.point(t) as Vector2
-      setPoint(
-        outputBezier,
-        point,
-        angle,
-        direction,
-        amplitude,
-        dist / ((frequency + 1) * 2),
-        dist / ((frequency + 1) * 2)
-      )
-
-      direction = -direction as AnimationDirection
-    }
-
-    return direction
-  }
 
   override initModifierProperties(
     elem: ElementInterfaceIntersect,
@@ -146,7 +149,7 @@ export default class ZigZagModifier extends ShapeModifier {
 
     let direction: AnimationDirection = -1,
       segment = shapeSegment(path, 0)
-    ZigZagModifier.zigZagCorner(
+    zigZagCorner(
       clonedPath,
       path,
       0,
@@ -157,7 +160,7 @@ export default class ZigZagModifier extends ShapeModifier {
     )
 
     for (let i = 0; i < count; i++) {
-      direction = ZigZagModifier.zigZagSegment(
+      direction = zigZagSegment(
         clonedPath,
         segment,
         amplitude,
@@ -172,7 +175,7 @@ export default class ZigZagModifier extends ShapeModifier {
         segment = shapeSegment(path, (i + 1) % count)
       }
 
-      ZigZagModifier.zigZagCorner(
+      zigZagCorner(
         clonedPath,
         path,
         i + 1,

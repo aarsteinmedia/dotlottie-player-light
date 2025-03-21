@@ -22,7 +22,7 @@ import {
 } from '@/animation/AnimationManager'
 import { RendererType } from '@/enums'
 import SVGRenderer from '@/renderers/SVGRenderer'
-import { getFactory, inBrowser, isServer } from '@/utils'
+import { /* getFactory, */ inBrowser, isServer } from '@/utils'
 import {
   registerRenderer,
   setExpressionsPlugin,
@@ -43,7 +43,7 @@ import ZigZagModifier from '@/utils/shapes/ZigZagModifier'
 const version = '[[BM_VERSION]]'
 
 export {
-  getFactory as __getFactory,
+  // getFactory as __getFactory,
   inBrowser,
   setIDPrefix,
   setLocationHref,
