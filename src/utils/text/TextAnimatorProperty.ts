@@ -114,7 +114,7 @@ export default class TextAnimatorProperty extends DynamicPropertyContainer {
         len = paths._length - 1
         let bezierData
         totalLength = 0
-        for (i = 0; i < len; i += 1) {
+        for (i = 0; i < len; i++) {
           bezierData = buildBezierData(
             paths.v[i],
             paths.v[i + 1],

@@ -891,19 +891,21 @@ export class SVGGaussianBlurEffect {
       return
     }
     // Empirical value, matching AE's blur appearance.
-    const kBlurrinessToSigma = 0.3
-    const sigma =
-      (this.filterManager.effectElements[0].p.v as number) * kBlurrinessToSigma
+    const kBlurrinessToSigma = 0.3,
+      sigma =
+        (this.filterManager.effectElements[0].p.v as number) *
+        kBlurrinessToSigma,
+      // Dimensions mapping:
+      //
+      //   1 -> horizontal & vertical
+      //   2 -> horizontal only
+      //   3 -> vertical only
+      //
+      dimensions = this.filterManager.effectElements[1].p.v,
+      sigmaX = dimensions == 3 ? 0 : sigma, // eslint-disable-line eqeqeq
+      sigmaY = dimensions == 2 ? 0 : sigma // eslint-disable-line eqeqeq
 
-    // Dimensions mapping:
-    //
-    //   1 -> horizontal & vertical
-    //   2 -> horizontal only
-    //   3 -> vertical only
-    //
-    const dimensions = this.filterManager.effectElements[1].p.v
-    const sigmaX = dimensions == 3 ? 0 : sigma // eslint-disable-line eqeqeq
-    const sigmaY = dimensions == 2 ? 0 : sigma // eslint-disable-line eqeqeq
+    // console.log(this.filterManager.effectElements.map((el) => el.p.v))
 
     this.feGaussianBlur.setAttribute('stdDeviation', `${sigmaX} ${sigmaY}`)
 

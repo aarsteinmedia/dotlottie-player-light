@@ -240,46 +240,43 @@ function renderPath(
   if (!itemData) {
     throw new Error('SVGElementsRenderer: Method renderPath is missing data')
   }
-  let j: number
-  let jLen: number
   let pathStringTransformed
   let redraw: boolean
   let pathNodes: ShapePath | undefined
-  let l: number
-  const lLen = itemData.styles.length
+  const { length } = itemData.styles
   const lvl = itemData.lvl
   let paths: ShapeElement
   let mat: Matrix
   let iterations
   let k
-  for (l = 0; l < lLen; l += 1) {
+  for (let i = 0; i < length; i++) {
     redraw = itemData.sh?._mdf || !!isFirstFrame
-    if (itemData.styles[l].lvl < lvl) {
+    if (itemData.styles[i].lvl < lvl) {
       mat = _matrixHelper.reset()
-      iterations = lvl - itemData.styles[l].lvl
+      iterations = lvl - itemData.styles[i].lvl
       k = itemData.transformers.length - 1
       while (!redraw && iterations > 0) {
         redraw = itemData.transformers[k].mProps._mdf || redraw
-        iterations -= 1
-        k -= 1
+        iterations--
+        k--
       }
       if (redraw) {
-        iterations = lvl - itemData.styles[l].lvl
+        iterations = lvl - itemData.styles[i].lvl
         k = itemData.transformers.length - 1
         while (iterations > 0) {
           mat.multiply(itemData?.transformers[k].mProps.v)
-          iterations -= 1
-          k -= 1
+          iterations--
+          k--
         }
       }
     } else {
       mat = _identityMatrix
     }
     paths = itemData.sh.paths
-    jLen = paths._length || 0
+    const jLen = paths._length || 0
     if (redraw) {
       pathStringTransformed = ''
-      for (j = 0; j < jLen; j += 1) {
+      for (let j = 0; j < jLen; j++) {
         pathNodes = paths.shapes?.[j] as ShapePath
         if (pathNodes && pathNodes._length) {
           pathStringTransformed += buildShapeString(
@@ -290,12 +287,12 @@ function renderPath(
           )
         }
       }
-      itemData.caches[l] = pathStringTransformed
+      itemData.caches[i] = pathStringTransformed
     } else {
-      pathStringTransformed = itemData.caches[l]
+      pathStringTransformed = itemData.caches[i]
     }
-    itemData.styles[l].d += styleData.hd === true ? '' : pathStringTransformed
-    itemData.styles[l]._mdf = redraw || itemData.styles[l]._mdf
+    itemData.styles[i].d += styleData.hd === true ? '' : pathStringTransformed
+    itemData.styles[i]._mdf = redraw || itemData.styles[i]._mdf
   }
 }
 

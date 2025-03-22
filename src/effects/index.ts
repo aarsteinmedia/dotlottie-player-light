@@ -1,4 +1,4 @@
-import type { EffectInterface, GroupEffect } from '@/effects/EffectsManager'
+import type { GroupEffect } from '@/effects/EffectsManager'
 import type { EffectValue, ElementInterfaceIntersect } from '@/types'
 import type { ValueProperty } from '@/utils/Properties'
 
@@ -9,16 +9,10 @@ export class SliderEffect {
 
   constructor(
     data: EffectValue,
-    elem: EffectInterface,
+    elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory(
-      elem as any,
-      data.v,
-      0,
-      0,
-      container
-    ) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 0, null, container) as ValueProperty
   }
 }
 
@@ -27,16 +21,10 @@ export class AngleEffect {
 
   constructor(
     data: EffectValue,
-    elem: EffectInterface,
+    elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory(
-      elem as any,
-      data.v,
-      0,
-      0,
-      container
-    ) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 0, 0, container) as ValueProperty
   }
 }
 
@@ -45,16 +33,10 @@ export class ColorEffect {
 
   constructor(
     data: EffectValue,
-    elem: EffectInterface,
+    elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory(
-      elem as any,
-      data.v,
-      1,
-      0,
-      container
-    ) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 1, 0, container) as ValueProperty
   }
 }
 
@@ -63,16 +45,10 @@ export class PointEffect {
 
   constructor(
     data: EffectValue,
-    elem: EffectInterface,
+    elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory(
-      elem as any,
-      data.v,
-      1,
-      0,
-      container
-    ) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 1, 0, container) as ValueProperty
   }
 }
 

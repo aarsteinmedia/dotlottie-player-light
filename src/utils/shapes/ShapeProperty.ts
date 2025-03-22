@@ -95,7 +95,6 @@ abstract class ShapeBaseProperty extends DynamicPropertyContainer {
     let keyPropS
     let keyPropE
     let isHold
-    let k
     let perc = 0
     let vertexValue
     const kf = this.keyframes
@@ -180,7 +179,7 @@ abstract class ShapeBaseProperty extends DynamicPropertyContainer {
     caching!.lastIndex = Number(iterationIndex)
 
     for (let j = 0; j < jLen; j++) {
-      for (k = 0; k < kLen; k += 1) {
+      for (let k = 0; k < kLen; k++) {
         vertexValue = isHold
           ? keyPropS.i[j][k]
           : keyPropS.i[j][k] + (keyPropE.i[j][k] - keyPropS.i[j][k]) * perc
@@ -213,11 +212,9 @@ abstract class ShapeBaseProperty extends DynamicPropertyContainer {
           (lastFrame > endTime && frameNum > endTime))
       )
     ) {
-      // / /
       this._caching!.lastIndex =
         lastFrame < frameNum ? Number(this._caching?.lastIndex) : 0
       this.interpolateShape(frameNum, this.pv, this._caching)
-      // / /
     }
     this._caching!.lastFrame = frameNum
     return this.pv
@@ -314,7 +311,7 @@ export class RectShapeProperty extends ShapeBaseProperty {
     this.initDynamicPropertyContainer(elem)
     this.p = PropertyFactory(
       elem,
-      data.p as any,
+      data.p,
       1,
       0,
       this
@@ -326,7 +323,7 @@ export class RectShapeProperty extends ShapeBaseProperty {
       0,
       this
     ) as MultiDimensionalProperty<Vector2>
-    this.r = PropertyFactory(elem, data.r as any, 0, 0, this) as ValueProperty
+    this.r = PropertyFactory(elem, data.r, 0, 0, this) as ValueProperty
     if (this.dynamicProperties?.length) {
       this.k = true
     } else {

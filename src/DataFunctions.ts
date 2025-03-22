@@ -94,7 +94,7 @@ export function completeShapes(arr: Shape[]) {
   const { length } = arr
   let j
   let jLen
-  for (let i = length - 1; i >= 0; i -= 1) {
+  for (let i = length - 1; i >= 0; i--) {
     if (arr[i].ty === 'sh') {
       if ((arr[i].ks?.k as ShapePath).i) {
         convertPathsToAbsoluteValues(arr[i].ks?.k)
@@ -468,15 +468,11 @@ class CheckShapes {
 
   private iterateLayers(layers: LottieLayer[]) {
     const { length } = layers
-    let j
-    let jLen
-    let k
-    let kLen
     for (let i = 0; i < length; i++) {
       if (layers[i].hasMask) {
-        const maskProps = layers[i].masksProperties
-        jLen = Number(maskProps?.length)
-        for (j = 0; j < jLen; j++) {
+        const maskProps = layers[i].masksProperties,
+          { length: jLen } = maskProps || []
+        for (let j = 0; j < jLen; j++) {
           if (!maskProps) {
             continue
           }
@@ -484,8 +480,8 @@ class CheckShapes {
             ;(maskProps[j].pt.k as MaskData).c = !!maskProps[j].cl
             continue
           }
-          kLen = (maskProps[j].pt.k as MaskData[]).length as unknown as number
-          for (k = 0; k < kLen; k += 1) {
+          const { length: kLen } = (maskProps[j].pt.k as MaskData[]) || []
+          for (let k = 0; k < kLen; k++) {
             if ((maskProps[j].pt.k as MaskData[])[k].s) {
               ;(maskProps[j].pt.k as MaskData[])[k].s[0].c = !!maskProps?.[j].cl
             }

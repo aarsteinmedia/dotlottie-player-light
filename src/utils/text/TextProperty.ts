@@ -164,7 +164,6 @@ export default class TextProperty extends DynamicPropertyContainer {
     }
     const data = this.data
     const letters: Letter[] = []
-    let i
     let len: number
     let newLineFlag
     let index = 0
@@ -176,7 +175,6 @@ export default class TextProperty extends DynamicPropertyContainer {
     const lineWidths = []
     let lineWidth = 0
     let maxLineWidth = 0
-    let j
     const fontData = fontManager?.getFontByName(documentData.f)
     let charData
     let cLength = 0
@@ -203,7 +201,7 @@ export default class TextProperty extends DynamicPropertyContainer {
         len = finalText.length
         trackingOffset = (documentData.tr / 1000) * documentData.finalSize
         let lastSpaceIndex = -1
-        for (i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
           charCode = finalText[i].charCodeAt(0)
           newLineFlag = false
           if (finalText[i] === ' ') {
@@ -268,7 +266,7 @@ export default class TextProperty extends DynamicPropertyContainer {
     cLength = 0
     let uncollapsedSpaces = 0
     let currentChar
-    for (i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
       newLineFlag = false
       currentChar = documentData.finalText[i]
       charCode = currentChar.charCodeAt(0)
@@ -379,7 +377,7 @@ export default class TextProperty extends DynamicPropertyContainer {
     let based
     let ind
     const indexes = []
-    for (j = 0; j < jLen; j++) {
+    for (let j = 0; j < jLen; j++) {
       animatorData = animators?.[j]
       if (!animatorData) {
         continue
@@ -400,7 +398,7 @@ export default class TextProperty extends DynamicPropertyContainer {
       }
       ind = 0
       based = Number(animatorData.s?.b)
-      for (i = 0; i < len; i++) {
+      for (let i = 0; i < len; i++) {
         letterData = letters[i]
         letterData.anIndexes[j] = ind
         if (
@@ -422,7 +420,7 @@ export default class TextProperty extends DynamicPropertyContainer {
       let currentInd = -1
       let newInd
       if (animatorData.s?.rn === 1) {
-        for (i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
           letterData = letters[i]
           if (currentInd !== Number(letterData.anIndexes[j])) {
             currentInd = letterData.anIndexes[j]

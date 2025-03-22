@@ -48,24 +48,23 @@ export class GroupEffect extends DynamicPropertyContainer {
     this.data = data
     this.effectElements = []
     this.initDynamicPropertyContainer(element)
-    let i
-    const len = this.data.ef.length
     let eff
-    const effects = this.data.ef
-    for (i = 0; i < len; i++) {
+    const effects = this.data.ef,
+      { length } = effects
+    for (let i = 0; i < length; i++) {
       eff = null
       switch (effects[i].ty) {
         case 0:
-          eff = new SliderEffect(effects[i], element as any, this)
+          eff = new SliderEffect(effects[i], element, this)
           break
         case 1:
-          eff = new AngleEffect(effects[i], element as any, this)
+          eff = new AngleEffect(effects[i], element, this)
           break
         case 2:
-          eff = new ColorEffect(effects[i], element as any, this)
+          eff = new ColorEffect(effects[i], element, this)
           break
         case 3:
-          eff = new PointEffect(effects[i], element as any, this)
+          eff = new PointEffect(effects[i], element, this)
           break
         case 4:
         case 7:
