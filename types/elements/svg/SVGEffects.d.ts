@@ -1,10 +1,9 @@
-import type { AngleEffect, CheckboxEffect, ColorEffect, LayerIndexEffect, MaskIndexEffect, NoValueEffect, PointEffect, SliderEffect } from '../../effects';
+import { GroupEffect } from '../../effects/EffectsManager';
 import { ElementInterfaceIntersect } from '../../types';
-type Filter = AngleEffect | CheckboxEffect | ColorEffect | LayerIndexEffect | MaskIndexEffect | NoValueEffect | PointEffect | SliderEffect;
 export default class SVGEffects {
-    filters: Filter[];
+    static idPrefix: string;
+    filters: GroupEffect[];
     constructor(elem: ElementInterfaceIntersect);
-    getEffects(type: string): (SliderEffect | AngleEffect | ColorEffect | PointEffect | CheckboxEffect | LayerIndexEffect | MaskIndexEffect | NoValueEffect)[];
+    getEffects(type: string): GroupEffect[];
     renderFrame(frame?: number | null): void;
 }
-export {};

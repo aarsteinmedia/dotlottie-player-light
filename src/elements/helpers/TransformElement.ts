@@ -160,7 +160,7 @@ export default class TransformElement extends BaseElement {
 
         const len = transformEffects.length
         for (let i = 0; i < len; i++) {
-          this.localTransforms.push(transformEffects[i] as Transformer)
+          this.localTransforms.push(transformEffects[i] as any)
         }
       }
     }

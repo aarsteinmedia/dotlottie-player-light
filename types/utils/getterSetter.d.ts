@@ -14,6 +14,6 @@ export declare const registeredEffects: {
         countsAsEffect: boolean;
         effect: EffectElement;
     };
-}, registerEffect: (id: string, effect: EffectElement, countsAsEffect: boolean) => void;
+}, registerEffect: (id: number, effect: EffectElement, countsAsEffect: boolean) => void;
 export declare const createElementID: () => string, setIDPrefix: (value: string) => void, getIDPrefix: () => string;
 export declare const getShouldRoundValues: () => boolean, setShouldRoundValues: (value: boolean) => void, setQuality: (value: string | number) => void;
