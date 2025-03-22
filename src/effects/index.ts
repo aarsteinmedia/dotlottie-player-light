@@ -6,7 +6,6 @@ import PropertyFactory from '@/utils/PropertyFactory'
 
 export class SliderEffect {
   p?: ValueProperty
-  type?: string
 
   constructor(
     data: EffectValue,
@@ -25,7 +24,6 @@ export class SliderEffect {
 
 export class AngleEffect {
   p?: ValueProperty
-  type?: string
 
   constructor(
     data: EffectValue,
@@ -44,7 +42,6 @@ export class AngleEffect {
 
 export class ColorEffect {
   p?: ValueProperty
-  type?: string
 
   constructor(
     data: EffectValue,
@@ -63,7 +60,6 @@ export class ColorEffect {
 
 export class PointEffect {
   p?: ValueProperty
-  type?: string
 
   constructor(
     data: EffectValue,
@@ -82,7 +78,6 @@ export class PointEffect {
 
 export class LayerIndexEffect {
   p?: ValueProperty
-  type?: string
 
   constructor(
     data: EffectValue,
@@ -95,7 +90,6 @@ export class LayerIndexEffect {
 
 export class MaskIndexEffect {
   p?: ValueProperty
-  type?: string
 
   constructor(
     data: EffectValue,
@@ -108,7 +102,6 @@ export class MaskIndexEffect {
 
 export class CheckboxEffect {
   p?: ValueProperty
-  type?: string
 
   constructor(
     data: EffectValue,
@@ -121,7 +114,6 @@ export class CheckboxEffect {
 
 export class NoValueEffect {
   p: object
-  type?: string
 
   constructor() {
     this.p = {}

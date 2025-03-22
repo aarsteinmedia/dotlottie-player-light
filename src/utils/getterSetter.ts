@@ -108,7 +108,7 @@ export const registeredEffects: {
     }
   } = {},
   registerEffect = (
-    id: string,
+    id: number,
     effect: EffectElement,
     countsAsEffect: boolean
   ) => {

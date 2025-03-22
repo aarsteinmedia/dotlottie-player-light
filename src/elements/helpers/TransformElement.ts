@@ -5,7 +5,7 @@ import BaseElement from '@/elements/BaseElement'
 import Matrix from '@/utils/Matrix'
 import TransformProperty from '@/utils/TransformProperty'
 
-const effectTypes = {
+export const effectTypes = {
   TRANSFORM_EFFECT: 'transformEffect',
 }
 

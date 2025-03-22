@@ -1,7 +1,7 @@
 import type { CompInterface } from '../../types';
+export declare const compositions: CompInterface[], currentFrame = 0;
+export declare function registerComposition(comp: CompInterface): void;
 export default class ProjectInterface {
-    static compositions: CompInterface[];
-    static currentFrame: number;
     content?: ProjectInterface;
     createEffectsInterface?: (val: any, _interface?: ProjectInterface) => any;
     registerEffectsInterface?: (val: any, _interface?: ProjectInterface) => any;
@@ -10,5 +10,4 @@ export default class ProjectInterface {
     text?: ProjectInterface;
     textInterface?: ProjectInterface;
     constructor(name?: string);
-    static registerComposition(comp: CompInterface): void;
 }

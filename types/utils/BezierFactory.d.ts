@@ -1,6 +1,4 @@
-export default class BezierFactory {
-    static getBezierEasing(a: number, b: number, c: number, d: number, nm?: string): BezierEasing;
-}
+export declare function getBezierEasing(a: number, b: number, c: number, d: number, nm?: string): BezierEasing;
 declare class BezierEasing {
     private _mSampleValues;
     private _p;

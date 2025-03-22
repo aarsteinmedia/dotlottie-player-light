@@ -7,8 +7,6 @@ export default class PolynomialBezier {
     d: Vector2;
     points: [Vector2, Vector2, Vector2, Vector2];
     constructor(p0: Vector2, p1FromProps: Vector2, p2FromProps: Vector2, p3: Vector2, linearize?: boolean);
-    static shapeSegment(shapePath: ShapePath, index: number): PolynomialBezier;
-    static shapeSegmentInverted(shapePath: ShapePath, index: number): PolynomialBezier;
     boundingBox(): {
         bottom: number;
         cx: number;
@@ -38,3 +36,5 @@ export default class PolynomialBezier {
     tangentAngle(t: number): number;
     private _extrema;
 }
+export declare function shapeSegment(shapePath: ShapePath, index: number): PolynomialBezier;
+export declare function shapeSegmentInverted(shapePath: ShapePath, index: number): PolynomialBezier;

@@ -8,7 +8,5 @@ export default class PoolFactory {
     newElement<T = unknown>(): T;
     release<T = unknown>(element: T): void;
 }
-export declare abstract class Pooling {
-    static double(arr: unknown[]): unknown[];
-}
+export declare function double(arr: unknown[]): unknown[];
 export declare const pointPool: PoolFactory, bezierLengthPool: PoolFactory, segmentsLengthPool: PoolFactory;

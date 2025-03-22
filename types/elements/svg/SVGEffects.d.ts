@@ -2,7 +2,6 @@ import type { AngleEffect, CheckboxEffect, ColorEffect, LayerIndexEffect, MaskIn
 import { ElementInterfaceIntersect } from '../../types';
 type Filter = AngleEffect | CheckboxEffect | ColorEffect | LayerIndexEffect | MaskIndexEffect | NoValueEffect | PointEffect | SliderEffect;
 export default class SVGEffects {
-    static idPrefix: string;
     filters: Filter[];
     constructor(elem: ElementInterfaceIntersect);
     getEffects(type: string): (SliderEffect | AngleEffect | ColorEffect | PointEffect | CheckboxEffect | LayerIndexEffect | MaskIndexEffect | NoValueEffect)[];

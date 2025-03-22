@@ -25,8 +25,8 @@ export function createFilter(filId: string, skipCoordinates?: boolean) {
   if (!fil) {
     throw new Error(`Could not create ${filId} filter element`)
   }
-  fil.setAttribute('id', filId)
-  if (skipCoordinates !== true) {
+  fil.id = filId
+  if (!skipCoordinates) {
     fil.setAttribute('filterUnits', 'objectBoundingBox')
     fil.setAttribute('x', '0%')
     fil.setAttribute('y', '0%')

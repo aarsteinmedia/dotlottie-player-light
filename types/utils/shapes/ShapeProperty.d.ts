@@ -4,11 +4,9 @@ import type ShapeCollection from '../../utils/shapes/ShapeCollection';
 import ShapeElement from '../../elements/ShapeElement';
 import DynamicPropertyContainer from '../../utils/helpers/DynamicPropertyContainer';
 import ShapePath from '../../utils/shapes/ShapePath';
-export default class ShapePropertyFactory {
-    static getConstructorFunction(): typeof ShapeProperty;
-    static getKeyframedConstructorFunction(): typeof KeyframedShapeProperty;
-    static getShapeProp(elem: ShapeElement, data: Merge<Shape, Mask>, type: number, _?: unknown): ShapeProperty | KeyframedShapeProperty | RectShapeProperty | EllShapeProperty | StarShapeProperty | undefined;
-}
+export declare function getConstructorFunction(): typeof ShapeProperty;
+export declare function getKeyframedConstructorFunction(): typeof KeyframedShapeProperty;
+export declare function getShapeProp(elem: ShapeElement, data: Merge<Shape, Mask>, type: number, _?: unknown): ShapeProperty | KeyframedShapeProperty | RectShapeProperty | EllShapeProperty | StarShapeProperty | undefined;
 declare abstract class ShapeBaseProperty extends DynamicPropertyContainer {
     _caching?: Caching;
     comp?: ElementInterfaceIntersect;

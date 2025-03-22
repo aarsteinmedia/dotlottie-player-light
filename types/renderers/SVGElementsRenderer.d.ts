@@ -1,12 +1,8 @@
-import type { Shape } from '../types';
-export default class SVGElementsRenderer {
-    static createRenderFunction(data: Shape): typeof SVGElementsRenderer.renderFill | typeof SVGElementsRenderer.renderGradient | typeof SVGElementsRenderer.renderPath | null;
-    private static renderContentTransform;
-    private static renderFill;
-    private static renderGradient;
-    private static renderGradientStroke;
-    private static renderNoop;
-    private static renderPath;
-    private static renderStroke;
-}
-export type CreateRenderFunction = typeof SVGElementsRenderer.createRenderFunction;
+import type { SVGFillStyleData, SVGStyleData } from '../elements/helpers/shapes';
+import type { ItemData, Shape, ShapeDataInterface } from '../types';
+export declare function createRenderFunction(data: Shape): typeof renderFill | typeof renderGradient | typeof renderPath | null;
+declare function renderFill(_: SVGStyleData, itemData?: SVGFillStyleData, isFirstFrame?: boolean): void;
+declare function renderGradient(styleData: SVGStyleData, itemData?: ItemData, isFirstFrame?: boolean): void;
+declare function renderPath(styleData: SVGStyleData, itemData?: ShapeDataInterface, isFirstFrame?: boolean): void;
+export type CreateRenderFunction = typeof createRenderFunction;
+export {};

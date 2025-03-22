@@ -20,10 +20,22 @@ import {
   searchAnimations,
   loadAnimation,
 } from '@/animation/AnimationManager'
+import {
+  SVGDropShadowEffect,
+  SVGFillFilter,
+  SVGGaussianBlurEffect,
+  SVGMatte3Effect,
+  SVGProLevelsFilter,
+  SVGStrokeEffect,
+  SVGTintFilter,
+  SVGTransformEffect,
+  SVGTritoneFilter,
+} from '@/effects/svg'
 import { RendererType } from '@/enums'
 import SVGRenderer from '@/renderers/SVGRenderer'
 import { /* getFactory, */ inBrowser, isServer } from '@/utils'
 import {
+  registerEffect,
   registerRenderer,
   setExpressionsPlugin,
   setIDPrefix,
@@ -105,3 +117,14 @@ registerModifier('rp', RepeaterModifier)
 registerModifier('rd', RoundCornersModifier)
 registerModifier('zz', ZigZagModifier)
 registerModifier('op', OffsetPathModifier)
+
+// Registering effects
+registerEffect(20, SVGTintFilter, true)
+registerEffect(21, SVGFillFilter, true)
+registerEffect(22, SVGStrokeEffect, false)
+registerEffect(23, SVGTritoneFilter, true)
+registerEffect(24, SVGProLevelsFilter, true)
+registerEffect(25, SVGDropShadowEffect, true)
+registerEffect(28, SVGMatte3Effect, false)
+registerEffect(29, SVGGaussianBlurEffect, true)
+registerEffect(35, SVGTransformEffect, false)

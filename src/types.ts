@@ -12,6 +12,17 @@ import type {
   PointEffect,
   SliderEffect,
 } from '@/effects'
+import type {
+  SVGDropShadowEffect,
+  SVGFillFilter,
+  SVGGaussianBlurEffect,
+  SVGMatte3Effect,
+  SVGProLevelsFilter,
+  SVGStrokeEffect,
+  SVGTintFilter,
+  SVGTransformEffect,
+  SVGTritoneFilter,
+} from '@/effects/svg'
 import type AudioElement from '@/elements/AudioElement'
 import type BaseElement from '@/elements/BaseElement'
 import type CompElement from '@/elements/CompElement'
@@ -194,6 +205,10 @@ export interface AnimatedContent {
   fn: null | CreateRenderFunction
 }
 
+export interface EFXElement {
+  p: BaseProperty
+}
+
 export interface ItemsData {
   gr: SVGGElement
   it: ShapeDataInterface[]
@@ -306,7 +321,7 @@ type BaseRendererConfig = {
   className?: string
 }
 
-type FilterSizeConfig = {
+export type FilterSizeConfig = {
   width: string
   height: string
   x: string
@@ -864,6 +879,15 @@ export type EffectElement =
   | typeof NoValueEffect
   | typeof LayerIndexEffect
   | typeof MaskIndexEffect
+  | typeof SVGTintFilter
+  | typeof SVGFillFilter
+  | typeof SVGStrokeEffect
+  | typeof SVGTritoneFilter
+  | typeof SVGProLevelsFilter
+  | typeof SVGDropShadowEffect
+  | typeof SVGMatte3Effect
+  | typeof SVGGaussianBlurEffect
+  | typeof SVGTransformEffect
 export interface EffectValue {
   ty: number
   v: {
@@ -875,6 +899,7 @@ export interface EffectValue {
 export interface Effect {
   ef: EffectValue[]
   en: 1 | 0
+  fs?: FilterSizeConfig
   ix?: number
   nm?: string
   np: number

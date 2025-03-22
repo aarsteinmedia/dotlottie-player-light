@@ -6,8 +6,6 @@ import type ZigZagModifier from '../../utils/shapes/ZigZagModifier';
 import { ElementInterfaceIntersect } from '../../types';
 export type ShapeModifierInterface = TrimModifier | PuckerAndBloatModifier | RepeaterModifier | ZigZagModifier | OffsetPathModifier;
 type Factory = typeof TrimModifier | typeof PuckerAndBloatModifier | typeof RepeaterModifier | typeof ZigZagModifier | typeof OffsetPathModifier;
-export default class ShapeModifiers {
-    static getModifier(nm: string, elem?: ElementInterfaceIntersect, data?: unknown): OffsetPathModifier | PuckerAndBloatModifier | RepeaterModifier | TrimModifier | ZigZagModifier;
-    static registerModifier(nm: string, factory: Factory): void;
-}
+export declare function getModifier(nm: string, elem?: ElementInterfaceIntersect, data?: unknown): OffsetPathModifier | PuckerAndBloatModifier | RepeaterModifier | TrimModifier | ZigZagModifier;
+export declare function registerModifier(nm: string, factory: Factory): void;
 export {};

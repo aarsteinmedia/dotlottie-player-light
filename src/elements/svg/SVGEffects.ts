@@ -1,14 +1,15 @@
-import type {
-  AngleEffect,
-  CheckboxEffect,
-  ColorEffect,
-  LayerIndexEffect,
-  MaskIndexEffect,
-  NoValueEffect,
-  PointEffect,
-  SliderEffect,
-} from '@/effects'
+// import type {
+//   AngleEffect,
+//   CheckboxEffect,
+//   ColorEffect,
+//   LayerIndexEffect,
+//   MaskIndexEffect,
+//   NoValueEffect,
+//   PointEffect,
+//   SliderEffect,
+// } from '@/effects'
 
+import { GroupEffect } from '@/effects/EffectsManager'
 import { ElementInterfaceIntersect } from '@/types'
 import { createFilter } from '@/utils/FiltersFactory'
 import {
@@ -17,41 +18,43 @@ import {
   registeredEffects,
 } from '@/utils/getterSetter'
 
-type Filter =
-  | AngleEffect
-  | CheckboxEffect
-  | ColorEffect
-  | LayerIndexEffect
-  | MaskIndexEffect
-  | NoValueEffect
-  | PointEffect
-  | SliderEffect
+// type Filter =
+//   | AngleEffect
+//   | CheckboxEffect
+//   | ColorEffect
+//   | LayerIndexEffect
+//   | MaskIndexEffect
+//   | NoValueEffect
+//   | PointEffect
+//   | SliderEffect
 
 export default class SVGEffects {
-  // static idPrefix = 'filter_result_'
-  filters: Filter[]
+  static idPrefix = 'filter_result_'
+  filters: GroupEffect[]
   constructor(elem: ElementInterfaceIntersect) {
-    // let source = 'SourceGraphic' TODO: Perhaps for main version
-    const len = elem.data.ef ? elem.data.ef.length : 0
-    const filId = createElementID()
-    const fil = createFilter(filId, true)
+    let source = 'SourceGraphic'
+
+    const filId = createElementID(),
+      fil = createFilter(filId, true)
+
     let count = 0
     this.filters = []
-    let filterManager
-    for (let i = 0; i < len; i++) {
+    let filterManager: null | GroupEffect
+    const { length } = elem.data.ef || []
+    for (let i = 0; i < length; i++) {
       filterManager = null
-      if (elem.data.ef?.[i].ty && registeredEffects[elem.data.ef?.[i].ty]) {
-        const Effect = registeredEffects[elem.data.ef[i].ty].effect
-        // TODO: This looks very wrong and should be tested
+      if (elem.data.ef![i].ty && registeredEffects[elem.data.ef![i].ty]) {
+        const Effect = registeredEffects[elem.data.ef![i].ty].effect
+
         filterManager = new Effect(
-          fil as any,
+          fil,
           elem.effectsManager?.effectElements[i] as any,
-          elem as any
-          // SVGEffects.idPrefix + count, TODO: Perhaps for main version
-          // source TODO: Perhaps for main version
-        )
-        // source = SVGEffects.idPrefix + count TODO: Perhaps for main version
-        if (registeredEffects[elem.data.ef[i].ty].countsAsEffect) {
+          elem as any,
+          SVGEffects.idPrefix + count,
+          source
+        ) as GroupEffect
+        source = SVGEffects.idPrefix + count
+        if (registeredEffects[elem.data.ef![i].ty].countsAsEffect) {
           count += 1
         }
       }
@@ -67,7 +70,7 @@ export default class SVGEffects {
       )
     }
     if (this.filters.length) {
-      elem.addRenderableComponent(this as any)
+      elem.addRenderableComponent(this as unknown as ElementInterfaceIntersect)
     }
   }
 
@@ -85,8 +88,7 @@ export default class SVGEffects {
   renderFrame(frame?: number | null) {
     const { length } = this.filters
     for (let i = 0; i < length; i++) {
-      // TODO: This needs testing
-      ;(this.filters[i] as any).renderFrame(frame)
+      this.filters[i].renderFrame(frame)
     }
   }
 }

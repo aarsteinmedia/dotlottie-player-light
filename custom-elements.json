@@ -717,7 +717,7 @@
         {
           "kind": "class",
           "description": "",
-          "name": "iR",
+          "name": "ro",
           "members": [
             {
               "kind": "field",
@@ -1123,17 +1123,17 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:u.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:g.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
               "name": "_render",
-              "default": "iz"
+              "default": "rh"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "iV"
+              "default": "rn"
             },
             {
               "kind": "field",
@@ -1328,7 +1328,7 @@
             }
           ],
           "superclass": {
-            "name": "sm",
+            "name": "eC",
             "module": "dist/unpkg/index.js"
           },
           "tagName": "dotlottie-player",
@@ -1340,7 +1340,7 @@
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
-            "name": "iR",
+            "name": "ro",
             "module": "dist/unpkg/index.js"
           }
         }

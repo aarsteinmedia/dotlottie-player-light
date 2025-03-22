@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'url'
+import path from 'node:path'
 import { esbuildPlugin } from '@web/dev-server-esbuild'
 import { importMapsPlugin } from '@web/dev-server-import-maps'
 // import { playwrightLauncher } from '@web/test-runner-playwright'
@@ -6,7 +7,9 @@ import rollupPostcss from 'rollup-plugin-postcss'
 import { fromRollup } from '@web/dev-server-rollup'
 import { typescriptPaths as rollupTypescriptPaths } from 'rollup-plugin-typescript-paths'
 
-const typescriptPaths = fromRollup(rollupTypescriptPaths),
+const __dirname = path.dirname(fileURLToPath(import.meta.url)),
+
+ typescriptPaths = fromRollup(rollupTypescriptPaths),
   postcss = fromRollup(rollupPostcss),
   /**
    * @type {import('@web/test-runner').TestRunnerConfig}
@@ -31,7 +34,7 @@ const typescriptPaths = fromRollup(rollupTypescriptPaths),
         loaders: { '.scss': 'css' },
         target: 'esnext',
         ts: true,
-        tsconfig: fileURLToPath(new URL('./tsconfig.json', import.meta.url)),
+        tsconfig: path.resolve(__dirname, 'tsconfig.json'),
       }),
       postcss(),
     ],

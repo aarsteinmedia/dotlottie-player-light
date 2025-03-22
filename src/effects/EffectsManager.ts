@@ -1,4 +1,9 @@
-import type { Effect, ElementInterfaceIntersect, LottieLayer } from '@/types'
+import type {
+  Effect,
+  EFXElement,
+  ElementInterfaceIntersect,
+  LottieLayer,
+} from '@/types'
 
 import {
   AngleEffect,
@@ -13,6 +18,7 @@ import {
 import DynamicPropertyContainer from '@/utils/helpers/DynamicPropertyContainer'
 
 export default class EffectsManager {
+  _mdf?: boolean
   effectElements: EffectInterface[]
   constructor(data: LottieLayer, element: ElementInterfaceIntersect) {
     const effects = data.ef || []
@@ -27,8 +33,9 @@ export default class EffectsManager {
 
 export class GroupEffect extends DynamicPropertyContainer {
   data?: Effect
-  effectElements?: EffectInterface[]
+  effectElements?: EFXElement[]
   override getValue = this.iterateDynamicProperties
+  type?: string
   constructor(
     data: Effect,
     element: ElementInterfaceIntersect,
@@ -78,9 +85,12 @@ export class GroupEffect extends DynamicPropertyContainer {
           break
       }
       if (eff) {
-        this.effectElements.push(eff)
+        this.effectElements.push(eff as EFXElement)
       }
     }
+  }
+  renderFrame(_frame?: number | null) {
+    throw new Error('GroupEffect: Method renderFrame is not implemented yet')
   }
 }
 

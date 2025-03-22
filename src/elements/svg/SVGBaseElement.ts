@@ -157,7 +157,7 @@ export default abstract class SVGBaseElement extends BaseRenderer {
           fil = createFilter(filId)
           this.globalData?.defs.appendChild(fil)
           fil.appendChild(createAlphaToLuminanceFilter())
-          gg = createNS('g')
+          gg = createNS<SVGGElement>('g')
           gg?.appendChild(useElement)
           masker.appendChild(gg)
           gg?.setAttribute('filter', `url(${getLocationHref()}#${filId})`)
