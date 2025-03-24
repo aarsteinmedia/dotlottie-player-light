@@ -12,7 +12,7 @@ export class SliderEffect {
     elem: ElementInterfaceIntersect,
     container: GroupEffect
   ) {
-    this.p = PropertyFactory(elem, data.v, 0, null, container) as ValueProperty
+    this.p = PropertyFactory(elem, data.v, 0, 0, container) as ValueProperty
   }
 }
 

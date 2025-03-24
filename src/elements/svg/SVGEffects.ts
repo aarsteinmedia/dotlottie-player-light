@@ -18,18 +18,9 @@ import {
   registeredEffects,
 } from '@/utils/getterSetter'
 
-// type Filter =
-//   | AngleEffect
-//   | CheckboxEffect
-//   | ColorEffect
-//   | LayerIndexEffect
-//   | MaskIndexEffect
-//   | NoValueEffect
-//   | PointEffect
-//   | SliderEffect
+const idPrefix = 'filter_result_'
 
 export default class SVGEffects {
-  static idPrefix = 'filter_result_'
   filters: GroupEffect[]
   constructor(elem: ElementInterfaceIntersect) {
     let source = 'SourceGraphic'
@@ -50,10 +41,10 @@ export default class SVGEffects {
           fil,
           elem.effectsManager?.effectElements[i] as any,
           elem as any,
-          SVGEffects.idPrefix + count,
+          idPrefix + count,
           source
         ) as GroupEffect
-        source = SVGEffects.idPrefix + count
+        source = idPrefix + count
         if (registeredEffects[elem.data.ef![i].ty].countsAsEffect) {
           count += 1
         }

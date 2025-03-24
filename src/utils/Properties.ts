@@ -362,9 +362,9 @@ export class ValueProperty extends BaseProperty {
   ) {
     super()
     this.propType = 'unidimensional'
-    this.mult = mult ?? 1
+    this.mult = mult || 1
     this.data = data
-    this.v = data.k * (mult ?? 1)
+    this.v = data.k * (mult || 1)
     this.pv = data.k
     this._mdf = false
     this.elem = elem
