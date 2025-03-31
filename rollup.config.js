@@ -95,7 +95,12 @@ const isProd = process.env.NODE_ENV !== 'development',
    * @type {import('rollup').RollupOptions}
    * */
   types = {
-    external: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+    external: [
+      '@aarsteinmedia/lottie-web/light',
+      'react',
+      'react/jsx-dev-runtime',
+      'react/jsx-runtime',
+    ],
     input: path.resolve(__dirname, 'types', 'index.d.ts'),
     output: {
       file: pkg.types,
@@ -127,7 +132,14 @@ const isProd = process.env.NODE_ENV !== 'development',
    * @type {import('rollup').RollupOptions}
    * */
   module = {
-    external: ['react', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'fflate'],
+    external: [
+      '@aarsteinmedia/lottie-web/light',
+      '@aarsteinmedia/lottie-web/utils',
+      'fflate',
+      'react',
+      'react/jsx-dev-runtime',
+      'react/jsx-runtime',
+    ],
     input,
     onwarn(warning, warn) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {

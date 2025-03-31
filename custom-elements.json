@@ -412,7 +412,7 @@
               "description": "Get options from props",
               "return": {
                 "type": {
-                  "text": "AnimationConfig<'svg'>"
+                  "text": "AnimationConfiguration<'svg'>"
                 }
               }
             },
@@ -717,7 +717,7 @@
         {
           "kind": "class",
           "description": "",
-          "name": "rc",
+          "name": "r_",
           "members": [
             {
               "kind": "field",
@@ -1128,12 +1128,12 @@
             {
               "kind": "field",
               "name": "_render",
-              "default": "ru"
+              "default": "tR"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "rd"
+              "default": "tO"
             },
             {
               "kind": "field",
@@ -1328,7 +1328,7 @@
             }
           ],
           "superclass": {
-            "name": "eP",
+            "name": "tz",
             "module": "dist/unpkg/index.js"
           },
           "tagName": "dotlottie-player",
@@ -1340,7 +1340,7 @@
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
-            "name": "rc",
+            "name": "r_",
             "module": "dist/unpkg/index.js"
           }
         }

@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player-light",
-  "version": "5.1.1",
+  "version": "5.2.0",
   "description": "Light Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player-light",
   "type": "module",
   "exports": {
@@ -48,6 +48,7 @@
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
+    "@aarsteinmedia/lottie-web": "^0.2.3",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
@@ -63,10 +64,10 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@swc/core": "^1.11.11",
-    "@types/chai": "^5.2.0",
+    "@swc/core": "^1.11.13",
+    "@types/chai": "^5.2.1",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.13.11",
+    "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",
     "@web/dev-server-esbuild": "^1.0.4",
     "@web/dev-server-import-maps": "^0.2.1",
@@ -74,22 +75,22 @@
     "@web/test-runner": "^0.20.0",
     "@web/test-runner-playwright": "^0.11.0",
     "autoprefixer": "^10.4.21",
-    "esbuild": "^0.25.1",
+    "esbuild": "^0.25.2",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-import-resolver-typescript": "^4.2.2",
+    "eslint-import-resolver-typescript": "^4.3.1",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsdoc": "^50.6.8",
+    "eslint-plugin-jsdoc": "^50.6.9",
     "eslint-plugin-perfectionist": "^4.10.1",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-prettier": "^5.2.5",
     "globals": "^16.0.0",
     "mocha": "^11.1.0",
     "playwright": "^1.51.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "prettier": "^3.5.3",
-    "react": "^19.0.0",
+    "react": "^19.1.0",
     "rimraf": "^6.0.1",
-    "rollup": "^4.36.0",
+    "rollup": "^4.38.0",
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-html-literals": "^1.1.8",
     "rollup-plugin-livereload": "^2.0.5",
@@ -98,12 +99,12 @@
     "rollup-plugin-summary": "^3.0.0",
     "rollup-plugin-swc3": "^0.12.1",
     "rollup-plugin-typescript-paths": "^1.5.0",
-    "stylelint": "^16.16.0",
+    "stylelint": "^16.17.0",
     "stylelint-config-recommended": "^15.0.0",
-    "tsc-alias": "^1.8.11",
+    "tsc-alias": "^1.8.13",
     "tslib": "^2.8.1",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.27.0"
+    "typescript-eslint": "^8.29.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

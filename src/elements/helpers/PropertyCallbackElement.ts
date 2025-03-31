@@ -9,7 +9,8 @@ const UPDATE_ON_CONNECTED = Symbol('UPDATE_ON_CONNECTED')
 
 if (isServer()) {
   // Mock HTMLElement for server-side rendering
-  global.HTMLElement = class EmptyHTMLElement {} as any
+  global.HTMLElement =
+    class EmptyHTMLElement {} as unknown as typeof global.HTMLElement
 }
 
 /**

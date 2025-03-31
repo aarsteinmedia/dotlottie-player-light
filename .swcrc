@@ -3,11 +3,8 @@
   "jsc": {
     "baseUrl": "./src",
     "loose": true,
-    "keepClassNames": true,
     "parser": {
-      "syntax": "typescript",
-      "decorators": true,
-      "dynamicImport": true
+      "syntax": "typescript"
     },
     "target": "es2022"
   }

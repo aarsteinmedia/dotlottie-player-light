@@ -10,7 +10,7 @@
   <body style="font-family: sans-serif; color: white; background-color: black;">
     <div style="margin: 40px auto; width: 80%; max-width: 800px;">
       <h1>DotLottie Player Demo</h1>
-      <!-- <dotlottie-player autoplay loop src="/assets/menuAnimation.lottie"></dotlottie-player> -->
+      <dotlottie-player autoplay loop src="/assets/menuAnimation.lottie"></dotlottie-player>
       <dotlottie-player autoplay background="#FFF" controls subframe src="./assets/optimized_m2acyje2.lottie"></dotlottie-player>
 
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -20,7 +20,7 @@
       pretium nibh ipsum. Magna fermentum iaculis eu non. Scelerisque viverra mauris in aliquam sem fringilla ut. Vivamus at
       augue eget arcu dictum varius duis at.</p>
 
-      <!-- <dotlottie-player autoplay background="#FFF" loop src="/assets/6142.json"></dotlottie-player> -->
+      <dotlottie-player autoplay background="#FFF" loop src="/assets/6142.json"></dotlottie-player>
       
       <p>Dictum sit amet justo donec enim diam vulputate ut pharetra. Volutpat sed cras ornare arcu dui. Tincidunt dui ut ornare
       lectus sit amet. Ornare suspendisse sed nisi lacus sed viverra tellus. Accumsan sit amet nulla facilisi morbi tempus.
@@ -39,7 +39,7 @@
       Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Ac tortor vitae purus faucibus. Tellus cras
       adipiscing enim eu turpis egestas pretium aenean pharetra.</p>
 
-      <!-- <dotlottie-player autoplay loop src="/assets/blackCat.lottie"></dotlottie-player> -->
+      <dotlottie-player autoplay loop src="/assets/blackCat.lottie"></dotlottie-player>
       
       <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur vitae.
       Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae. Nulla
@@ -65,7 +65,7 @@
       enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra diam sit
       amet nisl suscipit adipiscing bibendum.</p>
 
-      <!-- <dotlottie-player animateOnScroll controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
+      <dotlottie-player animateOnScroll controls subframe src="./assets/dev.lottie"></dotlottie-player>
 
       <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur vitae.
       Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae. Nulla
@@ -91,7 +91,7 @@
       enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra diam sit
       amet nisl suscipit adipiscing bibendum.</p>
 
-      <!-- <dotlottie-player autoplay background="#FFF" loop src="/assets/6558.json"></dotlottie-player> -->
+      <dotlottie-player autoplay background="#FFF" loop src="/assets/6558.json"></dotlottie-player>
       
       <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur vitae.
       Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae. Nulla
@@ -141,7 +141,7 @@
       enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra diam sit
       amet nisl suscipit adipiscing bibendum.</p>
 
-      <!-- <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
+      <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player>
 
       <p>Mauris ultrices eros in cursus turpis massa tincidunt dui ut. Malesuada bibendum arcu vitae elementum curabitur vitae.
       Dolor sit amet consectetur adipiscing elit. Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae. Nulla
@@ -158,7 +158,7 @@
       venenatis. Ante in nibh mauris cursus mattis molestie a. Egestas dui id ornare arcu odio ut sem nulla pharetra.
       Adipiscing elit ut aliquam purus.</p>
 
-      <!-- <dotlottie-player autoplay loop subframe src="./assets/blackCat.lottie"></dotlottie-player> -->
+      <dotlottie-player autoplay loop subframe src="./assets/blackCat.lottie"></dotlottie-player>
 
       <p>Ornare arcu dui vivamus arcu felis. Id ornare arcu odio ut sem nulla pharetra. Vitae proin sagittis nisl rhoncus mattis.
       Pellentesque eu tincidunt tortor aliquam nulla facilisi. Sed enim ut sem viverra aliquet eget sit amet. Blandit turpis
@@ -169,14 +169,16 @@
       enim. Donec pretium vulputate sapien nec sagittis. At erat pellentesque adipiscing commodo elit. Nulla pharetra diam sit
       amet nisl suscipit adipiscing bibendum.</p>
 
-      <!-- <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player> -->
+      <dotlottie-player animateOnScroll autoplay controls subframe src="./assets/dev.lottie"></dotlottie-player>
     </div>
     <script type="importmap">
-        {
-            "imports": {
-                "fflate": "./node_modules/fflate/esm/browser.js"
-            }
+      {
+        "imports": {
+          "fflate": "./node_modules/fflate/esm/browser.js",
+          "@aarsteinmedia/lottie-web/utils": "./node_modules/@aarsteinmedia/lottie-web/dist/lottie-utils.js",
+          "@aarsteinmedia/lottie-web/light": "./node_modules/@aarsteinmedia/lottie-web/dist/lottie-light.js"
         }
+      }
     </script>
     <script type="module" src="./dist/index.js"></script>
     <!-- <script>
