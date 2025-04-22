@@ -25,7 +25,6 @@ import {
   getAnimationData,
   getFilename,
   handleErrors,
-  isServer,
 } from '@/utils'
 import Lottie, {
   type AnimationConfiguration,
@@ -36,7 +35,7 @@ import Lottie, {
   type LottieManifest,
   type Vector2,
 } from '@aarsteinmedia/lottie-web/light'
-import { createElementID } from '@aarsteinmedia/lottie-web/utils'
+import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
 
 /**
  * dotLottie Player Web Component

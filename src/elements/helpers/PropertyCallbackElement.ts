@@ -1,4 +1,4 @@
-import { isServer } from '@/utils'
+import { isServer } from '@aarsteinmedia/lottie-web/utils'
 
 /**
  * Credit to:

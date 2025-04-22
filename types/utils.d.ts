@@ -6,7 +6,7 @@ export declare class CustomError extends Error {
 export declare const aspectRatio: (objectFit: string) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", download: (data: string | ArrayBuffer, options?: {
     name: string;
     mimeType: string;
-}) => void, degToRads: number, floatEqual: (a: number, b: number) => boolean, floatZero: (f: number) => boolean, frameOutput: (frame?: number) => string, getAnimationData: (input: unknown) => Promise<{
+}) => void, frameOutput: (frame?: number) => string, getAnimationData: (input: unknown) => Promise<{
     animations: AnimationData[] | null;
     manifest: LottieManifest | null;
     isDotLottie: boolean;
@@ -16,4 +16,4 @@ export declare const aspectRatio: (objectFit: string) => "none" | "xMidYMid meet
 }>, getManifest: (unzipped: Unzipped) => LottieManifest, getMimeFromExt: (ext?: string) => string, handleErrors: (err: unknown) => {
     message: string;
     status: number;
-}, hasExt: (path: string) => boolean, inBrowser: () => boolean, isAudio: (asset: LottieAsset) => boolean, isBase64: (str?: string) => boolean, isImage: (asset: LottieAsset) => boolean, isSafari: () => boolean, isServer: () => boolean, parseBase64: (str: string) => string, prepareString: (str: string) => string, resolveAssets: (unzipped: Unzipped, assets?: LottieAsset[]) => Promise<void>, unzip: (resp: Response) => Promise<Unzipped>;
+}, hasExt: (path: string) => boolean, isAudio: (asset: LottieAsset) => boolean, isBase64: (str?: string) => boolean, isImage: (asset: LottieAsset) => boolean, parseBase64: (str: string) => string, prepareString: (str: string) => string, resolveAssets: (unzipped: Unzipped, assets?: LottieAsset[]) => Promise<void>, unzip: (resp: Response) => Promise<Unzipped>;

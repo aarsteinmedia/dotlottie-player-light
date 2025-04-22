@@ -5,7 +5,7 @@ import type {
 } from '@aarsteinmedia/lottie-web/light'
 
 import { ObjectFit } from '@/enums'
-import { createElementID } from '@aarsteinmedia/lottie-web/utils'
+import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
 import { strFromU8, unzip as unzipOrg, type Unzipped } from 'fflate'
 
 export class CustomError extends Error {
@@ -51,10 +51,10 @@ export const aspectRatio = (objectFit: string) => {
       URL.revokeObjectURL(dataURL)
     }, 1000)
   },
-  degToRads = Math.PI / 180,
-  floatEqual = (a: number, b: number) =>
-    Math.abs(a - b) * 100000 <= Math.min(Math.abs(a), Math.abs(b)),
-  floatZero = (f: number) => Math.abs(f) <= 0.00001,
+  // degToRads = Math.PI / 180,
+  // floatEqual = (a: number, b: number) =>
+  //   Math.abs(a - b) * 100000 <= Math.min(Math.abs(a), Math.abs(b)),
+  // floatZero = (f: number) => Math.abs(f) <= 0.00001,
   frameOutput = (frame?: number) =>
     ((frame ?? 0) + 1).toString().padStart(3, '0'),
   getAnimationData = async (
@@ -227,7 +227,7 @@ export const aspectRatio = (objectFit: string) => {
     const lastDotIndex = path.split('/').pop()?.lastIndexOf('.')
     return (lastDotIndex ?? 0) > 1 && path.length - 1 > (lastDotIndex ?? 0)
   },
-  inBrowser = () => typeof navigator !== 'undefined',
+  // inBrowser = () => typeof navigator !== 'undefined',
   isAudio = (asset: LottieAsset) =>
     !('h' in asset) &&
     !('w' in asset) &&
@@ -245,14 +245,6 @@ export const aspectRatio = (objectFit: string) => {
   },
   isImage = (asset: LottieAsset) =>
     'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
-  isSafari = (): boolean => {
-    const result = inBrowser()
-      ? /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-      : false
-
-    return result
-  },
-  isServer = () => !(typeof window !== 'undefined' && window.document),
   parseBase64 = (str: string) => str.substring(str.indexOf(',') + 1),
   prepareString = (str: string) =>
     str
@@ -306,18 +298,15 @@ export const aspectRatio = (objectFit: string) => {
 
     await Promise.all(toResolve)
   },
-  unzip = async (resp: Response): Promise<Unzipped> => {
+  unzip = async (resp: Response) => {
     const buffer = new Uint8Array(await resp.arrayBuffer()),
-      unzipped = await new Promise<Unzipped>((resolve, reject) => {
-        unzipOrg(
-          buffer,
-          /* { filter }, */ (err, file) => {
-            if (err) {
-              reject(err)
-            }
-            resolve(file)
+      unzipped: Unzipped = await new Promise((resolve, reject) => {
+        unzipOrg(buffer, (err, file) => {
+          if (err) {
+            reject(err)
           }
-        )
+          resolve(file)
+        })
       })
     return unzipped
   }

@@ -97,6 +97,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   types = {
     external: [
       '@aarsteinmedia/lottie-web/light',
+      '@aarsteinmedia/lottie-web/utils',
       'react',
       'react/jsx-dev-runtime',
       'react/jsx-runtime',
