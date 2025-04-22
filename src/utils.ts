@@ -8,10 +8,6 @@ import { ObjectFit } from '@/enums'
 import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
 import { strFromU8, unzip as unzipOrg, type Unzipped } from 'fflate'
 
-export class CustomError extends Error {
-  status?: number
-}
-
 export const aspectRatio = (objectFit: string) => {
     switch (objectFit) {
       case ObjectFit.Contain:
@@ -81,9 +77,7 @@ export const aspectRatio = (objectFit: string) => {
       const result = await fetch(input)
 
       if (!result.ok) {
-        const error = new CustomError(result.statusText)
-        error.status = result.status
-        throw error
+        throw new Error(result.statusText)
       }
 
       /**
