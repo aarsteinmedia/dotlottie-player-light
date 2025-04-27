@@ -583,9 +583,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     // Destroy the animation instance
-    if (this._lottieInstance) {
-      this._lottieInstance.destroy()
-    }
+    this._lottieInstance?.destroy()
 
     // Remove the attached Visibility API's change event listener
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
@@ -664,9 +662,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }
 
       // Clear previous animation, if any
-      if (this._lottieInstance) {
-        this._lottieInstance.destroy()
-      }
+      this._lottieInstance?.destroy()
 
       this.playerState = PlayerState.Stopped
       if (
@@ -868,11 +864,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Reload animation
    */
   public async reload() {
-    if (!this._lottieInstance || !this.src) {
+    if (!this.src) {
       return
     }
 
-    this._lottieInstance.destroy()
+    this._lottieInstance?.destroy()
 
     await this.load(this.src)
   }
@@ -1505,7 +1501,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     try {
       // Clear previous animation
-      this._lottieInstance?.destroy()
+      this._lottieInstance?.destroy?.()
 
       // Re-initialize lottie player
       if (!isServer()) {

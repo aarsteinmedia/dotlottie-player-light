@@ -1,8 +1,5 @@
 import type { AnimationData, LottieAsset, LottieManifest } from '@aarsteinmedia/lottie-web/light';
 import { type Unzipped } from 'fflate';
-export declare class CustomError extends Error {
-    status?: number;
-}
 export declare const aspectRatio: (objectFit: string) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", download: (data: string | ArrayBuffer, options?: {
     name: string;
     mimeType: string;

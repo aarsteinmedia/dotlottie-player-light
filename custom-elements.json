@@ -717,7 +717,7 @@
         {
           "kind": "class",
           "description": "",
-          "name": "rw",
+          "name": "r_",
           "members": [
             {
               "kind": "field",
@@ -1340,7 +1340,7 @@
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
-            "name": "rw",
+            "name": "r_",
             "module": "dist/unpkg/index.js"
           }
         }
