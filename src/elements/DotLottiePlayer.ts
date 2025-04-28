@@ -565,7 +565,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     this.playerState = PlayerState.Destroyed
 
-    this._lottieInstance.destroy()
+    this._lottieInstance.destroy?.()
     this._lottieInstance = null
     this.dispatchEvent(new CustomEvent(PlayerEvents.Destroyed))
     this.remove()
@@ -583,7 +583,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     // Destroy the animation instance
-    this._lottieInstance?.destroy()
+    this._lottieInstance?.destroy?.()
 
     // Remove the attached Visibility API's change event listener
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
@@ -662,7 +662,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }
 
       // Clear previous animation, if any
-      this._lottieInstance?.destroy()
+      this._lottieInstance?.destroy?.()
 
       this.playerState = PlayerState.Stopped
       if (
@@ -868,7 +868,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       return
     }
 
-    this._lottieInstance?.destroy()
+    this._lottieInstance?.destroy?.()
 
     await this.load(this.src)
   }
