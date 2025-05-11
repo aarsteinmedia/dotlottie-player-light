@@ -20,7 +20,7 @@
         },
         {
           "kind": "class",
-          "description": "dotLottie Player Web Component",
+          "description": "DotLottie Player Web Component.",
           "name": "DotLottiePlayer",
           "members": [
             {
@@ -33,128 +33,118 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "description": "Return the styles for the component",
+              "description": "Return the styles for the component.",
               "readonly": true
             },
             {
               "kind": "field",
               "name": "animateOnScroll",
-              "description": "Whether to trigger next frame with scroll"
+              "description": "Whether to trigger next frame with scroll."
             },
             {
               "kind": "field",
               "name": "autoplay",
-              "description": "Autoplay"
+              "description": "Autoplay."
             },
             {
               "kind": "field",
               "name": "background",
-              "description": "Background color"
+              "description": "Background color."
             },
             {
               "kind": "field",
               "name": "controls",
-              "description": "Show controls"
+              "description": "Show controls."
             },
             {
               "kind": "field",
               "name": "count",
-              "description": "Number of times to loop"
+              "description": "Number of times to loop."
             },
             {
               "kind": "field",
               "name": "description",
-              "description": "Description for screen readers"
+              "description": "Description for screen readers."
             },
             {
               "kind": "field",
               "name": "direction",
-              "description": "Direction of animation"
+              "description": "Direction of animation."
             },
             {
               "kind": "field",
               "name": "hover",
-              "description": "Whether to play on mouseover"
+              "description": "Whether to play on mouseover."
             },
             {
               "kind": "field",
               "name": "intermission",
-              "description": "Pause between loop intrations, in miliseconds"
+              "description": "Pause between loop intrations, in miliseconds."
             },
             {
               "kind": "field",
               "name": "loop",
-              "description": "Loop animation"
+              "description": "Loop animation."
             },
             {
               "kind": "field",
               "name": "mode",
-              "description": "Play mode"
+              "description": "Play mode."
             },
             {
               "kind": "field",
               "name": "objectfit",
-              "description": "Resizing to container"
+              "description": "Resizing to container."
             },
             {
               "kind": "field",
               "name": "preserveAspectRatio",
-              "description": "Resizing to container (Deprecated)"
+              "description": "Resizing to container (Deprecated)."
             },
             {
               "kind": "field",
               "name": "simple",
-              "description": "Hide advanced controls"
+              "description": "Hide advanced controls."
             },
             {
               "kind": "field",
               "name": "speed",
-              "description": "Speed"
+              "description": "Speed."
             },
             {
               "kind": "field",
               "name": "src",
-              "description": "Source, either path or JSON string"
+              "description": "Source, either path or JSON string."
             },
             {
               "kind": "field",
               "name": "subframe",
-              "description": "Subframe"
+              "description": "Subframe."
             },
             {
               "kind": "method",
               "name": "destroy",
-              "description": "Destroy animation and element"
+              "description": "Destroy animation and element."
             },
             {
               "kind": "method",
               "name": "getLottie",
-              "description": "Returns the Lottie instance used in the component"
+              "description": "Returns the Lottie instance used in the component."
             },
             {
               "kind": "method",
               "name": "getManifest",
-              "description": "Get Lottie Manifest"
+              "description": "Get Lottie Manifest."
             },
             {
               "kind": "method",
               "name": "getMultiAnimationSettings",
-              "description": "Get Multi-animation settings",
-              "return": {
-                "type": {
-                  "text": "AnimationSettings[]"
-                }
-              }
+              "description": "Get Multi-animation settings."
             },
             {
               "kind": "method",
               "name": "getSegment",
-              "description": "Get playback segment",
-              "return": {
-                "type": {
-                  "text": "AnimationSegment"
-                }
-              }
+              "description": "Get playback segment."
             },
             {
               "kind": "method",
@@ -164,27 +154,27 @@
                   "name": "src"
                 }
               ],
-              "description": "Initialize Lottie Web player"
+              "description": "Initialize Lottie Web player."
             },
             {
               "kind": "method",
               "name": "next",
-              "description": "Skip to next animation"
+              "description": "Skip to next animation."
             },
             {
               "kind": "method",
               "name": "pause",
-              "description": "Pause"
+              "description": "Pause."
             },
             {
               "kind": "method",
               "name": "play",
-              "description": "Play"
+              "description": "Play."
             },
             {
               "kind": "method",
               "name": "prev",
-              "description": "Skip to previous animation"
+              "description": "Skip to previous animation."
             },
             {
               "kind": "method",
@@ -199,12 +189,17 @@
                 {
                   "name": "value"
                 }
-              ]
+              ],
+              "description": "Name: string, oldValue: string, newValue: string.",
+              "inheritedFrom": {
+                "name": "PropertyCallbackElement",
+                "module": "dist/index.js"
+              }
             },
             {
               "kind": "method",
               "name": "reload",
-              "description": "Reload animation"
+              "description": "Reload animation."
             },
             {
               "kind": "method",
@@ -212,13 +207,10 @@
               "parameters": [
                 {
                   "name": "value",
-                  "description": "Frame to seek to",
-                  "type": {
-                    "text": "number | string"
-                  }
+                  "description": "Frame to seek to."
                 }
               ],
-              "description": "Seek to a given frame"
+              "description": "Seek to a given frame."
             },
             {
               "kind": "method",
@@ -228,7 +220,7 @@
                   "name": "value"
                 }
               ],
-              "description": "Dynamically set count for loops"
+              "description": "Dynamically set count for loops."
             },
             {
               "kind": "method",
@@ -236,39 +228,30 @@
               "parameters": [
                 {
                   "name": "value",
-                  "description": "Animation direction",
-                  "type": {
-                    "text": "AnimationDirection"
-                  }
+                  "description": "Animation direction."
                 }
               ],
-              "description": "Animation play direction"
+              "description": "Animation play direction."
             },
             {
               "kind": "method",
               "name": "setLoop",
               "parameters": [
                 {
-                  "name": "value",
-                  "type": {
-                    "text": "boolean"
-                  }
+                  "name": "value"
                 }
               ],
-              "description": "Set loop"
+              "description": "Set loop."
             },
             {
               "kind": "method",
               "name": "setMultiAnimationSettings",
               "parameters": [
                 {
-                  "name": "settings",
-                  "type": {
-                    "text": "AnimationSettings[]"
-                  }
+                  "name": "settings"
                 }
               ],
-              "description": "Set Multi-animation settings"
+              "description": "Set Multi-animation settings."
             },
             {
               "kind": "method",
@@ -276,15 +259,9 @@
               "parameters": [
                 {
                   "name": "segment"
-                },
-                {
-                  "name": "settings",
-                  "type": {
-                    "text": "AnimationSegment"
-                  }
                 }
               ],
-              "description": "Set playback segment"
+              "description": "Set playback segment."
             },
             {
               "kind": "method",
@@ -293,13 +270,10 @@
                 {
                   "name": "value",
                   "default": "1",
-                  "description": "Playback speed",
-                  "type": {
-                    "text": "number"
-                  }
+                  "description": "Playback speed."
                 }
               ],
-              "description": "Set animation playback speed"
+              "description": "Set animation playback speed."
             },
             {
               "kind": "method",
@@ -307,13 +281,10 @@
               "parameters": [
                 {
                   "name": "value",
-                  "description": "Whether animation uses subframe",
-                  "type": {
-                    "text": "boolean"
-                  }
+                  "description": "Whether animation uses subframe."
                 }
               ],
-              "description": "Toggles subframe, for more smooth animations"
+              "description": "Toggles subframe, for more smooth animations."
             },
             {
               "kind": "method",
@@ -328,27 +299,27 @@
                   "default": "'AM Lottie'"
                 }
               ],
-              "description": "Snapshot and download the current frame as SVG"
+              "description": "Snapshot and download the current frame as SVG."
             },
             {
               "kind": "method",
               "name": "stop",
-              "description": "Stop"
+              "description": "Stop."
             },
             {
               "kind": "method",
               "name": "toggleBoomerang",
-              "description": "Toggle Boomerang"
+              "description": "Toggle Boomerang."
             },
             {
               "kind": "method",
               "name": "toggleLoop",
-              "description": "Toggle loop"
+              "description": "Toggle loop."
             },
             {
               "kind": "method",
               "name": "togglePlay",
-              "description": "Toggle playing state"
+              "description": "Toggle playing state."
             },
             {
               "kind": "method",
@@ -358,7 +329,7 @@
             {
               "kind": "method",
               "name": "_handleBlur",
-              "description": "Handle blur"
+              "description": "Handle blur."
             },
             {
               "kind": "method",
@@ -366,25 +337,19 @@
               "parameters": [
                 {
                   "name": "{ target }"
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event & { HTMLInputElement }"
-                  }
                 }
               ],
-              "description": "Handles click and drag actions on the progress track"
+              "description": "Handles click and drag actions on the progress track."
             },
             {
               "kind": "method",
               "name": "_addEventListeners",
-              "description": "Add event listeners"
+              "description": "Add event listeners."
             },
             {
               "kind": "method",
               "name": "_addIntersectionObserver",
-              "description": "Add IntersectionObserver"
+              "description": "Add IntersectionObserver."
             },
             {
               "kind": "method",
@@ -409,17 +374,12 @@
             {
               "kind": "method",
               "name": "_getOptions",
-              "description": "Get options from props",
-              "return": {
-                "type": {
-                  "text": "AnimationConfiguration<'svg'>"
-                }
-              }
+              "description": "Get options from props."
             },
             {
               "kind": "method",
               "name": "_handleScroll",
-              "description": "Handle scroll"
+              "description": "Handle scroll."
             },
             {
               "kind": "method",
@@ -446,22 +406,22 @@
             {
               "kind": "method",
               "name": "_mouseEnter",
-              "description": "Handle MouseEnter"
+              "description": "Handle MouseEnter."
             },
             {
               "kind": "method",
               "name": "_mouseLeave",
-              "description": "Handle MouseLeave"
+              "description": "Handle MouseLeave."
             },
             {
               "kind": "method",
               "name": "_onVisibilityChange",
-              "description": "Handle visibility change events"
+              "description": "Handle visibility change events."
             },
             {
               "kind": "method",
               "name": "_removeEventListeners",
-              "description": "Remove event listeners"
+              "description": "Remove event listeners."
             },
             {
               "kind": "method",
@@ -481,7 +441,7 @@
                   "name": "action"
                 }
               ],
-              "description": "Toggle event listeners"
+              "description": "Toggle event listeners."
             },
             {
               "kind": "method",
@@ -491,7 +451,7 @@
                   "name": "flag"
                 }
               ],
-              "description": "Toggle show Settings"
+              "description": "Toggle show Settings."
             },
             {
               "kind": "field",
@@ -712,12 +672,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/unpkg/index.js",
+      "path": "dist/unpkg.js",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "r_",
+          "name": "rT",
           "members": [
             {
               "kind": "field",
@@ -857,7 +817,11 @@
                 {
                   "name": "s"
                 }
-              ]
+              ],
+              "inheritedFrom": {
+                "name": "h",
+                "module": "dist/unpkg.js"
+              }
             },
             {
               "kind": "method",
@@ -1123,12 +1087,12 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:w.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:S.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
               "name": "_render",
-              "default": "A"
+              "default": "P"
             },
             {
               "kind": "field",
@@ -1286,6 +1250,14 @@
             {
               "kind": "field",
               "name": "shadow"
+            },
+            {
+              "kind": "field",
+              "default": "(this[o]=[])",
+              "inheritedFrom": {
+                "name": "h",
+                "module": "dist/unpkg.js"
+              }
             }
           ],
           "events": [
@@ -1328,8 +1300,8 @@
             }
           ],
           "superclass": {
-            "name": "o",
-            "module": "dist/unpkg/index.js"
+            "name": "h",
+            "module": "dist/unpkg.js"
           },
           "tagName": "dotlottie-player",
           "customElement": true
@@ -1340,8 +1312,8 @@
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
-            "name": "r_",
-            "module": "dist/unpkg/index.js"
+            "name": "rT",
+            "module": "dist/unpkg.js"
           }
         }
       ]

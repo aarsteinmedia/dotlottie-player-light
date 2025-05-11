@@ -1,17 +1,19 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+/* eslint-disable @typescript-eslint/no-namespace */
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
 
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
-type BaseRendererConfig = {
-  imagePreserveAspectRatio?: string
+interface BaseRendererConfig {
   className?: string
+  imagePreserveAspectRatio?: string
 }
 
-type FilterSizeConfig = {
-  width: string
+interface FilterSizeConfig {
   height: string
+  width: string
   x: string
   y: string
 }
@@ -40,9 +42,7 @@ export type CanvasRendererConfig = BaseRendererConfig & {
   preserveAspectRatio?: string
 }
 
-export type HTMLRendererConfig = BaseRendererConfig & {
-  hideOnTransparent?: boolean
-}
+export type HTMLRendererConfig = BaseRendererConfig & { hideOnTransparent?: boolean }
 
 export type AnimateOnScroll = boolean | '' | null
 export type Autoplay = boolean | '' | 'autoplay' | null
@@ -51,37 +51,40 @@ export type Loop = boolean | '' | 'loop' | null | number
 export type Subframe = boolean | '' | null
 
 export interface CEMConfig {
-  /** Enable special handling for catalyst */
+  /** Enable special handling for catalyst. */
   catalyst: boolean
-  /** Include third party custom elements manifests */
+  /** Include third party custom elements manifests. */
   dependencies: boolean
-  /** Run in dev mode, provides extra logging */
+  /** Run in dev mode, provides extra logging. */
   dev: boolean
-  /** Globs to exclude */
+  /** Globs to exclude. */
   exclude: string[]
-  /** Enable special handling for fast */
+  /** Enable special handling for fast. */
   fast: boolean
-  /** Globs to analyze */
+  /** Globs to analyze. */
   globs: ['src/**/*.ts']
-  /** Enable special handling for litelement */
+  /** Enable special handling for litelement. */
   litelement: boolean
-  /** Directory to output CEM to */
+  /** Directory to output CEM to. */
   outdir: string
-  /** Overrides default module creation: */
-  overrideModuleCreation({
+  /** Overrides default module creation. */
+  overrideModuleCreation: ({
     globs,
     ts,
   }: {
-    ts: unknown // TypeScrip
+    /**
+     * TypeScript.
+     */
+    ts: unknown
     globs: string[]
-  }): unknown[] // SourceFile[]
-  /** Output CEM path to `package.json`, defaults to true */
+  }) => unknown[]
+  /** Output CEM path to `package.json`, defaults to true. */
   packagejson: boolean
-  /** Provide custom plugins */
-  plugins: Array<() => Plugin>
-  /** Enable special handling for stencil */
+  /** Provide custom plugins. */
+  plugins: (() => Plugin)[]
+  /** Enable special handling for stencil. */
   stencil: boolean
-  /** Run in watch mode, runs on file changes */
+  /** Run in watch mode, runs on file changes. */
   watch: boolean
 }
 
@@ -93,32 +96,24 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'dotlottie-player': DotLottiePlayer
-  }
+  interface HTMLElementTagNameMap {'dotlottie-player': DotLottiePlayer}
   function dotLottiePlayer(): DotLottiePlayer
 }
 
 declare module 'react' {
   namespace JSX {
-    interface IntrinsicElements {
-      'dotlottie-player': JSXLottiePlayer
-    }
+    interface IntrinsicElements {'dotlottie-player': JSXLottiePlayer}
   }
 }
 
 declare module 'react/jsx-runtime' {
   namespace JSX {
-    interface IntrinsicElements {
-      'dotlottie-player': JSXLottiePlayer
-    }
+    interface IntrinsicElements {'dotlottie-player': JSXLottiePlayer}
   }
 }
 
 declare module 'react/jsx-dev-runtime' {
   namespace JSX {
-    interface IntrinsicElements {
-      'dotlottie-player': JSXLottiePlayer
-    }
+    interface IntrinsicElements {'dotlottie-player': JSXLottiePlayer}
   }
 }

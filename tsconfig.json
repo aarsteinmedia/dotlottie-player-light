@@ -33,10 +33,11 @@
     ],
     "removeComments": true,
     "resolveJsonModule": true,
-    "rootDir": "src",
+    // "rootDir": "src",
     "strict": true,
     "target": "ES2022",
     "useDefineForClassFields": false,
+    "verbatimModuleSyntax": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -45,7 +46,9 @@
   },
   "include": [
     "src/**/*",
-    "global.d.ts"
+    "global.d.ts",
+    "eslint.config.ts",
+    "rollup.config.ts"
   ],
   "exclude": [
     "**/node_modules",

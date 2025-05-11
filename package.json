@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player-light",
-  "version": "5.2.3",
+  "version": "5.2.4",
   "description": "Light Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player-light",
   "type": "module",
   "exports": {
@@ -11,7 +11,7 @@
     }
   },
   "main": "./dist/index.js",
-  "unpkg": "./dist/unpkg/index.js",
+  "unpkg": "./dist/unpkg.js",
   "types": "./dist/index.d.ts",
   "homepage": "https://www.aarstein.media/en/dotlottie-player",
   "repository": {
@@ -36,19 +36,19 @@
   "scripts": {
     "test": "wtr",
     "prebuild": "rimraf ./dist",
-    "build": "rollup -c",
+    "build": "rollup -c --configPlugin typescript",
     "prebuild:types": "rimraf ./types ",
-    "build:types": "tsc -p ./tsconfig.prod.json && tsc-alias",
+    "build:types": "tsc -p ./tsconfig.build.json && tsc-alias",
     "build:cem": "npx cem analyze --config 'cem.config.js'",
     "prod": "pnpm build:types && pnpm build && pnpm build:cem",
-    "dev": "rollup -c -w --environment NODE_ENV:development",
+    "dev": "rollup -c --configPlugin typescript -w --environment NODE_ENV:development",
     "lint:js": "eslint",
     "lint:js:fix": "eslint --fix",
     "lint:css": "npx stylelint **/*.css",
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^0.2.6",
+    "@aarsteinmedia/lottie-web": "^0.2.8",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
@@ -56,41 +56,38 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.10.4",
-    "@eslint/compat": "^1.2.8",
-    "@eslint/js": "^9.25.1",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@open-wc/testing": "^4.0.0",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@swc/core": "^1.11.22",
-    "@types/chai": "^5.2.1",
+    "@swc/core": "^1.11.24",
+    "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.3",
-    "@types/react": "^19.1.2",
+    "@types/node": "^22.15.17",
+    "@types/postcss-flexbugs-fixes": "^5.0.3",
+    "@types/react": "^19.1.3",
     "@web/dev-server-esbuild": "^1.0.4",
     "@web/dev-server-import-maps": "^0.2.1",
     "@web/dev-server-rollup": "^0.6.4",
     "@web/test-runner": "^0.20.1",
     "@web/test-runner-playwright": "^0.11.0",
     "autoprefixer": "^10.4.21",
-    "esbuild": "^0.25.3",
-    "eslint": "^9.25.1",
-    "eslint-config-prettier": "^10.1.2",
-    "eslint-import-resolver-typescript": "^4.3.4",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsdoc": "^50.6.11",
+    "esbuild": "^0.25.4",
+    "eslint": "^9.26.0",
+    "eslint-config-sheriff": "^27.1.0",
     "eslint-plugin-perfectionist": "^4.12.3",
-    "eslint-plugin-prettier": "^5.2.6",
-    "globals": "^16.0.0",
-    "mocha": "^11.1.0",
+    "globals": "^16.1.0",
+    "jiti": "^2.4.2",
+    "lodash-es": "^4.17.21",
+    "mocha": "^11.2.2",
     "playwright": "^1.52.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
     "rimraf": "^6.0.1",
-    "rollup": "^4.40.1",
+    "rollup": "^4.40.2",
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-html-literals": "^1.1.8",
     "rollup-plugin-livereload": "^2.0.5",
@@ -101,10 +98,10 @@
     "rollup-plugin-typescript-paths": "^1.5.0",
     "stylelint": "^16.19.1",
     "stylelint-config-recommended": "^15.0.0",
-    "tsc-alias": "^1.8.15",
+    "tsc-alias": "^1.8.16",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.31.0"
+    "typescript-eslint": "^8.32.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -153,5 +150,6 @@
   "funding": {
     "type": "paypal",
     "url": "https://www.paypal.com/donate/?hosted_button_id=E7C7DMN8KSQ6A"
-  }
+  },
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }

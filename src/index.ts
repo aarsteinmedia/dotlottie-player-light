@@ -3,14 +3,15 @@ import { isServer } from '@aarsteinmedia/lottie-web/utils'
 
 export default DotLottiePlayer
 
-export { PlayMode, PlayerEvents, PlayerState } from '@/enums'
+export {
+  PlayerEvents, PlayerState,PlayMode
+} from '@/enums'
 
 export const tagName = 'dotlottie-player'
 
 if (!isServer()) {
   /**
-   * Expose DotLottiePlayer class as global variable
-   * @returns { DotLottiePlayer }
+   * Expose DotLottiePlayer class as global variable.
    */
   globalThis.dotLottiePlayer = (): DotLottiePlayer => new DotLottiePlayer()
 

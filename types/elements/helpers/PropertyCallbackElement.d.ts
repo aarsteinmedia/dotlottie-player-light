@@ -1,4 +1,5 @@
-export default class PropertyCallbackElement extends HTMLElement {
+export default abstract class PropertyCallbackElement extends HTMLElement {
     constructor();
-    connectedCallback(): void;
+    connectedCallback(): Promise<void>;
+    propertyChangedCallback(_name: string, _oldValue: unknown, _value: unknown): void;
 }

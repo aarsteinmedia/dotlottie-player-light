@@ -8,8 +8,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     static get observedAttributes(): string[];
     static get observedProperties(): string[];
     static get styles(): CSSStyleSheet;
-    playerState?: PlayerState;
-    shadow: ShadowRoot;
+    playerState: PlayerState;
+    shadow: ShadowRoot | undefined;
     template: HTMLTemplateElement;
     set animateOnScroll(value: AnimateOnScroll);
     get animateOnScroll(): AnimateOnScroll;
@@ -80,7 +80,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     load(src: string | null): Promise<void>;
     next(): void;
     pause(): void;
-    play(): Promise<void>;
+    play(): void;
     prev(): void;
     propertyChangedCallback(name: string, _oldValue: unknown, value: unknown): void;
     reload(): Promise<void>;
@@ -96,7 +96,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     stop(): void;
     toggleBoomerang(): void;
     toggleLoop(): void;
-    togglePlay(): void | Promise<void>;
+    togglePlay(): void;
     protected _freeze(): void;
     protected _handleBlur(): void;
     protected _handleSeekChange({ target }: Event): void;

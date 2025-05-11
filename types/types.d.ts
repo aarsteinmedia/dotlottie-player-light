@@ -2,16 +2,16 @@ import 'react/jsx-runtime';
 import 'react/jsx-dev-runtime';
 import type DotLottiePlayer from './elements/DotLottiePlayer';
 import type { Plugin } from '@custom-elements-manifest/analyzer';
-type BaseRendererConfig = {
-    imagePreserveAspectRatio?: string;
+interface BaseRendererConfig {
     className?: string;
-};
-type FilterSizeConfig = {
-    width: string;
+    imagePreserveAspectRatio?: string;
+}
+interface FilterSizeConfig {
     height: string;
+    width: string;
     x: string;
     y: string;
-};
+}
 export type SVGRendererConfig = BaseRendererConfig & {
     title?: string;
     description?: string;
@@ -51,12 +51,12 @@ export interface CEMConfig {
     globs: ['src/**/*.ts'];
     litelement: boolean;
     outdir: string;
-    overrideModuleCreation({ globs, ts, }: {
+    overrideModuleCreation: ({ globs, ts, }: {
         ts: unknown;
         globs: string[];
-    }): unknown[];
+    }) => unknown[];
     packagejson: boolean;
-    plugins: Array<() => Plugin>;
+    plugins: (() => Plugin)[];
     stencil: boolean;
     watch: boolean;
 }

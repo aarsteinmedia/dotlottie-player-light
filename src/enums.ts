@@ -2,8 +2,8 @@ export enum ObjectFit {
   Contain = 'contain',
   Cover = 'cover',
   Fill = 'fill',
-  ScaleDown = 'scale-down',
   None = 'none',
+  ScaleDown = 'scale-down',
 }
 
 export enum PlayerState {
@@ -42,37 +42,37 @@ export enum PlayerEvents {
 export enum PreserveAspectRatio {
   Contain = 'xMidYMid meet',
   Cover = 'xMidYMid slice',
-  None = 'xMinYMin slice',
   Initial = 'none',
+  None = 'xMinYMin slice',
 }
 
 export enum ShapeType {
-  Rectangle = 'rc',
   Ellipse = 'el',
-  PolygonStar = 'sr',
-  Path = 'sh',
   Fill = 'fl',
-  Stroke = 'st',
   GradientFill = 'gf',
   GradientStroke = 'gs',
-  NoStyle = 'no',
   Group = 'gr',
-  Transform = 'tr',
-  RoundedCorners = 'rd',
-  PuckerBloat = 'pb',
   Merge = 'mm',
-  Twist = 'tw',
+  NoStyle = 'no',
   OffsetPath = 'op',
-  ZigZag = 'zz',
+  Path = 'sh',
+  PolygonStar = 'sr',
+  PuckerBloat = 'pb',
+  Rectangle = 'rc',
   Repeater = 'rp',
+  RoundedCorners = 'rd',
+  Stroke = 'st',
+  Transform = 'tr',
   Trim = 'tm',
+  Twist = 'tw',
   Unknown = 'ms',
+  ZigZag = 'zz',
 }
 
 export enum RendererType {
-  SVG = 'svg',
-  HTML = 'html',
   Canvas = 'canvas',
+  HTML = 'html',
+  SVG = 'svg',
 }
 
 export enum ArrayType {
@@ -83,16 +83,12 @@ export enum ArrayType {
   Uint8c = 'uint8c',
 }
 
-export const lineCapEnum: {
-    [key: number]: string
-  } = {
+export const lineCapEnum: { [key: number]: string } = {
     1: 'butt',
     2: 'round',
     3: 'square',
   },
-  lineJoinEnum: {
-    [key: number]: string
-  } = {
+  lineJoinEnum: { [key: number]: string } = {
     1: 'miter',
     2: 'round',
     3: 'bevel',
