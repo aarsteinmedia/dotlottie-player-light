@@ -35,7 +35,7 @@ const isProd = process.env.NODE_ENV !== 'development',
       inject: false,
       plugins: isProd
         ? [
-          flexbugs(), autoprefixer({ flexbox: 'no-2009', }),
+          flexbugs(), autoprefixer({ flexbox: 'no-2009' }),
         ]
         : [],
     }),
@@ -51,12 +51,12 @@ const isProd = process.env.NODE_ENV !== 'development',
         shouldMinify({ parts }) {
           return parts.some(({ text }) =>
             text.includes('<figure') ||
-              text.includes('<div') ||
-              text.includes('<svg'))
+            text.includes('<div') ||
+            text.includes('<svg'))
         },
       },
     }),
-    json({ compact: true, }),
+    json({ compact: true }),
     nodeResolve({
       extensions: ['.ts'],
       preferBuiltins,
@@ -78,7 +78,7 @@ const isProd = process.env.NODE_ENV !== 'development',
     ] : [
       ...plugins(true),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      serve({ open: true, }),
+      serve({ open: true }),
       livereload(),
     ],
   types: RollupOptions = {

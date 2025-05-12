@@ -19,8 +19,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url)),
     files: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
     nodeResolve: true,
     plugins: [
-      typescriptPaths({ preserveExtensions: true, }),
-      importMapsPlugin({ inject: { importMap: { imports: { '@/': './src/' }, }, }, }),
+      typescriptPaths({ preserveExtensions: true }),
+      importMapsPlugin({ inject: { importMap: { imports: { '@/': './src/' } } } }),
       esbuildPlugin({
         // json: true,
         loaders: { '.scss': 'css' },

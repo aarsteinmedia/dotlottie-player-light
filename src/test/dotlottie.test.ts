@@ -6,13 +6,12 @@ describe('DotLottiePlayer Component', () => {
   let el: DotLottiePlayer
 
   beforeEach(async () => {
-    el = await fixture<DotLottiePlayer>(
-      /* HTML */ `
-        <dotlottie-player
-                controls
-                src="./assets/dev.lottie"
-              ></dotlottie-player>
-      `)
+    el = await fixture<DotLottiePlayer>(/* HTML */ `
+      <dotlottie-player
+              controls
+              src="./assets/dev.lottie"
+            ></dotlottie-player>
+    `)
 
     assert(el instanceof DotLottiePlayer)
   })

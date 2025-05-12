@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.2.5] - 12-05-2025
+
+### Changed
+
+- Fixed image bug in Safari.
+- Made play button toggeable after freeze event
+
 ## [5.2.4] - 12-05-2025
 
 ### Changed

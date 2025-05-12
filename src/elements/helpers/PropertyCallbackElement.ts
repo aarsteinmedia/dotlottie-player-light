@@ -55,8 +55,8 @@ export default abstract class PropertyCallbackElement extends HTMLElement {
       )
       if (
         typeof initialValue !== 'undefined' &&
-            updateOnConnected in this &&
-            Array.isArray(this[updateOnConnected])
+        updateOnConnected in this &&
+        Array.isArray(this[updateOnConnected])
       ) {
         ; (this[updateOnConnected] as (keyof this)[]).push(observedProperties[i] as keyof this)
       }

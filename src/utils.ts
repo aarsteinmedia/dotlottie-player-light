@@ -17,10 +17,10 @@ const hasExt = (path: string) => {
 }
 
 /**
-   * Get extension from filename, URL or path.
-   *
-   * @param str - Filename, URL or path.
-   */
+ * Get extension from filename, URL or path.
+ *
+ * @param str - Filename, URL or path.
+ */
 export const getExt = (str?: string) => {
   if (typeof str !== 'string' || !str || !hasExt(str)) {
     return

@@ -448,7 +448,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     _oldValue: unknown,
     value: string
   ) {
-    if (!this._lottieInstance) {
+    if (!this._lottieInstance || !this.shadow) {
       return
     }
 
@@ -506,7 +506,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     if (name === 'loop') {
-      const toggleLoop = this.shadow?.querySelector('.toggleLoop')
+      const toggleLoop = this.shadow.querySelector('.toggleLoop')
 
       if (toggleLoop instanceof HTMLButtonElement) {
         toggleLoop.dataset.active = value
@@ -515,7 +515,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
 
     if (name === 'mode') {
-      const toggleBoomerang = this.shadow?.querySelector('.toggleBoomerang')
+      const toggleBoomerang = this.shadow.querySelector('.toggleBoomerang')
 
       if (toggleBoomerang instanceof HTMLButtonElement) {
         toggleBoomerang.dataset.active = (value as PlayMode === PlayMode.Bounce).toString()
@@ -539,6 +539,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       this.setSubframe(value === '' || Boolean(value))
     }
   }
+
   /**
    * Initialize everything on component first render.
    */
@@ -546,7 +547,11 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     await super.connectedCallback()
     this._render()
 
-    this._container = this.shadow?.querySelector('.animation') ?? null
+    if (!this.shadow) {
+      throw new Error('Missing Shadow element')
+    }
+
+    this._container = this.shadow.querySelector('.animation')
     this._renderControls()
 
     // Add listener for Visibility API's change event.
@@ -561,6 +566,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     await this.load(this.src)
     this.dispatchEvent(new CustomEvent(PlayerEvents.Rendered))
   }
+
   /**
    * Destroy animation and element.
    */
@@ -571,6 +577,8 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     this.playerState = PlayerState.Destroyed
 
+    this._removeEventListeners()
+
     this._lottieInstance.destroy()
     this._lottieInstance = null
     this.dispatchEvent(new CustomEvent(PlayerEvents.Destroyed))
@@ -578,6 +586,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
   }
+
   /**
    * Cleanup on component destroy.
    */
@@ -592,10 +601,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
 
     // Destroy the animation instance
-    if (!this._lottieInstance?.destroy) {
-      return
-    }
-    this._lottieInstance.destroy()
+    // if (!this._lottieInstance?.destroy) {
+    //   return
+    // }
+    this.destroy()
   }
 
   /**
@@ -670,6 +679,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
       // Clear previous animation, if any
       this._lottieInstance?.destroy()
+
 
       this.playerState = PlayerState.Stopped
 
@@ -918,7 +928,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     if (
       this.playerState === PlayerState.Playing ||
       this.playerState === PlayerState.Frozen &&
-        this._playerState.prev === PlayerState.Playing
+      this._playerState.prev === PlayerState.Playing
     ) {
       this._lottieInstance.goToAndPlay(frame, true)
       this.playerState = PlayerState.Playing
@@ -1409,9 +1419,16 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     if (this.playerState === PlayerState.Playing && type === 'blur') {
       this._freeze()
     }
-    if (this.playerState === PlayerState.Frozen && type === 'focus') {
-      this.play()
+    if (type === 'focus') {
+      // This timeout is set to not prevent toggling play after freeze event
+      setTimeout(() => {
+        if (this.playerState === PlayerState.Frozen) {
+          this.play()
+        }
+      }, 100)
+
     }
+
   }
 
   private _isLottie(json: AnimationData) {
@@ -1442,9 +1459,9 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
     if (this.count) {
       if (this._isBounce) {
-        this._playerState.count = this._playerState.count + 0.5
+        this._playerState.count += 0.5
       } else {
-        this._playerState.count++
+        this._playerState.count += 1
       }
 
       if (this._playerState.count >= this.count) {
@@ -1585,16 +1602,19 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Toggle event listeners.
    */
   private _toggleEventListeners(action: 'add' | 'remove') {
+
+    if (!this._lottieInstance) {
+      throw new Error('No Lottie Instance')
+    }
+
     const method = action === 'add' ? 'addEventListener' : 'removeEventListener'
 
-    if (this._lottieInstance) {
-      this._lottieInstance[method]('enterFrame', this._enterFrame)
-      this._lottieInstance[method]('complete', this._complete)
-      this._lottieInstance[method]('loopComplete', this._loopComplete)
-      this._lottieInstance[method]('DOMLoaded', this._DOMLoaded)
-      this._lottieInstance[method]('data_ready', this._dataReady)
-      this._lottieInstance[method]('data_failed', this._dataFailed)
-    }
+    this._lottieInstance[method]('enterFrame', this._enterFrame)
+    this._lottieInstance[method]('complete', this._complete)
+    this._lottieInstance[method]('loopComplete', this._loopComplete)
+    this._lottieInstance[method]('DOMLoaded', this._DOMLoaded)
+    this._lottieInstance[method]('data_ready', this._dataReady)
+    this._lottieInstance[method]('data_failed', this._dataFailed)
 
     if (this._container && this.hover) {
       this._container[method]('mouseenter', this._mouseEnter)
