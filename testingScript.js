@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/no-types */
 import files from './files.js'
 
 const previewForm = document.querySelector('form#preview'),
@@ -64,6 +65,8 @@ function handleRefresh() {
 
 /**
  * View converted SVG.
+ *
+ * @param {SubmitEvent | Event | string} e - Either the submit event, the change event or the string value.
  */
 async function viewFile(e) {
   let path
@@ -81,28 +84,19 @@ async function viewFile(e) {
   } else {
     path = e
   }
+
+  /**
+ * @type {import('./src/elements/DotLottiePlayer').default}
+ */
   const dotLottie = document.querySelector('.preview')
 
   try {
-    if (!dotLottie) {
+    if (!dotLottie || !path || !path === '') {
       throw new Error('No placeholder')
     }
 
-    // const res = await fetch(path)
+    await dotLottie.load(path)
 
-    // if (!res.ok) {
-    //   throw new Error('Could not find file')
-    // }
-
-    dotLottie.load(path)
-
-    // const { height, width } = svg.viewBox.baseVal
-
-    // if (width - 150 > height) {
-    //   container.style.flexDirection = 'column'
-    // } else {
-    //   container.style.flexDirection = 'row'
-    // }
   } catch (error) {
     console.error(error)
   }
