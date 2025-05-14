@@ -1,3 +1,14 @@
+import Lottie, {
+  type AnimationConfiguration,
+  type AnimationData,
+  type AnimationDirection,
+  type AnimationItem,
+  type AnimationSettings,
+  type LottieManifest,
+  type Vector2,
+} from '@aarsteinmedia/lottie-web/light'
+import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
+
 import type {
   AnimateOnScroll,
   Autoplay,
@@ -26,16 +37,6 @@ import {
   getFilename,
   handleErrors,
 } from '@/utils'
-import Lottie, {
-  type AnimationConfiguration,
-  type AnimationData,
-  type AnimationDirection,
-  type AnimationItem,
-  type AnimationSettings,
-  type LottieManifest,
-  type Vector2,
-} from '@aarsteinmedia/lottie-web/light'
-import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
 
 /**
  * DotLottie Player Web Component.
@@ -661,6 +662,12 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this._isBounce =
           this._multiAnimationSettings[this._currentAnimation].mode as PlayMode ===
           PlayMode.Bounce
+      }
+
+      // Override loop and autoplay set in manifest for single animation
+      if (manifest?.animations.length === 1) {
+        manifest.animations[0].autoplay = this.autoplay
+        manifest.animations[0].loop = this.loop
       }
 
       this._animations = animations

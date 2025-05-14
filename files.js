@@ -25,6 +25,7 @@ const files = [
   'optimized_m2acyje2.lottie',
   'hp-section-2.lottie',
   'dev.lottie',
+  'dinide.lottie',
 ]
 
 export default files
