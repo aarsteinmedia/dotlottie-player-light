@@ -26,6 +26,7 @@ const files = [
   'hp-section-2.lottie',
   'dev.lottie',
   'dinide.lottie',
+  'b2b.lottie',
 ]
 
 export default files
