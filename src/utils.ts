@@ -2,13 +2,14 @@ import type {
   AnimationData,
   LottieAsset,
   LottieManifest,
-} from '@aarsteinmedia/lottie-web/light'
+} from '@aarsteinmedia/lottie-web'
 
-import { ObjectFit } from '@/enums'
 import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
 import {
   strFromU8, unzip as unzipOrg, type Unzipped
 } from 'fflate'
+
+import { ObjectFit } from '@/enums'
 
 const hasExt = (path: string) => {
   const lastDotIndex = path.split('/').pop()?.lastIndexOf('.')

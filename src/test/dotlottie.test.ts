@@ -1,6 +1,7 @@
-import DotLottiePlayer from '@/index'
 import { assert, expect } from '@esm-bundle/chai'
 import { fixture } from '@open-wc/testing'
+
+import DotLottiePlayer from '@/index'
 
 describe('DotLottiePlayer Component', () => {
   let el: DotLottiePlayer

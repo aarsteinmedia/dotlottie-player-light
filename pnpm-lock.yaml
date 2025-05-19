@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@aarsteinmedia/lottie-web':
-        specifier: ^0.2.14
-        version: 0.2.14
+        specifier: ^0.2.15
+        version: 0.2.15
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
@@ -159,8 +159,8 @@ importers:
 
 packages:
 
-  '@aarsteinmedia/lottie-web@0.2.14':
-    resolution: {integrity: sha512-eeR2Xg5lpZmueyMKl4IbFA0YWiPVlATQSEhnnYSry0iHJlfntiBu8EYtWLhEAORU67Pt602MS491gqG3vW1G7Q==}
+  '@aarsteinmedia/lottie-web@0.2.15':
+    resolution: {integrity: sha512-56GNGsuGDmVQx8TuSYcPWdMnLHi8tF8LXrbmKDL1M8LT3VmRqpfe0EhH1WM1VynCmwrV7r1GB94vO6CDZdl1rA==}
     engines: {node: '>= 12.17.0'}
 
   '@astrojs/compiler@2.12.0':
@@ -4557,7 +4557,7 @@ packages:
 
 snapshots:
 
-  '@aarsteinmedia/lottie-web@0.2.14': {}
+  '@aarsteinmedia/lottie-web@0.2.15': {}
 
   '@astrojs/compiler@2.12.0': {}
 

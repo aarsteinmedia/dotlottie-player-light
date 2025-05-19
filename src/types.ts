@@ -3,8 +3,9 @@
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
 
-import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
+
+import type DotLottiePlayer from '@/elements/DotLottiePlayer'
 
 interface BaseRendererConfig {
   className?: string

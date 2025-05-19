@@ -1,7 +1,8 @@
-import { type AnimationDirection, type AnimationItem, type AnimationSettings, type LottieManifest, type Vector2 } from '@aarsteinmedia/lottie-web/light';
+import type { AnimationDirection, AnimationItem, AnimationSettings, LottieManifest, Vector2 } from '@aarsteinmedia/lottie-web';
+import { PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils';
 import type { AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
-import { PlayMode, PlayerState, PreserveAspectRatio } from '../enums';
+import { PlayMode, PlayerState } from '../enums';
 import renderControls from '../templates/controls';
 import renderPlayer from '../templates/player';
 export default class DotLottiePlayer extends PropertyCallbackElement {

@@ -9,7 +9,13 @@ import type {
 } from '@aarsteinmedia/lottie-web'
 
 import Lottie from '@aarsteinmedia/lottie-web/light'
-import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
+import {
+  createElementID,
+  isServer,
+  PlayerEvents,
+  PreserveAspectRatio,
+  RendererType,
+} from '@aarsteinmedia/lottie-web/utils'
 
 import type {
   AnimateOnScroll,
@@ -23,10 +29,7 @@ import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
 import {
   ObjectFit,
   PlayMode,
-  PlayerEvents,
   PlayerState,
-  PreserveAspectRatio,
-  RendererType,
 } from '@/enums'
 import styles from '@/styles.css'
 import renderControls from '@/templates/controls'

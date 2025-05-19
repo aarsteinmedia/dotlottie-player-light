@@ -1,4 +1,4 @@
-import type { AnimationData, LottieManifest } from '@aarsteinmedia/lottie-web/light';
+import type { AnimationData, LottieManifest } from '@aarsteinmedia/lottie-web';
 import { ObjectFit } from './enums';
 export declare const getExt: (str?: string) => string | undefined;
 export declare const aspectRatio: (objectFit: ObjectFit) => "none" | "xMidYMid meet" | "xMidYMid slice" | "xMinYMin slice", download: (data: string | ArrayBuffer, options?: {

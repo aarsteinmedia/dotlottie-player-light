@@ -15,10 +15,6 @@
           "name": "PlayMode"
         },
         {
-          "kind": "variable",
-          "name": "PlayerEvents"
-        },
-        {
           "kind": "class",
           "description": "DotLottie Player Web Component.",
           "name": "DotLottiePlayer",
@@ -621,6 +617,14 @@
       ],
       "exports": [
         {
+          "kind": "js",
+          "name": "PlayerEvents",
+          "declaration": {
+            "name": "PlayerEvents",
+            "package": "@aarsteinmedia/lottie-web/utils"
+          }
+        },
+        {
           "kind": "custom-element-definition",
           "name": "dotlottie-player",
           "declaration": {
@@ -633,14 +637,6 @@
           "name": "PlayMode",
           "declaration": {
             "name": "PlayMode",
-            "module": "dist/index.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "PlayerEvents",
-          "declaration": {
-            "name": "PlayerEvents",
             "module": "dist/index.js"
           }
         },
@@ -819,7 +815,7 @@
                 }
               ],
               "inheritedFrom": {
-                "name": "ib",
+                "name": "iw",
                 "module": "dist/unpkg.js"
               }
             },
@@ -1087,7 +1083,7 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:i_.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:ik.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
@@ -1253,9 +1249,9 @@
             },
             {
               "kind": "field",
-              "default": "(this[iy]=[])",
+              "default": "(this[i_]=[])",
               "inheritedFrom": {
-                "name": "ib",
+                "name": "iw",
                 "module": "dist/unpkg.js"
               }
             }
@@ -1300,7 +1296,7 @@
             }
           ],
           "superclass": {
-            "name": "ib",
+            "name": "iw",
             "module": "dist/unpkg.js"
           },
           "tagName": "dotlottie-player",
