@@ -1,12 +1,14 @@
-import Lottie, {
-  type AnimationConfiguration,
-  type AnimationData,
-  type AnimationDirection,
-  type AnimationItem,
-  type AnimationSettings,
-  type LottieManifest,
-  type Vector2,
-} from '@aarsteinmedia/lottie-web/light'
+import type {
+  AnimationConfiguration,
+  AnimationData,
+  AnimationDirection,
+  AnimationItem,
+  AnimationSettings,
+  LottieManifest,
+  Vector2,
+} from '@aarsteinmedia/lottie-web'
+
+import Lottie from '@aarsteinmedia/lottie-web/light'
 import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
 
 import type {
@@ -695,7 +697,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this._lottieInstance = Lottie.loadAnimation({
           ...this._getOptions(),
           animationData: animations[this._currentAnimation],
-        })
+        }) as unknown as AnimationItem
       }
 
       if (
@@ -1561,7 +1563,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this._lottieInstance = Lottie.loadAnimation({
           ...this._getOptions(),
           animationData: this._animations[this._currentAnimation],
-        })
+        }) as unknown as AnimationItem
       }
 
       // Check play mode for current animation
