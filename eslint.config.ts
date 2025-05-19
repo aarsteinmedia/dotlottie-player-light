@@ -31,7 +31,6 @@ const config: ConfigArray = tseslint.config(
       '@stylistic/function-paren-newline': ['warn', { minItems: 3 }],
       '@stylistic/indent': ['warn', 2],
       '@stylistic/indent-binary-ops': ['warn', 2],
-      '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
       '@stylistic/key-spacing': 'warn',
       '@stylistic/lines-between-class-members': ['warn', {
         enforce: [
