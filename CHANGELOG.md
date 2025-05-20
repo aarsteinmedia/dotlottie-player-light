@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.2.11] - 20-05-2025
+
+### Changed
+
+- Minor bugfix to animation engine.
+
 ## [5.2.10] - 19-05-2025
 
 ### Changed
