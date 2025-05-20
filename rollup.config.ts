@@ -11,8 +11,8 @@ import flexbugs from 'postcss-flexbugs-fixes'
 import { dts } from 'rollup-plugin-dts'
 import template from 'rollup-plugin-html-literals'
 import livereload from 'rollup-plugin-livereload'
+import serve from 'rollup-plugin-opener'
 import postcss from 'rollup-plugin-postcss'
-import serve from 'rollup-plugin-serve'
 import pluginSummary from 'rollup-plugin-summary'
 import { minify, swc } from 'rollup-plugin-swc3'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
@@ -72,13 +72,15 @@ const isProd = process.env.NODE_ENV !== 'development',
       pluginSummary(),
     ] : plugins(),
   modulePlugins = (): Plugin[] =>
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
     isProd ? [
       ...plugins(true), pluginSummary()
     ] : [
       ...plugins(true),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      serve({ open: true }),
+      serve({
+        browser: 'firefox',
+        open: true
+      }),
       livereload(),
     ],
   types: RollupOptions = {

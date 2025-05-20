@@ -27,6 +27,7 @@ const files = [
   'dev.lottie',
   'dinide.lottie',
   'b2b.lottie',
+  'gameAnimation.lottie',
 ]
 
 export default files

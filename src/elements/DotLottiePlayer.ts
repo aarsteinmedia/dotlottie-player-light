@@ -1562,12 +1562,10 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       this._lottieInstance?.destroy()
 
       // Re-initialize lottie player
-      if (!isServer()) {
-        this._lottieInstance = Lottie.loadAnimation({
-          ...this._getOptions(),
-          animationData: this._animations[this._currentAnimation],
-        }) as unknown as AnimationItem
-      }
+      this._lottieInstance = Lottie.loadAnimation({
+        ...this._getOptions(),
+        animationData: this._animations[this._currentAnimation],
+      }) as unknown as AnimationItem
 
       // Check play mode for current animation
       if (this._multiAnimationSettings[this._currentAnimation]?.mode) {
@@ -1587,19 +1585,19 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this.autoplay
       ) {
         if (this.animateOnScroll) {
-          this._lottieInstance?.goToAndStop(0, true)
+          this._lottieInstance.goToAndStop(0, true)
           this.playerState = PlayerState.Paused
 
           return
         }
 
-        this._lottieInstance?.goToAndPlay(0, true)
+        this._lottieInstance.goToAndPlay(0, true)
         this.playerState = PlayerState.Playing
 
         return
       }
 
-      this._lottieInstance?.goToAndStop(0, true)
+      this._lottieInstance.goToAndStop(0, true)
       this.playerState = PlayerState.Stopped
     } catch (error) {
       this._errorMessage = handleErrors(error).message
