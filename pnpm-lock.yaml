@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@aarsteinmedia/lottie-web':
-        specifier: ^0.2.19
-        version: 0.2.19
+        specifier: ^0.2.20
+        version: 0.2.20
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
@@ -46,8 +46,8 @@ importers:
         specifier: ^10.0.10
         version: 10.0.10
       '@types/node':
-        specifier: ^22.15.19
-        version: 22.15.19
+        specifier: ^22.15.20
+        version: 22.15.20
       '@types/postcss-flexbugs-fixes':
         specifier: ^5.0.3
         version: 5.0.3
@@ -159,8 +159,8 @@ importers:
 
 packages:
 
-  '@aarsteinmedia/lottie-web@0.2.19':
-    resolution: {integrity: sha512-12GiRIsindKCXS7IWZq25myZD1yJqxNXLjyboIVf9Dd5hA1ybZ91WG1x0ULWMLGBLIFnZIqXXGc+YHmFvgvOGg==}
+  '@aarsteinmedia/lottie-web@0.2.20':
+    resolution: {integrity: sha512-ha4f/fHJhpUGdIkk2n/espQjFAcml9Cby4CYAt4Q32W7ksbYW7QxC37P5/yvvCE1QddxMrGXiWO7cCbS8p0GLQ==}
     engines: {node: '>= 12.17.0'}
 
   '@astrojs/compiler@2.12.0':
@@ -934,8 +934,8 @@ packages:
   '@types/mocha@10.0.10':
     resolution: {integrity: sha512-xPyYSz1cMPnJQhl0CLMH68j3gprKZaTjG3s5Vi+fDgx+uhG9NOXwbVt52eFS8ECyXhyKcjDLCBEqBExKuiZb7Q==}
 
-  '@types/node@22.15.19':
-    resolution: {integrity: sha512-3vMNr4TzNQyjHcRZadojpRaD9Ofr6LsonZAoQ+HMUa/9ORTPoxVIw0e0mpqWpdjj8xybyCM+oKOUH2vwFu/oEw==}
+  '@types/node@22.15.20':
+    resolution: {integrity: sha512-A6BohGFRGHAscJsTslDCA9JG7qSJr/DWUvrvY8yi9IgnGtMxCyat7vvQ//MFa0DnLsyuS3wYTpLdw4Hf+Q5JXw==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -2500,8 +2500,8 @@ packages:
     resolution: {integrity: sha512-w9UMqWwJxHNOvoNzSJ2oPF5wvYcvP7jUvYzhp67yEhTi17ZDBBC1z9pTdGuzjD+EFIqLSYRweZjqfiPzQ06Ebg==}
     engines: {node: '>= 0.4'}
 
-  get-tsconfig@4.10.0:
-    resolution: {integrity: sha512-kGzZ3LWWQcGIAmg6iWvXn0ei6WDtV26wzHRMwDSzmAbcXrTEXxHy6IehI6/4eT6VRKyMP1eF1VqwrVUmE/LR7A==}
+  get-tsconfig@4.10.1:
+    resolution: {integrity: sha512-auHyJ4AgMz7vgS8Hp3N6HXSmlMdUyhSUrfBF16w153rxtLIEOE+HGqaBppczZvnHLqQJfiHotCYpNhl0lUROFQ==}
 
   get-uri@6.0.4:
     resolution: {integrity: sha512-E1b1lFFLvLgak2whF2xDBcOy6NLVGZBqqjJjsIhvopKfWWEi64pLVTWWehV8KlLerZkfNTA95sTe2OdJKm1OzQ==}
@@ -4592,7 +4592,7 @@ packages:
 
 snapshots:
 
-  '@aarsteinmedia/lottie-web@0.2.19': {}
+  '@aarsteinmedia/lottie-web@0.2.20': {}
 
   '@astrojs/compiler@2.12.0': {}
 
@@ -5233,14 +5233,14 @@ snapshots:
 
   '@types/accepts@1.3.7':
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
 
   '@types/babel__code-frame@7.0.6': {}
 
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
 
   '@types/chai-dom@1.11.3':
     dependencies:
@@ -5254,19 +5254,19 @@ snapshots:
 
   '@types/clean-css@4.2.11':
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
       source-map: 0.6.1
 
   '@types/co-body@6.1.3':
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
       '@types/qs': 6.14.0
 
   '@types/command-line-args@5.2.3': {}
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
 
   '@types/content-disposition@0.5.8': {}
 
@@ -5277,7 +5277,7 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/express': 5.0.2
       '@types/keygrip': 1.0.6
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
 
   '@types/debounce@1.2.4': {}
 
@@ -5287,7 +5287,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.0.6':
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -5337,13 +5337,13 @@ snapshots:
       '@types/http-errors': 2.0.4
       '@types/keygrip': 1.0.6
       '@types/koa-compose': 3.2.8
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
 
   '@types/mime@1.3.5': {}
 
   '@types/mocha@10.0.10': {}
 
-  '@types/node@22.15.19':
+  '@types/node@22.15.20':
     dependencies:
       undici-types: 6.21.0
 
@@ -5372,12 +5372,12 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
       '@types/send': 0.17.4
 
   '@types/sinon-chai@3.2.12':
@@ -5399,11 +5399,11 @@ snapshots:
 
   '@types/ws@7.4.7':
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
     optional: true
 
   '@typescript-eslint/eslint-plugin@8.32.1(@typescript-eslint/parser@8.32.1(eslint@9.27.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.27.0(jiti@2.4.2))(typescript@5.8.3)':
@@ -6197,7 +6197,7 @@ snapshots:
 
   chrome-launcher@0.15.2:
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.20
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -6787,7 +6787,7 @@ snapshots:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.1(supports-color@8.1.1)
       eslint: 9.27.0(jiti@2.4.2)
-      get-tsconfig: 4.10.0
+      get-tsconfig: 4.10.1
       is-bun-module: 2.0.0
       stable-hash: 0.0.5
       tinyglobby: 0.2.13
@@ -7412,7 +7412,7 @@ snapshots:
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
 
-  get-tsconfig@4.10.0:
+  get-tsconfig@4.10.1:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
@@ -8924,7 +8924,7 @@ snapshots:
       '@fastify/deepmerge': 2.0.2
       '@rollup/pluginutils': 5.1.4(rollup@4.41.0)
       '@swc/core': 1.11.24
-      get-tsconfig: 4.10.0
+      get-tsconfig: 4.10.1
       rollup: 4.41.0
       rollup-preserve-directives: 1.1.3(rollup@4.41.0)
 
@@ -9399,7 +9399,7 @@ snapshots:
     dependencies:
       chokidar: 3.6.0
       commander: 9.5.0
-      get-tsconfig: 4.10.0
+      get-tsconfig: 4.10.1
       globby: 11.1.0
       mylas: 2.1.13
       normalize-path: 3.0.0

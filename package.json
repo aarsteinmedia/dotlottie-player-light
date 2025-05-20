@@ -1,6 +1,6 @@
 {
   "name": "@aarsteinmedia/dotlottie-player-light",
-  "version": "5.2.11",
+  "version": "5.2.12",
   "description": "Light Web Component for playing Lottie animations in your web app. Previously @johanaarstein/dotlottie-player-light",
   "type": "module",
   "exports": {
@@ -48,7 +48,7 @@
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^0.2.19",
+    "@aarsteinmedia/lottie-web": "^0.2.20",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
@@ -65,7 +65,7 @@
     "@swc/core": "^1.11.24",
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.19",
+    "@types/node": "^22.15.20",
     "@types/postcss-flexbugs-fixes": "^5.0.3",
     "@types/react": "^19.1.4",
     "@web/dev-server-esbuild": "^1.0.4",

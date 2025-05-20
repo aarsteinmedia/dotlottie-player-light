@@ -97,7 +97,7 @@ async function viewFile(e) {
 
     await dotLottie.load(path)
 
-    dotLottie.addEventListener('complete', () => console.debug('complete'))
+    // dotLottie.addEventListener('complete', () => console.debug('complete'))
 
   } catch (error) {
     console.error(error)

@@ -718,27 +718,19 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
       this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
 
+      console.error(error)
+
       return
     }
 
     this._addEventListeners()
 
-
-    /**
-       *??
-       */
     const speed =
         this._multiAnimationSettings[this._currentAnimation]?.speed ??
-        this.speed, // ??
-      /**
-       * This._manifest.animations[this._currentAnimation].speed,.
-       */
+        this.speed,
       direction =
         this._multiAnimationSettings[this._currentAnimation]?.direction ??
         this.direction
-
-    // this._manifest.animations[this._currentAnimation].direction ??
-    // 1
 
     // Set initial playback speed and direction
     this._lottieInstance?.setSpeed(speed)
