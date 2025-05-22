@@ -3,6 +3,7 @@ import type {
   AnimationData,
   AnimationDirection,
   AnimationItem,
+  AnimationSegment,
   AnimationSettings,
   LottieManifest,
   Vector2,
@@ -412,7 +413,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   /**
    * Segment.
    */
-  private _segment?: Vector2
+  private _segment?: AnimationSegment
 
   constructor() {
     super()

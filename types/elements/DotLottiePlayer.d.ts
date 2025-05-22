@@ -1,4 +1,4 @@
-import type { AnimationDirection, AnimationItem, AnimationSettings, LottieManifest, Vector2 } from '@aarsteinmedia/lottie-web';
+import type { AnimationDirection, AnimationItem, AnimationSegment, AnimationSettings, LottieManifest, Vector2 } from '@aarsteinmedia/lottie-web';
 import { PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils';
 import type { AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
@@ -77,7 +77,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     getLottie(): AnimationItem | null;
     getManifest(): LottieManifest | undefined;
     getMultiAnimationSettings(): AnimationSettings[];
-    getSegment(): Vector2 | undefined;
+    getSegment(): AnimationSegment | undefined;
     load(src: string | null): Promise<void>;
     next(): void;
     pause(): void;
