@@ -32,11 +32,11 @@ function handleRefresh() {
       return
     }
     if (previewForm?.path?.value) {
-      const { value } = previewForm.path
+      const { value } = previewForm.path,
 
-      path = value.includes('/')
-        ? value
-        : `assets/${value}${regex.test(value) ? '' : '.json'}`
+        path = value.includes('/')
+          ? value
+          : `assets/${value}${regex.test(value) ? '' : '.json'}`
 
       viewFile(path)
 

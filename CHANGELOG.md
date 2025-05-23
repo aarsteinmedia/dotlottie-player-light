@@ -219,6 +219,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[5.2.14]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.14
 [5.1.1]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.1.1
 [5.1.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.1.0
 [5.0.0]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.0.0
