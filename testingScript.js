@@ -15,7 +15,7 @@ for (let i = 0; i < length; i++) {
   const opt = document.createElement('option')
 
   opt.innerText = files[i]
-  opt.value = `/assets/${files[i].split(' ')[0]}`
+  opt.value = `/assets/${files[i].trim()}`
   pathSelect.appendChild(opt)
 }
 
@@ -85,7 +85,7 @@ async function viewFile(e) {
         : `assets/${value}${regex.test(value) ? '' : '.json'}`
     } else if (e instanceof Event) {
       path = e.target.value
-      localStorage.setItem('selection', e.target.value)
+      localStorage.setItem('selection', path)
     } else {
       path = e
     }

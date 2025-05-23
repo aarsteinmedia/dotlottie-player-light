@@ -28,6 +28,8 @@ const files = [
   'dinide.lottie',
   'b2b.lottie',
   'gameAnimation.lottie',
+  'BuildGarden copy.lottie',
+  'BuildGarden.lottie'
 ]
 
 export default files

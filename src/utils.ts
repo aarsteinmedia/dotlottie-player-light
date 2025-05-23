@@ -161,8 +161,18 @@ const getMimeFromExt = (ext = '') => {
       toResolve: Promise<void>[] = [],
       { length } = manifest.animations
 
+    /**
+     * Check whether Lottie animations folder is abbreviated.
+     */
+    let animationsFolder = 'animations'
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (unzipped[`a/${manifest.animations[0].id}.json`]) {
+      animationsFolder = 'a'
+    }
+
     for (let i = 0; i < length; i++) {
-      const str = strFromU8(unzipped[`animations/${manifest.animations[i].id}.json`]),
+      const str = strFromU8(unzipped[`${animationsFolder}/${manifest.animations[i].id}.json`]),
         lottie: AnimationData = JSON.parse(prepareString(str))
 
       toResolve.push(resolveAssets(unzipped, lottie.assets))
@@ -265,14 +275,21 @@ export const aspectRatio = (objectFit: ObjectFit) => {
       }
 
       /**
-       * Check if file is JSON, first by parsing file name for extension,
-       * then – if filename has no extension – by cloning the response
-       * and parsing it for content.
+       * Check if file is JSON, first by parsing headers for content-type,
+       * than by parsing filename, then – if filename has no extension – by
+       * cloning the response and parsing response for content.
        */
-      const ext = getExt(input)
+      let isJSON = true
+      const contentType = result.headers.get('content-type')
 
-      if (ext === 'json' || !ext) {
-        if (ext) {
+      if (contentType === 'application/zip+dotlottie') {
+        isJSON = false
+      }
+
+      if (isJSON) {
+        const ext = getExt(input)
+
+        if (ext === 'json') {
           const lottie = await result.json()
 
           return {
