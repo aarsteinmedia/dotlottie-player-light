@@ -1088,12 +1088,12 @@
             {
               "kind": "field",
               "name": "_render",
-              "default": "iA"
+              "default": "ix"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "iM"
+              "default": "iA"
             },
             {
               "kind": "field",
