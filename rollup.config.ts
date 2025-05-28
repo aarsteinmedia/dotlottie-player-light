@@ -22,10 +22,6 @@ const isProd = process.env.NODE_ENV !== 'development',
 
   pkgBuffer = await readFile(new URL(path.resolve(__dirname, 'package.json'), import.meta.url)),
   pkg: typeof import('./package.json') = JSON.parse(pkgBuffer.toString()),
-  injectVersion = () => ({
-    name: 'inject-version',
-    renderChunk: (code: string) => code.replace('[[BM_VERSION]]', pkg.version),
-  }),
 
   external = [
     '@aarsteinmedia/lottie-web/light',
@@ -72,7 +68,6 @@ const isProd = process.env.NODE_ENV !== 'development',
       preferBuiltins,
     }),
     commonjs(),
-    injectVersion(),
     swc(),
   ],
 
