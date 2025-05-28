@@ -4,7 +4,9 @@ import type {
   LottieManifest,
 } from '@aarsteinmedia/lottie-web'
 
-import { createElementID, isServer } from '@aarsteinmedia/lottie-web/utils'
+import {
+  createElementID, isServer, PreserveAspectRatio
+} from '@aarsteinmedia/lottie-web/utils'
 import {
   strFromU8, unzip as unzipOrg, type Unzipped
 } from 'fflate'
@@ -77,7 +79,7 @@ const getMimeFromExt = (ext = '') => {
   },
   isImage = (asset: LottieAsset) =>
     'w' in asset && 'h' in asset && !('xt' in asset) && 'p' in asset,
-  resolveAssets = async (unzipped: Unzipped, assets?: LottieAsset[]) => {
+  resolveAssets = async (unzipped?: Unzipped, assets?: LottieAsset[]) => {
     if (!Array.isArray(assets)) {
       return
     }
@@ -91,24 +93,32 @@ const getMimeFromExt = (ext = '') => {
       }
 
       const type = isImage(assets[i]) ? 'images' : 'audio',
-        u8 = unzipped[`${type}/${assets[i].p}`]
+        u8 = unzipped?.[`${type}/${assets[i].p}`]
 
-      if (u8.length === 0) {
+      if (!u8) {
         continue
       }
 
       toResolve.push(new Promise<void>((resolveAsset) => {
-        const assetB64 = isServer()
-          ? Buffer.from(u8).toString('base64')
-          : btoa(
-            // eslint-disable-next-line unicorn/no-array-reduce
-            u8.reduce((dat, byte) => `${dat}${String.fromCharCode(byte)}`,
-              ''))
+        let assetB64: string
+
+        if (isServer()) {
+          assetB64 = Buffer.from(u8).toString('base64')
+        } else {
+          let result = ''
+          const { length: jLen } = u8
+
+          for (let j = 0; j < jLen; j++) {
+            result += String.fromCharCode(u8[j])
+          }
+
+          assetB64 = btoa(result)
+        }
 
         assets[i].p =
-            assets[i].p?.startsWith('data:') || isBase64(assets[i].p)
-              ? assets[i].p
-              : `data:${getMimeFromExt(getExt(assets[i].p))};base64,${assetB64}`
+          assets[i].p?.startsWith('data:') || isBase64(assets[i].p)
+            ? assets[i].p
+            : `data:${getMimeFromExt(getExt(assets[i].p))};base64,${assetB64}`
         assets[i].e = 1
         assets[i].u = ''
 
@@ -175,6 +185,31 @@ const getMimeFromExt = (ext = '') => {
       const str = strFromU8(unzipped[`${animationsFolder}/${manifest.animations[i].id}.json`]),
         lottie: AnimationData = JSON.parse(prepareString(str))
 
+      // Handle Expressions TODO: Consider adding this
+      // const { length: jLen } = lottie.layers
+
+      // for (let j = 0; j < jLen; j++) {
+      //   const { ks: shape } = lottie.layers[j],
+      //     props = Object.keys(shape) as (keyof typeof shape)[],
+      //     { length: pLen } = props
+
+      //   for (let p = 0; p < pLen; p++) {
+      //     const { e: isEncoded, x: expression } = shape[props[p]] as {
+      //       x?: string;
+      //       e?: 0 | 1
+      //     }
+
+      //     if (!expression || !isEncoded) {
+      //       continue
+      //     }
+
+      //     // Base64 Decode to handle compression
+      //     // @ts-expect-error
+      //     lottie.layers[j].ks[props[p]].x = atob(expression)
+      //   }
+
+      // }
+
       toResolve.push(resolveAssets(unzipped, lottie.assets))
       data.push(lottie)
     }
@@ -191,19 +226,19 @@ export const aspectRatio = (objectFit: ObjectFit) => {
     switch (objectFit) {
       case ObjectFit.Contain:
       case ObjectFit.ScaleDown: {
-        return 'xMidYMid meet'
+        return PreserveAspectRatio.Contain
       }
       case ObjectFit.Cover: {
-        return 'xMidYMid slice'
+        return PreserveAspectRatio.Cover
       }
       case ObjectFit.Fill: {
-        return 'none'
+        return PreserveAspectRatio.Initial
       }
       case ObjectFit.None: {
-        return 'xMinYMin slice'
+        return PreserveAspectRatio.None
       }
       default: {
-        return 'xMidYMid meet'
+        return PreserveAspectRatio.Contain
       }
     }
   },

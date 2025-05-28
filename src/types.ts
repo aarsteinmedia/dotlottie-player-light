@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable @typescript-eslint/no-namespace */
 import 'react/jsx-runtime'
 import 'react/jsx-dev-runtime'
@@ -6,6 +5,8 @@ import 'react/jsx-dev-runtime'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
+
+import type { tagName } from '.'
 
 interface BaseRendererConfig {
   className?: string
@@ -97,24 +98,24 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
 }
 
 declare global {
-  interface HTMLElementTagNameMap {'dotlottie-player': DotLottiePlayer}
+  interface HTMLElementTagNameMap {[tagName]: DotLottiePlayer}
   function dotLottiePlayer(): DotLottiePlayer
 }
 
 declare module 'react' {
   namespace JSX {
-    interface IntrinsicElements {'dotlottie-player': JSXLottiePlayer}
+    interface IntrinsicElements {[tagName]: JSXLottiePlayer}
   }
 }
 
 declare module 'react/jsx-runtime' {
   namespace JSX {
-    interface IntrinsicElements {'dotlottie-player': JSXLottiePlayer}
+    interface IntrinsicElements {[tagName]: JSXLottiePlayer}
   }
 }
 
 declare module 'react/jsx-dev-runtime' {
   namespace JSX {
-    interface IntrinsicElements {'dotlottie-player': JSXLottiePlayer}
+    interface IntrinsicElements {[tagName]: JSXLottiePlayer}
   }
 }

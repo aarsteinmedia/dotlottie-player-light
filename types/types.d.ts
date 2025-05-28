@@ -2,6 +2,7 @@ import 'react/jsx-runtime';
 import 'react/jsx-dev-runtime';
 import type { Plugin } from '@custom-elements-manifest/analyzer';
 import type DotLottiePlayer from './elements/DotLottiePlayer';
+import type { tagName } from '.';
 interface BaseRendererConfig {
     className?: string;
     imagePreserveAspectRatio?: string;
@@ -68,28 +69,28 @@ type JSXLottiePlayer = Omit<Partial<DotLottiePlayer>, 'style'> & {
 };
 declare global {
     interface HTMLElementTagNameMap {
-        'dotlottie-player': DotLottiePlayer;
+        [tagName]: DotLottiePlayer;
     }
     function dotLottiePlayer(): DotLottiePlayer;
 }
 declare module 'react' {
     namespace JSX {
         interface IntrinsicElements {
-            'dotlottie-player': JSXLottiePlayer;
+            [tagName]: JSXLottiePlayer;
         }
     }
 }
 declare module 'react/jsx-runtime' {
     namespace JSX {
         interface IntrinsicElements {
-            'dotlottie-player': JSXLottiePlayer;
+            [tagName]: JSXLottiePlayer;
         }
     }
 }
 declare module 'react/jsx-dev-runtime' {
     namespace JSX {
         interface IntrinsicElements {
-            'dotlottie-player': JSXLottiePlayer;
+            [tagName]: JSXLottiePlayer;
         }
     }
 }

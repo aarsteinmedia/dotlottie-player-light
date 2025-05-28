@@ -26,6 +26,16 @@ const isProd = process.env.NODE_ENV !== 'development',
     name: 'inject-version',
     renderChunk: (code: string) => code.replace('[[BM_VERSION]]', pkg.version),
   }),
+
+  external = [
+    '@aarsteinmedia/lottie-web/light',
+    '@aarsteinmedia/lottie-web/utils',
+    'fflate',
+    'react',
+    'react/jsx-dev-runtime',
+    'react/jsx-runtime',
+  ],
+
   input = path.resolve(
     __dirname, 'src', 'index.ts'
   ),
@@ -65,12 +75,14 @@ const isProd = process.env.NODE_ENV !== 'development',
     injectVersion(),
     swc(),
   ],
+
   unpkgPlugins = (): Plugin[] =>
     isProd ? [
       ...plugins(),
       minify(),
       pluginSummary(),
     ] : plugins(),
+
   modulePlugins = (): Plugin[] =>
 
     isProd ? [
@@ -83,14 +95,9 @@ const isProd = process.env.NODE_ENV !== 'development',
       }),
       livereload(),
     ],
+
   types: RollupOptions = {
-    external: [
-      '@aarsteinmedia/lottie-web/light',
-      '@aarsteinmedia/lottie-web/utils',
-      'react',
-      'react/jsx-dev-runtime',
-      'react/jsx-runtime',
-    ],
+    external,
     input: path.resolve(
       __dirname, 'types', 'index.d.ts'
     ),
@@ -100,6 +107,7 @@ const isProd = process.env.NODE_ENV !== 'development',
     },
     plugins: [dts()],
   },
+
   unpkg: RollupOptions = {
     input,
     onwarn(warning, warn) {
@@ -117,15 +125,9 @@ const isProd = process.env.NODE_ENV !== 'development',
     },
     plugins: unpkgPlugins(),
   },
+
   module: RollupOptions = {
-    external: [
-      '@aarsteinmedia/lottie-web/light',
-      '@aarsteinmedia/lottie-web/utils',
-      'fflate',
-      'react',
-      'react/jsx-dev-runtime',
-      'react/jsx-runtime',
-    ],
+    external,
     input,
     onwarn(warning, warn) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
@@ -142,6 +144,8 @@ const isProd = process.env.NODE_ENV !== 'development',
     plugins: modulePlugins(),
   }
 
-export default isProd ? [module,
+export default isProd ? [
+  module,
   types,
-  unpkg] : module
+  unpkg
+] : module

@@ -4,7 +4,7 @@ import { PlayerState } from '@/enums'
 /**
  * Render Player.
  */
-export default function renderPlayer(this: DotLottiePlayer) {
+export default async function renderPlayer(this: DotLottiePlayer) {
   if (!this.shadow) {
     return
   }
@@ -55,6 +55,6 @@ export default function renderPlayer(this: DotLottiePlayer) {
     </div>
   `
 
-  this.shadow.adoptedStyleSheets = [DotLottiePlayer.styles]
+  this.shadow.adoptedStyleSheets = [await DotLottiePlayer.styles()]
   this.shadow.appendChild(this.template.content.cloneNode(true))
 }

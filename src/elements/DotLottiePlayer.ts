@@ -80,11 +80,13 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Return the styles for the component.
    */
   static get styles() {
-    const styleSheet = new CSSStyleSheet()
+    return async () => {
+      const styleSheet = new CSSStyleSheet()
 
-    void styleSheet.replace(styles)
+      await styleSheet.replace(styles)
 
-    return styleSheet
+      return styleSheet
+    }
   }
 
   /**
@@ -254,7 +256,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   /**
    * Resizing to container.
    */
-  set objectfit(value: string) {
+  set objectfit(value: ObjectFit) {
     this.setAttribute('objectfit', value)
   }
 
@@ -552,7 +554,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    */
   override async connectedCallback() {
     await super.connectedCallback()
-    this._render()
+    await this._render()
 
     if (!this.shadow) {
       throw new Error('Missing Shadow element')
@@ -1318,7 +1320,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     }
     const preserveAspectRatio =
         this.preserveAspectRatio ??
-        (this.objectfit && aspectRatio(this.objectfit as ObjectFit)),
+        aspectRatio(this.objectfit),
       currentAnimationSettings = this._multiAnimationSettings.length > 0
         ? this._multiAnimationSettings[this._currentAnimation]
         : undefined,
@@ -1409,7 +1411,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
           this._lottieInstance.totalFrames * 3),
         roundedScroll = clampedScroll / 3
 
-      window.requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
         if (roundedScroll < (this._lottieInstance?.totalFrames ?? 0)) {
           this.playerState = PlayerState.Playing
           this._lottieInstance?.goToAndStop(roundedScroll, true)
@@ -1437,13 +1439,15 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
   }
 
   private _isLottie(json: AnimationData) {
-    const mandatory: string[] = ['v',
+    const mandatory: string[] = [
+      'v',
       'ip',
       'op',
       'layers',
       'fr',
       'w',
-      'h']
+      'h'
+    ]
 
     return mandatory.every((field: string) =>
       Object.hasOwn(json, field))

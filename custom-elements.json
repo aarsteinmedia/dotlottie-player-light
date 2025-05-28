@@ -603,7 +603,7 @@
             "name": "PropertyCallbackElement",
             "module": "dist/index.js"
           },
-          "tagName": "dotlottie-player",
+          "tagName": "tagName",
           "customElement": true
         },
         {
@@ -626,7 +626,7 @@
         },
         {
           "kind": "custom-element-definition",
-          "name": "dotlottie-player",
+          "name": "tagName",
           "declaration": {
             "name": "DotLottiePlayer",
             "module": "dist/index.js"
@@ -1299,14 +1299,22 @@
             "name": "iw",
             "module": "dist/unpkg.js"
           },
-          "tagName": "dotlottie-player",
+          "tagName": "rD",
           "customElement": true
+        },
+        {
+          "kind": "variable",
+          "name": "rD",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"dotlottie-player\""
         }
       ],
       "exports": [
         {
           "kind": "custom-element-definition",
-          "name": "dotlottie-player",
+          "name": "rD",
           "declaration": {
             "name": "rT",
             "module": "dist/unpkg.js"
