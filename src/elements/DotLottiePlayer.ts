@@ -610,9 +610,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     document.removeEventListener('visibilitychange', this._onVisibilityChange)
 
     // Destroy the animation instance
-    // if (!this._lottieInstance?.destroy) {
-    //   return
-    // }
     this.destroy()
   }
 
@@ -697,6 +694,13 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
 
       this.playerState = PlayerState.Stopped
+      if (
+        !this.animateOnScroll &&
+        (this.autoplay ||
+          this._multiAnimationSettings[this._currentAnimation]?.autoplay)
+      ) {
+        this.playerState = PlayerState.Playing
+      }
 
       // Initialize lottie player and load animation
       if (!isServer()) {
