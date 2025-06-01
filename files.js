@@ -29,7 +29,9 @@ const files = [
   'b2b.lottie',
   'gameAnimation.lottie',
   'BuildGarden copy.lottie',
-  'BuildGarden.lottie'
+  'BuildGarden.lottie',
+  'portal.lottie',
+  'models.lottie'
 ]
 
 export default files
