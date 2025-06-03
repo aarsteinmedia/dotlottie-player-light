@@ -48,7 +48,7 @@
     "lint:css:fix": "npx stylelint **/*.css --fix"
   },
   "dependencies": {
-    "@aarsteinmedia/lottie-web": "^0.4.1",
+    "@aarsteinmedia/lottie-web": "^0.4.3",
     "fflate": "^0.8.2"
   },
   "peerDependencies": {
@@ -101,7 +101,7 @@
     "tsc-alias": "^1.8.16",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.0"
+    "typescript-eslint": "^8.33.1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
