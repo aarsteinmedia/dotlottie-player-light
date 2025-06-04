@@ -815,7 +815,7 @@
                 }
               ],
               "inheritedFrom": {
-                "name": "iA",
+                "name": "iM",
                 "module": "dist/unpkg.js"
               }
             },
@@ -1088,12 +1088,12 @@
             {
               "kind": "field",
               "name": "_render",
-              "default": "iD"
+              "default": "iT"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "iT"
+              "default": "iD"
             },
             {
               "kind": "field",
@@ -1251,7 +1251,7 @@
               "kind": "field",
               "default": "(this[ix]=[])",
               "inheritedFrom": {
-                "name": "iA",
+                "name": "iM",
                 "module": "dist/unpkg.js"
               }
             }
@@ -1296,7 +1296,7 @@
             }
           ],
           "superclass": {
-            "name": "iA",
+            "name": "iM",
             "module": "dist/unpkg.js"
           },
           "tagName": "r$",
