@@ -2,9 +2,9 @@ import type { AnimationDirection, AnimationItem, AnimationSegment, AnimationSett
 import { PreserveAspectRatio } from '@aarsteinmedia/lottie-web/utils';
 import type { AnimateOnScroll, Autoplay, Controls, Loop, Subframe } from '../types';
 import PropertyCallbackElement from '../elements/helpers/PropertyCallbackElement';
-import { PlayMode, PlayerState } from '../enums';
 import renderControls from '../templates/controls';
 import renderPlayer from '../templates/player';
+import { PlayMode, PlayerState } from '../utils/enums';
 export default class DotLottiePlayer extends PropertyCallbackElement {
     static get observedAttributes(): string[];
     static get observedProperties(): string[];

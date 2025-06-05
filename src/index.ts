@@ -5,7 +5,7 @@ import DotLottiePlayer from '@/elements/DotLottiePlayer'
 export default DotLottiePlayer
 
 export { PlayerEvents }
-export { PlayerState, PlayMode } from '@/enums'
+export { PlayerState, PlayMode } from '@/utils/enums'
 
 export const tagName = 'dotlottie-player'
 

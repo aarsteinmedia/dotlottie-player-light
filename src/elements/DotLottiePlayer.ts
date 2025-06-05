@@ -27,11 +27,6 @@ import type {
 } from '@/types'
 
 import PropertyCallbackElement from '@/elements/helpers/PropertyCallbackElement'
-import {
-  ObjectFit,
-  PlayMode,
-  PlayerState,
-} from '@/enums'
 import styles from '@/styles.css'
 import renderControls from '@/templates/controls'
 import renderPlayer from '@/templates/player'
@@ -39,10 +34,15 @@ import {
   aspectRatio,
   download,
   frameOutput,
-  getAnimationData,
   getFilename,
   handleErrors,
 } from '@/utils'
+import {
+  ObjectFit,
+  PlayMode,
+  PlayerState,
+} from '@/utils/enums'
+import getAnimationData from '@/utils/getAnimationData'
 
 /**
  * DotLottie Player Web Component.
