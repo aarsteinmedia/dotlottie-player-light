@@ -12,13 +12,13 @@ The component is compatible with server side rendering, and like any good web co
 
 - Import from CDN:
 
-```xml
+```html
 <script src="https://unpkg.com/@aarsteinmedia/dotlottie-player-light@latest/dist/index.js"></script>
 ```
 
 - Import from node_modules directory:
 
-```xml
+```html
 <script src="/node_modules/@aarsteinmedia/dotlottie-player-light/dist/index.js"></script>
 ```
 
@@ -40,7 +40,7 @@ import '@aarsteinmedia/dotlottie-player-light'
 
 Add the element `dotlottie-player` to your markup and point `src` to a Lottie animation of your choice.
 
-```xml
+```html
 <dotlottie-player
   autoplay
   controls
@@ -64,7 +64,7 @@ Use the [full version](https://github.com/aarsteinmedia/dotlottie-player) of thi
 
 In the example below the first animation will play once, and then the next animation will loop:
 
-```xml
+```html
 <dotlottie-player
   id="find-me"
   subframe
@@ -112,7 +112,7 @@ export class AppComponent {
 
 If you've already imported the library in a parent component, you don't need to import it again in children of that component. If you want to assign the element a CSS class note that you need to use the `class` namespace, and not `className`.
 
-```jsx
+```tsx
 import '@aarsteinmedia/dotlottie-player-light'
 
 function App() {
@@ -296,7 +296,7 @@ The following events are exposed and can be listened to via `addEventListener` c
 | `stop`     | Animation has stopped                                            |
 
 ## WordPress Plugins
-<img align="left" width="110" height="110" src="/.github/wpIcon.svg" />
+<img align="left" width="110" height="110" src="/.github/wpIcon.svg" style="margin-right:1em;" />
 
 We've made a free WordPress plugin that works with Gutenberg Blocks, Elementor, Divi Builder and Flatsome UX Builder: [AM LottiePlayer for WordPress](https://www.aarstein.media/en/am-lottieplayer). It has all the functionality of this package, with a helpful user interface.
 
