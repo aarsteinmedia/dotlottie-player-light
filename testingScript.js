@@ -1,13 +1,18 @@
-/* eslint-disable jsdoc/no-types */
 import files from './files.js'
 
 const previewForm = document.querySelector('form#preview'),
-  pathSelect = previewForm.querySelector('select'),
+  pathSelect = previewForm.querySelector('select[name="path"]'),
+  rendererSelect = previewForm.querySelector('select[name="renderer"]'),
+  /**
+   * @type {import('./src/elements/DotLottiePlayer').default}
+   */
+  dotLottie = document.querySelector('.preview'),
   fallbackSVG = 'assets/am.lottie',
   regex = /\.(?:lottie|json)$/
 
 previewForm?.addEventListener('submit', viewFile)
 pathSelect?.addEventListener('change', viewFile)
+rendererSelect?.addEventListener('change', changeRenderer)
 
 const { length } = files.sort()
 
@@ -33,7 +38,6 @@ function handleRefresh() {
     }
     if (previewForm?.path?.value) {
       const { value } = previewForm.path,
-
         path = value.includes('/')
           ? value
           : `assets/${value}${regex.test(value) ? '' : '.json'}`
@@ -67,10 +71,17 @@ function handleRefresh() {
   }
 }
 
+function changeRenderer(e) {
+  const { value: renderer } = e.target
+
+  dotLottie.renderer = renderer
+  handleRefresh()
+}
+
 /**
  * View converted SVG.
  *
- * @param {SubmitEvent | Event | string} e - Either the submit event, the change event or the string value.
+ * @param e - Either the submit event, the change event or the string value.
  */
 async function viewFile(e) {
   try {
@@ -90,11 +101,6 @@ async function viewFile(e) {
       path = e
     }
 
-    /**
- * @type {import('./src/elements/DotLottiePlayer').default}
- */
-    const dotLottie = document.querySelector('.preview')
-
     if (!dotLottie || !path || !path === '') {
       throw new Error('No placeholder')
     }
@@ -102,7 +108,6 @@ async function viewFile(e) {
     await dotLottie.load(path)
 
     // dotLottie.addEventListener('complete', () => console.debug('complete'))
-
   } catch (error) {
     console.error(error)
   }

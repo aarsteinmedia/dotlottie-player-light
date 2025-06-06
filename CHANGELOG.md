@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
+## [5.2.24] - 06-06-2025
+
+### Changed
+
+- Fixed issue with sanitation of string values, causing trouble for text layers and unencoded expressions.
+
 ## [5.2.23] - 06-06-2025
 
 ### Changed
@@ -256,6 +262,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[5.2.24]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.24
 [5.2.23]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.23
 [5.2.22]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.22
 [5.2.19]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.19

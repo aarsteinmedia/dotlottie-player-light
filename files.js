@@ -31,7 +31,8 @@ const files = [
   'BuildGarden copy.lottie',
   'BuildGarden.lottie',
   'portal.lottie',
-  'models.lottie'
+  'models.lottie',
+  'rond-qui-tourne.lottie',
 ]
 
 export default files
