@@ -815,7 +815,7 @@
                 }
               ],
               "inheritedFrom": {
-                "name": "iM",
+                "name": "iP",
                 "module": "dist/unpkg.js"
               }
             },
@@ -1249,9 +1249,9 @@
             },
             {
               "kind": "field",
-              "default": "(this[iA]=[])",
+              "default": "(this[iM]=[])",
               "inheritedFrom": {
-                "name": "iM",
+                "name": "iP",
                 "module": "dist/unpkg.js"
               }
             }
@@ -1296,7 +1296,7 @@
             }
           ],
           "superclass": {
-            "name": "iM",
+            "name": "iP",
             "module": "dist/unpkg.js"
           },
           "tagName": "rV",
