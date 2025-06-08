@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
-## [5.2.25] - 08-06-2025
+
+## [5.2.26] - 08-06-2025
 
 ### Changed
 
+- Fixed runtime bug where minification caused some functionality to break
 - Minor bugfixes to animation engine.
 
 ## [5.2.24] - 06-06-2025
@@ -268,6 +270,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
+[5.2.26]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.26
 [5.2.24]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.24
 [5.2.23]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.23
 [5.2.22]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.22

@@ -9,7 +9,7 @@ import type {
   Vector2,
 } from '@aarsteinmedia/lottie-web'
 
-import Lottie from '@aarsteinmedia/lottie-web/light'
+import { loadAnimation } from '@aarsteinmedia/lottie-web/light'
 import {
   createElementID,
   isServer,
@@ -704,7 +704,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
 
       // Initialize lottie player and load animation
       if (!isServer()) {
-        this._lottieInstance = Lottie.loadAnimation({
+        this._lottieInstance = loadAnimation({
           ...this._getOptions(),
           animationData: animations[this._currentAnimation],
         }) as unknown as AnimationItem
@@ -1554,7 +1554,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       this._lottieInstance?.destroy()
 
       // Re-initialize lottie player
-      this._lottieInstance = Lottie.loadAnimation({
+      this._lottieInstance = loadAnimation({
         ...this._getOptions(),
         animationData: this._animations[this._currentAnimation],
       }) as unknown as AnimationItem

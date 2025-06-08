@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-useless-path-segments
+import '../dist/index.js'
 import files from './files.js'
 
 const previewForm = document.querySelector('form#preview'),
