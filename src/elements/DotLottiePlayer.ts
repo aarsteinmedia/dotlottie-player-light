@@ -12,7 +12,7 @@ import type {
 import { loadAnimation } from '@aarsteinmedia/lottie-web/light'
 import {
   createElementID,
-  _isServer,
+  isServer,
   PlayerEvents,
   PreserveAspectRatio,
   RendererType,
@@ -703,7 +703,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       }
 
       // Initialize lottie player and load animation
-      if (!_isServer) {
+      if (!isServer) {
         this._lottieInstance = loadAnimation({
           ...this._getOptions(),
           animationData: animations[this._currentAnimation],
@@ -1385,7 +1385,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
     if (!this.animateOnScroll || !this._lottieInstance) {
       return
     }
-    if (_isServer) {
+    if (isServer) {
       console.warn('DotLottie: Scroll animations might not work properly in a Server Side Rendering context. Try to wrap this in a client component.')
 
       return
