@@ -1,5 +1,5 @@
 import {
-  createElementID, isServer, PreserveAspectRatio
+  createElementID, _isServer, PreserveAspectRatio
 } from '@aarsteinmedia/lottie-web/utils'
 
 import { ObjectFit } from '@/utils/enums'
@@ -70,7 +70,7 @@ export const aspectRatio = (objectFit: ObjectFit) => {
   handleErrors = (err: unknown) => {
     const res = {
       message: 'Unknown error',
-      status: isServer() ? 500 : 400,
+      status: _isServer ? 500 : 400,
     }
 
     if (err && typeof err === 'object') {

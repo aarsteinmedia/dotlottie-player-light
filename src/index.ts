@@ -1,4 +1,4 @@
-import { isServer, PlayerEvents } from '@aarsteinmedia/lottie-web/utils'
+import { _isServer, PlayerEvents } from '@aarsteinmedia/lottie-web/utils'
 
 import DotLottiePlayer from '@/elements/DotLottiePlayer'
 
@@ -9,7 +9,7 @@ export { PlayerState, PlayMode } from '@/utils/enums'
 
 export const tagName = 'dotlottie-player'
 
-if (!isServer()) {
+if (!_isServer) {
   /**
    * Expose DotLottiePlayer class as global variable.
    */
