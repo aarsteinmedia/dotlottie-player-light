@@ -16,8 +16,3 @@ export enum PlayerState {
   Playing = 'playing',
   Stopped = 'stopped',
 }
-
-export enum PlayMode {
-  Bounce = 'bounce',
-  Normal = 'normal',
-}

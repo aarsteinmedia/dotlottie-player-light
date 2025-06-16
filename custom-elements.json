@@ -11,10 +11,6 @@
           "name": "PlayerState"
         },
         {
-          "kind": "variable",
-          "name": "PlayMode"
-        },
-        {
           "kind": "class",
           "description": "DotLottie Player Web Component.",
           "name": "DotLottiePlayer",
@@ -339,6 +335,16 @@
             },
             {
               "kind": "method",
+              "name": "_handleSettingsClick",
+              "parameters": [
+                {
+                  "name": "{ target }"
+                }
+              ],
+              "description": "Handle settings click event."
+            },
+            {
+              "kind": "method",
               "name": "_addEventListeners",
               "description": "Add event listeners."
             },
@@ -549,10 +555,6 @@
             },
             {
               "kind": "field",
-              "name": "_handleSettingsClick"
-            },
-            {
-              "kind": "field",
               "name": "template"
             },
             {
@@ -618,6 +620,14 @@
       "exports": [
         {
           "kind": "js",
+          "name": "PlayMode",
+          "declaration": {
+            "name": "PlayMode",
+            "package": "@aarsteinmedia/lottie-web/utils"
+          }
+        },
+        {
+          "kind": "js",
           "name": "PlayerEvents",
           "declaration": {
             "name": "PlayerEvents",
@@ -629,14 +639,6 @@
           "name": "tagName",
           "declaration": {
             "name": "DotLottiePlayer",
-            "module": "dist/index.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "PlayMode",
-          "declaration": {
-            "name": "PlayMode",
             "module": "dist/index.js"
           }
         },
@@ -673,7 +675,7 @@
         {
           "kind": "class",
           "description": "",
-          "name": "rI",
+          "name": "rp",
           "members": [
             {
               "kind": "field",
@@ -815,7 +817,7 @@
                 }
               ],
               "inheritedFrom": {
-                "name": "iE",
+                "name": "ih",
                 "module": "dist/unpkg.js"
               }
             },
@@ -937,6 +939,15 @@
             {
               "kind": "method",
               "name": "_handleSeekChange",
+              "parameters": [
+                {
+                  "name": "{target:t}"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleSettingsClick",
               "parameters": [
                 {
                   "name": "{target:t}"
@@ -1083,17 +1094,17 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:ix.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:ip.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
               "name": "_render",
-              "default": "iC"
+              "default": "id"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "iP"
+              "default": "im"
             },
             {
               "kind": "field",
@@ -1142,10 +1153,6 @@
                 "text": "array"
               },
               "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "_handleSettingsClick"
             },
             {
               "kind": "field",
@@ -1209,6 +1216,10 @@
             },
             {
               "kind": "field",
+              "name": "_handleSettingsClick"
+            },
+            {
+              "kind": "field",
               "name": "togglePlay"
             },
             {
@@ -1249,9 +1260,9 @@
             },
             {
               "kind": "field",
-              "default": "(this[iS]=[])",
+              "default": "(this[io]=[])",
               "inheritedFrom": {
-                "name": "iE",
+                "name": "ih",
                 "module": "dist/unpkg.js"
               }
             }
@@ -1296,15 +1307,15 @@
             }
           ],
           "superclass": {
-            "name": "iE",
+            "name": "ih",
             "module": "dist/unpkg.js"
           },
-          "tagName": "rF",
+          "tagName": "rm",
           "customElement": true
         },
         {
           "kind": "variable",
-          "name": "rF",
+          "name": "rm",
           "type": {
             "text": "string"
           },
@@ -1314,9 +1325,9 @@
       "exports": [
         {
           "kind": "custom-element-definition",
-          "name": "rF",
+          "name": "rm",
           "declaration": {
-            "name": "rI",
+            "name": "rp",
             "module": "dist/unpkg.js"
           }
         }

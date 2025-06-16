@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Changelog was only added since [3.1.2], so it's not exhaustive. [Please report any missing noteable changes to us](https://github.com/aarsteinmedia/dotlottie-player/issues), and we'll add them promptly.
 
 
-## [5.2.28] - 11-06-2025
+## [5.2.29] - 16-06-2025
 
 ### Changed
 
@@ -278,7 +278,7 @@ Changelog was only added since [3.1.2], so it's not exhaustive. [Please report a
 - Removed dependencies
   - `@lit`
 
-[5.2.28]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.28
+[5.2.29]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.29
 [5.2.26]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.26
 [5.2.24]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.24
 [5.2.23]: https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player-light/v/5.2.23

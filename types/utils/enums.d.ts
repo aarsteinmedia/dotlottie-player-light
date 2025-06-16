@@ -15,7 +15,3 @@ export declare enum PlayerState {
     Playing = "playing",
     Stopped = "stopped"
 }
-export declare enum PlayMode {
-    Bounce = "bounce",
-    Normal = "normal"
-}
