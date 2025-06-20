@@ -9,9 +9,12 @@ import type {
   Vector2,
 } from '@aarsteinmedia/lottie-web'
 
+import { getAnimationData } from '@aarsteinmedia/lottie-web/dotlottie'
 import { loadAnimation } from '@aarsteinmedia/lottie-web/light'
 import {
   createElementID,
+  download,
+  getFilename,
   isServer,
   PlayerEvents,
   PlayMode,
@@ -33,16 +36,13 @@ import renderControls from '@/templates/controls'
 import renderPlayer from '@/templates/player'
 import {
   aspectRatio,
-  download,
   frameOutput,
-  getFilename,
   handleErrors,
 } from '@/utils'
 import {
   ObjectFit,
   PlayerState,
 } from '@/utils/enums'
-import getAnimationData from '@/utils/getAnimationData'
 
 /**
  * DotLottie Player Web Component.
@@ -648,12 +648,12 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Initialize Lottie Web player.
    */
   public async load(src: string | null) {
-    if (!this.shadowRoot || !src) {
-      return
-    }
-
-    // Load the resource
     try {
+      if (!this.shadowRoot || !src) {
+        return
+      }
+
+      // Load the resource
       const { animations, manifest } = await getAnimationData(src)
 
       if (
@@ -719,6 +719,35 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
         this.play()
       }
 
+      this._addEventListeners()
+
+      const speed =
+        this._multiAnimationSettings[this._currentAnimation]?.speed ??
+        this.speed,
+        direction =
+        this._multiAnimationSettings[this._currentAnimation]?.direction ??
+        this.direction
+
+      // Set initial playback speed and direction
+      this._lottieInstance?.setSpeed(speed)
+      this._lottieInstance?.setDirection(direction)
+      this._lottieInstance?.setSubframe(Boolean(this.subframe))
+
+      // Start playing if autoplay is enabled
+      if (this.autoplay || this.animateOnScroll) {
+        if (this.direction === -1) {
+          this.seek('99%')
+        }
+
+        if (!('IntersectionObserver' in window)) {
+          if (!this.animateOnScroll) {
+            this.play()
+          }
+          this._playerState.visible = true
+        }
+
+        this._addIntersectionObserver()
+      }
     } catch (error) {
       this._errorMessage = handleErrors(error).message
 
@@ -727,38 +756,6 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
       this.dispatchEvent(new CustomEvent(PlayerEvents.Error))
 
       console.error(error)
-
-      return
-    }
-
-    this._addEventListeners()
-
-    const speed =
-        this._multiAnimationSettings[this._currentAnimation]?.speed ??
-        this.speed,
-      direction =
-        this._multiAnimationSettings[this._currentAnimation]?.direction ??
-        this.direction
-
-    // Set initial playback speed and direction
-    this._lottieInstance?.setSpeed(speed)
-    this._lottieInstance?.setDirection(direction)
-    this._lottieInstance?.setSubframe(Boolean(this.subframe))
-
-    // Start playing if autoplay is enabled
-    if (this.autoplay || this.animateOnScroll) {
-      if (this.direction === -1) {
-        this.seek('99%')
-      }
-
-      if (!('IntersectionObserver' in window)) {
-        if (!this.animateOnScroll) {
-          this.play()
-        }
-        this._playerState.visible = true
-      }
-
-      this._addIntersectionObserver()
     }
   }
 
@@ -1070,7 +1067,7 @@ export default class DotLottiePlayer extends PropertyCallbackElement {
    * Toggle Boomerang.
    */
   public toggleBoomerang() {
-    const curr = this._multiAnimationSettings[this._currentAnimation]
+    const curr = this._multiAnimationSettings[this._currentAnimation] ?? {}
 
     if (curr.mode !== undefined) {
       if (curr.mode as PlayMode === PlayMode.Normal) {

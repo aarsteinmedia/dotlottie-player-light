@@ -6,6 +6,6 @@
     "parser": {
       "syntax": "typescript"
     },
-    "target": "es2022"
+    "target": "es2023"
   }
 }

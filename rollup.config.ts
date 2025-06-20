@@ -26,6 +26,7 @@ const isProd = process.env.NODE_ENV !== 'development',
   external = [
     '@aarsteinmedia/lottie-web/light',
     '@aarsteinmedia/lottie-web/utils',
+    '@aarsteinmedia/lottie-web/dotlottie',
     'fflate',
     'react',
     'react/jsx-dev-runtime',

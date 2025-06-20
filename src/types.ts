@@ -5,46 +5,7 @@ import 'react/jsx-dev-runtime'
 import type { Plugin } from '@custom-elements-manifest/analyzer'
 
 import type DotLottiePlayer from '@/elements/DotLottiePlayer'
-
-import type { tagName } from '.'
-
-interface BaseRendererConfig {
-  className?: string
-  imagePreserveAspectRatio?: string
-}
-
-interface FilterSizeConfig {
-  height: string
-  width: string
-  x: string
-  y: string
-}
-
-export type SVGRendererConfig = BaseRendererConfig & {
-  title?: string
-  description?: string
-  preserveAspectRatio?: string
-  progressiveLoad?: boolean
-  hideOnTransparent?: boolean
-  viewBoxOnly?: boolean
-  viewBoxSize?: string | false
-  focusable?: boolean
-  filterSize?: FilterSizeConfig
-  contentVisibility?: string
-  runExpressions?: boolean
-  width?: number
-  height?: number
-  id?: string
-}
-
-export type CanvasRendererConfig = BaseRendererConfig & {
-  clearCanvas?: boolean
-  context?: CanvasRenderingContext2D
-  progressiveLoad?: boolean
-  preserveAspectRatio?: string
-}
-
-export type HTMLRendererConfig = BaseRendererConfig & { hideOnTransparent?: boolean }
+import type { tagName } from '@/index'
 
 export type AnimateOnScroll = boolean | '' | null
 export type Autoplay = boolean | '' | 'autoplay' | null

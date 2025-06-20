@@ -675,7 +675,7 @@
         {
           "kind": "class",
           "description": "",
-          "name": "rp",
+          "name": "rv",
           "members": [
             {
               "kind": "field",
@@ -817,7 +817,7 @@
                 }
               ],
               "inheritedFrom": {
-                "name": "ih",
+                "name": "ra",
                 "module": "dist/unpkg.js"
               }
             },
@@ -1094,17 +1094,17 @@
               "type": {
                 "text": "object"
               },
-              "default": "{count:0,loaded:!1,prev:ip.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
+              "default": "{count:0,loaded:!1,prev:rf.Loading,scrollTimeout:null,scrollY:0,visible:!1}"
             },
             {
               "kind": "field",
               "name": "_render",
-              "default": "id"
+              "default": "ry"
             },
             {
               "kind": "field",
               "name": "_renderControls",
-              "default": "im"
+              "default": "rg"
             },
             {
               "kind": "field",
@@ -1260,9 +1260,9 @@
             },
             {
               "kind": "field",
-              "default": "(this[io]=[])",
+              "default": "(this[rr]=[])",
               "inheritedFrom": {
-                "name": "ih",
+                "name": "ra",
                 "module": "dist/unpkg.js"
               }
             }
@@ -1307,15 +1307,15 @@
             }
           ],
           "superclass": {
-            "name": "ih",
+            "name": "ra",
             "module": "dist/unpkg.js"
           },
-          "tagName": "rm",
+          "tagName": "r_",
           "customElement": true
         },
         {
           "kind": "variable",
-          "name": "rm",
+          "name": "r_",
           "type": {
             "text": "string"
           },
@@ -1325,9 +1325,9 @@
       "exports": [
         {
           "kind": "custom-element-definition",
-          "name": "rm",
+          "name": "r_",
           "declaration": {
-            "name": "rp",
+            "name": "rv",
             "module": "dist/unpkg.js"
           }
         }
