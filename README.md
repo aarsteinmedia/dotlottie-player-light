@@ -1,6 +1,8 @@
-# AM LottiePlayer Light
-
+# DEPRECATED
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 ![Awesome Vector Animations](/.github/readmeBanner.svg)
+
+The functionality of this package has been moved inside `@aarsteinmedia/dotlottie-player`. To use light version, import `@aarsteinmedia/dotlottie-player/light`. This package will no longer recieve any updates.
 
 This is a light version of of [@aarsteinmedia/dotlottie-player](https://www.npmjs.com/package/@aarsteinmedia/dotlottie-player). If you only need SVG renderer (not HTML or Canvas) and don't need to convert JSON to dotLottie or combine animations on the fly, this one is for you. This version supports dotLottie format as well as JSON, and you can toggle between multiple animations in a single file.
 
